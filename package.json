@@ -1,0 +1,51 @@
+{
+	"name": "language-learning",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "biome lint -- apply <files>",
+		"format": "biome format <files> --write",
+		"check": "biome check --apply <files>",
+		"prepare": "husky",
+		"lint-staged": "lint-staged"
+	},
+	"dependencies": {
+		"next": "14.2.4",
+		"react": "^18",
+		"react-dom": "^18"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.8.1",
+		"@types/node": "^20",
+		"@types/react": "^18",
+		"@types/react-dom": "^18",
+		"husky": "^9.0.11",
+		"lint-staged": "^15.2.7",
+		"postcss": "^8",
+		"tailwindcss": "^3.4.1",
+		"typescript": "^5"
+	},
+	"cspell": {
+		"version": "0.2",
+		"ignorePaths": [],
+		"dictionaryDefinitions": [],
+		"dictionaries": [],
+		"words": ["biomejs", "tailwindcss"],
+		"ignoreWords": [],
+		"import": []
+	},
+	"lint-staged": {
+		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+			"biome check --files-ignore-unknown=true",
+			"biome check --write --no-errors-on-unmatched",
+			"biome check --write --organize-imports-enabled=false --no-errors-on-unmatched",
+			"biome check --write --unsafe --no-errors-on-unmatched",
+			"biome format --write --no-errors-on-unmatched",
+			"biome lint --write --no-errors-on-unmatched"
+		],
+		"*": ["biome check --no-errors-on-unmatched --files-ignore-unknown=true"]
+	}
+}

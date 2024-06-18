@@ -13,7 +13,9 @@
 		"lint-staged": "lint-staged"
 	},
 	"dependencies": {
+		"clsx": "^2.1.1",
 		"next": "14.2.4",
+		"next-intl": "^3.15.0",
 		"react": "^18",
 		"react-dom": "^18"
 	},
@@ -33,7 +35,11 @@
 		"ignorePaths": [],
 		"dictionaryDefinitions": [],
 		"dictionaries": [],
-		"words": ["biomejs", "tailwindcss"],
+		"words": [
+			"biomejs",
+			"clsx",
+			"tailwindcss"
+		],
 		"ignoreWords": [],
 		"import": []
 	},
@@ -46,6 +52,8 @@
 			"biome format --write --no-errors-on-unmatched",
 			"biome lint --write --no-errors-on-unmatched"
 		],
-		"*": ["biome check --no-errors-on-unmatched --files-ignore-unknown=true"]
+		"*": [
+			"biome check --no-errors-on-unmatched --files-ignore-unknown=true"
+		]
 	}
 }

@@ -3,13 +3,14 @@
 	"organizeImports": {
 		"enabled": true
 	},
+	"files": {
+		"ignore": ["package.json"]
+	},
 	"linter": {
 		"enabled": true,
 		"rules": {
 			"recommended": true,
-			"correctness": {
-				"noUnusedImports": "error"
-			}
+			"correctness": {}
 		}
 	},
 	"formatter": {

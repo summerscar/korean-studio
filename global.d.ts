@@ -1,7 +1,10 @@
-import type en from "./messages/en.json";
+declare module "*.svg" {
+	import type { FC, SVGProps } from "react";
+	const content: FC<SVGProps<SVGElement>>;
+	export default content;
+}
 
-type Messages = typeof en;
-
-declare global {
-	interface IntlMessages extends Messages {}
+declare module "*.svg?url" {
+	const content: string;
+	export default content;
 }

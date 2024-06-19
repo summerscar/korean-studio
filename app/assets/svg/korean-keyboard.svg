@@ -1,0 +1,304 @@
+<svg width="960" height="300">
+  <!-- Background -->
+  <rect width="960" height="300" fill="#f5f5f5" />
+
+  <!-- Function keys row -->
+  <g>
+    <!-- Key ~ -->
+    <rect x="10" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="20" y="30" font-size="16" fill="#333333">~</text>
+    <text x="45" y="55" font-size="16" text-anchor="end" fill="#333333">`</text>
+
+    <!-- Key 1 -->
+    <rect x="70" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="80" y="30" font-size="16" fill="#333333">1</text>
+    <text x="95" y="55" font-size="16" text-anchor="end" fill="#333333">!</text>
+
+    <!-- Key 2 -->
+    <rect x="130" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="140" y="30" font-size="16" fill="#333333">2</text>
+    <text x="155" y="55" font-size="16" text-anchor="end" fill="#333333">@</text>
+
+    <!-- Key 3 -->
+    <rect x="190" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="200" y="30" font-size="16" fill="#333333">3</text>
+    <text x="215" y="55" font-size="16" text-anchor="end" fill="#333333">#</text>
+
+    <!-- Key 4 -->
+    <rect x="250" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="260" y="30" font-size="16" fill="#333333">4</text>
+    <text x="275" y="55" font-size="16" text-anchor="end" fill="#333333">$</text>
+
+    <!-- Key 5 -->
+    <rect x="310" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="320" y="30" font-size="16" fill="#333333">5</text>
+    <text x="335" y="55" font-size="16" text-anchor="end" fill="#333333">%</text>
+
+    <!-- Key 6 -->
+    <rect x="370" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="380" y="30" font-size="16" fill="#333333">6</text>
+    <text x="395" y="55" font-size="16" text-anchor="end" fill="#333333">^</text>
+
+    <!-- Key 7 -->
+    <rect x="430" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="440" y="30" font-size="16" fill="#333333">7</text>
+    <text x="455" y="55" font-size="16" text-anchor="end" fill="#333333">&amp;</text>
+
+    <!-- Key 8 -->
+    <rect x="490" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="500" y="30" font-size="16" fill="#333333">8</text>
+    <text x="515" y="55" font-size="16" text-anchor="end" fill="#333333">*</text>
+
+    <!-- Key 9 -->
+    <rect x="550" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="560" y="30" font-size="16" fill="#333333">9</text>
+    <text x="575" y="55" font-size="16" text-anchor="end" fill="#333333">(</text>
+
+    <!-- Key 0 -->
+    <rect x="610" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="620" y="30" font-size="16" fill="#333333">0</text>
+    <text x="635" y="55" font-size="16" text-anchor="end" fill="#333333">)</text>
+
+    <!-- Key - -->
+    <rect x="670" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="680" y="30" font-size="16" fill="#333333">-</text>
+    <text x="695" y="55" font-size="16" text-anchor="end" fill="#333333">_</text>
+
+    <!-- Key = -->
+    <rect x="730" y="10" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="740" y="30" font-size="16" fill="#333333">=</text>
+    <text x="755" y="55" font-size="16" text-anchor="end" fill="#333333">+</text>
+
+    <!-- Key delete -->
+    <rect x="790" y="10" width="110" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="845" y="40" font-size="16" text-anchor="middle" fill="#333333">delete</text>
+  </g>
+
+  <!-- Top letters row -->
+  <g>
+    <!-- Key tab -->
+    <rect x="10" y="70" width="80" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="50" y="100" font-size="16" text-anchor="middle" fill="#333333">tab</text>
+
+    <!-- Key Q -->
+    <rect class="q" x="100" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="110" y="90" font-size="16" fill="#333333">Q</text>
+    <text x="145" y="95" font-size="16" text-anchor="end" fill="#333333">ㅃ</text>
+    <text x="145" y="120" font-size="16" text-anchor="end" fill="#333333">ㅂ</text>
+
+    <!-- Key W -->
+    <rect class="w" x="160" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="170" y="90" font-size="16" fill="#333333">W</text>
+    <text x="205" y="95" font-size="16" text-anchor="end" fill="#333333">ㅉ</text>
+    <text x="205" y="120" font-size="16" text-anchor="end" fill="#333333">ㅈ</text>
+
+    <!-- Key E -->
+    <rect class="e" x="220" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="230" y="90" font-size="16" fill="#333333">E</text>
+    <text x="265" y="95" font-size="16" text-anchor="end" fill="#333333">ㄸ</text>
+    <text x="265" y="120" font-size="16" text-anchor="end" fill="#333333">ㄷ</text>
+
+    <!-- Key R -->
+    <rect class="r" x="280" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="290" y="90" font-size="16" fill="#333333">R</text>
+    <text x="325" y="95" font-size="16" text-anchor="end" fill="#333333">ㄲ</text>
+    <text x="325" y="120" font-size="16" text-anchor="end" fill="#333333">ㄱ</text>
+
+    <!-- Key T -->
+    <rect class="t" x="340" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="350" y="90" font-size="16" fill="#333333">T</text>
+    <text x="385" y="95" font-size="16" text-anchor="end" fill="#333333">ㅆ</text>
+    <text x="385" y="120" font-size="16" text-anchor="end" fill="#333333">ㅅ</text>
+
+    <!-- Key Y -->
+    <rect class="y" x="400" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="410" y="90" font-size="16" fill="#333333">Y</text>
+    <text x="445" y="120" font-size="16" text-anchor="end" fill="#333333">ㅛ</text>
+
+    <!-- Key U -->
+    <rect class="u" x="460" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="470" y="90" font-size="16" fill="#333333">U</text>
+    <text x="505" y="120" font-size="16" text-anchor="end" fill="#333333">ㅕ</text>
+
+    <!-- Key I -->
+    <rect class="i" x="520" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="530" y="90" font-size="16" fill="#333333">I</text>
+    <text x="565" y="120" font-size="16" text-anchor="end" fill="#333333">ㅑ</text>
+
+    <!-- Key O -->
+    <rect class="o" x="580" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="590" y="90" font-size="16" fill="#333333">O</text>
+    <text x="625" y="120" font-size="16" text-anchor="end" fill="#333333">ㅐ</text>
+    <text x="625" y="95" font-size="16" text-anchor="end" fill="#333333">ㅒ</text>
+
+    <!-- Key P -->
+    <rect class="p" x="640" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="650" y="90" font-size="16" fill="#333333">P</text>
+    <text x="685" y="120" font-size="16" text-anchor="end" fill="#333333">ㅔ</text>
+    <text x="685" y="95" font-size="16" text-anchor="end" fill="#333333">ㅖ</text>
+
+    <!-- Key [ -->
+    <rect x="700" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="710" y="90" font-size="16" fill="#333333">[</text>
+    <text x="745" y="120" font-size="16" text-anchor="end" fill="#333333">[[</text>
+
+    <!-- Key ] -->
+    <rect x="760" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="770" y="90" font-size="16" fill="#333333">]</text>
+    <text x="805" y="120" font-size="16" text-anchor="end" fill="#333333">]]</text>
+
+    <!-- Key \ -->
+    <rect x="820" y="70" width="80" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="860" y="100" font-size="16" text-anchor="middle" fill="#333333">\</text>
+  </g>
+
+  <!-- Middle letters row -->
+  <g>
+    <!-- Key caps lock -->
+    <rect x="10" y="130" width="90" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="55" y="160" font-size="16" text-anchor="middle" fill="#333333">caps lock</text>
+
+    <!-- Key A -->
+    <rect class="a" x="110" y="130" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="120" y="150" font-size="16" fill="#333333">A</text>
+    <text x="155" y="170" font-size="16" text-anchor="end" fill="#333333">ㅁ</text>
+
+    <!-- Key S -->
+    <rect class="s" x="170" y="130" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="180" y="150" font-size="16" fill="#333333">S</text>
+    <text x="215" y="170" font-size="16" text-anchor="end" fill="#333333">ㄴ</text>
+
+    <!-- Key D -->
+    <rect class="d" x="230" y="130" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="240" y="150" font-size="16" fill="#333333">D</text>
+    <text x="275" y="170" font-size="16" text-anchor="end" fill="#333333">ㅇ</text>
+
+    <!-- Key F -->
+    <rect class="f" x="290" y="130" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="300" y="150" font-size="16" fill="#333333">F</text>
+    <text x="335" y="170" font-size="16" text-anchor="end" fill="#333333">ㄹ</text>
+
+    <!-- Key G -->
+    <rect class="g" x="350" y="130" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="360" y="150" font-size="16" fill="#333333">G</text>
+    <text x="395" y="170" font-size="16" text-anchor="end" fill="#333333">ㅎ</text>
+
+    <!-- Key H -->
+    <rect class="h" x="410" y="130" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="420" y="150" font-size="16" fill="#333333">H</text>
+    <text x="455" y="170" font-size="16" text-anchor="end" fill="#333333">ㅗ</text>
+
+    <!-- Key J -->
+    <rect class="j" x="470" y="130" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="480" y="150" font-size="16" fill="#333333">J</text>
+    <text x="515" y="170" font-size="16" text-anchor="end" fill="#333333">ㅓ</text>
+
+    <!-- Key K -->
+    <rect class="k" x="530" y="130" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="540" y="150" font-size="16" fill="#333333">K</text>
+    <text x="575" y="170" font-size="16" text-anchor="end" fill="#333333">ㅏ</text>
+
+    <!-- Key L -->
+    <rect class="l" x="590" y="130" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="600" y="150" font-size="16" fill="#333333">L</text>
+    <text x="635" y="170" font-size="16" text-anchor="end" fill="#333333">ㅣ</text>
+
+    <!-- Key ; -->
+    <rect x="650" y="130" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="660" y="150" font-size="16" fill="#333333">;</text>
+    <text x="695" y="170" font-size="16" text-anchor="end" fill="#333333">;</text>
+
+    <!-- Key ' -->
+    <rect x="710" y="130" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="720" y="150" font-size="16" fill="#333333">'</text>
+    <text x="755" y="170" font-size="16" text-anchor="end" fill="#333333">'</text>
+
+    <!-- Key return -->
+    <rect x="770" y="130" width="130" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="835" y="160" font-size="16" text-anchor="middle" fill="#333333">return</text>
+  </g>
+
+  <!-- Bottom letters row -->
+  <g>
+    <!-- Key shift -->
+    <rect class="shift" x="10" y="190" width="110" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="65" y="220" font-size="16" text-anchor="middle" fill="#333333">shift</text>
+
+    <!-- Key Z -->
+    <rect class="z" x="130" y="190" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="140" y="210" font-size="16" fill="#333333">Z</text>
+    <text x="175" y="230" font-size="16" text-anchor="end" fill="#333333">ㅋ</text>
+
+    <!-- Key X -->
+    <rect class="x" x="190" y="190" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="200" y="210" font-size="16" fill="#333333">X</text>
+    <text x="235" y="230" font-size="16" text-anchor="end" fill="#333333">ㅌ</text>
+
+    <!-- Key C -->
+    <rect class="c" x="250" y="190" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="260" y="210" font-size="16" fill="#333333">C</text>
+    <text x="295" y="230" font-size="16" text-anchor="end" fill="#333333">ㅊ</text>
+
+    <!-- Key V -->
+    <rect class="v" x="310" y="190" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="320" y="210" font-size="16" fill="#333333">V</text>
+    <text x="355" y="230" font-size="16" text-anchor="end" fill="#333333">ㅍ</text>
+
+    <!-- Key B -->
+    <rect class="b" x="370" y="190" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="380" y="210" font-size="16" fill="#333333">B</text>
+    <text x="415" y="230" font-size="16" text-anchor="end" fill="#333333">ㅠ</text>
+
+    <!-- Key N -->
+    <rect class="n" x="430" y="190" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="440" y="210" font-size="16" fill="#333333">N</text>
+    <text x="475" y="230" font-size="16" text-anchor="end" fill="#333333">ㅜ</text>
+
+    <!-- Key M -->
+    <rect class="m" x="490" y="190" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="500" y="210" font-size="16" fill="#333333">M</text>
+    <text x="535" y="230" font-size="16" text-anchor="end" fill="#333333">ㅡ</text>
+
+    <!-- Key , -->
+    <rect x="550" y="190" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="560" y="210" font-size="16" fill="#333333">,</text>
+    <text x="595" y="230" font-size="16" text-anchor="end" fill="#333333">,</text>
+
+    <!-- Key . -->
+    <rect x="610" y="190" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="620" y="210" font-size="16" fill="#333333">.</text>
+    <text x="655" y="230" font-size="16" text-anchor="end" fill="#333333">.</text>
+
+    <!-- Key / -->
+    <rect x="670" y="190" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="680" y="210" font-size="16" fill="#333333">/</text>
+    <text x="715" y="230" font-size="16" text-anchor="end" fill="#333333">/</text>
+
+    <!-- Key shift -->
+    <rect x="730" y="190" width="170" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="815" y="220" font-size="16" text-anchor="middle" fill="#333333">shift</text>
+  </g>
+
+  <!-- Bottom row -->
+  <g>
+    <!-- Key control -->
+    <rect x="10" y="250" width="70" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="45" y="280" font-size="16" text-anchor="middle" fill="#333333">control</text>
+
+    <!-- Key alt -->
+    <rect x="90" y="250" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="115" y="280" font-size="16" text-anchor="middle" fill="#333333">alt</text>
+
+    <!-- Key space -->
+    <rect x="150" y="250" width="510" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="405" y="280" font-size="16" text-anchor="middle" fill="#333333">hujiang.com</text>
+
+    <!-- Key alt -->
+    <rect x="670" y="250" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="695" y="280" font-size="16" text-anchor="middle" fill="#333333">alt</text>
+
+    <!-- Key control -->
+    <rect x="730" y="250" width="70" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="765" y="280" font-size="16" text-anchor="middle" fill="#333333">control</text>
+  </g>
+</svg>

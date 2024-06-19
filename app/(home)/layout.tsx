@@ -1,3 +1,6 @@
+import { Footer } from "@/components/footer";
+import { Header } from "@/components/header";
+import { HomeBGIcon } from "@/components/home-bg-icon";
 import { DefaultLayout } from "@/components/root-layout";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -17,5 +20,12 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	return <DefaultLayout>{children}</DefaultLayout>;
+	return (
+		<DefaultLayout>
+			<HomeBGIcon />
+			<Header />
+			<section className="flex-auto flex items-stretch">{children}</section>
+			<Footer />
+		</DefaultLayout>
+	);
 }

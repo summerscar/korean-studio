@@ -27,7 +27,9 @@ export async function DefaultLayout({
 		<html lang={locale}>
 			<body className={clsx(inter.className, bodyClassName)}>
 				<NextIntlClientProvider messages={messages}>
-					{children}
+					<main className="flex min-h-screen flex-col bg-slate-600/10">
+						{children}
+					</main>
 				</NextIntlClientProvider>
 			</body>
 		</html>

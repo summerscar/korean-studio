@@ -140,12 +140,10 @@
     <!-- Key [ -->
     <rect x="700" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
     <text x="710" y="90" font-size="16" fill="#333333">[</text>
-    <text x="745" y="120" font-size="16" text-anchor="end" fill="#333333">[[</text>
 
     <!-- Key ] -->
     <rect x="760" y="70" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
     <text x="770" y="90" font-size="16" fill="#333333">]</text>
-    <text x="805" y="120" font-size="16" text-anchor="end" fill="#333333">]]</text>
 
     <!-- Key \ -->
     <rect x="820" y="70" width="80" height="50" fill="white" stroke="#cccccc" stroke-width="1" />

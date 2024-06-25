@@ -25,17 +25,12 @@ const ALPHA_KEYS_TO_BIND = [
 	"x",
 	"y",
 	"z",
-	"shift",
-	"shift+q",
-	"shift+w",
-	"shift+e",
-	"shift+r",
-	"shift+t",
-	"shift+o",
-	"shift+p",
 ] as const;
 
-const WITH_SHIFT_KEYS_TO_BIND = ["shift", ...ALPHA_KEYS_TO_BIND.map((_) => `shift+${_}`)];
+const WITH_SHIFT_KEYS_TO_BIND = [
+	"shift",
+	...ALPHA_KEYS_TO_BIND.map((_) => `shift+${_}`),
+];
 const KEYS_TO_BIND = [...ALPHA_KEYS_TO_BIND, ...WITH_SHIFT_KEYS_TO_BIND];
 
 const QWERTY_HANGUL_KEYBOARD_MAP = {
@@ -131,7 +126,17 @@ const HANGUL_QWERTY_KEYBOARD_MAP = {
 
 const hangulToQwerty = (str: string) => {
 	return Array.from(str)
-		.map((_) => HANGUL_QWERTY_KEYBOARD_MAP[_ as keyof typeof HANGUL_QWERTY_KEYBOARD_MAP] || " ")
+		.map(
+			(_) =>
+				HANGUL_QWERTY_KEYBOARD_MAP[
+					_ as keyof typeof HANGUL_QWERTY_KEYBOARD_MAP
+				] || " ",
+		)
 		.join("");
 };
-export { KEYS_TO_BIND, QWERTY_HANGUL_KEYBOARD_MAP, HANGUL_QWERTY_KEYBOARD_MAP, hangulToQwerty };
+export {
+	KEYS_TO_BIND,
+	QWERTY_HANGUL_KEYBOARD_MAP,
+	HANGUL_QWERTY_KEYBOARD_MAP,
+	hangulToQwerty,
+};

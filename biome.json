@@ -19,7 +19,7 @@
 		"enabled": true,
 		"indentWidth": 2,
 		"indentStyle": "tab",
-		"lineWidth": 120
+		"lineWidth": 80
 	},
 	"json": {
 		"parser": {

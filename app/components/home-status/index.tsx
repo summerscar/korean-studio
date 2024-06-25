@@ -10,9 +10,12 @@ import {
 	disassembleHangulToGroups,
 } from "es-hangul";
 import { useLocale } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const HomeStatus = ({ dict }: { dict: Dict }) => {
+const HomeStatus = ({
+	dict,
+	inputKeys,
+}: { dict: Dict; inputKeys: Record<string, boolean> }) => {
 	const [curInputIndex] = useState(0);
 	const locale = useLocale();
 
@@ -25,17 +28,22 @@ const HomeStatus = ({ dict }: { dict: Dict }) => {
 
 	const translation = useMemo(() => {
 		if (!currentWord) return null;
-		const trans = currentWord.trans[locale as keyof Tran] || currentWord.trans.en;
+		const trans =
+			currentWord.trans[locale as keyof Tran] || currentWord.trans.en;
 		return trans.join(", ");
 	}, [currentWord, locale]);
+
+	useEffect(() => {
+		console.log("inputKeys:", inputKeys);
+	}, [inputKeys]);
 
 	const displayName = currentWord?.name || "";
 	const hangul = disassembleHangul(displayName);
 	const qwerty = hangulToQwerty(hangul);
 	return (
 		<div className="text-center">
-			<div className="text-4xl font-bold">{displayName}</div>
-			<div className="text-lg text-gray-500">{translation}</div>
+			<div className="text-4xl font-bold text-slate-800">{displayName}</div>
+			<div className="text-lg text-slate-400">{translation}</div>
 			<div>{hangul}</div>
 			<div>{qwerty}</div>
 		</div>

@@ -31,13 +31,13 @@ const HomeStatus = ({ dict }: { dict: Dict }) => {
 
 	const displayName = currentWord?.name || "";
 	const hangul = disassembleHangul(displayName);
+	const qwerty = hangulToQwerty(hangul);
 	return (
 		<div className="text-center">
-			<div>{displayName}</div>
+			<div className="text-4xl font-bold">{displayName}</div>
+			<div className="text-lg text-gray-500">{translation}</div>
 			<div>{hangul}</div>
-			<div>{hangulToQwerty(hangul)}</div>
-			<div>{convertQwertyToHangul(hangulToQwerty(hangul))}</div>
-			<div>{translation}</div>
+			<div>{qwerty}</div>
 		</div>
 	);
 };

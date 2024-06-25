@@ -1,4 +1,4 @@
-const KEYS_TO_BIND = [
+const ALPHA_KEYS_TO_BIND = [
 	"a",
 	"b",
 	"c",
@@ -25,6 +25,7 @@ const KEYS_TO_BIND = [
 	"x",
 	"y",
 	"z",
+	"shift",
 	"shift+q",
 	"shift+w",
 	"shift+e",
@@ -33,6 +34,9 @@ const KEYS_TO_BIND = [
 	"shift+o",
 	"shift+p",
 ] as const;
+
+const WITH_SHIFT_KEYS_TO_BIND = ["shift", ...ALPHA_KEYS_TO_BIND.map((_) => `shift+${_}`)];
+const KEYS_TO_BIND = [...ALPHA_KEYS_TO_BIND, ...WITH_SHIFT_KEYS_TO_BIND];
 
 const QWERTY_HANGUL_KEYBOARD_MAP = {
 	q: "ㅂ",

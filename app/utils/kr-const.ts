@@ -134,6 +134,7 @@ const hangulToQwerty = (str: string) => {
 		)
 		.join("");
 };
+
 export {
 	KEYS_TO_BIND,
 	QWERTY_HANGUL_KEYBOARD_MAP,

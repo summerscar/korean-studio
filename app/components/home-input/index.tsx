@@ -1,5 +1,6 @@
 "use client";
 import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
+import { isShift, keyCodeToQwerty } from "@/utils/convert-input";
 import { KEYS_TO_BIND } from "@/utils/kr-const";
 import {
 	useClickAway,
@@ -21,18 +22,15 @@ const HomeInput = ({
 	const inputRef = useHotkeys<HTMLInputElement>(
 		["esc", ...KEYS_TO_BIND],
 		(keyboardEvent) => {
-			const { code, type, shiftKey, key } = keyboardEvent;
+			const { code, type, key } = keyboardEvent;
 			if (key === "Escape") {
 				inputRef.current?.blur();
 				return;
 			}
 
 			if (type === "keydown") {
-				console.log("↓", code, key, shiftKey);
 				setCurrentInputKeys((prev) => ({ ...prev, [code]: true }));
 			} else if (type === "keyup") {
-				console.log("↑", code, key, shiftKey);
-
 				setCurrentInputKeys((prev) => {
 					const res = { ...prev };
 					delete res[code];
@@ -74,10 +72,10 @@ const HomeInput = ({
 	);
 
 	const inlineStyle = useMemo(() => {
-		const activeColor = "bisque";
+		const activeColor = "var(--keyboard-active-color)";
 		return Object.keys(currentInputKeys).reduce((prev, keyCode) => {
-			return `${prev}.${keyCode.toLowerCase().replace(/^key/, "")} {fill: ${activeColor};}
-  .shift {${keyCode.toLowerCase().includes("shift") ? `fill: ${activeColor};` : ""}}`;
+			return `${prev}.${keyCodeToQwerty(keyCode)} {fill: ${activeColor};}
+  .shift {${isShift(keyCode) ? `fill: ${activeColor};` : ""}}`;
 		}, "");
 	}, [currentInputKeys]);
 

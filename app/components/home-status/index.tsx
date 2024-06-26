@@ -1,8 +1,12 @@
 "use client";
+import { SizedConfetti } from "@/components/sized-confetti";
+import type { InputKeys } from "@/types";
 // https://www.lexilogos.com/code/conkr.js
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
+import { convertInputsToQwerty } from "@/utils/convert-input";
 import { hangulToQwerty } from "@/utils/kr-const";
+import clsx from "clsx";
 import {
 	convertQwertyToHangul,
 	convertQwertyToHangulAlphabet,
@@ -15,16 +19,54 @@ import { useEffect, useMemo, useState } from "react";
 const HomeStatus = ({
 	dict,
 	inputKeys,
-}: { dict: Dict; inputKeys: Record<string, boolean> }) => {
-	const [curInputIndex] = useState(0);
+}: { dict: Dict; inputKeys: InputKeys }) => {
+	const [curWordIndex] = useState(0);
+	const [curInputIndex, setCurInputIndex] = useState(0);
 	const locale = useLocale();
+	const [confetti, setConfetti] = useState(false);
 
 	const currentWord = useMemo(() => {
-		if (curInputIndex < dict.length) {
-			return dict[curInputIndex];
+		setCurInputIndex(0);
+		if (curWordIndex < dict.length) {
+			return dict[curWordIndex];
 		}
 		return null;
-	}, [curInputIndex, dict]);
+	}, [curWordIndex, dict]);
+
+	/** 韩文单词 */
+	const displayName = currentWord?.name || "";
+	/** 韩文字母 */
+	const hangul = disassembleHangul(displayName);
+	/** 韩文字母对应的键盘输入 */
+	const qwerty = hangulToQwerty(hangul);
+
+	useEffect(() => {
+		const keysList = Object.keys(inputKeys);
+		if (!keysList.length) return;
+
+		setCurInputIndex((prev) => {
+			const targetKey = (qwerty || "").substring(prev, prev + 1);
+			if (!targetKey) return prev;
+
+			const isTarget = convertInputsToQwerty(inputKeys).find(
+				(key) => key === targetKey,
+			);
+			if (isTarget) {
+				return prev + 1;
+			}
+			// TODO: show tips
+			return prev;
+		});
+	}, [inputKeys, qwerty]);
+
+	/** 完成输入，下一个单词 */
+	useEffect(() => {
+		console.log(curInputIndex, hangul.length);
+		if (curInputIndex >= hangul.length) {
+			setConfetti(true);
+			console.log("next word!");
+		}
+	}, [curInputIndex, hangul]);
 
 	const translation = useMemo(() => {
 		if (!currentWord) return null;
@@ -37,15 +79,48 @@ const HomeStatus = ({
 		console.log("inputKeys:", inputKeys);
 	}, [inputKeys]);
 
-	const displayName = currentWord?.name || "";
-	const hangul = disassembleHangul(displayName);
-	const qwerty = hangulToQwerty(hangul);
+	const heightLightClass = (strIndex: number) =>
+		clsx({
+			"text-red-500": curInputIndex > strIndex,
+		});
+
 	return (
 		<div className="text-center">
+			<SizedConfetti
+				style={{ pointerEvents: "none" }}
+				numberOfPieces={confetti ? 500 : 0}
+				recycle={false}
+				onConfettiComplete={(confetti) => {
+					setConfetti(false);
+					confetti?.reset();
+				}}
+			/>
 			<div className="text-4xl font-bold text-slate-800">{displayName}</div>
-			<div className="text-lg text-slate-400">{translation}</div>
-			<div>{hangul}</div>
-			<div>{qwerty}</div>
+			<div className="text-lg text-gray-500">{translation}</div>
+			<div>
+				{[...hangul].map((strItem, idx) => (
+					<span
+						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+						key={idx}
+						className={clsx(heightLightClass(idx))}
+					>
+						{strItem}
+					</span>
+				))}
+			</div>
+			<div>
+				{[...qwerty].map((strItem, idx) => (
+					<span
+						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+						key={idx}
+						className={clsx(heightLightClass(idx))}
+					>
+						{strItem}
+					</span>
+				))}
+			</div>
+
+			<div>{`curInputIndex: ${curInputIndex}`}</div>
 		</div>
 	);
 };

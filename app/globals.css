@@ -7,6 +7,12 @@
 body {
 }
 
+@layer base {
+  :root {
+    --keyboard-active-color: theme("colors.gray.300");
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

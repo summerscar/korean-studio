@@ -3,8 +3,11 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
+		"keystone:dev": "keystone dev",
+		"keystone:build": "keystone build",
+		"keystone:start": "keystone start",
 		"dev": "next dev",
-		"build": "next build",
+		"build": "pnpm keystone build --no-ui && pnpm next build",
 		"start": "next start",
 		"lint": "biome lint -- apply <files>",
 		"format": "biome format <files> --write",
@@ -13,6 +16,8 @@
 		"lint-staged": "lint-staged"
 	},
 	"dependencies": {
+		"@keystone-6/core": "^6.1.0",
+		"@prisma/client": "^5.16.1",
 		"@svgr/webpack": "^8.1.0",
 		"ahooks": "^3.8.0",
 		"clsx": "^2.1.1",
@@ -32,6 +37,7 @@
 		"husky": "^9.0.11",
 		"lint-staged": "^15.2.7",
 		"postcss": "^8",
+		"prisma": "^5.16.1",
 		"tailwindcss": "^3.4.1",
 		"typescript": "^5"
 	},

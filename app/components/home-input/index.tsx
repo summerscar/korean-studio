@@ -83,7 +83,6 @@ const HomeInput = ({
 		<div className="flex flex-col w-full items-center">
 			<input type="text" ref={inputRef} />
 			<p>isFocus: {`${isInputFocused}`} Enter</p>
-			<p>{Object.keys(currentInputKeys).join(" - ")}</p>
 			<p className="w-10/12">
 				<style
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>

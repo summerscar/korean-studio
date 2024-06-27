@@ -14,19 +14,18 @@ import {
 	disassembleHangulToGroups,
 } from "es-hangul";
 import { useLocale } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const HomeStatus = ({
 	dict,
 	inputKeys,
 }: { dict: Dict; inputKeys: InputKeys }) => {
-	const [curWordIndex] = useState(0);
+	const [curWordIndex, setCurWordIndex] = useState(0);
 	const [curInputIndex, setCurInputIndex] = useState(0);
 	const locale = useLocale();
 	const [confetti, setConfetti] = useState(false);
 
 	const currentWord = useMemo(() => {
-		setCurInputIndex(0);
 		if (curWordIndex < dict.length) {
 			return dict[curWordIndex];
 		}
@@ -59,14 +58,19 @@ const HomeStatus = ({
 		});
 	}, [inputKeys, qwerty]);
 
+	const toNextWord = useCallback(() => {
+		setCurWordIndex((val) => val + 1);
+		setCurInputIndex(0);
+		console.log("next word!");
+	}, []);
+
 	/** 完成输入，下一个单词 */
 	useEffect(() => {
-		console.log(curInputIndex, hangul.length);
 		if (curInputIndex >= hangul.length) {
 			setConfetti(true);
-			console.log("next word!");
+			toNextWord();
 		}
-	}, [curInputIndex, hangul]);
+	}, [curInputIndex, hangul, toNextWord]);
 
 	const translation = useMemo(() => {
 		if (!currentWord) return null;
@@ -88,7 +92,7 @@ const HomeStatus = ({
 		<div className="text-center">
 			<SizedConfetti
 				style={{ pointerEvents: "none" }}
-				numberOfPieces={confetti ? 500 : 0}
+				numberOfPieces={confetti ? 1000 : 0}
 				recycle={false}
 				onConfettiComplete={(confetti) => {
 					setConfetti(false);
@@ -119,7 +123,6 @@ const HomeStatus = ({
 					</span>
 				))}
 			</div>
-
 			<div>{`curInputIndex: ${curInputIndex}`}</div>
 		</div>
 	);

@@ -1,6 +1,5 @@
 import { config, list } from "@keystone-6/core";
-import { allowAll } from "@keystone-6/core/access";
-import { text } from "@keystone-6/core/fields";
+import { lists } from "keystone/schema";
 // import type { Context } from ".keystone/types";
 
 export default config({
@@ -15,13 +14,5 @@ export default config({
 		},
 		prismaClientPath: "node_modules/.prisma/client",
 	},
-	lists: {
-		User: list({
-			access: allowAll,
-			fields: {
-				name: text({ validation: { isRequired: true } }),
-				email: text({ validation: { isRequired: true }, isIndexed: "unique" }),
-			},
-		}),
-	},
+	lists,
 });

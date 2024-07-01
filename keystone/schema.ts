@@ -5,15 +5,10 @@ import type { Lists } from ".keystone/types";
 
 export const lists = {
 	User: list({
-		// WARNING
-		//   for this example, anyone can create, query, update and delete anything
-		//   if you want to prevent random people on the internet from accessing your data,
-		//   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
 		access: allowAll,
-
 		fields: {
-			name: text({ validation: { isRequired: true } }),
-			about: text(),
+			username: text({ validation: { isRequired: true } }),
+			email: text({ validation: { isRequired: true }, isIndexed: "unique" }),
 			createdAt: timestamp({
 				defaultValue: { kind: "now" },
 			}),

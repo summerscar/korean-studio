@@ -2,7 +2,6 @@
 import krPopular from "@/assets/dicts/kr-popular.json";
 import { HomeInput } from "@/components/home-input";
 import { HomeStatus } from "@/components/home-status";
-import { useLatest } from "ahooks";
 import { useState } from "react";
 
 export default function Home() {

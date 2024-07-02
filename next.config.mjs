@@ -4,6 +4,10 @@ const withNextIntl = createNextIntlPlugin("./app/i18n.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	experimental: {
+		// without this, 'Error: Expected Upload to be a GraphQL nullable type.'
+		serverComponentsExternalPackages: ["graphql"],
+	},
 	webpack(config) {
 		// Grab the existing rule that handles SVG imports
 		const fileLoaderRule = config.module.rules.find((rule) =>

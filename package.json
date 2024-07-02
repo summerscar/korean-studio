@@ -19,6 +19,7 @@
 		"lint-staged": "lint-staged"
 	},
 	"dependencies": {
+		"@keystone-6/auth": "^8.0.0",
 		"@keystone-6/core": "^6.1.0",
 		"@prisma/client": "^5.16.1",
 		"@svgr/webpack": "^8.1.0",
@@ -51,7 +52,7 @@
 		"ignorePaths": [],
 		"dictionaryDefinitions": [],
 		"dictionaries": [],
-		"words": ["ahooks", "biomejs", "clsx", "svgr", "tailwindcss"],
+		"words": ["ahooks", "biomejs", "clsx", "svgr", "tailwindcss", "Topik"],
 		"ignoreWords": [],
 		"import": []
 	},

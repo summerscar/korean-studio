@@ -1,3 +1,4 @@
+import { SignIn } from "@/components/sign-in";
 import { keystoneContext } from "keystone/context";
 
 export default async function Topik() {
@@ -12,6 +13,7 @@ export default async function Topik() {
 			{users.map((user) => (
 				<p key={user.id}>{user.name}</p>
 			))}
+			<SignIn />
 		</div>
 	);
 }

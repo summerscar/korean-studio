@@ -1,6 +1,6 @@
 import { createYoga } from "graphql-yoga";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { keystoneContext } from "../../keystone/context";
+import { keystoneContext } from "../../../keystone/context";
 
 /*
   An example of how to setup your own yoga graphql server
@@ -14,7 +14,7 @@ export const config = {
 };
 
 // Use Keystone API to create GraphQL handler
-export default createYoga<{
+const handler = createYoga<{
 	req: NextApiRequest;
 	res: NextApiResponse;
 }>({
@@ -29,3 +29,14 @@ export default createYoga<{
   */
 	context: ({ req, res }) => keystoneContext.withRequest(req, res),
 });
+
+/** https://nextjs.org/docs/app/building-your-application/routing/route-handlers#supported-http-methods */
+export {
+	handler as GET,
+	handler as POST,
+	handler as PUT,
+	handler as DELETE,
+	handler as PATCH,
+	handler as OPTIONS,
+	handler as HEAD,
+};

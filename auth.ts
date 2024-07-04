@@ -1,10 +1,13 @@
 import { authenticateUserWithPassword } from "@/utils/api";
-import { getKeystoneContext } from "@/utils/db";
 import { signInSchema } from "@/utils/zod";
+import { keystoneContext } from "keystone/context";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+	session: {
+		maxAge: 60 * 60 * 24 * 30,
+	},
 	providers: [
 		Credentials({
 			// You can specify which fields should be submitted, by adding keys to the `credentials` object.
@@ -14,17 +17,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				password: {},
 			},
 			authorize: async (credentials) => {
-				console.log("credentials", credentials);
 				const { email, password } = await signInSchema.parseAsync(credentials);
-
 				let user = null;
 				try {
-					user = (await authenticateUserWithPassword(email, password)) as any;
+					user = await authenticateUserWithPassword(email, password);
 				} catch (error) {
-					console.error(
-						"[error] [authenticateUserWithPassword]:",
-						error.message,
-					);
+					error instanceof Error &&
+						console.error(
+							"[error] [authenticateUserWithPassword]:",
+							error.message,
+						);
 				}
 
 				console.log(
@@ -35,7 +37,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				if (!user) {
 					// No user found, so this is their first attempt to login
 					// meaning this is also the place you could do registration
-					throw new Error("User not found.");
+					// throw new Error("Login failed.");
 				}
 
 				// return user object with the their profile data
@@ -43,4 +45,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			},
 		}),
 	],
+	callbacks: {},
 });

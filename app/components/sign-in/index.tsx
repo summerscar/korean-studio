@@ -8,7 +8,10 @@ export function SignIn() {
 				try {
 					await signIn("credentials", formData);
 				} catch (e) {
-					console.error(e);
+					console.log("------------\n", e.message, "\n------------");
+					console.log("------------\n", e, "\n------------");
+
+					// throw e;
 				}
 			}}
 		>

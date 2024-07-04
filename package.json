@@ -1,5 +1,5 @@
 {
-	"name": "language-learning",
+	"name": "korean-studio",
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
@@ -55,7 +55,15 @@
 		"ignorePaths": [],
 		"dictionaryDefinitions": [],
 		"dictionaries": [],
-		"words": ["ahooks", "biomejs", "clsx", "svgr", "tailwindcss", "Topik"],
+		"words": [
+			"ahooks",
+			"biomejs",
+			"clsx",
+			"NEXTAUTH",
+			"svgr",
+			"tailwindcss",
+			"Topik"
+		],
 		"ignoreWords": [],
 		"import": []
 	},

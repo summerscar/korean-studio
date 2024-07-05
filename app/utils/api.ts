@@ -31,8 +31,9 @@ export const authenticateUserWithPassword = async (
 			secret: password,
 		},
 	});
+
 	if (res.authenticate?.message === "Failed to start session.") {
-		return await keystoneContext.query.User.findOne({
+		return await keystoneContext.sudo().query.User.findOne({
 			where: { email },
 			query: "id name email",
 		});

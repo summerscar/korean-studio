@@ -1,4 +1,5 @@
 import { signIn } from "@/../auth";
+import { isRedirectError } from "next/dist/client/components/redirect";
 
 export function SignIn() {
 	return (
@@ -8,10 +9,11 @@ export function SignIn() {
 				try {
 					await signIn("credentials", formData);
 				} catch (e) {
+					if (!isRedirectError(e)) {
+						throw e;
+					}
 					console.log("------------\n", e.message, "\n------------");
 					console.log("------------\n", e, "\n------------");
-
-					// throw e;
 				}
 			}}
 		>

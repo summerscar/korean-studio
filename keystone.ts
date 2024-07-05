@@ -1,6 +1,6 @@
 // import type { Context } from ".keystone/types";
 import { createAuth } from "@keystone-6/auth";
-import { config, list } from "@keystone-6/core";
+import { config } from "@keystone-6/core";
 import { statelessSessions } from "@keystone-6/core/session";
 import { authConfig, lists } from "./keystone/schema";
 

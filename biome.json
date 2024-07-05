@@ -11,7 +11,8 @@
 				"noUnusedVariables": "error"
 			},
 			"suspicious": {
-				"noExplicitAny": "info"
+				"noExplicitAny": "info",
+				"noAssignInExpressions": "off"
 			}
 		}
 	},

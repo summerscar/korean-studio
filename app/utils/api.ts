@@ -1,42 +1,14 @@
+import type { Dict } from "@/types/dict";
+import type { dicts } from "@/utils/config";
 import { GraphQLClient } from "graphql-request";
-import { keystoneContext } from "keystone/context";
 
-export const client = new GraphQLClient(
-	`${process.env.NEXTAUTH_URL}/api/graphql/`,
-);
+const parseURL = (url: string) =>
+	`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}${url}`;
 
-// api authenticateUserWithPassword
-export const authenticateUserWithPassword = async (
-	email: string,
-	password: string,
-) => {
-	const res = await keystoneContext.graphql.run<
-		Record<string, any>,
-		{ identity: string; secret: string }
-	>({
-		query: `mutation signin($identity: String!, $secret: String!) {
-			authenticate: authenticateUserWithPassword(email: $identity, password: $secret) {
-				... on UserAuthenticationWithPasswordSuccess {
-					item {
-						id
-					}
-				}
-				... on UserAuthenticationWithPasswordFailure {
-					message
-				}
-			}
-		}`,
-		variables: {
-			identity: email,
-			secret: password,
-		},
-	});
+export const client = new GraphQLClient(parseURL("/api/graphql"));
 
-	if (res.authenticate?.message === "Failed to start session.") {
-		return await keystoneContext.sudo().query.User.findOne({
-			where: { email },
-			query: "id name email",
-		});
-	}
-	throw new Error(res.authenticate?.message);
+export const fetchDict = async (
+	target: keyof typeof dicts = "kr-popular",
+): Promise<Dict> => {
+	return fetch(parseURL(`/dicts/${target}.json`)).then((res) => res.json());
 };

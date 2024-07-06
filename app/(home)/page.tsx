@@ -1,16 +1,10 @@
-"use client";
-import krPopular from "@/assets/dicts/kr-popular.json";
-import { HomeInput } from "@/components/home-input";
-import { HomeStatus } from "@/components/home-status";
-import { useState } from "react";
+import Home from "@/components/home";
+import { fetchDict } from "@/utils/api";
 
-export default function Home() {
-	const [inputKeys, setInputKeys] = useState<Record<string, boolean>>({});
-
+export default function HomePage() {
 	return (
 		<main className="w-full flex flex-col items-center justify-center">
-			<HomeStatus dict={krPopular} inputKeys={inputKeys} />
-			<HomeInput onInput={setInputKeys} />
+			<Home dictPromise={fetchDict()} />
 		</main>
 	);
 }

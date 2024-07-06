@@ -37,4 +37,8 @@ const getSiteConfig = (
 };
 const siteConfig = getSiteConfig();
 
+export const dicts = {
+	"kr-popular": "流行词汇",
+};
+
 export { siteConfig, DEFAULT_SITE, DEFAULT_SITE_LANGUAGE };

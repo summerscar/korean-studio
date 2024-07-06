@@ -43,6 +43,7 @@ export const lists = {
 				...allOperations(allowAll),
 				// hint: unconditionally returning `true` is equivalent to using allowAll for this operation
 				query: async ({ session, context, listKey, operation }) => {
+					console.log("-----no session-----");
 					if (!session) return false;
 					console.log(`[keystone][${operation}][${listKey}]: start...`);
 					if (isFromNextAuth(session)) {

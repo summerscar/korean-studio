@@ -5,6 +5,7 @@ import type { InputKeys } from "@/types";
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
 import { convertInputsToQwerty } from "@/utils/convert-input";
+import { myeongjo } from "@/utils/fonts";
 import { hangulToQwerty } from "@/utils/kr-const";
 import clsx from "clsx";
 import {
@@ -89,7 +90,7 @@ const HomeStatus = ({
 		});
 
 	return (
-		<div className="text-center">
+		<div className={clsx(myeongjo.className, "text-center")}>
 			<SizedConfetti
 				style={{ pointerEvents: "none" }}
 				numberOfPieces={confetti ? 1000 : 0}

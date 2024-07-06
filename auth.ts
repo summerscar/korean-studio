@@ -1,4 +1,4 @@
-import { authenticateUserWithPassword } from "@/utils/api";
+import { authenticateUserWithPassword } from "@/utils/db";
 import { signInSchema } from "@/utils/zod";
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";

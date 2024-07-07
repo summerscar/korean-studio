@@ -12,15 +12,15 @@ export type HomeInputRef = {
 
 const HomeInput = forwardRef<
 	HomeInputRef,
-	{ onInput?: (inputKeys: Record<string, boolean>) => void }
->(({ onInput }, ref) => {
+	{ onInput?: (inputKeys: Record<string, boolean>) => void; position?: DOMRect }
+>(({ onInput, position }, ref) => {
 	const [currentInputKeys, setCurrentInputKeys] = useState<
 		Record<string, boolean>
 	>({});
 	const [isInputFocused, setIsInputFocused] = useState(false);
 
 	const inputRef = useHotkeys<HTMLInputElement>(
-		["esc", ...KEYS_TO_BIND],
+		["esc", "backspace", ...KEYS_TO_BIND],
 		(keyboardEvent) => {
 			const { code, type, key } = keyboardEvent;
 			if (key === "Escape") {
@@ -84,14 +84,22 @@ const HomeInput = forwardRef<
 		{ target: inputRef },
 	);
 
+	const style = position
+		? {
+				left: `${position.left}px`,
+				top: `${position.top}px`,
+			}
+		: undefined;
+
 	return (
 		<div
 			className={clsx(
 				isInputFocused
 					? "animate-[1s_ease_0s_infinite_normal_none_running_blink]"
 					: "opacity-0",
-				"absolute top-0 left-0 w-[2px] h-[23px] overflow-hidden bg-black",
+				"fixed top-0 left-0 w-[2px] h-[23px] overflow-hidden bg-black translate-y-1",
 			)}
+			style={style}
 		>
 			<input className="opacity-0 w-0 h-0" type="text" ref={inputRef} />
 		</div>

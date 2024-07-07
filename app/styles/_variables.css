@@ -1,14 +1,13 @@
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+	--font-color-inactive: theme(textColor.gray.500);
+	--font-color-active: theme(textColor.black);
+	--font-color-error: theme(textColor.rose.500);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+		--font-color-inactive: #3f3f3f;
+		--font-color-active: #ffffff;
   }
 }

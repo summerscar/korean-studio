@@ -1,28 +1,24 @@
 "use client";
 import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
+import { HomeInput } from "@/components/home-input";
 import { SizedConfetti } from "@/components/sized-confetti";
-import type { InputKeys } from "@/types";
 // https://www.lexilogos.com/code/conkr.js
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
 import {
 	convertInputsToQwerty,
+	isEmptyInput,
 	isShift,
+	isShiftOnly,
 	keyCodeToQwerty,
 } from "@/utils/convert-input";
-import { myeongjo } from "@/utils/fonts";
+import { notoKR } from "@/utils/fonts";
 import { hangulToQwerty } from "@/utils/kr-const";
 import { useClickAway } from "ahooks";
 import clsx from "clsx";
-import {
-	convertQwertyToHangul,
-	convertQwertyToHangulAlphabet,
-	disassembleHangul,
-	disassembleHangulToGroups,
-} from "es-hangul";
+import { disassembleHangul } from "es-hangul";
 import { useLocale } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { HomeInput } from "../home-input";
 
 const HomeStatus = ({
 	dict,
@@ -31,6 +27,7 @@ const HomeStatus = ({
 }) => {
 	const [curWordIndex, setCurWordIndex] = useState(0);
 	const [curInputIndex, setCurInputIndex] = useState(0);
+	const [isInputError, setIsInputError] = useState(false);
 	const locale = useLocale();
 	const [confetti, setConfetti] = useState(false);
 	const hangulRef = useRef<HTMLDivElement>(null);
@@ -39,6 +36,19 @@ const HomeStatus = ({
 		handleInputBlur: () => {},
 		handleInputFocus: () => {},
 	});
+
+	/** 计算input光标位置 */
+	const [inputPosition, setInputPosition] = useState<DOMRect>();
+	useEffect(() => {
+		if (hangulRef.current) {
+			inputRef.current.handleInputFocus?.();
+		}
+		const hangulEls = hangulRef.current?.children;
+		if (!hangulEls || curInputIndex >= hangulEls.length) return;
+		const currentSpan = hangulEls[curInputIndex] as HTMLSpanElement;
+		const rect = currentSpan.getBoundingClientRect();
+		setInputPosition(rect);
+	}, [curInputIndex]);
 
 	useClickAway(() => {
 		inputRef.current.handleInputBlur?.();
@@ -58,6 +68,16 @@ const HomeStatus = ({
 	/** 韩文字母对应的键盘输入 */
 	const qwerty = hangulToQwerty(hangul);
 
+	const addShakeAnimation = useCallback((target: HTMLElement) => {
+		const className = "animate-[shake-text_0.25s_1]";
+		const remove = () => {
+			target.classList.remove(className);
+			target.removeEventListener("animationend", remove);
+		};
+		target.classList.add(className);
+		target.addEventListener("animationend", remove);
+	}, []);
+
 	useEffect(() => {
 		const keysList = Object.keys(inputKeys);
 		if (!keysList.length) return;
@@ -65,17 +85,26 @@ const HomeStatus = ({
 		setCurInputIndex((prev) => {
 			const targetKey = (qwerty || "").substring(prev, prev + 1);
 			if (!targetKey) return prev;
-
-			const isTarget = convertInputsToQwerty(inputKeys).find(
-				(key) => key === targetKey,
-			);
+			const parsedInputs = convertInputsToQwerty(inputKeys);
+			// backspace 需要退回一位
+			if (parsedInputs.includes("backspace")) {
+				setIsInputError(false);
+				return Math.max(prev - 1, 0);
+			}
+			// 前进一位
+			const isTarget = parsedInputs.find((key) => key === targetKey);
 			if (isTarget) {
+				setIsInputError(false);
 				return prev + 1;
 			}
-			// TODO: show tips
+			// 输入错误，提示下一个输入
+			if (!isShiftOnly(inputKeys)) {
+				setIsInputError(true);
+				addShakeAnimation(hangulRef.current!);
+			}
 			return prev;
 		});
-	}, [inputKeys, qwerty]);
+	}, [inputKeys, qwerty, addShakeAnimation]);
 
 	const toNextWord = useCallback(() => {
 		setCurWordIndex((val) => val + 1);
@@ -85,11 +114,11 @@ const HomeStatus = ({
 
 	/** 完成输入，下一个单词 */
 	useEffect(() => {
-		if (curInputIndex >= hangul.length) {
+		if (curInputIndex >= hangul.length && isEmptyInput(inputKeys)) {
 			setConfetti(true);
 			toNextWord();
 		}
-	}, [curInputIndex, hangul, toNextWord]);
+	}, [curInputIndex, hangul, inputKeys, toNextWord]);
 
 	const translation = useMemo(() => {
 		if (!currentWord) return null;
@@ -104,7 +133,9 @@ const HomeStatus = ({
 
 	const heightLightClass = (strIndex: number) =>
 		clsx({
-			"text-red-500": curInputIndex > strIndex,
+			"font-bold text-[color:var(--font-color-error)]":
+				isInputError && curInputIndex === strIndex,
+			"text-[color:var(--font-color-active)]": curInputIndex > strIndex,
 		});
 
 	const inlineStyle = useMemo(() => {
@@ -116,7 +147,7 @@ const HomeStatus = ({
 	}, [inputKeys]);
 
 	return (
-		<div className={clsx(myeongjo.className, "text-center relative")}>
+		<div className={clsx(notoKR.className, "text-center")}>
 			<SizedConfetti
 				style={{ pointerEvents: "none" }}
 				numberOfPieces={confetti ? 1000 : 0}
@@ -130,7 +161,9 @@ const HomeStatus = ({
 			<div className="text-lg text-gray-500">{translation}</div>
 			{/* 韩语音节 */}
 			<div
-				className="inline-block"
+				className={clsx(
+					"inline-block cursor-pointer text-xl text-[color:var(--font-color-inactive)]",
+				)}
 				ref={hangulRef}
 				onClick={() => inputRef.current.handleInputFocus()}
 				onKeyUp={() => inputRef.current.handleInputBlur()}
@@ -171,7 +204,11 @@ const HomeStatus = ({
 					height={"100%"}
 				/>
 			</p>
-			<HomeInput onInput={setInputKeys} ref={inputRef} />
+			<HomeInput
+				onInput={setInputKeys}
+				position={inputPosition}
+				ref={inputRef}
+			/>
 		</div>
 	);
 };

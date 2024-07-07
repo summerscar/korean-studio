@@ -4,8 +4,6 @@
 @import "./styles/_variables.css";
 @import "./styles/_animation.css";
 
-
-
 @layer base {
   :root {
     --keyboard-active-color: theme("colors.gray.300");

@@ -13,6 +13,9 @@
 			"suspicious": {
 				"noExplicitAny": "info",
 				"noAssignInExpressions": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off"
 			}
 		}
 	},

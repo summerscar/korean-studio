@@ -53,3 +53,29 @@ body{--y-0:80%;--x-0:85%;--c-0:hsla(150.8823529411765,52%,83%,1);--x-1:60%;--c-1
 	50% { opacity: 0.1; }
 	80% { opacity: 1; }
 }
+
+@keyframes shake-text {
+	0% {
+			transform: translateX(0)
+	}
+
+	30% {
+			transform: translateX(-3%)
+	}
+
+	40% {
+			transform: translateX(3%)
+	}
+
+	70% {
+			transform: translateX(-3%)
+	}
+
+	80% {
+			transform: translateX(3%)
+	}
+
+	to {
+			transform: translateX(0)
+	}
+}

@@ -1,19 +1,19 @@
 "use client";
-import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
-import { isShift, keyCodeToQwerty } from "@/utils/convert-input";
 import { KEYS_TO_BIND } from "@/utils/kr-const";
-import {
-	useClickAway,
-	useEventListener,
-	useMount,
-	useUpdateEffect,
-} from "ahooks";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEventListener, useUpdateEffect } from "ahooks";
+import clsx from "clsx";
+import { forwardRef, useCallback, useImperativeHandle, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
-const HomeInput = ({
-	onInput,
-}: { onInput?: (inputKeys: Record<string, boolean>) => void }) => {
+export type HomeInputRef = {
+	handleInputBlur: () => void;
+	handleInputFocus: () => void;
+};
+
+const HomeInput = forwardRef<
+	HomeInputRef,
+	{ onInput?: (inputKeys: Record<string, boolean>) => void }
+>(({ onInput }, ref) => {
 	const [currentInputKeys, setCurrentInputKeys] = useState<
 		Record<string, boolean>
 	>({});
@@ -24,7 +24,7 @@ const HomeInput = ({
 		(keyboardEvent) => {
 			const { code, type, key } = keyboardEvent;
 			if (key === "Escape") {
-				inputRef.current?.blur();
+				handleInputBlur();
 				return;
 			}
 
@@ -42,6 +42,19 @@ const HomeInput = ({
 		[onInput],
 	);
 
+	const handleInputFocus = useCallback(() => {
+		// debugger;
+		inputRef.current?.focus();
+	}, [inputRef]);
+	const handleInputBlur = useCallback(() => {
+		inputRef.current?.blur();
+	}, [inputRef]);
+
+	useImperativeHandle(ref, () => ({
+		handleInputFocus,
+		handleInputBlur,
+	}));
+
 	useUpdateEffect(() => {
 		if (onInput) {
 			onInput(currentInputKeys);
@@ -51,7 +64,7 @@ const HomeInput = ({
 	useHotkeys(
 		["enter"],
 		() => {
-			inputRef.current?.focus();
+			handleInputFocus();
 		},
 		[],
 	);
@@ -71,32 +84,17 @@ const HomeInput = ({
 		{ target: inputRef },
 	);
 
-	const inlineStyle = useMemo(() => {
-		const activeColor = "var(--keyboard-active-color)";
-		return Object.keys(currentInputKeys).reduce((prev, keyCode) => {
-			return `${prev}.${keyCodeToQwerty(keyCode)} {fill: ${activeColor};}
-  .shift {${isShift(keyCode) ? `fill: ${activeColor};` : ""}}`;
-		}, "");
-	}, [currentInputKeys]);
-
 	return (
-		<div className="flex flex-col w-full items-center">
-			<input type="text" ref={inputRef} />
-			<p>isFocus: {`${isInputFocused}`} Enter</p>
-			<p className="w-10/12">
-				<style
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-					dangerouslySetInnerHTML={{
-						__html: inlineStyle,
-					}}
-				/>
-				<KoreanKeyBoardSVG
-					viewBox="0 0 960 300"
-					width={"100%"}
-					height={"100%"}
-				/>
-			</p>
+		<div
+			className={clsx(
+				isInputFocused
+					? "animate-[1s_ease_0s_infinite_normal_none_running_blink]"
+					: "opacity-0",
+				"absolute top-0 left-0 w-[2px] h-[23px] overflow-hidden bg-black",
+			)}
+		>
+			<input className="opacity-0 w-0 h-0" type="text" ref={inputRef} />
 		</div>
 	);
-};
+});
 export { HomeInput };

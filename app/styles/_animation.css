@@ -9,7 +9,7 @@ body{--y-0:80%;--x-0:85%;--c-0:hsla(150.8823529411765,52%,83%,1);--x-1:60%;--c-1
 
 :root {
   --sk-size: 80px;
-  --sk-color: rgba(255, 255, 255, 0.5);
+  --sk-color: rgba(255, 255, 255, 0.8);
 }
 .sk-center { margin: auto; }
 
@@ -45,4 +45,11 @@ body{--y-0:80%;--x-0:85%;--c-0:hsla(150.8823529411765,52%,83%,1);--x-1:60%;--c-1
   } 35% {
     transform: scale3D(0, 0, 1);
   }
+}
+
+
+@keyframes blink {
+	20% { opacity: 1; }
+	50% { opacity: 0.1; }
+	80% { opacity: 1; }
 }

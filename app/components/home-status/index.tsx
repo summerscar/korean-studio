@@ -1,12 +1,18 @@
 "use client";
+import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import { SizedConfetti } from "@/components/sized-confetti";
 import type { InputKeys } from "@/types";
 // https://www.lexilogos.com/code/conkr.js
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
-import { convertInputsToQwerty } from "@/utils/convert-input";
+import {
+	convertInputsToQwerty,
+	isShift,
+	keyCodeToQwerty,
+} from "@/utils/convert-input";
 import { myeongjo } from "@/utils/fonts";
 import { hangulToQwerty } from "@/utils/kr-const";
+import { useClickAway } from "ahooks";
 import clsx from "clsx";
 import {
 	convertQwertyToHangul,
@@ -16,15 +22,27 @@ import {
 } from "es-hangul";
 import { useLocale } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { HomeInput } from "../home-input";
 
 const HomeStatus = ({
 	dict,
-	inputKeys,
-}: { dict: Dict; inputKeys: InputKeys }) => {
+}: {
+	dict: Dict;
+}) => {
 	const [curWordIndex, setCurWordIndex] = useState(0);
 	const [curInputIndex, setCurInputIndex] = useState(0);
 	const locale = useLocale();
 	const [confetti, setConfetti] = useState(false);
+	const hangulRef = useRef<HTMLDivElement>(null);
+	const [inputKeys, setInputKeys] = useState<Record<string, boolean>>({});
+	const inputRef = useRef({
+		handleInputBlur: () => {},
+		handleInputFocus: () => {},
+	});
+
+	useClickAway(() => {
+		inputRef.current.handleInputBlur?.();
+	}, hangulRef);
 
 	const currentWord = useMemo(() => {
 		if (curWordIndex < dict.length) {
@@ -89,8 +107,16 @@ const HomeStatus = ({
 			"text-red-500": curInputIndex > strIndex,
 		});
 
+	const inlineStyle = useMemo(() => {
+		const activeColor = "var(--keyboard-active-color)";
+		return Object.keys(inputKeys).reduce((prev, keyCode) => {
+			return `${prev}.${keyCodeToQwerty(keyCode)} {fill: ${activeColor};}
+		.shift {${isShift(keyCode) ? `fill: ${activeColor};` : ""}}`;
+		}, "");
+	}, [inputKeys]);
+
 	return (
-		<div className={clsx(myeongjo.className, "text-center")}>
+		<div className={clsx(myeongjo.className, "text-center relative")}>
 			<SizedConfetti
 				style={{ pointerEvents: "none" }}
 				numberOfPieces={confetti ? 1000 : 0}
@@ -102,7 +128,13 @@ const HomeStatus = ({
 			/>
 			<div className="text-4xl font-bold text-slate-800">{displayName}</div>
 			<div className="text-lg text-gray-500">{translation}</div>
-			<div>
+			{/* 韩语音节 */}
+			<div
+				className="inline-block"
+				ref={hangulRef}
+				onClick={() => inputRef.current.handleInputFocus()}
+				onKeyUp={() => inputRef.current.handleInputBlur()}
+			>
 				{[...hangul].map((strItem, idx) => (
 					<span
 						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
@@ -113,6 +145,7 @@ const HomeStatus = ({
 					</span>
 				))}
 			</div>
+			{/* 键盘输入 */}
 			<div>
 				{[...qwerty].map((strItem, idx) => (
 					<span
@@ -125,6 +158,20 @@ const HomeStatus = ({
 				))}
 			</div>
 			<div>{`curInputIndex: ${curInputIndex}`}</div>
+			<p className="w-[80vw]">
+				<style
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+					dangerouslySetInnerHTML={{
+						__html: inlineStyle,
+					}}
+				/>
+				<KoreanKeyBoardSVG
+					viewBox="0 0 960 300"
+					width={"100%"}
+					height={"100%"}
+				/>
+			</p>
+			<HomeInput onInput={setInputKeys} ref={inputRef} />
 		</div>
 	);
 };

@@ -1,10 +1,11 @@
-import Home from "@/components/home";
+import { HomeStatus } from "@/components/home-status";
 import { fetchDict } from "@/utils/api";
 
-export default function HomePage() {
+export default async function HomePage() {
+	const dict = await fetchDict();
 	return (
 		<main className="w-full flex flex-col items-center justify-center">
-			<Home dictPromise={fetchDict()} />
+			<HomeStatus dict={dict} />
 		</main>
 	);
 }

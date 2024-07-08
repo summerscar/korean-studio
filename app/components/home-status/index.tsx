@@ -1,5 +1,6 @@
 "use client";
 import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
+import { DictNav } from "@/components/dict-nav";
 import { HomeInput } from "@/components/home-input";
 import { SizedConfetti } from "@/components/sized-confetti";
 // https://www.lexilogos.com/code/conkr.js
@@ -157,6 +158,7 @@ const HomeStatus = ({
 					confetti?.reset();
 				}}
 			/>
+			<DictNav dict={dict} curWordIndex={curWordIndex} />
 			<div className="text-4xl font-bold text-slate-800">{displayName}</div>
 			<div className="text-lg text-gray-500">{translation}</div>
 			{/* 韩语音节 */}

@@ -1,0 +1,42 @@
+<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff7e5f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#feb47b;stop-opacity:1" />
+    </linearGradient>
+    <style>
+      .bg {
+        fill: url(#grad1);
+      }
+      .text {
+        fill: #ffffff;
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .highlight {
+        fill: #ffff00;
+        font-family: Arial, sans-serif;
+        font-size: 28px;
+        font-weight: bold;
+        filter: url(#glow);
+      }
+      .star {
+        fill: #ffffff;
+        opacity: 0.5;
+      }
+    </style>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect x="0" y="0" width="400" height="150" class="bg" rx="15" ry="15"/>
+  <text x="135" y="110" class="highlight">Excellent!</text>
+  <polygon points="360,30 370,50 390,50 375,65 380,85 360,75 340,85 345,65 330,50 350,50" class="star"/>
+  <polygon points="50,30 60,50 80,50 65,65 70,85 50,75 30,85 35,65 20,50 40,50" class="star"/>
+  <polygon points="200,10 210,30 230,30 215,45 220,65 200,55 180,65 185,45 170,30 190,30" class="star"/>
+</svg>

@@ -47,6 +47,7 @@ const HomeInput = forwardRef<
 		inputRef.current?.focus();
 	}, [inputRef]);
 	const handleInputBlur = useCallback(() => {
+		// debugger;
 		inputRef.current?.blur();
 	}, [inputRef]);
 

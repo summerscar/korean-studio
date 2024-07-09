@@ -1,5 +1,7 @@
 "use client";
+import CompleteSVG from "@/assets/svg/complete.svg";
 import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
+import RefreshSVG from "@/assets/svg/refresh.svg";
 import { DictNav } from "@/components/dict-nav";
 import { HomeInput } from "@/components/home-input";
 import { SizedConfetti } from "@/components/sized-confetti";
@@ -15,7 +17,7 @@ import {
 } from "@/utils/convert-input";
 import { notoKR } from "@/utils/fonts";
 import { hangulToQwerty } from "@/utils/kr-const";
-import { useClickAway } from "ahooks";
+import { useClickAway, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { disassembleHangul } from "es-hangul";
 import { useLocale } from "next-intl";
@@ -28,6 +30,7 @@ const HomeStatus = ({
 }) => {
 	const [curWordIndex, setCurWordIndex] = useState(0);
 	const [curInputIndex, setCurInputIndex] = useState(0);
+	const [isComplete, setIsComplete] = useState(false);
 	const [isInputError, setIsInputError] = useState(false);
 	const locale = useLocale();
 	const [confetti, setConfetti] = useState(false);
@@ -40,6 +43,7 @@ const HomeStatus = ({
 
 	/** 计算input光标位置 */
 	const [inputPosition, setInputPosition] = useState<DOMRect>();
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (hangulRef.current) {
 			inputRef.current.handleInputFocus?.();
@@ -49,7 +53,7 @@ const HomeStatus = ({
 		const currentSpan = hangulEls[curInputIndex] as HTMLSpanElement;
 		const rect = currentSpan.getBoundingClientRect();
 		setInputPosition(rect);
-	}, [curInputIndex]);
+	}, [curInputIndex, curWordIndex]);
 
 	useClickAway(() => {
 		inputRef.current.handleInputBlur?.();
@@ -107,13 +111,47 @@ const HomeStatus = ({
 		});
 	}, [inputKeys, qwerty, addShakeAnimation]);
 
-	const toNextWord = useCallback(() => {
-		setCurWordIndex((val) => val + 1);
-		setCurInputIndex(0);
-		console.log("next word!");
+	const focusInput = useCallback(() => {
+		inputRef.current.handleInputFocus?.();
+	}, []);
+	const blurInput = useCallback(() => {
+		inputRef.current.handleInputBlur?.();
 	}, []);
 
-	/** 完成输入，下一个单词 */
+	const skipToNextWord = useCallback(
+		(nextWordIndex: number) => {
+			if (nextWordIndex >= dict.length) {
+				setIsComplete(true);
+				setTimeout(blurInput);
+			} else {
+				setIsComplete(false);
+				setTimeout(focusInput);
+			}
+			const targetIndex = Math.max(0, nextWordIndex);
+			setCurWordIndex(targetIndex);
+			setCurInputIndex(0);
+			setIsInputError(false);
+			console.log(
+				`skip to next word! ${targetIndex + 1}/${dict.length}  \n`,
+				dict[targetIndex],
+			);
+		},
+		[focusInput, dict, blurInput],
+	);
+
+	const toPrevWord = useMemoizedFn(() => {
+		skipToNextWord(curWordIndex - 1);
+	});
+
+	const toNextWord = useMemoizedFn(() => {
+		skipToNextWord(curWordIndex + 1);
+	});
+
+	const resetWord = useMemoizedFn(() => {
+		skipToNextWord(0);
+	});
+
+	/** TODO: 放在useEffect可能有点问题 完成输入，下一个单词 */
 	useEffect(() => {
 		if (curInputIndex >= hangul.length && isEmptyInput(inputKeys)) {
 			setConfetti(true);
@@ -148,7 +186,15 @@ const HomeStatus = ({
 	}, [inputKeys]);
 
 	return (
-		<div className={clsx(notoKR.className, "text-center")}>
+		<div
+			className={clsx(
+				notoKR.className,
+				"flex",
+				"flex-col",
+				"items-center",
+				"justify-center",
+			)}
+		>
 			<SizedConfetti
 				style={{ pointerEvents: "none" }}
 				numberOfPieces={confetti ? 1000 : 0}
@@ -158,7 +204,18 @@ const HomeStatus = ({
 					confetti?.reset();
 				}}
 			/>
-			<DictNav dict={dict} curWordIndex={curWordIndex} />
+			{isComplete && (
+				<div className="flex flex-col items-center justify-center">
+					<CompleteSVG />
+					<RefreshSVG className="mt-5 cursor-pointer" onClick={resetWord} />
+				</div>
+			)}
+			<DictNav
+				onNext={toNextWord}
+				onPrev={toPrevWord}
+				dict={dict}
+				curWordIndex={curWordIndex}
+			/>
 			<div className="text-4xl font-bold text-slate-800">{displayName}</div>
 			<div className="text-lg text-gray-500">{translation}</div>
 			{/* 韩语音节 */}
@@ -167,8 +224,8 @@ const HomeStatus = ({
 					"inline-block cursor-pointer text-xl text-[color:var(--font-color-inactive)]",
 				)}
 				ref={hangulRef}
-				onClick={() => inputRef.current.handleInputFocus()}
-				onKeyUp={() => inputRef.current.handleInputBlur()}
+				onClick={focusInput}
+				onKeyUp={blurInput}
 			>
 				{[...hangul].map((strItem, idx) => (
 					<span

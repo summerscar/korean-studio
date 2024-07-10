@@ -15,3 +15,21 @@
     text-wrap: balance;
   }
 }
+
+@media (prefers-color-scheme: light) {
+	.markdown-body, [data-theme="light"] {
+		--bgColor-default: theme(colors.transparent)!important;
+	}
+}
+
+
+.markdown-body {
+	ol, ul, menu {
+		list-style: unset;
+		margin: unset;
+		padding: unset;
+	}
+	ol {
+		list-style-type: decimal;
+	}
+}

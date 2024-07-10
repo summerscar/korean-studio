@@ -2,5 +2,9 @@
 	"Index": {
 		"title": "Korean Studio",
 		"description": "Korean Language Learning"
+	},
+	"Header": {
+		"beginner": "Beginner",
+		"intermediate": "Intermediate"
 	}
 }

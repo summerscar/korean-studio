@@ -3,6 +3,7 @@ import "@/globals.css";
 import clsx from "clsx";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import "github-markdown-css";
 
 export async function DefaultLayout({
 	isAdmin = false,

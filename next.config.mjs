@@ -1,9 +1,11 @@
+import withMDX from "@next/mdx";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./app/i18n.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
 	experimental: {
 		// without this, 'Error: Expected Upload to be a GraphQL nullable type.'
 		serverComponentsExternalPackages: ["graphql"],
@@ -55,4 +57,4 @@ const nextConfig = {
 	},
 };
 
-export default withNextIntl(nextConfig);
+export default withNextIntl(withMDX()(nextConfig));

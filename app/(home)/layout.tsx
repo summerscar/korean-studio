@@ -2,13 +2,12 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { HomeBGIcon } from "@/components/home-bg-icon";
 import { DefaultLayout } from "@/components/root-layout";
+import { getServerI18n } from "@/utils/i18n";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
-	const locale = await getLocale();
-	const t = await getTranslations({ locale, namespace: "Index" });
-
+	const t = await getServerI18n("Index");
 	return {
 		title: t("title"),
 		description: t("description"),

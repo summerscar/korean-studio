@@ -2,5 +2,9 @@
 	"Index": {
 		"title": "韩语教室",
 		"description": "韩语学习"
+	},
+	"Header": {
+		"beginner": "入门",
+		"intermediate": "进阶"
 	}
 }

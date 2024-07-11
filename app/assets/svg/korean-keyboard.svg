@@ -288,8 +288,8 @@
     <text x="115" y="280" font-size="16" text-anchor="middle" fill="#333333">alt</text>
 
     <!-- Key space -->
-    <rect x="150" y="250" width="510" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
-    <text x="405" y="280" font-size="16" text-anchor="middle" fill="#333333">hujiang.com</text>
+    <rect class="space Space" x="150" y="250" width="510" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <text x="405" y="280" font-size="16" text-anchor="middle" fill="#333333"></text>
 
     <!-- Key alt -->
     <rect x="670" y="250" width="50" height="50" fill="white" stroke="#cccccc" stroke-width="1" />

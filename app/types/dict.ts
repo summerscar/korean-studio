@@ -8,6 +8,8 @@ export interface Tran {
 export interface DictItem {
 	name: string;
 	trans: Tran;
+	example: string;
+	exTrans: Tran;
 }
 
 export type Dict = DictItem[];

@@ -9,11 +9,16 @@ import { SizedConfetti } from "@/components/sized-confetti";
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
 import {
+	NextKeyShortcut,
+	PrevKeyShortcut,
 	convertInputsToQwerty,
 	isEmptyInput,
+	isNavShortcut,
 	isShift,
 	isShiftOnly,
+	isSpace,
 	keyCodeToQwerty,
+	parseSpaceStr,
 } from "@/utils/convert-input";
 import { notoKR } from "@/utils/fonts";
 import { hangulToQwerty } from "@/utils/kr-const";
@@ -69,9 +74,9 @@ const HomeStatus = ({
 	/** 韩文单词 */
 	const displayName = currentWord?.name || "";
 	/** 韩文字母 */
-	const hangul = disassembleHangul(displayName);
+	const hangul = parseSpaceStr(disassembleHangul(displayName));
 	/** 韩文字母对应的键盘输入 */
-	const qwerty = hangulToQwerty(hangul);
+	const qwerty = parseSpaceStr(hangulToQwerty(hangul));
 
 	const addShakeAnimation = useCallback((target: HTMLElement) => {
 		const className = "animate-[shake-text_0.25s_1]";
@@ -103,7 +108,7 @@ const HomeStatus = ({
 				return prev + 1;
 			}
 			// 输入错误，提示下一个输入
-			if (!isShiftOnly(inputKeys)) {
+			if (!isShiftOnly(inputKeys) && !isNavShortcut(inputKeys)) {
 				setIsInputError(true);
 				addShakeAnimation(hangulRef.current!);
 			}
@@ -146,18 +151,36 @@ const HomeStatus = ({
 	const toNextWord = useMemoizedFn(() => {
 		skipToNextWord(curWordIndex + 1);
 	});
-
+	const toNextWordWithCheck = useMemoizedFn(() => {
+		const nextWordIndex = curWordIndex + 1;
+		if (nextWordIndex >= dict.length) {
+			return;
+		}
+		toNextWord();
+	});
 	const resetWord = useMemoizedFn(() => {
 		skipToNextWord(0);
 	});
 
-	/** TODO: 放在useEffect可能有点问题 完成输入，下一个单词 */
+	/** 完成输入，下一个单词 TODO: 放在useEffect可能有点问题 */
 	useEffect(() => {
 		if (curInputIndex >= hangul.length && isEmptyInput(inputKeys)) {
 			setConfetti(true);
 			toNextWord();
 		}
 	}, [curInputIndex, hangul, inputKeys, toNextWord]);
+
+	useEffect(() => {
+		const inputKeysArr = Object.keys(inputKeys);
+		if (inputKeysArr.includes(PrevKeyShortcut)) {
+			toPrevWord();
+			return;
+		}
+		if (inputKeysArr.includes(NextKeyShortcut)) {
+			toNextWordWithCheck();
+			return;
+		}
+	}, [inputKeys, toPrevWord, toNextWordWithCheck]);
 
 	const translation = useMemo(() => {
 		if (!currentWord) return null;
@@ -166,8 +189,15 @@ const HomeStatus = ({
 		return trans.join(", ");
 	}, [currentWord, locale]);
 
+	const exTranslation = useMemo(() => {
+		if (!currentWord) return null;
+		const exTrans =
+			currentWord.exTrans[locale as keyof Tran] || currentWord.exTrans.en;
+		return exTrans.join(", ");
+	}, [currentWord, locale]);
+
 	useEffect(() => {
-		console.log("inputKeys:", inputKeys);
+		!isEmptyInput(inputKeys) && console.log("inputKeys:", inputKeys);
 	}, [inputKeys]);
 
 	const heightLightClass = (strIndex: number) =>
@@ -181,7 +211,8 @@ const HomeStatus = ({
 		const activeColor = "var(--keyboard-active-color)";
 		return Object.keys(inputKeys).reduce((prev, keyCode) => {
 			return `${prev}.${keyCodeToQwerty(keyCode)} {fill: ${activeColor};}
-		.shift {${isShift(keyCode) ? `fill: ${activeColor};` : ""}}`;
+		.shift {${isShift(keyCode) ? `fill: ${activeColor};` : ""}}
+		.space {${isSpace(keyCode) ? `fill: ${activeColor};` : ""}}`;
 		}, "");
 	}, [inputKeys]);
 
@@ -237,20 +268,8 @@ const HomeStatus = ({
 					</span>
 				))}
 			</div>
-			{/* 键盘输入 */}
-			<div>
-				{[...qwerty].map((strItem, idx) => (
-					<span
-						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-						key={idx}
-						className={clsx(heightLightClass(idx))}
-					>
-						{strItem}
-					</span>
-				))}
-			</div>
-			<div>{`curInputIndex: ${curInputIndex}`}</div>
-			<p className="w-[80vw]">
+			{/* 键盘图案 */}
+			<p className="w-[80vw] my-2">
 				<style
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 					dangerouslySetInnerHTML={{
@@ -263,6 +282,27 @@ const HomeStatus = ({
 					height={"100%"}
 				/>
 			</p>
+			{/* 例句 */}
+			<div className="flex justify-center flex-col items-center">
+				<p className="relative">
+					<span className="absolute left-0 -translate-x-full pr-1">Ex. </span>
+					{currentWord?.example}
+				</p>
+				<p>{exTranslation}</p>
+			</div>
+			{/* 键盘输入 */}
+			<div className="text-[color:var(--font-color-inactive)]">
+				{[...qwerty].map((strItem, idx) => (
+					<span
+						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+						key={idx}
+						className={clsx(heightLightClass(idx))}
+					>
+						{strItem}
+					</span>
+				))}
+			</div>
+			<div>{`curInputIndex: ${curInputIndex}`}</div>
 			<HomeInput
 				onInput={setInputKeys}
 				position={inputPosition}

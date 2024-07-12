@@ -1,15 +1,14 @@
 import type { Dict } from "@/types/dict";
 import type { dicts } from "@/utils/config";
+import { getBaseURL } from "@/utils/get-base-url";
 import { timeOut } from "@/utils/time-out";
 import { GraphQLClient } from "graphql-request";
 
 const parseURL = (url: string) =>
-	url.startsWith("http")
-		? url
-		: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}${url}`;
+	url.startsWith("http") ? url : `${getBaseURL()}${url}`;
 
 /** client api */
-export const client = new GraphQLClient(parseURL("/api/graphql"));
+export const client = () => new GraphQLClient(parseURL("/api/graphql"));
 
 /** server api */
 const createFetch =

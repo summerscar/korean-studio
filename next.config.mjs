@@ -1,6 +1,6 @@
 import withMDX from "@next/mdx";
+import { PrismaPlugin } from "@prisma/nextjs-monorepo-workaround-plugin";
 import createNextIntlPlugin from "next-intl/plugin";
-
 const withNextIntl = createNextIntlPlugin("./app/i18n.ts");
 
 /** @type {import('next').NextConfig} */
@@ -10,7 +10,11 @@ const nextConfig = {
 		// without this, 'Error: Expected Upload to be a GraphQL nullable type.'
 		serverComponentsExternalPackages: ["graphql"],
 	},
-	webpack(config) {
+	webpack(config, { isServer }) {
+		if (isServer) {
+			config.plugins = [...config.plugins, new PrismaPlugin()];
+		}
+
 		// Grab the existing rule that handles SVG imports
 		const fileLoaderRule = config.module.rules.find((rule) =>
 			rule.test?.test?.(".svg"),

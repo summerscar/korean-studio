@@ -7,6 +7,8 @@ class InvalidLoginError extends CredentialsSignin {
 	code = "Invalid identifier or password";
 }
 
+console.log("[next-auth][NEXTAUTH_URL]", process.env.NEXTAUTH_URL);
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	session: {
 		maxAge: 60 * 60 * 24 * 30,

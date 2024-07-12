@@ -22,19 +22,21 @@ const Header = async () => {
 				</Link>
 				<div className="flex">
 					<Link href="/beginner" className="mr-4">
-						<span>{t("beginner")}</span>
+						<span>🚧{t("beginner")}</span>
 					</Link>
 					<Link href="/intermediate" className="mr-4">
-						<span>{t("intermediate")}</span>
+						<span>🚧{t("intermediate")}</span>
 					</Link>
 					<Link href="/topik" className="mr-4">
-						<span>Topik</span>
+						<span>🚧Topik</span>
 					</Link>
 					<span>
 						{session ? (
 							<div>
 								<span>{session.user?.name}</span>
-								<Link href="/api/auth/signout">Sign Out</Link>
+								<Link className="ml-4" href="/api/auth/signout">
+									Signout
+								</Link>
 							</div>
 						) : (
 							<Link href="/api/auth/signin">Sign In</Link>

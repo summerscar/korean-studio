@@ -19,7 +19,7 @@ export default withAuth(
 		db: {
 			provider: "postgresql",
 			url: process.env.POSTGRES_URL!,
-			enableLogging: process.env.NODE_ENV !== "production",
+			enableLogging: false,
 			prismaClientPath: "node_modules/.prisma/client",
 		},
 		lists,

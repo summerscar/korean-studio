@@ -2,26 +2,24 @@
 import { createAuth } from "@keystone-6/auth";
 import { config } from "@keystone-6/core";
 import { statelessSessions } from "@keystone-6/core/session";
+import { config as envConfig } from "dotenv";
 import { authConfig, lists } from "./keystone/schema";
-
 const { withAuth } = createAuth(authConfig);
+envConfig({ path: ["./.env", "./.env.local"] });
 
 const session = statelessSessions({
 	secret: process.env.AUTH_SECRET,
 	maxAge: 60 * 60 * 24 * 30,
 });
-
 export default withAuth(
 	config({
 		server: {
 			port: 4000,
 		},
 		db: {
-			provider: "sqlite",
-			url: `file:${process.cwd()}/keystone.db`, // next.js requires an absolute path for sqlite
-			onConnect: async () => {
-				// await seedDemoData(context);
-			},
+			provider: "postgresql",
+			url: process.env.POSTGRES_URL!,
+			enableLogging: process.env.NODE_ENV !== "production",
 			prismaClientPath: "node_modules/.prisma/client",
 		},
 		lists,

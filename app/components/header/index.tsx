@@ -1,5 +1,6 @@
 import { getServerI18n } from "@/utils/i18n";
 import { auth } from "auth";
+import Image from "next/image";
 import Link from "next/link";
 
 const Header = async () => {
@@ -10,7 +11,14 @@ const Header = async () => {
 		<div className="sticky top-0 h-[--header-height] flex border-b border-slate-900/10 w-full backdrop-blur-lg select-none bg-slate-300/10">
 			<div className="w-full px-8 flex justify-between items-center">
 				<Link href="/">
-					<div>logo</div>
+					<Image
+						src="/vercel.svg"
+						alt="Vercel Logo"
+						className="dark:invert"
+						width={100}
+						height={24}
+						priority
+					/>
 				</Link>
 				<div className="flex">
 					<Link href="/beginner" className="mr-4">

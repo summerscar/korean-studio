@@ -13,7 +13,7 @@ export const isShift = (keyCode: string) => {
 	return keyCode.toLowerCase().includes("shift");
 };
 export const isSpace = (keyCode: string) => {
-	return keyCode.toLowerCase().includes("space");
+	return keyCode.toLowerCase() === "space";
 };
 export const isShiftOnly = (input: InputKeys) => {
 	return Object.keys(input).every(isShift) && Object.keys(input).length === 1;

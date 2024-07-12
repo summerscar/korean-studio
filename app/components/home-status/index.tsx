@@ -4,10 +4,10 @@ import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
 import { DictNav } from "@/components/dict-nav";
 import { HomeInput } from "@/components/home-input";
-import { SizedConfetti } from "@/components/sized-confetti";
 // https://www.lexilogos.com/code/conkr.js
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
+import { playConfetti } from "@/utils/confetti";
 import {
 	NextKeyShortcut,
 	PrevKeyShortcut,
@@ -38,7 +38,6 @@ const HomeStatus = ({
 	const [isComplete, setIsComplete] = useState(false);
 	const [isInputError, setIsInputError] = useState(false);
 	const locale = useLocale();
-	const [confetti, setConfetti] = useState(false);
 	const hangulRef = useRef<HTMLDivElement>(null);
 	const [inputKeys, setInputKeys] = useState<Record<string, boolean>>({});
 	const inputRef = useRef({
@@ -165,7 +164,7 @@ const HomeStatus = ({
 	/** 完成输入，下一个单词 TODO: 放在useEffect可能有点问题 */
 	useEffect(() => {
 		if (curInputIndex >= hangul.length && isEmptyInput(inputKeys)) {
-			setConfetti(true);
+			playConfetti();
 			toNextWord();
 		}
 	}, [curInputIndex, hangul, inputKeys, toNextWord]);
@@ -226,15 +225,6 @@ const HomeStatus = ({
 				"justify-center",
 			)}
 		>
-			<SizedConfetti
-				style={{ pointerEvents: "none" }}
-				numberOfPieces={confetti ? 1000 : 0}
-				recycle={false}
-				onConfettiComplete={(confetti) => {
-					setConfetti(false);
-					confetti?.reset();
-				}}
-			/>
 			{isComplete && (
 				<div className="flex flex-col items-center justify-center">
 					<CompleteSVG />

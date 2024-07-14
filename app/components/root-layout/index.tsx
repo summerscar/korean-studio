@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "github-markdown-css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export async function DefaultLayout({
 	isAdmin = false,
@@ -32,6 +33,7 @@ export async function DefaultLayout({
 						{children}
 					</main>
 				</NextIntlClientProvider>
+				<SpeedInsights />
 			</body>
 		</html>
 	);

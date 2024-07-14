@@ -8,8 +8,8 @@ const Header = async () => {
 	const t = await getServerI18n("Header");
 	console.log("[Header]", session);
 	return (
-		<div className="sticky top-0 h-[--header-height] flex border-b border-slate-900/10 w-full backdrop-blur-lg select-none bg-slate-300/10">
-			<div className="w-full px-8 flex justify-between items-center">
+		<div className="sticky top-0 h-[--header-height] flex border-b border-slate-900/10 w-full backdrop-blur-lg select-none bg-slate-300/10 text-base-content">
+			<div className="w-full px-4 flex justify-between items-center">
 				<Link href="/">
 					<Image
 						src="/vercel.svg"

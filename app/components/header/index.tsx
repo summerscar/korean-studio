@@ -1,8 +1,7 @@
 import { getServerI18n } from "@/utils/i18n";
 import { auth } from "auth";
+import { Link } from "next-view-transitions";
 import Image from "next/image";
-import Link from "next/link";
-
 const Header = async () => {
 	const session = await auth();
 	const t = await getServerI18n("Header");

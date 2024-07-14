@@ -6,6 +6,8 @@ import { getLocale, getMessages } from "next-intl/server";
 import "github-markdown-css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ViewTransitions } from "next-view-transitions";
+
 export async function DefaultLayout({
 	isAdmin = false,
 	children,
@@ -26,16 +28,18 @@ export async function DefaultLayout({
 		);
 	}
 	return (
-		<html lang={locale}>
-			<body className={clsx(inter.className, bodyClassName)}>
-				<NextIntlClientProvider messages={messages}>
-					<main className="flex min-h-screen flex-col bg-slate-600/10">
-						{children}
-					</main>
-				</NextIntlClientProvider>
-				<SpeedInsights />
-				<Analytics />
-			</body>
-		</html>
+		<ViewTransitions>
+			<html lang={locale}>
+				<body className={clsx(inter.className, bodyClassName)}>
+					<NextIntlClientProvider messages={messages}>
+						<main className="flex min-h-screen flex-col bg-slate-600/10">
+							{children}
+						</main>
+					</NextIntlClientProvider>
+					<SpeedInsights />
+					<Analytics />
+				</body>
+			</html>
+		</ViewTransitions>
 	);
 }

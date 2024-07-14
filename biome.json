@@ -28,6 +28,9 @@
 	"json": {
 		"parser": {
 			"allowComments": true
+		},
+		"formatter": {
+			"lineWidth": 75
 		}
 	},
 	"vcs": {

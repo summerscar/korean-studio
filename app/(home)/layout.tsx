@@ -10,6 +10,25 @@ export async function generateMetadata(): Promise<Metadata> {
 	return {
 		title: t("title"),
 		description: t("description"),
+		keywords: t("keywords").split(","),
+		generator: "Next.js",
+		authors: [{ name: "summerscar", url: "https://github.com/summerscar" }],
+		openGraph: {
+			title: t("title"),
+			description: t("description"),
+			type: "website",
+			images: [],
+			url: "https://korean.app.summerscar.me/",
+			siteName: t("title"),
+		},
+		twitter: {
+			card: "summary_large_image",
+			site: "@summerscar",
+			creator: "@summerscar",
+			title: t("title"),
+			description: t("description"),
+			images: [],
+		},
 	};
 }
 

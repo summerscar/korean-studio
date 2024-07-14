@@ -4,7 +4,6 @@ import { HomeBGIcon } from "@/components/home-bg-icon";
 import { DefaultLayout } from "@/components/root-layout";
 import { getServerI18n } from "@/utils/i18n";
 import type { Metadata } from "next";
-import { getLocale, getTranslations } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getServerI18n("Index");
@@ -20,7 +19,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<DefaultLayout>
+		<DefaultLayout bodyClassName="relative z-0">
 			<HomeBGIcon />
 			<Header />
 			<section className="flex-auto flex items-stretch">{children}</section>

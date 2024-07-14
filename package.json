@@ -29,6 +29,7 @@
 		"@prisma/client": "^5.16.1",
 		"@svgr/webpack": "^8.1.0",
 		"@types/mdx": "^2.0.13",
+		"@vercel/speed-insights": "^1.0.12",
 		"ahooks": "^3.8.0",
 		"canvas-confetti": "^1.9.3",
 		"clsx": "^2.1.1",

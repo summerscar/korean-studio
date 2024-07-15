@@ -2,6 +2,7 @@ import NextIcon from "@/assets/svg/next.svg";
 import PrevIcon from "@/assets/svg/prev.svg";
 
 import type { Dict } from "@/types/dict";
+import { notoKR } from "@/utils/fonts";
 import clsx from "clsx";
 
 const DictNav = ({
@@ -38,7 +39,9 @@ const DictNav = ({
 							/>
 						);
 					})()}
-					<div className="flex-none select-none">{item?.name}</div>
+					<div className={clsx(notoKR.className, "flex-none select-none")}>
+						{item?.name}
+					</div>
 				</div>
 			))}
 		</div>

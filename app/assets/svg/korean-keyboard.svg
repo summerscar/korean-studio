@@ -1,6 +1,6 @@
-<svg width="960" height="300">
+<svg width="910" height="310">
   <!-- Background -->
-  <rect width="960" height="300" fill="#f5f5f5" />
+  <rect width="910" height="310" fill="#f5f5f5" />
 
   <!-- Function keys row -->
   <g>

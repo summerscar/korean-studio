@@ -1,7 +1,9 @@
 "use client";
 import CompleteSVG from "@/assets/svg/complete.svg";
+import KeyboardIcon from "@/assets/svg/keyboard.svg";
 import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
+import ScoreIcon from "@/assets/svg/score.svg";
 import { DictNav } from "@/components/dict-nav";
 import { HomeInput } from "@/components/home-input";
 // https://www.lexilogos.com/code/conkr.js
@@ -20,7 +22,7 @@ import {
 	keyCodeToQwerty,
 	parseSpaceStr,
 } from "@/utils/convert-input";
-import { notoKR } from "@/utils/fonts";
+import { myeongjo, notoKR } from "@/utils/fonts";
 import { hangulToQwerty } from "@/utils/kr-const";
 import { useClickAway, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
@@ -37,6 +39,10 @@ const HomeStatus = ({
 	const [curInputIndex, setCurInputIndex] = useState(0);
 	const [isComplete, setIsComplete] = useState(false);
 	const [isInputError, setIsInputError] = useState(false);
+	const [showKeyboard, setShowKeyboard] = useState(true);
+	const toggleShowKeyboard = useMemoizedFn(() =>
+		setShowKeyboard(!showKeyboard),
+	);
 	const locale = useLocale();
 	const hangulRef = useRef<HTMLDivElement>(null);
 	const [inputKeys, setInputKeys] = useState<Record<string, boolean>>({});
@@ -216,15 +222,7 @@ const HomeStatus = ({
 	}, [inputKeys]);
 
 	return (
-		<div
-			className={clsx(
-				notoKR.className,
-				"flex",
-				"flex-col",
-				"items-center",
-				"justify-center",
-			)}
-		>
+		<div className={clsx("flex", "flex-col", "items-center", "justify-center")}>
 			{isComplete && (
 				<div className="flex flex-col items-center justify-center">
 					<CompleteSVG />
@@ -237,11 +235,17 @@ const HomeStatus = ({
 				dict={dict}
 				curWordIndex={curWordIndex}
 			/>
-			<div className="text-4xl font-bold text-slate-800">{displayName}</div>
-			<div className="text-lg text-gray-500">{translation}</div>
+			<div
+				className={clsx(notoKR.className, "text-4xl font-bold text-slate-800")}
+			>
+				{/* TODO: TTS */}
+				{displayName}
+			</div>
+			<div className="text-lg text-gray-500 my-2">{translation}</div>
 			{/* 韩语音节 */}
 			<div
 				className={clsx(
+					notoKR.className,
 					"inline-block cursor-pointer text-xl text-[color:var(--font-color-inactive)]",
 				)}
 				ref={hangulRef}
@@ -258,8 +262,27 @@ const HomeStatus = ({
 					</span>
 				))}
 			</div>
+			<div className="hidden">
+				{showKeyboard ? (
+					<KeyboardIcon
+						onClick={toggleShowKeyboard}
+						className="cursor-pointer"
+						width={28}
+						height={28}
+						fill="currentColor"
+					/>
+				) : (
+					<ScoreIcon
+						onClick={toggleShowKeyboard}
+						className="cursor-pointer"
+						width={28}
+						height={28}
+						fill="currentColor"
+					/>
+				)}
+			</div>
 			{/* 键盘图案 */}
-			<p className="w-[80vw] my-2">
+			<p className={clsx("w-[80vw] my-2", { invisible: !showKeyboard })}>
 				<style
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 					dangerouslySetInnerHTML={{
@@ -267,21 +290,21 @@ const HomeStatus = ({
 					}}
 				/>
 				<KoreanKeyBoardSVG
-					viewBox="0 0 960 300"
+					viewBox="0 0 910 310"
 					width={"100%"}
 					height={"100%"}
 				/>
 			</p>
 			{/* 例句 */}
 			<div className="flex justify-center flex-col items-center">
-				<p className="relative">
+				<p className={clsx("relative", myeongjo.className)}>
 					<span className="absolute left-0 -translate-x-full pr-1">Ex. </span>
 					{currentWord?.example}
 				</p>
 				<p>{exTranslation}</p>
 			</div>
 			{/* 键盘输入 */}
-			<div className="text-[color:var(--font-color-inactive)]">
+			<div className="hidden text-[color:var(--font-color-inactive)]">
 				{[...qwerty].map((strItem, idx) => (
 					<span
 						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
@@ -292,7 +315,6 @@ const HomeStatus = ({
 					</span>
 				))}
 			</div>
-			<div>{`curInputIndex: ${curInputIndex}`}</div>
 			<HomeInput
 				onInput={setInputKeys}
 				position={inputPosition}

@@ -2,7 +2,13 @@
 import { KEYS_TO_BIND } from "@/utils/kr-const";
 import { useEventListener, useUpdateEffect } from "ahooks";
 import clsx from "clsx";
-import { forwardRef, useCallback, useImperativeHandle, useState } from "react";
+import {
+	forwardRef,
+	useCallback,
+	useEffect,
+	useImperativeHandle,
+	useState,
+} from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 export type HomeInputRef = {
@@ -12,12 +18,20 @@ export type HomeInputRef = {
 
 const HomeInput = forwardRef<
 	HomeInputRef,
-	{ onInput?: (inputKeys: Record<string, boolean>) => void; position?: DOMRect }
->(({ onInput, position }, ref) => {
+	{
+		onInput?: (inputKeys: Record<string, boolean>) => void;
+		position?: DOMRect;
+		onFocusChange?: (isFocused: boolean) => void;
+	}
+>(({ onInput, position, onFocusChange }, ref) => {
 	const [currentInputKeys, setCurrentInputKeys] = useState<
 		Record<string, boolean>
 	>({});
 	const [isInputFocused, setIsInputFocused] = useState(false);
+
+	useEffect(() => {
+		onFocusChange?.(isInputFocused);
+	}, [isInputFocused, onFocusChange]);
 
 	const inputRef = useHotkeys<HTMLInputElement>(
 		[

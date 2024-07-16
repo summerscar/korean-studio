@@ -23,8 +23,9 @@ import {
 	parseSpaceStr,
 } from "@/utils/convert-input";
 import { myeongjo, notoKR } from "@/utils/fonts";
+import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
-import { useClickAway, useMemoizedFn } from "ahooks";
+import { useClickAway, useEventListener, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { disassembleHangul } from "es-hangul";
 import { useLocale } from "next-intl";
@@ -39,6 +40,7 @@ const HomeStatus = ({
 	const [curInputIndex, setCurInputIndex] = useState(0);
 	const [isComplete, setIsComplete] = useState(false);
 	const [isInputError, setIsInputError] = useState(false);
+	const [isInputFocused, setIsInputFocused] = useState(false);
 	const [showKeyboard, setShowKeyboard] = useState(true);
 	const toggleShowKeyboard = useMemoizedFn(() =>
 		setShowKeyboard(!showKeyboard),
@@ -51,12 +53,23 @@ const HomeStatus = ({
 		handleInputFocus: () => {},
 	});
 
+	useEventListener(
+		"keyup",
+		(e) => {
+			if (isInputFocused) return;
+			if (e.key === "Enter") {
+				focusInput();
+			}
+		},
+		{ target: isServer ? undefined : document },
+	);
+
 	/** 计算input光标位置 */
 	const [inputPosition, setInputPosition] = useState<DOMRect>();
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (hangulRef.current) {
-			inputRef.current.handleInputFocus?.();
+			focusInput();
 		}
 		const hangulEls = hangulRef.current?.children;
 		if (!hangulEls || curInputIndex >= hangulEls.length) return;
@@ -66,7 +79,7 @@ const HomeStatus = ({
 	}, [curInputIndex, curWordIndex]);
 
 	useClickAway(() => {
-		inputRef.current.handleInputBlur?.();
+		blurInput();
 	}, hangulRef);
 
 	const currentWord = useMemo(() => {
@@ -282,7 +295,14 @@ const HomeStatus = ({
 				)}
 			</div>
 			{/* 键盘图案 */}
-			<p className={clsx("w-[80vw] my-2", { invisible: !showKeyboard })}>
+			<div
+				className={clsx(
+					"drop-shadow-xl w-[80vw] my-2 rounded-md overflow-hidden relative",
+					{
+						invisible: !showKeyboard,
+					},
+				)}
+			>
 				<style
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 					dangerouslySetInnerHTML={{
@@ -294,7 +314,16 @@ const HomeStatus = ({
 					width={"100%"}
 					height={"100%"}
 				/>
-			</p>
+				<div
+					className={clsx(
+						"transition-all select-none absolute top-0 left-0 w-full h-full bg-gray-400/85 flex items-center justify-center flex-col",
+						isInputFocused ? "opacity-0" : "opacity-100",
+					)}
+				>
+					<div className="text-3xl">Press 『Enter』 to type !</div>
+					<div className="text-sm mt-10">tips: Try 『[』『]』.</div>
+				</div>
+			</div>
 			{/* 例句 */}
 			<div className="flex justify-center flex-col items-center">
 				<p className={clsx("relative", myeongjo.className)}>
@@ -316,6 +345,7 @@ const HomeStatus = ({
 				))}
 			</div>
 			<HomeInput
+				onFocusChange={setIsInputFocused}
 				onInput={setInputKeys}
 				position={inputPosition}
 				ref={inputRef}

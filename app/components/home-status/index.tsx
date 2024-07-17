@@ -56,15 +56,27 @@ const HomeStatus = ({
 	useEventListener(
 		"keyup",
 		(e) => {
-			if (isInputFocused) return;
-			if (e.key === "Enter") {
+			/** 进入输入状态 */
+			if (e.code === "Enter") {
+				if (isInputFocused) return;
 				focusInput();
+				return;
+			}
+
+			/** 单词导航 */
+			if ([NextKeyShortcut, PrevKeyShortcut].includes(e.code)) {
+				if (e.code === NextKeyShortcut) {
+					toNextWordWithCheck();
+				} else if (e.code === PrevKeyShortcut) {
+					toPrevWord();
+				}
+				return;
 			}
 		},
 		{ target: isServer ? undefined : document },
 	);
 
-	/** 计算input光标位置 */
+	/** 计算input光标位置, curWordIndex 更新时重新计算 */
 	const [inputPosition, setInputPosition] = useState<DOMRect>();
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
@@ -126,7 +138,7 @@ const HomeStatus = ({
 				return prev + 1;
 			}
 			// 输入错误，提示下一个输入
-			if (!isShiftOnly(inputKeys) && !isNavShortcut(inputKeys)) {
+			if (!isShiftOnly(inputKeys)) {
 				setIsInputError(true);
 				addShakeAnimation(hangulRef.current!);
 			}
@@ -188,18 +200,6 @@ const HomeStatus = ({
 		}
 	}, [curInputIndex, hangul, inputKeys, toNextWord]);
 
-	useEffect(() => {
-		const inputKeysArr = Object.keys(inputKeys);
-		if (inputKeysArr.includes(PrevKeyShortcut)) {
-			toPrevWord();
-			return;
-		}
-		if (inputKeysArr.includes(NextKeyShortcut)) {
-			toNextWordWithCheck();
-			return;
-		}
-	}, [inputKeys, toPrevWord, toNextWordWithCheck]);
-
 	const translation = useMemo(() => {
 		if (!currentWord) return null;
 		const trans =
@@ -214,10 +214,12 @@ const HomeStatus = ({
 		return exTrans.join(", ");
 	}, [currentWord, locale]);
 
+	/** just for log */
 	useEffect(() => {
 		!isEmptyInput(inputKeys) && console.log("inputKeys:", inputKeys);
 	}, [inputKeys]);
 
+	/** 输入状态 style */
 	const heightLightClass = (strIndex: number) =>
 		clsx({
 			"font-bold text-[color:var(--font-color-error)]":
@@ -321,7 +323,7 @@ const HomeStatus = ({
 					)}
 				>
 					<div className="text-3xl">Press 『Enter』 to type !</div>
-					<div className="text-sm mt-10">tips: Try 『[』『]』.</div>
+					<div className="text-sm mt-6">tips: Try 『[』『]』.</div>
 				</div>
 			</div>
 			{/* 例句 */}

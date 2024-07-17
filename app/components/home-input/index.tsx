@@ -34,14 +34,7 @@ const HomeInput = forwardRef<
 	}, [isInputFocused, onFocusChange]);
 
 	const inputRef = useHotkeys<HTMLInputElement>(
-		[
-			"esc",
-			"backspace",
-			"space",
-			"BracketLeft",
-			"BracketRight",
-			...KEYS_TO_BIND,
-		],
+		["esc", "backspace", "space", ...KEYS_TO_BIND],
 		(keyboardEvent) => {
 			const { code, type, key } = keyboardEvent;
 			if (key === "Escape") {

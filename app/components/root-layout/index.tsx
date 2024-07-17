@@ -26,12 +26,10 @@ export async function DefaultLayout({
 		);
 	}
 	return (
-		<html lang={locale}>
+		<html lang={locale} data-theme="nord">
 			<body className={clsx(inter.className, bodyClassName)}>
 				<NextIntlClientProvider messages={messages}>
-					<main className="flex min-h-screen flex-col bg-slate-600/10">
-						{children}
-					</main>
+					<main className="flex min-h-screen flex-col">{children}</main>
 				</NextIntlClientProvider>
 				<SpeedInsights />
 				<Analytics />

@@ -39,7 +39,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<DefaultLayout bodyClassName="relative z-0">
-			<HomeBGIcon />
+			{/* <HomeBGIcon /> */}
 			<Header />
 			<section className="flex-auto flex items-stretch">{children}</section>
 			<Footer />

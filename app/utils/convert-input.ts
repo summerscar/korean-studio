@@ -30,7 +30,9 @@ export const isEmptyInput = (input: InputKeys) => {
 };
 
 export const parseSpaceStr = (str: string) => {
-	return str.replace(/ /g, spaceStr).replace(/(space|Space)/g, spaceStr);
+	return str
+		.replace(/ /g, spaceStr)
+		.replace(/(\bspace\b|\bSpace\b)/g, spaceStr);
 };
 /**
  * {keyD: true, space: true, ShiftLeft: true} => ["D", "␣", "shiftleft"]

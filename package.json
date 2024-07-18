@@ -46,6 +46,7 @@
 		"react": "^18",
 		"react-dom": "^18",
 		"react-hotkeys-hook": "^4.5.0",
+		"react-string-replace": "^1.1.1",
 		"swr": "^2.2.5",
 		"tsparticles": "^3.5.0",
 		"zod": "^3.23.8"

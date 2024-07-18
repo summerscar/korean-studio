@@ -31,6 +31,7 @@ import clsx from "clsx";
 import { disassembleHangul } from "es-hangul";
 import { useLocale } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import reactStringReplace from "react-string-replace";
 
 const HomeStatus = ({
 	dict,
@@ -234,6 +235,13 @@ const HomeStatus = ({
 		}, "");
 	}, [inputKeys]);
 
+	const highLightExample = (example?: string) => {
+		const displayName = currentWord?.name || "";
+		return reactStringReplace(example, displayName, (match) => (
+			<b className={notoKR.className}>{match}</b>
+		));
+	};
+
 	return (
 		<div className={clsx("flex", "flex-col", "items-center", "justify-center")}>
 			{isComplete && (
@@ -325,7 +333,7 @@ const HomeStatus = ({
 						type="button"
 						onClick={() => drawerRef.current.open()}
 					>
-						View lists
+						View list
 					</button>
 					<div className="text-sm ">
 						tips: Try 『<b>[</b>』『<b>]</b>』.
@@ -336,7 +344,7 @@ const HomeStatus = ({
 			<div className="flex justify-center flex-col items-center">
 				<p className={clsx("relative", myeongjo.className)}>
 					<span className="absolute left-0 -translate-x-full pr-1">Ex. </span>
-					{currentWord?.example}
+					{highLightExample(currentWord?.example)}
 				</p>
 				<p>{exTranslation}</p>
 			</div>

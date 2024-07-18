@@ -4,8 +4,10 @@ import clsx from "clsx";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "github-markdown-css";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+
 export async function DefaultLayout({
 	isAdmin = false,
 	children,
@@ -33,6 +35,7 @@ export async function DefaultLayout({
 				</NextIntlClientProvider>
 				<SpeedInsights />
 				<Analytics />
+				<GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
 			</body>
 		</html>
 	);

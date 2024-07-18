@@ -26,6 +26,7 @@
 		"@mdx-js/loader": "^3.0.1",
 		"@mdx-js/react": "^3.0.1",
 		"@next/mdx": "^14.2.4",
+		"@next/third-parties": "^14.2.5",
 		"@prisma/client": "^5.16.1",
 		"@svgr/webpack": "^8.1.0",
 		"@types/mdx": "^2.0.13",
@@ -97,6 +98,8 @@
 			"biome format --write --no-errors-on-unmatched",
 			"biome lint --write --no-errors-on-unmatched"
 		],
-		"*": ["biome check --no-errors-on-unmatched --files-ignore-unknown=true"]
+		"*": [
+			"biome check --no-errors-on-unmatched --files-ignore-unknown=true"
+		]
 	}
 }

@@ -2,6 +2,7 @@ import NextIcon from "@/assets/svg/next.svg";
 import PrevIcon from "@/assets/svg/prev.svg";
 
 import type { Dict, DictItem, Tran } from "@/types/dict";
+import { getTranslation } from "@/utils/convert-input";
 import { notoKR } from "@/utils/fonts";
 import clsx from "clsx";
 import { useLocale } from "next-intl";
@@ -20,13 +21,6 @@ const DictNav = ({
 	const prev = curWordIndex - 1 >= 0 ? dict[curWordIndex - 1] : null;
 	const next = curWordIndex + 1 < dict.length ? dict[curWordIndex + 1] : null;
 	const locale = useLocale();
-
-	const getTranslation = (currentWord: DictItem | null) => {
-		if (!currentWord) return "";
-		const trans =
-			currentWord.trans[locale as keyof Tran] || currentWord.trans.en;
-		return trans.join(", ");
-	};
 
 	return (
 		<div className="w-[80vw] flex justify-between">
@@ -53,13 +47,13 @@ const DictNav = ({
 							/>
 						);
 					})()}
-					<div className={clsx(notoKR.className, "flex-none px-1 select-none")}>
-						{item?.name}
+					<div className="flex-none px-1 select-none">
+						<p className={clsx("font-bold", notoKR.className)}>{item?.name}</p>
 						<p
-							title={getTranslation(item)}
+							title={getTranslation(item, locale)}
 							className="text-xs text-gray-500 max-w-40 overflow-hidden text-ellipsis text-nowrap"
 						>
-							{getTranslation(item)}
+							{getTranslation(item, locale)}
 						</p>
 					</div>
 				</div>

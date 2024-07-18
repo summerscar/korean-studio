@@ -29,7 +29,9 @@ export async function DefaultLayout({
 	}
 	return (
 		<html lang={locale} data-theme="nord">
-			<body className={clsx(inter.className, bodyClassName)}>
+			<body
+				className={clsx(inter.className, bodyClassName, "text-base-content")}
+			>
 				<NextIntlClientProvider messages={messages}>
 					<main className="flex min-h-screen flex-col">{children}</main>
 				</NextIntlClientProvider>

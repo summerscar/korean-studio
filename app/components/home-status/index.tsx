@@ -5,6 +5,7 @@ import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
 import ScoreIcon from "@/assets/svg/score.svg";
 import { DictNav } from "@/components/dict-nav";
+import { HomeDrawer } from "@/components/home-drawer";
 import { HomeInput } from "@/components/home-input";
 // https://www.lexilogos.com/code/conkr.js
 import type { Dict } from "@/types/dict";
@@ -25,7 +26,7 @@ import {
 import { myeongjo, notoKR } from "@/utils/fonts";
 import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
-import { useClickAway, useEventListener, useMemoizedFn } from "ahooks";
+import { useEventListener, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { disassembleHangul } from "es-hangul";
 import { useLocale } from "next-intl";
@@ -45,6 +46,7 @@ const HomeStatus = ({
 	const toggleShowKeyboard = useMemoizedFn(() =>
 		setShowKeyboard(!showKeyboard),
 	);
+	const drawerRef = useRef({ open: () => {} });
 	const locale = useLocale();
 	const hangulRef = useRef<HTMLDivElement>(null);
 	const [inputKeys, setInputKeys] = useState<Record<string, boolean>>({});
@@ -89,10 +91,6 @@ const HomeStatus = ({
 		const rect = currentSpan.getBoundingClientRect();
 		setInputPosition(rect);
 	}, [curInputIndex, curWordIndex]);
-
-	useClickAway(() => {
-		blurInput();
-	}, hangulRef);
 
 	const currentWord = useMemo(() => {
 		if (curWordIndex < dict.length) {
@@ -250,9 +248,7 @@ const HomeStatus = ({
 				dict={dict}
 				curWordIndex={curWordIndex}
 			/>
-			<div
-				className={clsx(notoKR.className, "text-4xl font-bold text-slate-800")}
-			>
+			<div className={clsx(notoKR.className, "text-4xl font-bold")}>
 				{/* TODO: TTS */}
 				{displayName}
 			</div>
@@ -265,7 +261,6 @@ const HomeStatus = ({
 				)}
 				ref={hangulRef}
 				onClick={focusInput}
-				onKeyUp={blurInput}
 			>
 				{[...hangul].map((strItem, idx) => (
 					<span
@@ -318,12 +313,23 @@ const HomeStatus = ({
 				/>
 				<div
 					className={clsx(
-						"transition-all select-none absolute top-0 left-0 w-full h-full bg-gray-400/85 flex items-center justify-center flex-col",
-						isInputFocused ? "opacity-0" : "opacity-100",
+						"transition-all select-none absolute top-0 left-0 w-full h-full bg-gray-400/75 flex items-center justify-center flex-col",
+						isInputFocused ? "opacity-0 pointer-events-none" : "opacity-100",
 					)}
 				>
-					<div className="text-3xl">Press 『Enter』 to type !</div>
-					<div className="text-sm mt-6">tips: Try 『[』『]』.</div>
+					<div className="text-3xl">
+						Press 『<b>Enter</b>』 to type !
+					</div>
+					<button
+						className="btn btn-outline btn-sm mt-5 mb-1"
+						type="button"
+						onClick={() => drawerRef.current.open()}
+					>
+						View lists
+					</button>
+					<div className="text-sm ">
+						tips: Try 『<b>[</b>』『<b>]</b>』.
+					</div>
 				</div>
 			</div>
 			{/* 例句 */}
@@ -351,6 +357,12 @@ const HomeStatus = ({
 				onInput={setInputKeys}
 				position={inputPosition}
 				ref={inputRef}
+			/>
+			<HomeDrawer
+				drawerRef={drawerRef}
+				dict={dict}
+				curWordIndex={curWordIndex}
+				onClick={skipToNextWord}
 			/>
 		</div>
 	);

@@ -1,4 +1,5 @@
 import type { InputKeys } from "@/types";
+import type { DictItem, Tran } from "@/types/dict";
 
 export const spaceStr = "␣";
 
@@ -47,4 +48,13 @@ export const convertInputsToQwerty = (input: InputKeys) => {
 		return isWithShift && !isShift(key) ? key.toUpperCase() : key;
 	});
 	return keysList;
+};
+
+export const getTranslation = (
+	currentWord: DictItem | null,
+	locale: string,
+) => {
+	if (!currentWord) return "";
+	const trans = currentWord.trans[locale as keyof Tran] || currentWord.trans.en;
+	return trans.join(", ");
 };

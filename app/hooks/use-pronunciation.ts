@@ -19,8 +19,6 @@ const usePronunciation = (
 
 			if (!audioRef.current) {
 				const audio = new Audio();
-				audio.crossOrigin = "anonymous";
-				audio.preload = "auto";
 				audioRef.current = audio;
 				const handleSetPlaying = () => {
 					setIsPlaying(true);
@@ -34,8 +32,10 @@ const usePronunciation = (
 			}
 
 			audioRef.current.src = generateWordSoundSrc(word);
+			audioRef.current.preload = "auto";
+
 			if (autoPlay) {
-				audioRef.current.play();
+				play();
 			}
 		}
 	}, [autoPlay, word]);

@@ -4,6 +4,7 @@ import KeyboardIcon from "@/assets/svg/keyboard.svg";
 import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
 import ScoreIcon from "@/assets/svg/score.svg";
+import SpeakerSVG from "@/assets/svg/speaker.svg";
 import { DictNav } from "@/components/dict-nav";
 import { HomeDrawer } from "@/components/home-drawer";
 import { HomeInput } from "@/components/home-input";
@@ -11,6 +12,7 @@ import { HomeInput } from "@/components/home-input";
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
 import { playConfetti } from "@/utils/confetti";
+
 import {
 	NextKeyShortcut,
 	PrevKeyShortcut,
@@ -26,6 +28,7 @@ import {
 import { myeongjo, notoKR } from "@/utils/fonts";
 import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
+import { playWordSound } from "@/utils/pronunciation";
 import { useEventListener, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { disassembleHangul } from "es-hangul";
@@ -199,6 +202,11 @@ const HomeStatus = ({
 		}
 	}, [curInputIndex, hangul, inputKeys, toNextWord]);
 
+	const handlePlayWordSound = useMemoizedFn(() => {
+		if (!currentWord) return;
+		playWordSound(currentWord.name);
+	});
+
 	const translation = useMemo(() => {
 		if (!currentWord) return null;
 		const trans =
@@ -256,9 +264,15 @@ const HomeStatus = ({
 				dict={dict}
 				curWordIndex={curWordIndex}
 			/>
-			<div className={clsx(notoKR.className, "text-4xl font-bold")}>
+			<div className={clsx(notoKR.className, "text-4xl font-bold relative")}>
 				{/* TODO: TTS */}
 				{displayName}
+				<SpeakerSVG
+					width={20}
+					height={20}
+					onMouseOver={handlePlayWordSound}
+					className="absolute top-1/2 cursor-pointer -right-10 -translate-x-1/2 -translate-y-1/2"
+				/>
 			</div>
 			<div className="text-lg text-gray-500 my-2">{translation}</div>
 			{/* 韩语音节 */}

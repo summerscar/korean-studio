@@ -267,7 +267,6 @@ const HomeStatus = ({
 				curWordIndex={curWordIndex}
 			/>
 			<div className={clsx(notoKR.className, "text-4xl font-bold relative")}>
-				{/* TODO: TTS */}
 				{displayName}
 				<SpeakerSVG
 					width={20}

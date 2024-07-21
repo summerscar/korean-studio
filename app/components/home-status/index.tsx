@@ -247,8 +247,10 @@ const HomeStatus = ({
 
 	const highLightExample = (example?: string) => {
 		const displayName = currentWord?.name || "";
-		return reactStringReplace(example, displayName, (match) => (
-			<b className={notoKR.className}>{match}</b>
+		return reactStringReplace(example, displayName, (match, index) => (
+			<b className={notoKR.className} key={index}>
+				{match}
+			</b>
 		));
 	};
 

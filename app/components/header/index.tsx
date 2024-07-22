@@ -21,10 +21,10 @@ const Header = async () => {
 					/>
 				</Link>
 				<div className="flex">
-					<Link href="/beginner" className="mr-4">
+					<Link href="/learn/beginner" className="mr-4">
 						<span>🚧{t("beginner")}</span>
 					</Link>
-					<Link href="/intermediate" className="mr-4">
+					<Link href="/learn/intermediate" className="mr-4">
 						<span>🚧{t("intermediate")}</span>
 					</Link>
 					<Link href="/topik" className="mr-4">

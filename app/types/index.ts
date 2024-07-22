@@ -8,3 +8,7 @@ export enum Levels {
 export type LevelParams = {
 	level: Levels;
 };
+
+export type DocsTitleParams = {
+	title: string;
+};

@@ -8,8 +8,9 @@ import { redirect } from "next/navigation";
 async function loadMDX(level: Levels, title: string) {
 	const root = path.resolve();
 	const mdxPath = path.join(root, "mdx", level, `${title}.mdx`);
-	const mdPath = path.join(root, "md", level, `${title}.md`);
+	const mdPath = path.join(root, "mdx", level, `${title}.md`);
 	let filePath = "";
+
 	if (fs.existsSync(mdxPath)) {
 		filePath = mdxPath;
 	} else if (fs.existsSync(mdPath)) {
@@ -35,6 +36,7 @@ export default async function Page({
 	return (
 		<>
 			<p>{JSON.stringify(mdx.frontmatter, null, 2)}</p>
+			{/* TODO: move class to here */}
 			{mdx.content}
 		</>
 	);

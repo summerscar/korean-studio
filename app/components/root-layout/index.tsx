@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "github-markdown-css";
+import { isProd } from "@/utils/is-dev";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -19,6 +20,7 @@ export async function DefaultLayout({
 }>) {
 	const locale = await getLocale();
 	const messages = await getMessages();
+	const GAId = process.env.NEXT_PUBLIC_GA_ID || "";
 
 	if (isAdmin) {
 		return (
@@ -35,9 +37,9 @@ export async function DefaultLayout({
 				<NextIntlClientProvider messages={messages}>
 					<main className="flex min-h-screen flex-col">{children}</main>
 				</NextIntlClientProvider>
-				<SpeedInsights />
-				<Analytics />
-				<GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
+				{isProd && <SpeedInsights />}
+				{isProd && <Analytics />}
+				{isProd && <GoogleAnalytics gaId={GAId} />}
 			</body>
 		</html>
 	);

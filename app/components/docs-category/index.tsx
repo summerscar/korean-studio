@@ -1,13 +1,20 @@
+import { existsSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import type { DocsTitleParams, LevelParams } from "@/types";
 import clsx from "clsx";
 import Link from "next/link";
 
-let listAllDocs = async (level: string) => {
+const __docs_store = new Map<string, string[]>();
+
+const listAllDocs = async (level: string) => {
+	if (__docs_store.has(level)) {
+		return __docs_store.get(level)!;
+	}
+
 	const root = path.resolve();
 	const mdxDir = path.join(root, "mdx", level);
-	const docs = await readdir(mdxDir);
+	const docs = existsSync(mdxDir) ? await readdir(mdxDir) : [];
 	const docsData = await Promise.all(
 		docs.map(async (doc) => {
 			const filePath = path.join(mdxDir, doc);
@@ -25,10 +32,7 @@ let listAllDocs = async (level: string) => {
 		(a, b) => Date.parse(a) - Date.parse(b),
 	);
 	const sortedDocs = sortedDocsDate.map((date) => docs[docsDate.indexOf(date)]);
-
-	// 暂时用惰性函数救一下吧，后面用 postinstall 跑脚本？
-	// biome-ignore lint/correctness/noUnusedVariables: <explanation>
-	listAllDocs = async (level) => sortedDocs;
+	__docs_store.set(level, sortedDocs);
 	return sortedDocs;
 };
 

@@ -26,5 +26,5 @@ const dynamicFetch = createFetch("dynamic");
 export const fetchDict = async (
 	target: keyof typeof dicts = "kr-popular",
 ): Promise<Dict> => {
-	return timeOut(2000).then(() => staticFetch(`/dicts/${target}.json`));
+	return staticFetch(`/dicts/${target}.json`);
 };

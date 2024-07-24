@@ -14,10 +14,6 @@
   .text-balance {
     text-wrap: balance;
   }
-
-	.list-active {
-		background-color: var(--fallback-bc, oklch(var(--bc) / 0.1));
-	}
 }
 
 

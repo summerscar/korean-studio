@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { listAllDocs } from "@/components/docs-category";
 import type { DocsTitleParams, LevelParams, Levels } from "@/types";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { redirect } from "next/navigation";
@@ -26,6 +27,15 @@ async function loadMDX(level: Levels, title: string) {
 			parseFrontmatter: true,
 		},
 	});
+}
+
+export async function generateStaticParams({
+	params: { level },
+}: { params: LevelParams }) {
+	const docs = await listAllDocs(level);
+	return docs.map((doc) => ({
+		title: doc.replace(/\.mdx?/, ""),
+	}));
 }
 
 export default async function Page({

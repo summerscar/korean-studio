@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const __docs_store = new Map<string, string[]>();
 
-const listAllDocs = async (level: string) => {
+export const listAllDocs = async (level: string) => {
 	if (__docs_store.has(level)) {
 		return __docs_store.get(level)!;
 	}

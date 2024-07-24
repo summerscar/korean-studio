@@ -1,5 +1,11 @@
 import { DocsLayout } from "@/components/docs-layout";
-import type { LevelParams } from "@/types";
+import { Levels } from "@/types";
+
+export async function generateStaticParams() {
+	return [Levels.Beginner, Levels.Intermediate].map((level) => ({
+		level,
+	}));
+}
 
 export default function Layout({
 	children,

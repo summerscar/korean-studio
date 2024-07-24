@@ -7,7 +7,7 @@ function DocsLayout({
 }: PropsWithChildren<{ category: ReactNode }>) {
 	return (
 		<div className="flex w-full">
-			<div className="self-start w-1/4 flex-none p-8 sticky top-14 max-h-[calc(100vh-var(--header-height))] overflow-auto">
+			<div className="self-start w-64 flex-none sticky top-[--header-height] max-h-[calc(100vh-var(--header-height))] overflow-auto">
 				{/* // TODO: Parallel Routes */}
 				{category}
 			</div>

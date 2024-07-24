@@ -71,8 +71,7 @@ const HomeDrawer = ({
 								>
 									<div
 										className={clsx({
-											"bg-[var(--fallback-bc,oklch(var(--bc)/0.1))]":
-												index === curWordIndex,
+											"list-active": index === curWordIndex,
 										})}
 									>
 										<span>

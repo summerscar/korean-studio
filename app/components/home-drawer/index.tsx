@@ -61,7 +61,7 @@ const HomeDrawer = ({
 							aria-label="close sidebar"
 							className="drawer-overlay"
 						/>
-						<ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+						<ul className="menu bg-base-100 text-base-content min-h-full w-80 p-4">
 							{/* Sidebar content here */}
 							{dict.map((item, index) => (
 								<li
@@ -71,7 +71,7 @@ const HomeDrawer = ({
 								>
 									<div
 										className={clsx({
-											"list-active": index === curWordIndex,
+											active: index === curWordIndex,
 										})}
 									>
 										<span>

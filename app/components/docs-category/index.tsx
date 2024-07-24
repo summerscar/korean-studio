@@ -45,8 +45,12 @@ const DocsCategory = async ({
 	);
 
 	return (
-		<ul>
-			<li className="my-2">
+		<ul className="menu">
+			<li
+				className={clsx({
+					"list-active": !title,
+				})}
+			>
 				<Link className="flex" href={`/learn/${level}`}>
 					Intro {level}
 				</Link>
@@ -54,8 +58,8 @@ const DocsCategory = async ({
 			{docs.map((doc) => (
 				<li
 					key={doc}
-					className={clsx("my-2", {
-						"bg-[var(--fallback-bc,oklch(var(--bc)/0.1))]": title === doc,
+					className={clsx({
+						"list-active": title === doc,
 					})}
 				>
 					<Link className="flex" href={`/learn/${level}/${doc}`}>

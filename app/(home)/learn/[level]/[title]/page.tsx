@@ -44,10 +44,9 @@ export default async function Page({
 	const mdx = await loadMDX(level, title);
 
 	return (
-		<>
+		<article className="markdown-body">
 			<p>{JSON.stringify(mdx.frontmatter, null, 2)}</p>
-			{/* TODO: move class to here */}
 			{mdx.content}
-		</>
+		</article>
 	);
 }

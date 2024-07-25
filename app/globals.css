@@ -18,14 +18,9 @@
 
 
 
-@media (prefers-color-scheme: light) {
-	.markdown-body, [data-theme="light"] {
-		--bgColor-default: theme(colors.transparent)!important;
-	}
-}
-
-
 .markdown-body {
+	--fgColor-default: theme(textColor.base-content)!important;
+	--bgColor-default: theme(colors.transparent)!important;
 	ol, ul, menu {
 		list-style: unset;
 		margin: unset;

@@ -1,13 +1,13 @@
 import { inter } from "@/utils/fonts";
-import "@/globals.css";
-import clsx from "clsx";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
 import "github-markdown-css";
+import "@/globals.css";
 import { isProd } from "@/utils/is-dev";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import clsx from "clsx";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 
 export async function DefaultLayout({
 	isAdmin = false,
@@ -30,6 +30,7 @@ export async function DefaultLayout({
 		);
 	}
 	return (
+		// TODO: dark context
 		<html lang={locale} data-theme="nord">
 			<body
 				className={clsx(inter.className, bodyClassName, "text-base-content")}

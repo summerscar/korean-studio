@@ -112,7 +112,7 @@ const HomeInput = forwardRef<
 				isInputFocused
 					? "animate-[1s_ease_0s_infinite_normal_none_running_blink]"
 					: "opacity-0",
-				"fixed top-0 left-0 w-[2px] h-[23px] overflow-hidden bg-black translate-y-1",
+				"fixed top-0 left-0 w-[2px] h-[23px] overflow-hidden bg-base-content translate-y-1",
 			)}
 			style={style}
 		>

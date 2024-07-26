@@ -1,19 +1,17 @@
 
 :root {
 	--font-color-inactive: theme(textColor.gray.500);
-	--font-color-active: theme(textColor.black);
+	--font-color-active: theme(textColor.base-content);
 	--font-color-error: theme(textColor.rose.500);
 	--header-height: 64px;
+}
+
+[data-theme="dark"] {
+	--font-color-inactive: theme(textColor.gray.600);
 }
 
 @media screen(lg) {
 	:root {
 		--header-height: 56px;
 	}
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-		--font-color-inactive: #3f3f3f;
-		--font-color-active: #ffffff;
-  }
 }

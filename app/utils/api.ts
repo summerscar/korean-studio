@@ -19,12 +19,12 @@ const createFetch =
 			cache: type ? "force-cache" : "no-store",
 		}).then((res) => res.json());
 
-const staticFetch = createFetch("static");
 // biome-ignore lint/correctness/noUnusedVariables: <explanation>
+const staticFetch = createFetch("static");
 const dynamicFetch = createFetch("dynamic");
 
 export const fetchDict = async (
 	target: keyof typeof dicts = "kr-popular",
 ): Promise<Dict> => {
-	return staticFetch(`/dicts/${target}.json`);
+	return dynamicFetch(`/dicts/${target}.json`);
 };

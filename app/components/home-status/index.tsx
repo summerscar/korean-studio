@@ -341,7 +341,7 @@ const HomeStatus = ({
 				/>
 				<div
 					className={clsx(
-						"transition-all select-none absolute top-0 left-0 w-full h-full bg-gray-400/75 dark:bg-slate-600/85 flex items-center justify-center flex-col",
+						"transition-all select-none absolute top-0 left-0 w-full h-full bg-gray-400/75 dark:bg-gray-800/85 flex items-center justify-center flex-col",
 						isInputFocused ? "opacity-0 pointer-events-none" : "opacity-100",
 					)}
 				>

@@ -48,7 +48,7 @@ const Footer = () => {
 					</svg>
 				</a>
 				<a
-					href="https://github.com/summerscar/korean-studio"
+					href="https://github.com/summerscar"
 					target="_blank"
 					rel="noreferrer"
 				>

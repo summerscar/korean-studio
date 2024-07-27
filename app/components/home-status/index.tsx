@@ -345,8 +345,8 @@ const HomeStatus = ({
 						isInputFocused ? "opacity-0 pointer-events-none" : "opacity-100",
 					)}
 				>
-					<div className="text-3xl">
-						Press 『<b>Enter</b>』 to type !
+					<div className="text-3xl flex items-center">
+						Press<kbd className="kbd kbd-md mx-2">Enter</kbd>to type !
 					</div>
 					<button
 						className="btn btn-outline btn-sm mt-5 mb-1"
@@ -356,7 +356,9 @@ const HomeStatus = ({
 						View list
 					</button>
 					<div className="text-sm ">
-						tips: Try 『<b>[</b>』『<b>]</b>』.
+						tips: Try <kbd className="kbd kbd-xs">[</kbd>
+						{" / "}
+						<kbd className="kbd kbd-xs">]</kbd>.
 					</div>
 				</div>
 			</div>

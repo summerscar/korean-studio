@@ -1,6 +1,7 @@
 import { inter } from "@/utils/fonts";
 import "github-markdown-css";
 import "@/globals.css";
+import { Themes } from "@/types";
 import { isProd } from "@/utils/is-dev";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
@@ -30,8 +31,7 @@ export async function DefaultLayout({
 		);
 	}
 	return (
-		// TODO: dark context
-		<html lang={locale} data-theme="nord">
+		<html lang={locale} data-theme={Themes.Light}>
 			<body
 				className={clsx(inter.className, bodyClassName, "text-base-content")}
 			>

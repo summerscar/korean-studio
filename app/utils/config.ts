@@ -1,10 +1,4 @@
-import { SITES, SITES_LANGUAGE } from "@/types/site";
-
-const titleConfig: Record<SITES, string> = {
-	[SITES.korean]: "한국어",
-	[SITES.japanese]: "日本語",
-	[SITES.chinese]: "中文",
-};
+import { SITES_LANGUAGE } from "@/types/site";
 
 const siteLanguageConfig: Record<SITES_LANGUAGE, string> = {
 	[SITES_LANGUAGE.korean]: "한국어",
@@ -14,7 +8,6 @@ const siteLanguageConfig: Record<SITES_LANGUAGE, string> = {
 	[SITES_LANGUAGE.english]: "English",
 };
 
-const DEFAULT_SITE = SITES.korean;
 const DEFAULT_SITE_LANGUAGE = SITES_LANGUAGE.zhCN;
 
 /**
@@ -22,23 +15,17 @@ const DEFAULT_SITE_LANGUAGE = SITES_LANGUAGE.zhCN;
  * @param language UI 语言
  * @returns 本站配置
  */
-const getSiteConfig = (
-	site: SITES = DEFAULT_SITE,
-	language: SITES_LANGUAGE = DEFAULT_SITE_LANGUAGE,
-) => {
+const getSiteConfig = (language: SITES_LANGUAGE = DEFAULT_SITE_LANGUAGE) => {
 	return {
-		title: titleConfig[site],
-		headerTitle: titleConfig[site],
-		description: titleConfig[site],
 		siteLanguage: siteLanguageConfig[language],
-		supportedSites: SITES,
 		supportedSiteLanguages: SITES_LANGUAGE,
 	} as const;
 };
+
 const siteConfig = getSiteConfig();
 
 export const dicts = {
 	"kr-popular": "流行词汇",
 };
 
-export { siteConfig, DEFAULT_SITE, DEFAULT_SITE_LANGUAGE };
+export { siteConfig, DEFAULT_SITE_LANGUAGE };

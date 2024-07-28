@@ -1,9 +1,3 @@
-enum SITES {
-	korean = "kr",
-	japanese = "jp",
-	chinese = "cn",
-}
-
 enum SITES_LANGUAGE {
 	korean = "kr",
 	japanese = "jp",
@@ -12,4 +6,4 @@ enum SITES_LANGUAGE {
 	english = "en",
 }
 
-export { SITES, SITES_LANGUAGE };
+export { SITES_LANGUAGE };

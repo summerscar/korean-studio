@@ -28,7 +28,7 @@ const Header = async () => {
 						<span>🚧{t("intermediate")}</span>
 					</Link>
 					<Link href="/topik" className="mr-4">
-						<span>🚧Topik</span>
+						<span>TOPIK</span>
 					</Link>
 					<span>
 						{session ? (

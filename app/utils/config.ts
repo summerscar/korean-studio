@@ -5,9 +5,10 @@ const siteLanguageConfig: Record<SITES_LANGUAGE, string> = {
 	[SITES_LANGUAGE.japanese]: "日本語",
 	[SITES_LANGUAGE.zhCN]: "中文简体",
 	[SITES_LANGUAGE.zhTW]: "中文繁体",
-	[SITES_LANGUAGE.english]: "English",
+	[SITES_LANGUAGE.en]: "English",
 };
 
+const LOCAL_KEY = "locale";
 const DEFAULT_SITE_LANGUAGE = SITES_LANGUAGE.zhCN;
 
 /**
@@ -28,4 +29,4 @@ export const dicts = {
 	"kr-popular": "流行词汇",
 };
 
-export { siteConfig, DEFAULT_SITE_LANGUAGE };
+export { siteConfig, DEFAULT_SITE_LANGUAGE, LOCAL_KEY };

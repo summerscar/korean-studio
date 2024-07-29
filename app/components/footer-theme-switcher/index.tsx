@@ -1,12 +1,12 @@
 "use client";
 
 import { THEME_DARK_KEY, Themes } from "@/types";
-import { useMemoizedFn, useMount, useUpdateEffect } from "ahooks";
+import { useMemoizedFn, useMount, useThrottle, useUpdateEffect } from "ahooks";
 import { useState } from "react";
 
 const ThemeSwitcher = () => {
 	const [isDarkTheme, setIsDarkTheme] = useState(false);
-
+	const throttledValue = useThrottle(isDarkTheme, { wait: 300 });
 	const setThemeData = useMemoizedFn((theme: Themes) => {
 		document.documentElement.setAttribute("data-theme", theme);
 	});
@@ -36,6 +36,7 @@ const ThemeSwitcher = () => {
 				onChange={handleSetDarkTheme}
 				type="checkbox"
 				className="theme-controller"
+				checked={throttledValue}
 				value={Themes.Dark}
 			/>
 

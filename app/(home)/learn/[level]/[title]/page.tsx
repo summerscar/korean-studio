@@ -5,6 +5,9 @@ import { listAllDocs } from "@/components/docs-category";
 import type { DocsTitleParams, LevelParams, Levels } from "@/types";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { redirect } from "next/navigation";
+import { generateMetadata } from "../page";
+
+export { generateMetadata };
 
 async function loadMDX(level: Levels, title: string) {
 	const root = path.resolve();

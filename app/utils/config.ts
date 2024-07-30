@@ -25,8 +25,4 @@ const getSiteConfig = (language: SITES_LANGUAGE = DEFAULT_SITE_LANGUAGE) => {
 
 const siteConfig = getSiteConfig();
 
-export const dicts = {
-	"kr-popular": "流行词汇",
-};
-
 export { siteConfig, DEFAULT_SITE_LANGUAGE, LOCAL_KEY };

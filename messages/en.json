@@ -7,5 +7,10 @@
 	"Header": {
 		"beginner": "Beginner",
 		"intermediate": "Intermediate"
+	},
+	"Home": {
+		"viewList": "View list",
+		"popular": "Popular Words",
+		"dirty": "Dirty Words"
 	}
 }

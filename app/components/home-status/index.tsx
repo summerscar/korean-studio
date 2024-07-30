@@ -13,13 +13,11 @@ import { usePronunciation } from "@/hooks/use-pronunciation";
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
 import { playConfetti } from "@/utils/confetti";
-
 import {
 	NextKeyShortcut,
 	PrevKeyShortcut,
 	convertInputsToQwerty,
 	isEmptyInput,
-	isNavShortcut,
 	isShift,
 	isShiftOnly,
 	isSpace,
@@ -29,10 +27,10 @@ import {
 import { myeongjo, notoKR } from "@/utils/fonts";
 import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
-import { useEventListener, useMemoizedFn } from "ahooks";
+import { useEventListener, useLatest, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { disassembleHangul } from "es-hangul";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import reactStringReplace from "react-string-replace";
 
@@ -52,12 +50,18 @@ const HomeStatus = ({
 	);
 	const drawerRef = useRef({ open: () => {} });
 	const locale = useLocale();
+	const tHome = useTranslations("Home");
 	const hangulRef = useRef<HTMLDivElement>(null);
 	const [inputKeys, setInputKeys] = useState<Record<string, boolean>>({});
 	const inputRef = useRef({
 		handleInputBlur: () => {},
 		handleInputFocus: () => {},
 	});
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		resetWord();
+	}, [dict]);
 
 	useEventListener(
 		"keyup",
@@ -114,6 +118,7 @@ const HomeStatus = ({
 	const displayName = currentWord?.name || "";
 	/** 韩文字母 */
 	const hangul = parseSpaceStr(disassembleHangul(displayName));
+	const lastedHangul = useLatest(hangul);
 	/** 韩文字母对应的键盘输入 */
 	const qwerty = parseSpaceStr(hangulToQwerty(hangul));
 
@@ -201,13 +206,16 @@ const HomeStatus = ({
 		skipToNextWord(0);
 	});
 
-	/** 完成输入，下一个单词 TODO: 放在useEffect可能有点问题 */
+	/** 完成输入，下一个单词 TODO: 放在useEffect可能有点问题, 仅curInputIndex更新时触发 */
 	useEffect(() => {
-		if (curInputIndex >= hangul.length && isEmptyInput(inputKeys)) {
+		if (
+			curInputIndex >= lastedHangul.current.length &&
+			isEmptyInput(inputKeys)
+		) {
 			playConfetti();
 			toNextWord();
 		}
-	}, [curInputIndex, hangul, inputKeys, toNextWord]);
+	}, [curInputIndex, lastedHangul, inputKeys, toNextWord]);
 
 	const translation = useMemo(() => {
 		if (!currentWord) return null;
@@ -349,13 +357,13 @@ const HomeStatus = ({
 						Press<kbd className="kbd kbd-md mx-2">Enter</kbd>to type !
 					</div>
 					<button
-						className="btn btn-outline btn-sm mt-5 mb-1"
+						className="btn btn-outline btn-sm mt-5 mb-2"
 						type="button"
 						onClick={() => drawerRef.current.open()}
 					>
-						View list
+						{tHome("viewList")}
 					</button>
-					<div className="text-sm ">
+					<div className="text-sm">
 						tips: Try <kbd className="kbd kbd-xs">[</kbd>
 						{" / "}
 						<kbd className="kbd kbd-xs">]</kbd>.

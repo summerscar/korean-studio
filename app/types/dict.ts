@@ -12,4 +12,11 @@ export interface DictItem {
 	exTrans: Tran;
 }
 
+export enum Dicts {
+	popular = "popular",
+	dirty = "dirty",
+}
+
+export const DEFAULT_DICT = Dicts.popular;
+
 export type Dict = DictItem[];

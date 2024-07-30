@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { useLocale } from "next-intl";
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import { DictMenu } from "./dict-menu";
 
 const HomeDrawer = ({
 	dict,
@@ -62,6 +63,7 @@ const HomeDrawer = ({
 							className="drawer-overlay"
 						/>
 						<ul className="menu bg-base-100 text-base-content min-h-full w-80 p-4">
+							<DictMenu />
 							{/* Sidebar content here */}
 							{dict.map((item, index) => (
 								<li

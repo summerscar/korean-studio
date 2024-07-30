@@ -7,5 +7,10 @@
 	"Header": {
 		"beginner": "入门",
 		"intermediate": "进阶"
+	},
+	"Home": {
+		"viewList": "查看列表",
+		"popular": "热门词汇",
+		"dirty": "脏话"
 	}
 }

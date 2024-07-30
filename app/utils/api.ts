@@ -1,7 +1,6 @@
-import type { Dict } from "@/types/dict";
-import type { dicts } from "@/utils/config";
+import { DEFAULT_DICT, type Dict } from "@/types/dict";
+import type { Dicts } from "@/types/dict";
 import { getBaseURL } from "@/utils/get-base-url";
-import { timeOut } from "@/utils/time-out";
 import { GraphQLClient } from "graphql-request";
 
 const parseURL = (url: string) =>
@@ -24,7 +23,7 @@ const staticFetch = createFetch("static");
 const dynamicFetch = createFetch("dynamic");
 
 export const fetchDict = async (
-	target: keyof typeof dicts = "kr-popular",
+	target: keyof typeof Dicts = DEFAULT_DICT,
 ): Promise<Dict> => {
 	return dynamicFetch(`/dicts/${target}.json`);
 };

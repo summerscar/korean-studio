@@ -10,7 +10,7 @@ const mapForLocale: Record<string, string> = {
 	en: "🇺🇸",
 	ja: "🇯🇵",
 };
-// TODO： i18n
+
 const I18nSwitcher = () => {
 	const [locale, setLocale] = useState<string>(DEFAULT_SITE_LANGUAGE);
 

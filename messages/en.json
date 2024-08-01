@@ -11,6 +11,7 @@
 	"Home": {
 		"viewList": "View list",
 		"popular": "Popular Words",
-		"dirty": "Dirty Words"
+		"dirty": "Dirty Words",
+		"tipsEnter": "Press<enter></enter>to type!"
 	}
 }

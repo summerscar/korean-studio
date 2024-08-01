@@ -11,6 +11,7 @@
 	"Home": {
 		"viewList": "查看列表",
 		"popular": "热门词汇",
-		"dirty": "脏话"
+		"dirty": "脏话",
+		"tipsEnter": "按下<enter></enter>键输入"
 	}
 }

@@ -13,7 +13,7 @@ const DictMenu = () => {
 		router.push(`/?dict=${dict}`);
 	};
 	return (
-		<ul className="menu menu-horizontal menu-sm bg-base-200 rounded-box">
+		<ul className="menu menu-horizontal menu-sm bg-base-200 rounded-box mb-3 shadow-md">
 			{Object.entries(Dicts).map(([key, value]) => (
 				<li key={key}>
 					<span

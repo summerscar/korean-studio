@@ -11,6 +11,7 @@
 	"Home": {
 		"viewList": "リストを見る",
 		"popular": "トレンド用語",
-		"dirty": "悪口"
+		"dirty": "悪口",
+		"tipsEnter": "<enter></enter>を押してから入力してください"
 	}
 }

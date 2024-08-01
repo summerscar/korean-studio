@@ -206,7 +206,7 @@ const HomeStatus = ({
 		skipToNextWord(0);
 	});
 
-	/** 完成输入，下一个单词 TODO: 放在useEffect可能有点问题, 仅curInputIndex更新时触发 */
+	/** 完成输入，下一个单词 放在useEffect可能有点问题, 仅curInputIndex更新时触发 */
 	useEffect(() => {
 		if (
 			curInputIndex >= lastedHangul.current.length &&
@@ -354,7 +354,9 @@ const HomeStatus = ({
 					)}
 				>
 					<div className="text-3xl flex items-center">
-						Press<kbd className="kbd kbd-md mx-2">Enter</kbd>to type !
+						{tHome.rich("tipsEnter", {
+							enter: () => <kbd className="kbd kbd-md mx-2">Enter</kbd>,
+						})}
 					</div>
 					<button
 						className="btn btn-outline btn-sm mt-5 mb-2"
@@ -373,7 +375,6 @@ const HomeStatus = ({
 			{/* 例句 */}
 			<div className="flex justify-center flex-col items-center">
 				<p className={clsx("relative", myeongjo.className)}>
-					<span className="absolute left-0 -translate-x-full pr-1">Ex. </span>
 					{highLightExample(currentWord?.example)}
 					<SpeakerSVG
 						width={12}

@@ -31,7 +31,14 @@ import { useEventListener, useLatest, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { disassembleHangul } from "es-hangul";
 import { useLocale, useTranslations } from "next-intl";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import reactStringReplace from "react-string-replace";
 
 const HomeStatus = ({
@@ -68,13 +75,15 @@ const HomeStatus = ({
 		(e) => {
 			/** 进入输入状态 */
 			if (e.code === "Enter") {
-				if (isInputFocused) return;
+				if (isInputFocused || isComplete) return;
 				focusInput();
 				return;
 			}
 
 			/** 单词导航 */
 			if ([NextKeyShortcut, PrevKeyShortcut].includes(e.code)) {
+				if (isComplete) return;
+
 				if (e.code === NextKeyShortcut) {
 					toNextWordWithCheck();
 				} else if (e.code === PrevKeyShortcut) {
@@ -163,6 +172,8 @@ const HomeStatus = ({
 	const focusInput = useCallback(() => {
 		inputRef.current.handleInputFocus?.();
 	}, []);
+
+	// biome-ignore lint/correctness/noUnusedVariables: <explanation>
 	const blurInput = useCallback(() => {
 		inputRef.current.handleInputBlur?.();
 	}, []);
@@ -171,7 +182,6 @@ const HomeStatus = ({
 		(nextWordIndex: number) => {
 			if (nextWordIndex >= dict.length) {
 				setIsComplete(true);
-				setTimeout(blurInput);
 			} else {
 				setIsComplete(false);
 				setTimeout(focusInput);
@@ -185,7 +195,7 @@ const HomeStatus = ({
 				dict[targetIndex],
 			);
 		},
-		[focusInput, dict, blurInput],
+		[focusInput, dict],
 	);
 
 	const toPrevWord = useMemoizedFn(() => {
@@ -262,14 +272,19 @@ const HomeStatus = ({
 		));
 	};
 
-	return (
-		<div className={clsx("flex", "flex-col", "items-center", "justify-center")}>
-			{isComplete && (
+	if (isComplete) {
+		return (
+			<Wrapper>
 				<div className="flex flex-col items-center justify-center">
 					<CompleteSVG />
 					<RefreshSVG className="mt-5 cursor-pointer" onClick={resetWord} />
 				</div>
-			)}
+			</Wrapper>
+		);
+	}
+
+	return (
+		<Wrapper>
 			<DictNav
 				onNext={toNextWord}
 				onPrev={toPrevWord}
@@ -412,8 +427,14 @@ const HomeStatus = ({
 				curWordIndex={curWordIndex}
 				onClick={skipToNextWord}
 			/>
-		</div>
+		</Wrapper>
 	);
 };
+
+const Wrapper = ({ children }: { children: ReactNode }) => (
+	<div className={clsx("flex", "flex-col", "items-center", "justify-center")}>
+		{children}
+	</div>
+);
 
 export { HomeStatus };

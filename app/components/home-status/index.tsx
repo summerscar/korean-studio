@@ -12,7 +12,7 @@ import { usePronunciation } from "@/hooks/use-pronunciation";
 // https://www.lexilogos.com/code/conkr.js
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
-import { baseInputAE } from "@/utils/audio";
+import { useInputAudioEffect } from "@/utils/audio";
 import { playConfetti } from "@/utils/confetti";
 import {
 	NextKeyShortcut,
@@ -25,6 +25,7 @@ import {
 	isSpace,
 	keyCodeToQwerty,
 	parseSpaceStr,
+	spaceStr,
 } from "@/utils/convert-input";
 import { myeongjo, notoKR } from "@/utils/fonts";
 import { isServer } from "@/utils/is-server";
@@ -54,6 +55,7 @@ const HomeStatus = ({
 	const [isInputError, setIsInputError] = useState(false);
 	const [isInputFocused, setIsInputFocused] = useState(false);
 	const [showKeyboard, setShowKeyboard] = useState(true);
+	const inputAE = useInputAudioEffect();
 	const toggleShowKeyboard = useMemoizedFn(() =>
 		setShowKeyboard(!showKeyboard),
 	);
@@ -84,13 +86,15 @@ const HomeStatus = ({
 
 			/** 单词导航 */
 			if ([NextKeyShortcut, PrevKeyShortcut].includes(e.code)) {
-				if (isComplete) return;
+				if (isComplete || (curWordIndex === 0 && e.code === PrevKeyShortcut))
+					return;
 
 				if (e.code === NextKeyShortcut) {
 					toNextWordWithCheck();
 				} else if (e.code === PrevKeyShortcut) {
 					toPrevWord();
 				}
+				inputAE.current!.swapAE.play();
 				return;
 			}
 		},
@@ -154,22 +158,29 @@ const HomeStatus = ({
 			// backspace 需要退回一位
 			if (parsedInputs.includes("backspace")) {
 				setIsInputError(false);
+				inputAE.current!.backspaceAE.play();
 				return Math.max(prev - 1, 0);
 			}
 			// 前进一位
 			const isTarget = parsedInputs.find((key) => key === targetKey);
 			if (isTarget) {
 				setIsInputError(false);
+				if (targetKey === spaceStr) {
+					inputAE.current!.spaceAE.play();
+				} else {
+					inputAE.current!.baseInputAE.play();
+				}
 				return prev + 1;
 			}
 			// 输入错误，提示下一个输入
 			if (!isShiftOnly(inputKeys)) {
 				setIsInputError(true);
+				inputAE.current!.incorrectAE.play();
 				addShakeAnimation(hangulRef.current!);
 			}
 			return prev;
 		});
-	}, [inputKeys, qwerty, addShakeAnimation]);
+	}, [inputKeys, qwerty, addShakeAnimation, inputAE]);
 
 	const focusInput = useCallback(() => {
 		inputRef.current.handleInputFocus?.();
@@ -247,14 +258,7 @@ const HomeStatus = ({
 	useEffect(() => {
 		if (!isEmptyInput(inputKeys)) {
 			console.log("inputKeys:", inputKeys);
-			const inputKeysArr = Object.keys(inputKeys);
-			if (inputKeysArr.find((key) => isSpace(key))) {
-			} else if (inputKeysArr.find((key) => isBackspace(key))) {
-			} else {
-				baseInputAE.play();
-			}
 		}
-		// if () {}
 	}, [inputKeys]);
 
 	/** 输入状态 style */

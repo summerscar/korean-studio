@@ -43,7 +43,6 @@ const HomeInput = forwardRef<
 			}
 
 			if (type === "keydown") {
-				// TODO: input audio
 				setCurrentInputKeys((prev) => ({ ...prev, [code]: true }));
 			} else if (type === "keyup") {
 				setCurrentInputKeys((prev) => {

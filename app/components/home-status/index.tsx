@@ -12,11 +12,13 @@ import { usePronunciation } from "@/hooks/use-pronunciation";
 // https://www.lexilogos.com/code/conkr.js
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
+import { baseInputAE } from "@/utils/audio";
 import { playConfetti } from "@/utils/confetti";
 import {
 	NextKeyShortcut,
 	PrevKeyShortcut,
 	convertInputsToQwerty,
+	isBackspace,
 	isEmptyInput,
 	isShift,
 	isShiftOnly,
@@ -243,7 +245,16 @@ const HomeStatus = ({
 
 	/** just for log */
 	useEffect(() => {
-		!isEmptyInput(inputKeys) && console.log("inputKeys:", inputKeys);
+		if (!isEmptyInput(inputKeys)) {
+			console.log("inputKeys:", inputKeys);
+			const inputKeysArr = Object.keys(inputKeys);
+			if (inputKeysArr.find((key) => isSpace(key))) {
+			} else if (inputKeysArr.find((key) => isBackspace(key))) {
+			} else {
+				baseInputAE.play();
+			}
+		}
+		// if () {}
 	}, [inputKeys]);
 
 	/** 输入状态 style */

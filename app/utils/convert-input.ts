@@ -16,6 +16,9 @@ export const isShift = (keyCode: string) => {
 export const isSpace = (keyCode: string) => {
 	return keyCode.toLowerCase() === "space";
 };
+export const isBackspace = (keyCode: string) => {
+	return keyCode.toLowerCase() === "backspace";
+};
 export const isShiftOnly = (input: InputKeys) => {
 	return Object.keys(input).every(isShift) && Object.keys(input).length === 1;
 };

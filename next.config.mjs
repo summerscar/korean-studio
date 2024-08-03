@@ -57,6 +57,14 @@ const nextConfig = {
 		// Modify the file loader rule to ignore *.svg, since we have it handled now.
 		fileLoaderRule.exclude = /\.svg$/i;
 
+		config.module.rules.push({
+			test: /\.(mp3)$/,
+			type: "asset/resource",
+			generator: {
+				filename: "static/[name].[hash].[ext]",
+			},
+		});
+
 		return config;
 	},
 };

@@ -70,7 +70,7 @@
     <text x="755" y="55" font-size="16" text-anchor="end" fill="#333333">+</text>
 
     <!-- Key delete -->
-    <rect x="790" y="10" width="110" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
+    <rect class="backspace" x="790" y="10" width="110" height="50" fill="white" stroke="#cccccc" stroke-width="1" />
     <text x="845" y="40" font-size="16" text-anchor="middle" fill="#333333">delete</text>
   </g>
 

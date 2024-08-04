@@ -274,7 +274,8 @@ const HomeStatus = ({
 		return Object.keys(inputKeys).reduce((prev, keyCode) => {
 			return `${prev}.${keyCodeToQwerty(keyCode)} {fill: ${activeColor};}
 		.shift {${isShift(keyCode) ? `fill: ${activeColor};` : ""}}
-		.space {${isSpace(keyCode) ? `fill: ${activeColor};` : ""}}`;
+		.space {${isSpace(keyCode) ? `fill: ${activeColor};` : ""}}
+		.backspace {${isBackspace(keyCode) ? `fill: ${activeColor};` : ""}}`;
 		}, "");
 	}, [inputKeys]);
 

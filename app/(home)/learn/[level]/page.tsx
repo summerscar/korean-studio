@@ -1,8 +1,8 @@
 import { type DocsTitleParams, type LevelParams, Levels } from "@/types";
 import { getServerI18n } from "@/utils/i18n";
+import { loadMDX } from "@/utils/load-mdx";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { loadMDX } from "./[title]/page";
 
 // 这层 layout 获取不到下层 title 的动态参数，下层页面直接导入使用
 export async function generateMetadata({

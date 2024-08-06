@@ -9,7 +9,7 @@ import { generateMetadata } from "../page";
 
 export { generateMetadata };
 
-async function loadMDX(level: Levels, title: string) {
+export async function loadMDX(level: Levels, title: string) {
 	const root = path.resolve();
 	const mdxPath = path.join(root, "mdx", level, `${title}.mdx`);
 	const mdPath = path.join(root, "mdx", level, `${title}.md`);

@@ -14,7 +14,10 @@ export const listAllDocs = async (level: string) => {
 
 	const root = path.resolve();
 	const mdxDir = path.join(root, "mdx", level);
-	const docs = existsSync(mdxDir) ? await readdir(mdxDir) : [];
+	const docs = (existsSync(mdxDir) ? await readdir(mdxDir) : []).filter(
+		// filter out hidden files
+		(doc) => !doc.startsWith("_"),
+	);
 	const docsData = await Promise.all(
 		docs.map(async (doc) => {
 			const filePath = path.join(mdxDir, doc);

@@ -1,7 +1,15 @@
 import type { createAuth } from "@keystone-6/auth";
 import { list } from "@keystone-6/core";
 import { allOperations, allowAll } from "@keystone-6/core/access";
-import { checkbox, password, text, timestamp } from "@keystone-6/core/fields";
+import {
+	checkbox,
+	integer,
+	json,
+	password,
+	select,
+	text,
+	timestamp,
+} from "@keystone-6/core/fields";
 import type { KeystoneContext } from "@keystone-6/core/types";
 import type { Session } from "next-auth";
 import type { Lists, TypeInfo } from ".keystone/types";
@@ -67,6 +75,35 @@ export const lists = {
 			createdAt: timestamp({
 				defaultValue: { kind: "now" },
 			}),
+		},
+	}),
+	Topik: list({
+		access: allowAll,
+		fields: {
+			no: integer({ validation: { isRequired: true } }),
+			year: integer({ validation: { isRequired: true } }),
+			level: select({
+				type: "enum",
+				options: [
+					{ label: "TOPIK I", value: "TOPIK_I" },
+					{ label: "TOPIK II", value: "TOPIK_II" },
+				],
+				validation: { isRequired: true },
+			}),
+			questionNumber: integer({ validation: { isRequired: true } }),
+			questionType: select({
+				type: "enum",
+				options: [
+					{ label: "听力", value: "LISTENING" },
+					{ label: "阅读", value: "READING" },
+					{ label: "写作", value: "WRITING" },
+				],
+				validation: { isRequired: true },
+			}),
+			questionContent: text({ validation: { isRequired: true } }),
+			options: json(),
+			correctAnswer: text({ validation: { isRequired: true } }),
+			explanation: text(),
 		},
 	}),
 } satisfies Lists;

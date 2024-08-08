@@ -20,3 +20,27 @@ model User {
   isAdmin   Boolean   @default(false)
   createdAt DateTime? @default(now())
 }
+
+model Topik {
+  id              String                @id @default(cuid())
+  no              Int
+  year            Int
+  level           TopikLevelType
+  questionNumber  Int
+  questionType    TopikQuestionTypeType
+  questionContent String                @default("")
+  options         Json?
+  correctAnswer   String                @default("")
+  explanation     String                @default("")
+}
+
+enum TopikLevelType {
+  TOPIK_I
+  TOPIK_II
+}
+
+enum TopikQuestionTypeType {
+  LISTENING
+  READING
+  WRITING
+}

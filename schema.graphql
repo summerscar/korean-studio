@@ -132,6 +132,115 @@ input UserCreateInput {
   createdAt: DateTime
 }
 
+type Topik {
+  id: ID!
+  no: Int
+  year: Int
+  level: TopikLevelType
+  questionNumber: Int
+  questionType: TopikQuestionTypeType
+  questionContent: String
+  options: JSON
+  correctAnswer: String
+  explanation: String
+}
+
+enum TopikLevelType {
+  TOPIK_I
+  TOPIK_II
+}
+
+enum TopikQuestionTypeType {
+  LISTENING
+  READING
+  WRITING
+}
+
+input TopikWhereUniqueInput {
+  id: ID
+}
+
+input TopikWhereInput {
+  AND: [TopikWhereInput!]
+  OR: [TopikWhereInput!]
+  NOT: [TopikWhereInput!]
+  id: IDFilter
+  no: IntFilter
+  year: IntFilter
+  level: TopikLevelTypeNullableFilter
+  questionNumber: IntFilter
+  questionType: TopikQuestionTypeTypeNullableFilter
+  questionContent: StringFilter
+  correctAnswer: StringFilter
+  explanation: StringFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input TopikLevelTypeNullableFilter {
+  equals: TopikLevelType
+  in: [TopikLevelType!]
+  notIn: [TopikLevelType!]
+  not: TopikLevelTypeNullableFilter
+}
+
+input TopikQuestionTypeTypeNullableFilter {
+  equals: TopikQuestionTypeType
+  in: [TopikQuestionTypeType!]
+  notIn: [TopikQuestionTypeType!]
+  not: TopikQuestionTypeTypeNullableFilter
+}
+
+input TopikOrderByInput {
+  id: OrderDirection
+  no: OrderDirection
+  year: OrderDirection
+  level: OrderDirection
+  questionNumber: OrderDirection
+  questionType: OrderDirection
+  questionContent: OrderDirection
+  correctAnswer: OrderDirection
+  explanation: OrderDirection
+}
+
+input TopikUpdateInput {
+  no: Int
+  year: Int
+  level: TopikLevelType
+  questionNumber: Int
+  questionType: TopikQuestionTypeType
+  questionContent: String
+  options: JSON
+  correctAnswer: String
+  explanation: String
+}
+
+input TopikUpdateArgs {
+  where: TopikWhereUniqueInput!
+  data: TopikUpdateInput!
+}
+
+input TopikCreateInput {
+  no: Int
+  year: Int
+  level: TopikLevelType
+  questionNumber: Int
+  questionType: TopikQuestionTypeType
+  questionContent: String
+  options: JSON
+  correctAnswer: String
+  explanation: String
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -144,6 +253,12 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
+  createTopik(data: TopikCreateInput!): Topik
+  createTopiks(data: [TopikCreateInput!]!): [Topik]
+  updateTopik(where: TopikWhereUniqueInput!, data: TopikUpdateInput!): Topik
+  updateTopiks(data: [TopikUpdateArgs!]!): [Topik]
+  deleteTopik(where: TopikWhereUniqueInput!): Topik
+  deleteTopiks(where: [TopikWhereUniqueInput!]!): [Topik]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -170,6 +285,9 @@ type Query {
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
+  topiks(where: TopikWhereInput! = {}, orderBy: [TopikOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopikWhereUniqueInput): [Topik!]
+  topik(where: TopikWhereUniqueInput!): Topik
+  topiksCount(where: TopikWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

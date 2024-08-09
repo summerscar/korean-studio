@@ -80,8 +80,8 @@ export const lists = {
 	Topik: list({
 		access: allowAll,
 		fields: {
-			no: integer({ validation: { isRequired: true } }),
-			year: integer({ validation: { isRequired: true } }),
+			no: integer({ validation: { isRequired: true }, label: "届次" }),
+			year: integer({ validation: { isRequired: true }, label: "年份" }),
 			level: select({
 				type: "enum",
 				options: [
@@ -89,8 +89,12 @@ export const lists = {
 					{ label: "TOPIK II", value: "TOPIK_II" },
 				],
 				validation: { isRequired: true },
+				label: "级别",
 			}),
-			questionNumber: integer({ validation: { isRequired: true } }),
+			questionNumber: integer({
+				validation: { isRequired: true },
+				label: "题号",
+			}),
 			questionType: select({
 				type: "enum",
 				options: [
@@ -99,11 +103,21 @@ export const lists = {
 					{ label: "写作", value: "WRITING" },
 				],
 				validation: { isRequired: true },
+				label: "题型",
 			}),
-			questionContent: text({ validation: { isRequired: true } }),
-			options: json(),
-			correctAnswer: text({ validation: { isRequired: true } }),
-			explanation: text(),
+			score: integer({
+				validation: { isRequired: true },
+				label: "分数",
+				defaultValue: 0,
+			}),
+			audioURL: text({ label: "听力音频" }),
+			questionContent: text({
+				validation: {},
+				label: "题干",
+			}),
+			options: json({ label: "选项" }),
+			correctAnswer: text({ validation: { isRequired: true }, label: "答案" }),
+			explanation: text({ label: "解析" }),
 		},
 	}),
 } satisfies Lists;

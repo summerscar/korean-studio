@@ -28,6 +28,8 @@ model Topik {
   level           TopikLevelType
   questionNumber  Int
   questionType    TopikQuestionTypeType
+  score           Int                   @default(0)
+  audioURL        String                @default("")
   questionContent String                @default("")
   options         Json?
   correctAnswer   String                @default("")

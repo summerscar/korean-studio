@@ -139,6 +139,8 @@ type Topik {
   level: TopikLevelType
   questionNumber: Int
   questionType: TopikQuestionTypeType
+  score: Int
+  audioURL: String
   questionContent: String
   options: JSON
   correctAnswer: String
@@ -170,6 +172,8 @@ input TopikWhereInput {
   level: TopikLevelTypeNullableFilter
   questionNumber: IntFilter
   questionType: TopikQuestionTypeTypeNullableFilter
+  score: IntFilter
+  audioURL: StringFilter
   questionContent: StringFilter
   correctAnswer: StringFilter
   explanation: StringFilter
@@ -207,6 +211,8 @@ input TopikOrderByInput {
   level: OrderDirection
   questionNumber: OrderDirection
   questionType: OrderDirection
+  score: OrderDirection
+  audioURL: OrderDirection
   questionContent: OrderDirection
   correctAnswer: OrderDirection
   explanation: OrderDirection
@@ -218,6 +224,8 @@ input TopikUpdateInput {
   level: TopikLevelType
   questionNumber: Int
   questionType: TopikQuestionTypeType
+  score: Int
+  audioURL: String
   questionContent: String
   options: JSON
   correctAnswer: String
@@ -235,6 +243,8 @@ input TopikCreateInput {
   level: TopikLevelType
   questionNumber: Int
   questionType: TopikQuestionTypeType
+  score: Int
+  audioURL: String
   questionContent: String
   options: JSON
   correctAnswer: String

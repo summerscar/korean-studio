@@ -1,4 +1,3 @@
-// import type { Context } from ".keystone/types";
 import { createAuth } from "@keystone-6/auth";
 import { config } from "@keystone-6/core";
 import { statelessSessions } from "@keystone-6/core/session";

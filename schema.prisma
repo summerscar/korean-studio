@@ -30,9 +30,9 @@ model Topik {
   questionType    TopikQuestionTypeType
   score           Int                   @default(0)
   audioURL        String                @default("")
+  questionStem    String                @default("")
   questionContent String                @default("")
-  options         Json?
-  correctAnswer   String                @default("")
+  options         Json?                 @default("[{\"content\":\"\",\"isCorrect\":true},{\"content\":\"\"},{\"content\":\"\"},{\"content\":\"\"}]")
   explanation     String                @default("")
 }
 

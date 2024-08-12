@@ -141,9 +141,9 @@ type Topik {
   questionType: TopikQuestionTypeType
   score: Int
   audioURL: String
+  questionStem: String
   questionContent: String
   options: JSON
-  correctAnswer: String
   explanation: String
 }
 
@@ -174,8 +174,8 @@ input TopikWhereInput {
   questionType: TopikQuestionTypeTypeNullableFilter
   score: IntFilter
   audioURL: StringFilter
+  questionStem: StringFilter
   questionContent: StringFilter
-  correctAnswer: StringFilter
   explanation: StringFilter
 }
 
@@ -213,8 +213,8 @@ input TopikOrderByInput {
   questionType: OrderDirection
   score: OrderDirection
   audioURL: OrderDirection
+  questionStem: OrderDirection
   questionContent: OrderDirection
-  correctAnswer: OrderDirection
   explanation: OrderDirection
 }
 
@@ -226,9 +226,9 @@ input TopikUpdateInput {
   questionType: TopikQuestionTypeType
   score: Int
   audioURL: String
+  questionStem: String
   questionContent: String
   options: JSON
-  correctAnswer: String
   explanation: String
 }
 
@@ -245,9 +245,9 @@ input TopikCreateInput {
   questionType: TopikQuestionTypeType
   score: Int
   audioURL: String
+  questionStem: String
   questionContent: String
   options: JSON
-  correctAnswer: String
   explanation: String
 }
 

@@ -18,6 +18,9 @@
 			},
 			"a11y": {
 				"useKeyWithClickEvents": "off"
+			},
+			"complexity": {
+				"noForEach": "off"
 			}
 		}
 	},

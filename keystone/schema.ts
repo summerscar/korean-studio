@@ -27,7 +27,7 @@ export const authConfig = {
 	},
 } satisfies Parameters<typeof createAuth>[0];
 
-const isFromNextAuth = (session: any) => {
+const isFromNextAuth = (session: Session) => {
 	return session?.user?.id !== undefined;
 };
 
@@ -111,12 +111,29 @@ export const lists = {
 				defaultValue: 0,
 			}),
 			audioURL: text({ label: "听力音频" }),
+			questionStem: text({ label: "题干" }),
 			questionContent: text({
 				validation: {},
-				label: "题干",
+				label: "题目",
 			}),
-			options: json({ label: "选项" }),
-			correctAnswer: text({ validation: { isRequired: true }, label: "答案" }),
+			options: json({
+				label: "选项",
+				defaultValue: [
+					{
+						content: "",
+						isCorrect: true,
+					},
+					{
+						content: "",
+					},
+					{
+						content: "",
+					},
+					{
+						content: "",
+					},
+				],
+			}),
 			explanation: text({ label: "解析" }),
 		},
 	}),

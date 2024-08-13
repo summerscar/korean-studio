@@ -1,7 +1,9 @@
 import { keystoneContext } from "@/../keystone/context";
+import ArrowLeftIcon from "@/assets/svg/arrow-left.svg";
 import type { TopikQuestion } from "@/types";
 import Link from "next/link";
 import type { TopikLevelType } from ".keystone/types";
+
 const TopikQuestionPage = async ({
 	params,
 }: { params: { level: TopikLevelType; no: string } }) => {
@@ -19,31 +21,48 @@ const TopikQuestionPage = async ({
 	const topikQuestions = topikListByLevelAndNo as TopikQuestion[];
 	return (
 		<div>
+			<nav>
+				<Link href={`/topik/${level}`}>
+					<ArrowLeftIcon />
+				</Link>
+			</nav>
+			<h1 className="text-2xl font-bold">
+				{topikQuestions[0].year}년 제{topikQuestions[0].no}회
+			</h1>
 			{topikQuestions.map((topikQuestion) => (
 				<div className="flex flex-col my-4" key={topikQuestion.id}>
-					<div className="text-xl font-bold">
+					<h1>{topikQuestion.questionStem}</h1>
+					<div>
 						<Link
+							className="hover:underline font-bold"
 							href={`/topik/${level}/${no}/${topikQuestion.questionNumber}`}
 						>
-							第{topikQuestion.no}届 - No.{topikQuestion.questionNumber}
+							{topikQuestion.questionNumber}.
 						</Link>
+						<span> </span>
+						{topikQuestion.questionContent}
 					</div>
-					<h1 className="text-2xl font-bold">{topikQuestion.questionStem}</h1>
-					<h2 className="text-xl">{topikQuestion.questionContent}</h2>
 					<h3>
-						{topikQuestion.options.map((option, index) => (
-							<div key={option.content}>
-								<input
-									type="radio"
-									name="options"
-									value={index}
-									id={index.toString()}
-								/>
-								<label htmlFor={index.toString()}>
-									{index + 1}. {option.content}
-								</label>
-							</div>
-						))}
+						{topikQuestion.options.map((option, index) => {
+							const id =
+								topikQuestion.questionNumber.toString() + index.toString();
+							return (
+								<div key={option.content}>
+									<input
+										type="radio"
+										className="radio radio-xs radio-secondary"
+										disabled
+										name="options"
+										value={index}
+										id={id}
+									/>
+									<span> </span>
+									<label htmlFor={id}>
+										{index + 1}. {option.content}
+									</label>
+								</div>
+							);
+						})}
 					</h3>
 					<h4>{topikQuestion.explanation}</h4>
 				</div>

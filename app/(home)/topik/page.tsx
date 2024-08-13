@@ -43,14 +43,19 @@ export default async function Topik() {
 		<div className="flex justify-center items-center flex-col">
 			<div className="flex flex-col">
 				{levelCategories.map((category) => (
-					<div key={category.value}>
-						<h2>
+					<div key={category.value} className="last:mt-8">
+						<h2 className="text-2xl font-bold hover:underline mb-4">
 							<Link href={`/topik/${category.value}`}>{category.label}</Link>
 						</h2>
 						<ul>
 							{category.items.map((no) => (
 								<li className="text-center" key={no}>
-									<Link href={`/topik/${category.value}/${no}`}>第{no}届</Link>
+									<Link
+										className="hover:underline"
+										href={`/topik/${category.value}/${no}`}
+									>
+										제{no}회
+									</Link>
 								</li>
 							))}
 						</ul>

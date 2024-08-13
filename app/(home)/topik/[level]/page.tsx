@@ -1,4 +1,5 @@
 import { keystoneContext } from "@/../keystone/context";
+import ArrowLeftIcon from "@/assets/svg/arrow-left.svg";
 import { TopikLevels } from "@/types";
 import Link from "next/link";
 import type { TopikLevelType } from ".keystone/types";
@@ -15,11 +16,19 @@ const TopikLevelPage = async ({
 
 	return (
 		<div className="flex flex-col items-center">
-			<h1>{TopikLevels[level]}</h1>
+			{/* TODO: breadcrumb */}
+			<nav>
+				<Link href="/topik">
+					<ArrowLeftIcon />
+				</Link>
+			</nav>
+			<h1 className="text-2xl font-bold mb-4">{TopikLevels[level]}</h1>
 			<ul>
 				{[...new Set(topikListByLevel.map((item) => item.no))].map((no) => (
 					<li key={no}>
-						<Link href={`/topik/${level}/${no}`}>第{no}届</Link>
+						<Link className="hover:underline" href={`/topik/${level}/${no}`}>
+							제{no}회
+						</Link>
 					</li>
 				))}
 			</ul>

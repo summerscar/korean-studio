@@ -70,6 +70,23 @@
 		"tailwindcss": "^3.4.1",
 		"typescript": "^5"
 	},
+	"overrides": {
+		"@next/third-parties": {
+			"next": "14.3.0-canary.33"
+		},
+		"@vercel/analytics": {
+			"next": "14.3.0-canary.33"
+		},
+		"@vercel/speed-insights": {
+			"next": "14.3.0-canary.33"
+		},
+		"next-auth": {
+			"next": "14.3.0-canary.33"
+		},
+		"next-intl": {
+			"next": "14.3.0-canary.33"
+		}
+	},
 	"cspell": {
 		"version": "0.2",
 		"ignorePaths": [],

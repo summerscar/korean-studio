@@ -1,12 +1,22 @@
 import { keystoneContext } from "@/../keystone/context";
-import ArrowLeftIcon from "@/assets/svg/arrow-left.svg";
-import type { TopikQuestion } from "@/types";
+import { TopikLevels, type TopikQuestion } from "@/types";
+import { getServerI18n } from "@/utils/i18n";
+import type { Metadata } from "next";
 import Link from "next/link";
 import type { TopikLevelType } from ".keystone/types";
 
-const TopikQuestionPage = async ({
+export async function generateMetadata({
 	params,
-}: { params: { level: TopikLevelType; no: string } }) => {
+}: { params: { level: TopikLevelType; no: string } }): Promise<Metadata> {
+	const tIndex = await getServerI18n("Index");
+	return {
+		title: `${tIndex("title")}-${TopikLevels[params.level]}-${params.no}`,
+	};
+}
+
+export default async function Page({
+	params,
+}: { params: { level: TopikLevelType; no: string } }) {
 	const { level, no } = params;
 	const topikListByLevelAndNo = await keystoneContext.query.Topik.findMany({
 		where: { level: { equals: level }, no: { equals: Number(no) } },
@@ -21,11 +31,6 @@ const TopikQuestionPage = async ({
 	const topikQuestions = topikListByLevelAndNo as TopikQuestion[];
 	return (
 		<div>
-			<nav>
-				<Link href={`/topik/${level}`}>
-					<ArrowLeftIcon />
-				</Link>
-			</nav>
 			<h1 className="text-2xl font-bold">
 				{topikQuestions[0].year}년 제{topikQuestions[0].no}회
 			</h1>
@@ -69,6 +74,4 @@ const TopikQuestionPage = async ({
 			))}
 		</div>
 	);
-};
-
-export default TopikQuestionPage;
+}

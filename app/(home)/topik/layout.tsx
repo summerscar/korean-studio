@@ -1,10 +1,12 @@
 import { notoKR } from "@/utils/fonts";
 import clsx from "clsx";
 
-export default function TopikLayout({
+export default function Layout({
 	children,
+	breadcrumbs,
 }: Readonly<{
 	children: React.ReactNode;
+	breadcrumbs: React.ReactNode;
 }>) {
 	return (
 		<div
@@ -13,6 +15,7 @@ export default function TopikLayout({
 				notoKR.className,
 			)}
 		>
+			{breadcrumbs}
 			{children}
 		</div>
 	);

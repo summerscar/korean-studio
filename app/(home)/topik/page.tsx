@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // "id no year level questionNumber questionType score audioURL questionStem questionContent options explanation",
 
-export default async function Topik() {
+export default async function Page() {
 	const levelCategories: {
 		label: string;
 		value: TopikLevelType;
@@ -40,7 +40,7 @@ export default async function Topik() {
 	});
 
 	return (
-		<div className="flex justify-center items-center flex-col">
+		<div className="flex flex-col">
 			<div className="flex flex-col">
 				{levelCategories.map((category) => (
 					<div key={category.value} className="last:mt-8">
@@ -49,7 +49,7 @@ export default async function Topik() {
 						</h2>
 						<ul>
 							{category.items.map((no) => (
-								<li className="text-center" key={no}>
+								<li key={no}>
 									<Link
 										className="hover:underline"
 										href={`/topik/${category.value}/${no}`}

@@ -1,9 +1,21 @@
 import { keystoneContext } from "@/../keystone/context";
-import ArrowLeftIcon from "@/assets/svg/arrow-left.svg";
 import QuestionForm from "@/components/question-form";
-import type { TopikQuestion } from "@/types";
-import Link from "next/link";
+import { TopikLevels, type TopikQuestion } from "@/types";
+import { getServerI18n } from "@/utils/i18n";
+import type { Metadata } from "next";
 import type { TopikLevelType } from ".keystone/types";
+
+export async function generateMetadata({
+	params,
+}: {
+	params: { level: TopikLevelType; no: string; question: string };
+}): Promise<Metadata> {
+	const tIndex = await getServerI18n("Index");
+	return {
+		title: `${tIndex("title")}-${TopikLevels[params.level]}-${params.no}-${params.question}`,
+	};
+}
+
 const TopikQuestionPage = async ({
 	params,
 }: { params: { level: TopikLevelType; no: string; question: string } }) => {
@@ -27,16 +39,9 @@ const TopikQuestionPage = async ({
 	const normalizedTopikQuestion = JSON.parse(JSON.stringify(topikQuestion));
 
 	return (
-		<>
-			<nav>
-				<Link href={`/topik/${level}/${no}`}>
-					<ArrowLeftIcon />
-				</Link>
-			</nav>
-			<div className="flex flex-col gap-2">
-				<QuestionForm topikQuestion={normalizedTopikQuestion} />
-			</div>
-		</>
+		<div className="flex flex-col gap-2">
+			<QuestionForm topikQuestion={normalizedTopikQuestion} />
+		</div>
 	);
 };
 

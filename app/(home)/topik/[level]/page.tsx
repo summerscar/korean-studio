@@ -1,12 +1,22 @@
 import { keystoneContext } from "@/../keystone/context";
-import ArrowLeftIcon from "@/assets/svg/arrow-left.svg";
 import { TopikLevels } from "@/types";
+import { getServerI18n } from "@/utils/i18n";
+import type { Metadata } from "next";
 import Link from "next/link";
 import type { TopikLevelType } from ".keystone/types";
 
-const TopikLevelPage = async ({
+export async function generateMetadata({
 	params,
-}: { params: { level: TopikLevelType } }) => {
+}: { params: { level: TopikLevelType } }): Promise<Metadata> {
+	const tIndex = await getServerI18n("Index");
+	return {
+		title: `${tIndex("title")}-${TopikLevels[params.level]}`,
+	};
+}
+
+export default async function Page({
+	params,
+}: { params: { level: TopikLevelType } }) {
 	const { level } = params;
 	const topikListByLevel = await keystoneContext.query.Topik.findMany({
 		where: { level: { equals: level } },
@@ -15,13 +25,7 @@ const TopikLevelPage = async ({
 	});
 
 	return (
-		<div className="flex flex-col items-center">
-			{/* TODO: breadcrumb */}
-			<nav>
-				<Link href="/topik">
-					<ArrowLeftIcon />
-				</Link>
-			</nav>
+		<div className="flex flex-col">
 			<h1 className="text-2xl font-bold mb-4">{TopikLevels[level]}</h1>
 			<ul>
 				{[...new Set(topikListByLevel.map((item) => item.no))].map((no) => (
@@ -34,6 +38,4 @@ const TopikLevelPage = async ({
 			</ul>
 		</div>
 	);
-};
-
-export default TopikLevelPage;
+}

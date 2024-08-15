@@ -1,8 +1,8 @@
 "use client";
-import { DEFAULT_SITE_LANGUAGE, LOCAL_KEY } from "@/utils/config";
-import { useMemoizedFn, useMount, useUpdateEffect } from "ahooks";
+import { getI18nFromCookie, setI18nToCookie } from "@/actions/check-i18n";
+import { DEFAULT_SITE_LANGUAGE } from "@/utils/config";
+import { useMount } from "ahooks";
 import clsx from "clsx";
-import Cookies from "js-cookie";
 import { useState } from "react";
 
 const mapForLocale: Record<string, string> = {
@@ -14,32 +14,21 @@ const mapForLocale: Record<string, string> = {
 const I18nSwitcher = () => {
 	const [locale, setLocale] = useState<string>(DEFAULT_SITE_LANGUAGE);
 
-	const setLanguageToStorage = useMemoizedFn((newLocale: string) => {
-		// console.log("set language to storage: ", newLocale);
-		localStorage.setItem(LOCAL_KEY, newLocale);
-		Cookies.set(LOCAL_KEY, newLocale, { expires: 365 });
+	useMount(async () => {
+		const acceptLanguage = window.navigator.languages.find(
+			(locale) => locale in mapForLocale,
+		);
+		const newLocale =
+			(await getI18nFromCookie()) || acceptLanguage || DEFAULT_SITE_LANGUAGE;
+		setLocale(newLocale);
+		await setI18nToCookie(newLocale);
 	});
 
-	useMount(() => {
-		const acceptLanguage =
-			window.navigator.languages.find((locale) => locale in mapForLocale) ||
-			DEFAULT_SITE_LANGUAGE;
-		// TODO: 服务器默认英文，找到匹配语言后自动切换
-		const newLocale = localStorage.getItem("locale") || acceptLanguage;
+	const handleChangeLocale = (newLocale: string) => async () => {
+		if (newLocale === locale) return;
 		setLocale(newLocale);
-	});
-
-	const handleChangeLocale = (newLocale: string) => () => {
-		setLocale(newLocale);
-		setTimeout(() => {
-			window.location.reload();
-		});
+		await setI18nToCookie(newLocale);
 	};
-
-	useUpdateEffect(() => {
-		if (!locale) return;
-		setLanguageToStorage(locale);
-	}, [locale, setLanguageToStorage]);
 
 	return (
 		<div className="dropdown dropdown-hover dropdown-top">

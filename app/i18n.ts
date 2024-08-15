@@ -1,10 +1,9 @@
 import { getRequestConfig } from "next-intl/server";
-import { cookies, headers } from "next/headers";
-import { DEFAULT_SITE_LANGUAGE, LOCAL_KEY } from "./utils/config";
+import { getI18nFromCookie } from "./actions/check-i18n";
+import { DEFAULT_SITE_LANGUAGE } from "./utils/config";
 
 export default getRequestConfig(async () => {
-	const cookie = cookies();
-	const locale = cookie.get(LOCAL_KEY)?.value || DEFAULT_SITE_LANGUAGE;
+	const locale = (await getI18nFromCookie()) || DEFAULT_SITE_LANGUAGE;
 
 	return {
 		locale,

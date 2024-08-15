@@ -1,11 +1,12 @@
 "use server";
+import type { SITES_LANGUAGE } from "@/types/site";
 import { LOCAL_KEY } from "@/utils/config";
 import { cookies } from "next/headers";
 
 const getI18nFromCookie = async () => {
 	const cookie = cookies();
 	const locale = cookie.get(LOCAL_KEY)?.value;
-	return locale;
+	return locale as SITES_LANGUAGE | undefined;
 };
 
 const setI18nToCookie = async (locale: string) => {

@@ -1,5 +1,6 @@
 "use client";
 import { getI18nFromCookie, setI18nToCookie } from "@/actions/check-i18n";
+import type { SITES_LANGUAGE } from "@/types/site";
 import { DEFAULT_SITE_LANGUAGE } from "@/utils/config";
 import { useMount } from "ahooks";
 import clsx from "clsx";
@@ -11,8 +12,8 @@ const mapForLocale: Record<string, string> = {
 	ja: "🇯🇵",
 };
 
-const I18nSwitcher = () => {
-	const [locale, setLocale] = useState<string>(DEFAULT_SITE_LANGUAGE);
+const I18nSwitcher = ({ defaultLocale }: { defaultLocale: SITES_LANGUAGE }) => {
+	const [locale, setLocale] = useState<string>(defaultLocale);
 
 	useMount(async () => {
 		const acceptLanguage = window.navigator.languages.find(

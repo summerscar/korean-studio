@@ -1,34 +1,23 @@
 "use client";
-
-import { THEME_DARK_KEY, Themes } from "@/types";
-import { useMemoizedFn, useMount, useThrottle, useUpdateEffect } from "ahooks";
+import { setThemeToCookie } from "@/actions/check-theme";
+import { Themes } from "@/types";
+import { useMemoizedFn } from "ahooks";
 import { useState } from "react";
 
-const ThemeSwitcher = () => {
-	const [isDarkTheme, setIsDarkTheme] = useState(false);
-	const throttledValue = useThrottle(isDarkTheme, { wait: 300 });
+const ThemeSwitcher = ({ defaultTheme }: { defaultTheme: Themes }) => {
+	const [theme, setTheme] = useState(defaultTheme);
+
 	const setThemeData = useMemoizedFn((theme: Themes) => {
 		document.documentElement.setAttribute("data-theme", theme);
+		setThemeToCookie(theme);
 	});
-
-	useMount(() => {
-		setIsDarkTheme(() => {
-			const isDark = JSON.parse(
-				localStorage.getItem(THEME_DARK_KEY) || "false",
-			);
-			setThemeData(isDark ? Themes.Dark : Themes.Light);
-			return isDark;
-		});
-	});
-
-	useUpdateEffect(() => {
-		localStorage.setItem(THEME_DARK_KEY, JSON.stringify(isDarkTheme));
-		setThemeData(isDarkTheme ? Themes.Dark : Themes.Light);
-	}, [isDarkTheme]);
 
 	const handleSetDarkTheme = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setIsDarkTheme(e.target.checked);
+		const newTheme = e.target.checked ? Themes.Dark : Themes.Light;
+		setTheme(newTheme);
+		setThemeData(newTheme);
 	};
+
 	return (
 		<label className="swap swap-rotate">
 			{/* this hidden checkbox controls the state */}
@@ -36,7 +25,7 @@ const ThemeSwitcher = () => {
 				onChange={handleSetDarkTheme}
 				type="checkbox"
 				className="theme-controller"
-				checked={throttledValue}
+				defaultChecked={theme === Themes.Dark}
 				value={Themes.Dark}
 			/>
 

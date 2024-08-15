@@ -1,6 +1,7 @@
 import { inter } from "@/utils/fonts";
 import "github-markdown-css";
 import "@/globals.css";
+import { getThemeFromCookie } from "@/actions/check-theme";
 import { Themes } from "@/types";
 import { isProd } from "@/utils/is-dev";
 import { GoogleAnalytics } from "@next/third-parties/google";
@@ -21,6 +22,7 @@ export async function DefaultLayout({
 }>) {
 	const locale = await getLocale();
 	const messages = await getMessages();
+	const themeFromCookie = await getThemeFromCookie();
 	const GAId = process.env.NEXT_PUBLIC_GA_ID || "";
 
 	if (isAdmin) {
@@ -31,7 +33,7 @@ export async function DefaultLayout({
 		);
 	}
 	return (
-		<html lang={locale} data-theme={Themes.Light}>
+		<html lang={locale} data-theme={themeFromCookie || Themes.Light}>
 			<body
 				className={clsx(inter.className, bodyClassName, "text-base-content")}
 			>

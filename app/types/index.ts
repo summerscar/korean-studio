@@ -21,7 +21,7 @@ export type TopikQuestion = Omit<Lists.Topik.Item, "options"> & {
 	options: QuestionOptions;
 };
 
-export const THEME_DARK_KEY = "theme-dark";
+export const THEME_KEY = "theme";
 
 export enum Themes {
 	Light = "nord",

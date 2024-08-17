@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 			title: t("title"),
 			description: t("description"),
 			type: "website",
-			images: [],
+			images: ["/api/og"],
 			url: "https://korean.app.summerscar.me/",
 			siteName: t("title"),
 		},
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 			creator: "@summerscar",
 			title: t("title"),
 			description: t("description"),
-			images: [],
+			images: ["/api/og"],
 		},
 	};
 }

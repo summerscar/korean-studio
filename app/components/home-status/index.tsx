@@ -1,5 +1,6 @@
 "use client";
 import CompleteSVG from "@/assets/svg/complete.svg";
+import InfoIcon from "@/assets/svg/info.svg";
 import KeyboardIcon from "@/assets/svg/keyboard.svg";
 import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
@@ -32,7 +33,7 @@ import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
 import { useEventListener, useLatest, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
-import { disassembleHangul } from "es-hangul";
+import { disassemble, romanize, standardizePronunciation } from "es-hangul";
 import { useLocale, useTranslations } from "next-intl";
 import {
 	type ReactNode,
@@ -132,10 +133,17 @@ const HomeStatus = ({
 	/** 韩文单词 */
 	const displayName = currentWord?.name || "";
 	/** 韩文字母 */
-	const hangul = parseSpaceStr(disassembleHangul(displayName));
+	const hangul = parseSpaceStr(disassemble(displayName));
 	const lastedHangul = useLatest(hangul);
+
 	/** 韩文字母对应的键盘输入 */
 	const qwerty = parseSpaceStr(hangulToQwerty(hangul));
+
+	/** 韩文字母对应的罗马拼音 */
+	const romanized = romanize(displayName);
+
+	/** 韩文标准化发音 */
+	const standardized = standardizePronunciation(displayName);
 
 	const addShakeAnimation = useCallback((target: HTMLElement) => {
 		const className = "animate-[shake-text_0.25s_1]";
@@ -309,22 +317,27 @@ const HomeStatus = ({
 			/>
 			<div className={clsx(notoKR.className, "text-4xl font-bold relative")}>
 				{displayName}
-				<SpeakerSVG
-					width={20}
-					height={20}
-					onMouseEnter={playWord}
-					className={clsx(
-						isWordPlaying ? "text-accent" : "text-base-content",
-						"absolute top-1/2 cursor-pointer -right-10 -translate-x-1/2 -translate-y-1/2",
-					)}
-				/>
+				<div
+					className="tooltip tooltip-right absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-1/2"
+					data-tip={`${romanized} / ${standardized}`}
+				>
+					<SpeakerSVG
+						width={20}
+						height={20}
+						onMouseEnter={playWord}
+						className={clsx(
+							isWordPlaying ? "text-accent" : "text-base-content",
+							"cursor-pointer",
+						)}
+					/>
+				</div>
 			</div>
 			<div className="text-lg text-gray-500 my-2">{translation}</div>
 			{/* 韩语音节 */}
 			<div
 				className={clsx(
 					notoKR.className,
-					"inline-block cursor-pointer text-xl text-[color:var(--font-color-inactive)]",
+					"relative inline-block cursor-pointer text-xl text-[color:var(--font-color-inactive)]",
 				)}
 				ref={hangulRef}
 				onClick={focusInput}
@@ -338,6 +351,17 @@ const HomeStatus = ({
 						{strItem}
 					</span>
 				))}
+				<div
+					className="tooltip tooltip-right absolute -right-9 top-1/2 -translate-x-1/2 -translate-y-1/2"
+					data-tip={qwerty}
+				>
+					<InfoIcon
+						className="opacity-60"
+						width={20}
+						height={20}
+						viewBox="0 0 24 24"
+					/>
+				</div>
 			</div>
 			<div className="hidden">
 				{showKeyboard ? (

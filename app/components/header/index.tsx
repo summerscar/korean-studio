@@ -1,60 +1,36 @@
+import HomeIcon from "@/assets/svg/home.svg";
 import { getServerI18n } from "@/utils/i18n";
 import { auth } from "auth";
-import clsx from "clsx";
-import Image from "next/image";
 import Link from "next/link";
+import { ActiveLinks } from "./_component/active-links";
+
+export const headerConfig = (t: Awaited<ReturnType<typeof getServerI18n>>) => [
+	{
+		href: "/learn/beginner",
+		label: `🚧${t("beginner")}`,
+	},
+	{
+		href: "/learn/intermediate",
+		label: `🚧${t("intermediate")}`,
+	},
+	{
+		href: "/topik",
+		label: "🚧TOPIK",
+	},
+];
 
 const Header = async () => {
 	const session = await auth();
 	const t = await getServerI18n("Header");
 
-	/*
-	TODO: active
-	https://github.com/vercel/next.js/issues/43704#issuecomment-2090798307
-	const path = getPathname().path;
-	console.log("[path]", path);
-	*/
-	const path = "";
-	const headerConfig = [
-		{
-			href: "/learn/beginner",
-			label: `🚧${t("beginner")}`,
-			active: path.includes("/learn/beginner"),
-		},
-		{
-			href: "/learn/intermediate",
-			label: `🚧${t("intermediate")}`,
-			active: path.includes("/learn/intermediate"),
-		},
-		{
-			href: "/topik",
-			label: "🚧TOPIK",
-			active: path.includes("/topik"),
-		},
-	];
 	return (
 		<header className="sticky top-0 h-[--header-height] flex border-b border-slate-900/10 w-full backdrop-blur-lg select-none bg-slate-300/10 text-base-content">
 			<div className="w-full px-4 flex justify-between items-center">
 				<Link href="/">
-					<Image
-						src="/vercel.svg"
-						alt="Vercel Logo"
-						className="dark:invert"
-						width={100}
-						height={24}
-						priority
-					/>
+					<HomeIcon width={32} height={32} viewBox="0 0 24 24" />
 				</Link>
 				<div className="flex">
-					{headerConfig.map(({ href, label }) => (
-						<Link
-							key={href}
-							href={href}
-							className={clsx("mr-4 hover:underline")}
-						>
-							<span>{label}</span>
-						</Link>
-					))}
+					{<ActiveLinks links={headerConfig(t)} />}
 					<span>
 						{session ? (
 							<div>

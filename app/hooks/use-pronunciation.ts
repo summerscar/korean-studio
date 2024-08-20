@@ -1,3 +1,4 @@
+import { createToast } from "@/hooks/use-toast";
 import { useMemoizedFn } from "ahooks";
 import { useEffect, useRef, useState } from "react";
 
@@ -40,9 +41,17 @@ const usePronunciation = (
 		}
 	}, [autoPlay, word]);
 
-	const play = useMemoizedFn(() => {
+	const play = useMemoizedFn(async () => {
 		if (audioRef.current) {
-			audioRef.current.play();
+			try {
+				await audioRef.current.play();
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			} catch (e: any) {
+				createToast({
+					type: "error",
+					message: e.message,
+				});
+			}
 		}
 	});
 

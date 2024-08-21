@@ -10,7 +10,6 @@ import { DictNav } from "@/components/dict-nav";
 import { HomeDrawer } from "@/components/home-drawer";
 import { HomeInput } from "@/components/home-input";
 import { usePronunciation } from "@/hooks/use-pronunciation";
-// https://www.lexilogos.com/code/conkr.js
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
 import { useInputAudioEffect } from "@/utils/audio";

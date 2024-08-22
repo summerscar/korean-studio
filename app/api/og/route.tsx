@@ -10,6 +10,7 @@ export async function GET(req: NextRequest): Promise<Response | ImageResponse> {
 		const t = await getServerI18n("Index");
 
 		const { searchParams } = new URL(req.url);
+		// TODO: 设备主题设置
 		// const isLight = req.headers.get("Sec-CH-Prefers-Color-Scheme") === "light";
 
 		const title = searchParams.has("title")

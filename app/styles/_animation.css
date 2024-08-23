@@ -85,3 +85,13 @@ body{--y-0:80%;--x-0:85%;--c-0:hsla(150.8823529411765,52%,83%,1);--x-1:60%;--c-1
 			transform: translateX(0)
 	}
 }
+
+/* learn progress animation */
+html {
+	scroll-timeline: --page-scroll block;
+}
+
+@keyframes grow-progress {
+	from { transform: scaleX(0); }
+	to { transform: scaleX(1); }
+}

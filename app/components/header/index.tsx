@@ -3,6 +3,7 @@ import { getServerI18n } from "@/utils/i18n";
 import { auth } from "auth";
 import Link from "next/link";
 import { ActiveLinks } from "./_component/active-links";
+import { Progress } from "./_component/progress";
 
 export const headerConfig = (t: Awaited<ReturnType<typeof getServerI18n>>) => [
 	{
@@ -45,6 +46,7 @@ const Header = async () => {
 					</span>
 				</div>
 			</div>
+			<Progress />
 		</header>
 	);
 };

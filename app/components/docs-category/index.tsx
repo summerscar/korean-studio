@@ -46,12 +46,12 @@ const DocsCategory = async ({
 	const docs = (await listAllDocs(level)).map((doc) =>
 		doc.replace(/\.mdx?/, ""),
 	);
-
+	const formattedTitle = decodeURIComponent(title || "");
 	return (
 		<ul className="menu">
 			<li>
 				<Link
-					className={clsx("flex", { active: !title })}
+					className={clsx("flex", { active: !formattedTitle })}
 					href={`/learn/${level}`}
 				>
 					Intro {level}
@@ -60,7 +60,7 @@ const DocsCategory = async ({
 			{docs.map((doc) => (
 				<li key={doc}>
 					<Link
-						className={clsx("flex", { active: title === doc })}
+						className={clsx("flex", { active: formattedTitle === doc })}
 						href={`/learn/${level}/${doc}`}
 					>
 						{doc}

@@ -17,7 +17,7 @@ export async function generateStaticParams({
 export default async function Page({
 	params: { level, title },
 }: { params: LevelParams & DocsTitleParams }) {
-	const mdx = await loadMDX(level, title);
+	const mdx = await loadMDX(level, decodeURIComponent(title));
 
 	return (
 		<article className="markdown-body">

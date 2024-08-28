@@ -16,7 +16,8 @@
 		"format": "biome format <files> --write",
 		"check": "biome check --apply <files>",
 		"prepare": "husky",
-		"lint-staged": "lint-staged"
+		"lint-staged": "lint-staged",
+		"run-crawler": "tsx scripts/index.ts"
 	},
 	"dependencies": {
 		"@keystone-6/auth": "^8.0.0",
@@ -61,6 +62,8 @@
 		"@types/node": "^20",
 		"@types/react": "^18",
 		"@types/react-dom": "^18",
+		"axios": "^1.7.5",
+		"cheerio": "^1.0.0",
 		"daisyui": "^4.12.10",
 		"husky": "^9.0.11",
 		"lint-staged": "^15.2.7",
@@ -68,6 +71,7 @@
 		"postcss": "^8",
 		"prisma": "^5.16.1",
 		"tailwindcss": "^3.4.1",
+		"tsx": "^4.19.0",
 		"typescript": "^5"
 	},
 	"overrides": {

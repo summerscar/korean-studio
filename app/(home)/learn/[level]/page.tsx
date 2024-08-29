@@ -11,11 +11,10 @@ export async function generateMetadata({
 	params: LevelParams & Partial<DocsTitleParams>;
 }): Promise<Metadata> {
 	const t = await getServerI18n("Header");
-	const tIndex = await getServerI18n("Index");
 	const level = params.level;
-	const subTitle = params.title ? params.title : t(level);
+	const subTitle = params.title ? decodeURIComponent(params.title) : t(level);
 	return {
-		title: `${tIndex("title")}-${subTitle}`,
+		title: `${subTitle}`,
 	};
 }
 

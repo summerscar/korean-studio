@@ -1,7 +1,6 @@
 import { keystoneContext } from "@/../keystone/context";
 import QuestionForm from "@/components/question-form";
 import { TopikLevels, type TopikQuestion } from "@/types";
-import { getServerI18n } from "@/utils/i18n";
 import type { Metadata } from "next";
 import type { TopikLevelType } from ".keystone/types";
 
@@ -10,9 +9,8 @@ export async function generateMetadata({
 }: {
 	params: { level: TopikLevelType; no: string; question: string };
 }): Promise<Metadata> {
-	const tIndex = await getServerI18n("Index");
 	return {
-		title: `${tIndex("title")}-${TopikLevels[params.level]}-${params.no}-${params.question}`,
+		title: `${TopikLevels[params.level]}-${params.no}th-${params.question}`,
 	};
 }
 

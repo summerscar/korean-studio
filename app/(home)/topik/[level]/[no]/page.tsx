@@ -12,7 +12,7 @@ export async function generateMetadata({
 	};
 }
 
-export default async function Page({
+export default async function NoPage({
 	params,
 }: { params: { level: TopikLevelType; no: string } }) {
 	const { level, no } = params;
@@ -70,6 +70,10 @@ export default async function Page({
 					<h4>{topikQuestion.explanation}</h4>
 				</div>
 			))}
+			{/* TODO: add test action */}
+			<button type="button" className="btn">
+				开始测试
+			</button>
 		</div>
 	);
 }

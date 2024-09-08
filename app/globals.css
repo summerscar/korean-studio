@@ -7,6 +7,8 @@
 @layer base {
   :root {
     --keyboard-active-color: theme("colors.gray.300");
+		scroll-padding-top: var(--header-height);
+		scroll-behavior: smooth;
   }
 }
 

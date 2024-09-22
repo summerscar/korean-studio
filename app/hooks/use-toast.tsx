@@ -1,6 +1,7 @@
 import { useMemoizedFn } from "ahooks";
 import type { ReactNode } from "react";
 import { renderToString } from "react-dom/server";
+// TODO: create callable
 const createToast = ({
 	type,
 	message,

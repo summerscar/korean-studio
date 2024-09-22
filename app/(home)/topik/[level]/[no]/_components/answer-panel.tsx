@@ -11,7 +11,7 @@ const AnswerPanel = ({
 					<a
 						href={`#${topikQuestion.questionNumber}`}
 						key={topikQuestion.id}
-						className="w-10 h-10 text-center leading-10 rounded-md border cursor-pointer select-none border-base-content"
+						className="w-10 h-10 text-center leading-10 rounded-md  cursor-pointer select-none outline outline-1 outline-base-content"
 					>
 						{topikQuestion.questionNumber}
 					</a>

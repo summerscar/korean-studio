@@ -28,10 +28,6 @@ export enum Themes {
 	Dark = "dark",
 }
 
-export type LevelParams = {
-	level: Levels;
-};
-
-export type DocsTitleParams = {
-	title: string;
+export type DocPathParams = {
+	doc_path: string[];
 };

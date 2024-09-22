@@ -1,11 +1,24 @@
-import { existsSync } from "node:fs";
+import { existsSync, lstatSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
-import path from "node:path";
-import type { DocsTitleParams, LevelParams } from "@/types";
+import path, { resolve } from "node:path";
+import type { DocPathParams, Levels } from "@/types";
 import clsx from "clsx";
 import Link from "next/link";
 
-const __docs_store = new Map<string, string[]>();
+interface DirItem {
+	date: string;
+	title: string;
+}
+
+export interface FileItem extends DirItem {
+	file: string;
+	relativePath: string;
+}
+interface SubDirItem extends DirItem {
+	children: (SubDirItem | FileItem)[];
+}
+
+const __docs_store = new Map<string, (FileItem | SubDirItem)[]>();
 
 export const listAllDocs = async (level: string) => {
 	if (__docs_store.has(level)) {
@@ -14,39 +27,91 @@ export const listAllDocs = async (level: string) => {
 
 	const root = path.resolve();
 	const mdxDir = path.join(root, "mdx", level);
-	const docs = (existsSync(mdxDir) ? await readdir(mdxDir) : []).filter(
-		// filter out hidden files
-		(doc) => !doc.startsWith("_"),
-	);
-	const docsData = await Promise.all(
-		docs.map(async (doc) => {
-			const filePath = path.join(mdxDir, doc);
-			const data = await readFile(filePath, { encoding: "utf-8" });
-			return data;
-		}),
-	);
 
-	const docsDate = await Promise.all(
-		docsData.map((doc) => doc.match(/date: (\d{4}-\d{2}-\d{2})/)?.[1] || "0"),
-	);
+	const walkDir = async (
+		dir: string,
+		walkPath: string[] = [],
+	): Promise<(FileItem | SubDirItem)[]> => {
+		const files = (existsSync(dir) ? await readdir(dir) : []).filter(
+			// filter out hidden files
+			(doc) =>
+				!doc.startsWith("_") && !lstatSync(resolve(dir, doc)).isDirectory(),
+		);
 
-	// sort docsData with docsDates
-	const sortedDocsDate = [...docsDate].sort(
-		(a, b) => Date.parse(a) - Date.parse(b),
-	);
-	const sortedDocs = sortedDocsDate.map((date) => docs[docsDate.indexOf(date)]);
-	__docs_store.set(level, sortedDocs);
-	return sortedDocs;
+		const subDirs = (existsSync(dir) ? await readdir(dir) : []).filter((doc) =>
+			lstatSync(resolve(dir, doc)).isDirectory(),
+		);
+
+		const data: FileItem[] = await Promise.all(
+			files.map(async (file) => {
+				const filePath = path.join(dir, file);
+				const data = await readFile(filePath, { encoding: "utf-8" });
+
+				return {
+					file: file,
+					relativePath: path.join(...walkPath, file),
+					title: data.match(/title: (.*)/)?.[1] || file,
+					date: data.match(/date: (\d{4}-\d{2}-\d{2})/)?.[1] || "0",
+				};
+			}),
+		);
+
+		const subData = await Promise.all(
+			subDirs.map(async (subDir) => {
+				const filePath = path.join(dir, subDir);
+				return {
+					title: subDir,
+					children: await walkDir(filePath, [...walkPath, subDir]),
+					date: "0",
+				} as SubDirItem;
+			}),
+		);
+
+		const tree = [...data, ...subData].sort(
+			(a, b) => Date.parse(b.date) - Date.parse(a.date),
+		);
+
+		return tree;
+	};
+
+	const docs = await walkDir(mdxDir);
+	__docs_store.set(level, docs);
+	return docs;
 };
 
-const DocsCategory = async ({
-	level,
-	title,
-}: LevelParams & Partial<DocsTitleParams>) => {
-	const docs = (await listAllDocs(level)).map((doc) =>
-		doc.replace(/\.mdx?/, ""),
-	);
-	const formattedTitle = decodeURIComponent(title || "");
+const DocsCategory = async ({ doc_path }: DocPathParams) => {
+	const level = doc_path[0] as Levels;
+	const docs = await listAllDocs(level);
+	const formattedTitle =
+		doc_path.length > 1 ? decodeURIComponent(doc_path?.pop() || "") : "";
+
+	const buildTree = (docs: (FileItem | SubDirItem)[], path: string[] = []) => {
+		return docs.map((doc) => {
+			if ("children" in doc) {
+				return (
+					<li key={doc.title}>
+						<details open>
+							<summary>{doc.title}</summary>
+							<ul>{buildTree(doc.children, [...path, doc.title])}</ul>
+						</details>
+					</li>
+				);
+			}
+			const docFileTitle = doc.file.replace(/\.mdx?/, "");
+			return (
+				<li key={doc.title}>
+					<Link
+						href={`/${path.join("/")}/${docFileTitle}`}
+						className={clsx("flex", {
+							active: formattedTitle === docFileTitle,
+						})}
+					>
+						{doc.title}
+					</Link>
+				</li>
+			);
+		});
+	};
 	return (
 		<ul className="menu">
 			<li>
@@ -57,16 +122,7 @@ const DocsCategory = async ({
 					Intro {level}
 				</Link>
 			</li>
-			{docs.map((doc) => (
-				<li key={doc}>
-					<Link
-						className={clsx("flex", { active: formattedTitle === doc })}
-						href={`/learn/${level}/${doc}`}
-					>
-						{doc}
-					</Link>
-				</li>
-			))}
+			{buildTree(docs, ["learn", level])}
 		</ul>
 	);
 };

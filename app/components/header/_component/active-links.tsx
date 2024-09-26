@@ -7,6 +7,7 @@ import type { headerConfig } from "..";
 const ActiveLinks = ({ links }: { links: ReturnType<typeof headerConfig> }) => {
 	const pathname = usePathname();
 	const isActive = (href: string) => pathname.includes(href);
+
 	return (
 		<>
 			{links.map(({ href, label }) => (
@@ -14,8 +15,8 @@ const ActiveLinks = ({ links }: { links: ReturnType<typeof headerConfig> }) => {
 					key={href}
 					href={href}
 					className={clsx(
-						isActive(href) && "underline",
-						"mr-4 hover:underline",
+						isActive(href) && "bg-slate-400/40",
+						"mr-4 py-1 px-2 rounded-md cursor-pointer hover:bg-slate-400/40",
 					)}
 				>
 					<span>{label}</span>

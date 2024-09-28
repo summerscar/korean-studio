@@ -129,5 +129,8 @@
 		"*": [
 			"biome check --no-errors-on-unmatched --files-ignore-unknown=true"
 		]
+	},
+	"volta": {
+		"node": "20.17.0"
 	}
 }

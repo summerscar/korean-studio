@@ -1,5 +1,6 @@
 "use server";
 import { THEME_KEY, type Themes } from "@/types";
+import { DEFAULT_COOKIE_CONFIG } from "@/utils/config";
 import { cookies } from "next/headers";
 
 const getThemeFromCookie = async () => {
@@ -10,10 +11,7 @@ const getThemeFromCookie = async () => {
 
 const setThemeToCookie = async (theme: string) => {
 	const cookie = cookies();
-	await cookie.set(THEME_KEY, theme, {
-		maxAge: 365 * 24 * 60 * 60,
-		path: "/",
-	});
+	await cookie.set(THEME_KEY, theme, DEFAULT_COOKIE_CONFIG);
 };
 
 export { getThemeFromCookie, setThemeToCookie };

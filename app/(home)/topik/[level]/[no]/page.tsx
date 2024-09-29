@@ -1,8 +1,11 @@
 import { keystoneContext } from "@/../keystone/context";
+import { isTestStart } from "@/actions/topik-actions";
 import { TopikLevels, type TopikQuestion } from "@/types";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ActionBar } from "./_components/action-bar";
 import { AnswerPanel } from "./_components/answer-panel";
+import { TestCutDown } from "./_components/count-down";
 import type { TopikLevelType } from ".keystone/types";
 
 export async function generateMetadata({
@@ -16,6 +19,10 @@ export async function generateMetadata({
 export default async function NoPage({
 	params,
 }: { params: { level: TopikLevelType; no: string } }) {
+	const { isStart: isTesting, timeLeft } = await isTestStart(
+		params.level,
+		params.no,
+	);
 	const { level, no } = params;
 	const topikListByLevelAndNo = await keystoneContext.query.Topik.findMany({
 		where: { level: { equals: level }, no: { equals: Number(no) } },
@@ -32,6 +39,12 @@ export default async function NoPage({
 		<div>
 			<h1 className="text-2xl font-bold">
 				{topikQuestions[0].year}년 제{topikQuestions[0].no}회
+				{isTesting && (
+					<>
+						{" "}
+						<TestCutDown timeLeft={timeLeft} />
+					</>
+				)}
 			</h1>
 			<div className="flex items-start">
 				<div className="flex-auto">
@@ -58,10 +71,11 @@ export default async function NoPage({
 										topikQuestion.questionNumber.toString() + index.toString();
 									return (
 										<div key={option.content}>
+											{/* TODO: group radio */}
 											<input
 												type="radio"
 												className="radio radio-xs radio-secondary"
-												disabled
+												disabled={!isTesting}
 												name="options"
 												value={index}
 												id={id}
@@ -81,10 +95,7 @@ export default async function NoPage({
 				<AnswerPanel topikQuestions={topikQuestions} />
 			</div>
 
-			{/* TODO: add test action */}
-			<button type="button" className="btn">
-				开始测试
-			</button>
+			<ActionBar level={level} no={no} isTesting={isTesting} />
 		</div>
 	);
 }

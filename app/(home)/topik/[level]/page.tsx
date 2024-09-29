@@ -14,7 +14,7 @@ export async function generateMetadata({
 	};
 }
 
-export default async function Page({
+export default async function LevelPage({
 	params,
 }: { params: { level: TopikLevelType } }) {
 	const { level } = params;

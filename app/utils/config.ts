@@ -11,6 +11,11 @@ const siteLanguageConfig: Record<SITES_LANGUAGE, string> = {
 const LOCAL_KEY = "locale";
 const DEFAULT_SITE_LANGUAGE = SITES_LANGUAGE.zhCN;
 
+const DEFAULT_COOKIE_CONFIG = {
+	maxAge: 365 * 24 * 60 * 60,
+	path: "/",
+};
+
 /**
  * @param site 本站学习语言
  * @param language UI 语言
@@ -25,4 +30,4 @@ const getSiteConfig = (language: SITES_LANGUAGE = DEFAULT_SITE_LANGUAGE) => {
 
 const siteConfig = getSiteConfig();
 
-export { siteConfig, DEFAULT_SITE_LANGUAGE, LOCAL_KEY };
+export { siteConfig, DEFAULT_SITE_LANGUAGE, LOCAL_KEY, DEFAULT_COOKIE_CONFIG };

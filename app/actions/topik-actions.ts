@@ -1,5 +1,6 @@
 "use server";
 import { DEFAULT_COOKIE_CONFIG } from "@/utils/config";
+import { timeOut } from "@/utils/time-out";
 import { cookies } from "next/headers";
 import type { TopikLevelType } from ".keystone/types";
 
@@ -15,6 +16,7 @@ const startTestAction = async (level: TopikLevelType, no: string) => {
 	);
 	status[`${level}-${no}`] = new Date().getTime();
 	cookie.set(TopikTestStatusKey, JSON.stringify(status), DEFAULT_COOKIE_CONFIG);
+	await timeOut(500);
 };
 
 const cancelTestAction = async (level: TopikLevelType, no: string) => {
@@ -25,6 +27,7 @@ const cancelTestAction = async (level: TopikLevelType, no: string) => {
 	);
 	delete status[`${level}-${no}`];
 	cookie.set(TopikTestStatusKey, JSON.stringify(status), DEFAULT_COOKIE_CONFIG);
+	await timeOut(500);
 };
 
 const isTestStart = async (level: TopikLevelType, no: string) => {

@@ -1,6 +1,7 @@
 "use client";
 import { startTestAction } from "@/actions/topik-actions";
 import { cancelTestAction } from "@/actions/topik-actions";
+import { useServerActionState } from "@/hooks/use-server-action-state";
 import { TestCutDown } from "./count-down";
 import type { TopikLevelType } from ".keystone/types";
 
@@ -19,14 +20,15 @@ const ActionBar = ({
 	onSubmit: () => void;
 	onReset: () => void;
 }) => {
-	const handleClickStartTest = () => {
-		// TODO: wait status
-		startTestAction(level, no);
-	};
-	const handleClickCancelTest = () => {
-		// TODO: wait status
-		cancelTestAction(level, no);
-	};
+	const [isHandleClickStartTestPending, handleClickStartTest] =
+		useServerActionState(async () => {
+			return await startTestAction(level, no);
+		});
+
+	const [isHandleClickCancelTestPending, handleClickCancelTest] =
+		useServerActionState(async () => {
+			return await cancelTestAction(level, no);
+		});
 
 	return (
 		<div>
@@ -49,9 +51,13 @@ const ActionBar = ({
 						</button>
 						<button
 							type="button"
-							className="btn btn-sm"
+							className="btn btn-sm btn-warning"
+							disabled={isHandleClickCancelTestPending}
 							onClick={handleClickCancelTest}
 						>
+							{isHandleClickCancelTestPending && (
+								<span className="loading loading-spinner" />
+							)}
 							取消测试
 						</button>
 					</div>
@@ -60,9 +66,13 @@ const ActionBar = ({
 			) : (
 				<button
 					type="button"
-					className="btn btn-sm btn-success"
+					disabled={isHandleClickStartTestPending}
+					className="btn btn-sm btn-secondary"
 					onClick={handleClickStartTest}
 				>
+					{isHandleClickStartTestPending && (
+						<span className="loading loading-spinner" />
+					)}
 					开始测试
 				</button>
 			)}

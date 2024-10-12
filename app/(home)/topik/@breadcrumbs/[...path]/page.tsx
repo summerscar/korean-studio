@@ -9,7 +9,7 @@ export default function Page({
 				<li>
 					<Link href={"/topik"}>TOPIK</Link>
 				</li>
-				{path.map((i, index, arr) => {
+				{path.slice(1).map((i, index, arr) => {
 					const href = `/topik${arr.slice(0, index + 1).reduce((prev, cur) => `${prev}/${cur}`, "")}`;
 					const text = index === 1 ? `제${i}회` : index === 2 ? `문제${i}` : i;
 

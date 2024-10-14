@@ -3,7 +3,6 @@ import { type DocPathParams, Levels } from "@/types";
 import { getServerI18n } from "@/utils/i18n";
 import { loadMDX } from "@/utils/load-mdx";
 import type { Metadata } from "next";
-import Head from "next/head";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata({
@@ -74,9 +73,6 @@ export default async function Page({ params }: { params: DocPathParams }) {
 
 	return (
 		<>
-			<Head>
-				<title>12312412</title>
-			</Head>
 			<article className="markdown-body">
 				<p>{JSON.stringify(mdx.frontmatter, null, 2)}</p>
 				{mdx.content}

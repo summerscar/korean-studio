@@ -3,6 +3,7 @@
 @tailwind utilities;
 @import "./styles/_variables.css";
 @import "./styles/_animation.css";
+@import "./styles/_markdown.css";
 
 @layer base {
   :root {
@@ -16,19 +17,4 @@
   .text-balance {
     text-wrap: balance;
   }
-}
-
-
-
-.markdown-body {
-	--fgColor-default: theme(textColor.base-content)!important;
-	--bgColor-default: theme(colors.transparent)!important;
-	ol, ul, menu {
-		list-style: unset;
-		margin: unset;
-		padding: unset;
-	}
-	ol {
-		list-style-type: decimal;
-	}
 }

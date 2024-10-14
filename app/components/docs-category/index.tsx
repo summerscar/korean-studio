@@ -2,6 +2,7 @@ import { existsSync, lstatSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import path, { resolve } from "node:path";
 import type { DocPathParams, Levels } from "@/types";
+import { isDev } from "@/utils/is-dev";
 import clsx from "clsx";
 import Link from "next/link";
 
@@ -21,7 +22,7 @@ interface SubDirItem extends DirItem {
 const __docs_store = new Map<string, (FileItem | SubDirItem)[]>();
 
 export const listAllDocs = async (level: string) => {
-	if (__docs_store.has(level)) {
+	if (__docs_store.has(level) && !isDev) {
 		return __docs_store.get(level)!;
 	}
 
@@ -35,7 +36,9 @@ export const listAllDocs = async (level: string) => {
 		const files = (existsSync(dir) ? await readdir(dir) : []).filter(
 			// filter out hidden files
 			(doc) =>
-				!doc.startsWith("_") && !lstatSync(resolve(dir, doc)).isDirectory(),
+				!doc.startsWith("_") &&
+				!lstatSync(resolve(dir, doc)).isDirectory() &&
+				(doc.endsWith(".mdx") || doc.endsWith(".md")),
 		);
 
 		const subDirs = (existsSync(dir) ? await readdir(dir) : []).filter((doc) =>
@@ -119,7 +122,8 @@ const DocsCategory = async ({ doc_path }: DocPathParams) => {
 					className={clsx("flex", { active: !formattedTitle })}
 					href={`/learn/${level}`}
 				>
-					Intro {level}
+					{/* TODO: i18n */}
+					介绍
 				</Link>
 			</li>
 			{buildTree(docs, ["learn", level])}

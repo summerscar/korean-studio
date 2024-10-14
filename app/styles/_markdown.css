@@ -1,0 +1,17 @@
+.markdown-body {
+	--fgColor-default: theme(textColor.base-content)!important;
+	--bgColor-default: theme(colors.transparent)!important;
+	--borderColor-default: theme(colors.base-content)!important;
+	--borderColor-muted: var(--borderColor-default)!important;
+	table tr:nth-child(2n) {
+		background-color: unset!important;
+	}
+	ol, ul, menu {
+		list-style: unset;
+		margin: unset;
+		padding: unset;
+	}
+	ol {
+		list-style-type: decimal;
+	}
+}

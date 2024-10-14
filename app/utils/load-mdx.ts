@@ -4,6 +4,7 @@ import path from "node:path";
 import type { Levels } from "@/types";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { redirect } from "next/navigation";
+import remarkGfm from "remark-gfm";
 
 export async function loadMDX(level: Levels, title: string) {
 	const root = path.resolve();
@@ -23,6 +24,9 @@ export async function loadMDX(level: Levels, title: string) {
 	return compileMDX({
 		source: data,
 		options: {
+			mdxOptions: {
+				remarkPlugins: [remarkGfm],
+			},
 			parseFrontmatter: true,
 		},
 	});

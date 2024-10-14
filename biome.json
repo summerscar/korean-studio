@@ -3,6 +3,9 @@
 	"organizeImports": {
 		"enabled": true
 	},
+	"files": {
+		"ignore": ["**/*.css"]
+	},
 	"linter": {
 		"enabled": true,
 		"rules": {

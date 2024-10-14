@@ -37,6 +37,7 @@ export async function DefaultLayout({
 			<body
 				className={clsx(inter.className, bodyClassName, "text-base-content")}
 			>
+				<div id="bg" />
 				<NextIntlClientProvider messages={messages}>
 					<main className="flex min-h-screen flex-col">{children}</main>
 				</NextIntlClientProvider>

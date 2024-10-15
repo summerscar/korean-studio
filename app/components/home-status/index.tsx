@@ -5,11 +5,10 @@ import KeyboardIcon from "@/assets/svg/keyboard.svg";
 import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
 import ScoreIcon from "@/assets/svg/score.svg";
-import SpeakerSVG from "@/assets/svg/speaker.svg";
 import { DictNav } from "@/components/dict-nav";
 import { HomeDrawer } from "@/components/home-drawer";
 import { HomeInput } from "@/components/home-input";
-import { usePronunciation } from "@/hooks/use-pronunciation";
+import { Pronunciation } from "@/components/pronunciation";
 import type { Dict } from "@/types/dict";
 import type { Tran } from "@/types/dict";
 import { useInputAudioEffect } from "@/utils/audio";
@@ -121,13 +120,6 @@ const HomeStatus = ({
 		}
 		return null;
 	}, [curWordIndex, dict]);
-
-	const { isPlaying: isWordPlaying, play: playWord } = usePronunciation(
-		currentWord?.name,
-	);
-	const { isPlaying: isExamplePlaying, play: playExample } = usePronunciation(
-		currentWord?.example,
-	);
 
 	/** 韩文单词 */
 	const displayName = currentWord?.name || "";
@@ -320,15 +312,7 @@ const HomeStatus = ({
 					className="tooltip tooltip-right absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-1/2"
 					data-tip={`${romanized} / ${standardized}`}
 				>
-					<SpeakerSVG
-						width={20}
-						height={20}
-						onMouseEnter={playWord}
-						className={clsx(
-							isWordPlaying ? "text-accent" : "text-base-content",
-							"cursor-pointer",
-						)}
-					/>
+					<Pronunciation width={20} height={20} text={currentWord?.name} />
 				</div>
 			</div>
 			<div className="text-lg text-gray-500 my-2">{translation}</div>
@@ -430,14 +414,9 @@ const HomeStatus = ({
 			<div className="flex justify-center flex-col items-center">
 				<p className={clsx("relative", myeongjo.className)}>
 					{highLightExample(currentWord?.example)}
-					<SpeakerSVG
-						width={12}
-						height={12}
-						onMouseEnter={playExample}
-						className={clsx(
-							isExamplePlaying ? "text-accent" : "text-base-content",
-							"absolute top-1/2 cursor-pointer -right-6 -translate-x-1/2 -translate-y-1/2",
-						)}
+					<Pronunciation
+						text={currentWord?.example}
+						className="absolute top-1/2 -right-6 -translate-x-1/2 -translate-y-1/2"
 					/>
 				</p>
 				<p>{exTranslation}</p>

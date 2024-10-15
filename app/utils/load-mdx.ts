@@ -1,9 +1,11 @@
 import fs from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { components } from "@/components/markdown-render";
 import type { Levels } from "@/types";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { redirect } from "next/navigation";
+import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 
 export async function loadMDX(level: Levels, title: string) {
@@ -23,9 +25,11 @@ export async function loadMDX(level: Levels, title: string) {
 	const data = await readFile(filePath, { encoding: "utf-8" });
 	return compileMDX({
 		source: data,
+		components: { ...components },
 		options: {
 			mdxOptions: {
 				remarkPlugins: [remarkGfm],
+				rehypePlugins: [rehypeSlug],
 			},
 			parseFrontmatter: true,
 		},

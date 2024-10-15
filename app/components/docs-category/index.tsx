@@ -71,7 +71,7 @@ export const listAllDocs = async (level: string) => {
 		);
 
 		const tree = [...data, ...subData].sort(
-			(a, b) => Date.parse(b.date) - Date.parse(a.date),
+			(a, b) => Date.parse(a.date) - Date.parse(b.date),
 		);
 
 		return tree;

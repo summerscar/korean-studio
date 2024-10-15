@@ -73,10 +73,7 @@ export default async function Page({ params }: { params: DocPathParams }) {
 
 	return (
 		<>
-			<article className="markdown-body">
-				<p>{JSON.stringify(mdx.frontmatter, null, 2)}</p>
-				{mdx.content}
-			</article>
+			<article className="markdown-body">{mdx.content}</article>
 		</>
 	);
 }

@@ -1,7 +1,9 @@
+import { MDXSpeaker } from "@/components/pronunciation";
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
 import type { PropsWithChildren } from "react";
 
+// TODO: https://www.zenryoku-kun.com/new-post/nextjs-mdx-remote#problem-mdx
 const header = (level: 1 | 2 | 3, props: PropsWithChildren<{ id: string }>) => {
 	const size = {
 		1: "text-2xl",
@@ -25,6 +27,9 @@ const components = {
 	h1: (props: PropsWithChildren<{ id: string }>) => header(1, props),
 	h2: (props: PropsWithChildren<{ id: string }>) => header(2, props),
 	h3: (props: PropsWithChildren<{ id: string }>) => header(3, props),
+	Speak: (props: PropsWithChildren<{ id: string }>) => (
+		<MDXSpeaker {...props} />
+	),
 } as Readonly<MDXComponents>;
 
 export { components };

@@ -9,7 +9,10 @@ function generateWordSoundSrc(word: string) {
 
 const usePronunciation = (
 	word: string | undefined,
-	{ autoPlay }: { autoPlay: boolean } = { autoPlay: false },
+	{ autoPlay, preload }: { autoPlay?: boolean; preload?: boolean } = {
+		autoPlay: false,
+		preload: false,
+	},
 ) => {
 	const audioRef = useRef<HTMLAudioElement>();
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -33,13 +36,13 @@ const usePronunciation = (
 			}
 
 			audioRef.current.src = generateWordSoundSrc(word);
-			audioRef.current.preload = "auto";
+			audioRef.current.preload = preload ? "auto" : "none";
 
 			if (autoPlay) {
 				play();
 			}
 		}
-	}, [autoPlay, word]);
+	}, [autoPlay, preload, word]);
 
 	const play = useMemoizedFn(async () => {
 		if (audioRef.current) {

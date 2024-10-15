@@ -415,6 +415,8 @@ const HomeStatus = ({
 				<p className={clsx("relative", myeongjo.className)}>
 					{highLightExample(currentWord?.example)}
 					<Pronunciation
+						width={12}
+						height={12}
 						text={currentWord?.example}
 						className="absolute top-1/2 -right-6 -translate-x-1/2 -translate-y-1/2"
 					/>

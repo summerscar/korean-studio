@@ -75,9 +75,7 @@ const ToastForCallable = ({
 	};
 
 	return createPortal(
-		<div id="toast" className="toast toast-top toast-center">
-			<div className={`alert alert-${type}`}>{message}</div>
-		</div>,
+		<div className={`alert alert-${type}`}>{message}</div>,
 		getToastWrapper(),
 	);
 };

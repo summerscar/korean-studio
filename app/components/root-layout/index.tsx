@@ -2,6 +2,7 @@ import { inter } from "@/utils/fonts";
 import "github-markdown-css";
 import "@/globals.css";
 import { getThemeFromCookie } from "@/actions/check-theme";
+import { ToastRoot } from "@/hooks/use-toast";
 import { Themes } from "@/types";
 import { isProd } from "@/utils/is-dev";
 import { GoogleAnalytics } from "@next/third-parties/google";
@@ -41,6 +42,7 @@ export async function DefaultLayout({
 				<NextIntlClientProvider messages={messages}>
 					<main className="flex min-h-screen flex-col">{children}</main>
 				</NextIntlClientProvider>
+				<ToastRoot />
 				{isProd && <SpeedInsights />}
 				{isProd && <Analytics />}
 				{isProd && <GoogleAnalytics gaId={GAId} />}

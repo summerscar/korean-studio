@@ -1,7 +1,10 @@
+"use client";
+import { createCallable } from "@/utils/callable";
 import { useMemoizedFn } from "ahooks";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { renderToString } from "react-dom/server";
-// TODO: create callable
+
 const createToast = ({
 	type,
 	message,
@@ -40,4 +43,48 @@ const useToast = () => {
 		toast,
 	};
 };
-export { useToast, createToast };
+
+// -----
+// create callable toast
+// -----
+
+const ToastForCallable = ({
+	type,
+	message,
+	call,
+}: {
+	type: string;
+	message: ReactNode;
+	call: { end: (payload: string) => void };
+}) => {
+	useEffect(() => {
+		setTimeout(() => {
+			call.end("toast destroyed");
+		}, 3000);
+	}, [call]);
+
+	const getToastWrapper = () => {
+		let toastWrapper = document.getElementById("toast");
+		if (!toastWrapper) {
+			toastWrapper = document.createElement("div");
+			toastWrapper.id = "toast";
+			toastWrapper.classList.add("toast", "toast-top", "toast-center");
+			document.body.appendChild(toastWrapper);
+		}
+		return toastWrapper;
+	};
+
+	return createPortal(
+		<div id="toast" className="toast toast-top toast-center">
+			<div className={`alert alert-${type}`}>{message}</div>
+		</div>,
+		getToastWrapper(),
+	);
+};
+
+const { call, Root } = createCallable<
+	{ type: string; message: string },
+	string
+>(ToastForCallable);
+
+export { useToast, createToast, call as callToast, Root as ToastRoot };

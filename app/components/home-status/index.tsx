@@ -384,6 +384,7 @@ const HomeStatus = ({
 					viewBox="0 0 910 310"
 					width={"100%"}
 					height={"100%"}
+					className="dark:invert-[0.8]"
 				/>
 				<div
 					className={clsx(

@@ -1,9 +1,9 @@
 import confetti from "canvas-confetti";
 
-const count = 300;
+const count = 500;
 const defaults = {
-	scalar: 2,
-	gravity: 0.7,
+	scalar: 1.4,
+	gravity: 1.2,
 } satisfies confetti.Options;
 
 function fireLeft(particleRatio: number, opts: confetti.Options) {
@@ -11,8 +11,8 @@ function fireLeft(particleRatio: number, opts: confetti.Options) {
 		...defaults,
 		...opts,
 		particleCount: Math.floor(count * particleRatio),
-		angle: 45,
-		origin: { x: -0.1, y: 0.8 },
+		angle: 55,
+		origin: { x: -0.1, y: 1 },
 		drift: 1.5,
 	});
 }
@@ -22,8 +22,8 @@ function fireRight(particleRatio: number, opts: confetti.Options) {
 		...defaults,
 		...opts,
 		particleCount: Math.floor(count * particleRatio),
-		angle: 135,
-		origin: { x: 1.1, y: 0.8 },
+		angle: 125,
+		origin: { x: 1.1, y: 1 },
 		drift: -1.5,
 	});
 }
@@ -31,50 +31,52 @@ function fireRight(particleRatio: number, opts: confetti.Options) {
 const leftConfetti = () => {
 	fireLeft(0.25, {
 		spread: 26,
-		startVelocity: 65,
+		startVelocity: 80,
 	});
 	fireLeft(0.2, {
-		spread: 60,
+		spread: 40,
 	});
 	fireLeft(0.35, {
-		spread: 100,
+		spread: 50,
 		decay: 0.91,
 		scalar: 0.8,
+		startVelocity: 90,
 	});
 	fireLeft(0.1, {
-		spread: 120,
-		startVelocity: 35,
+		// spread: 80,
+		startVelocity: 50,
 		decay: 0.92,
 		scalar: 1.2,
 	});
 	fireLeft(0.1, {
-		spread: 120,
-		startVelocity: 55,
+		// spread: 80,
+		startVelocity: 70,
 	});
 };
 
 const rightConfetti = () => {
 	fireRight(0.25, {
 		spread: 26,
-		startVelocity: 65,
+		startVelocity: 80,
 	});
 	fireRight(0.2, {
-		spread: 60,
+		spread: 40,
 	});
 	fireRight(0.35, {
-		spread: 100,
+		spread: 50,
 		decay: 0.91,
 		scalar: 0.8,
+		startVelocity: 90,
 	});
 	fireRight(0.1, {
-		spread: 120,
-		startVelocity: 35,
+		// spread: 80,
+		startVelocity: 50,
 		decay: 0.92,
 		scalar: 1.2,
 	});
 	fireRight(0.1, {
-		spread: 120,
-		startVelocity: 55,
+		// spread: 80,
+		startVelocity: 70,
 	});
 };
 

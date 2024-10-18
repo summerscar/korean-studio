@@ -2,8 +2,8 @@ import { existsSync, lstatSync } from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import path, { resolve } from "node:path";
 import type { DocPathParams, Levels } from "@/types";
-import { isDev } from "@/utils/is-dev";
 import clsx from "clsx";
+import { unstable_cache } from "next/cache";
 import Link from "next/link";
 
 interface DirItem {
@@ -19,13 +19,7 @@ interface SubDirItem extends DirItem {
 	children: (SubDirItem | FileItem)[];
 }
 
-const __docs_store = new Map<string, (FileItem | SubDirItem)[]>();
-
-export const listAllDocs = async (level: string) => {
-	if (__docs_store.has(level) && !isDev) {
-		return __docs_store.get(level)!;
-	}
-
+export const listAllDocs = unstable_cache(async (level: string) => {
 	const root = path.resolve();
 	const mdxDir = path.join(root, "mdx", level);
 
@@ -65,6 +59,7 @@ export const listAllDocs = async (level: string) => {
 				return {
 					title: subDir,
 					children: await walkDir(filePath, [...walkPath, subDir]),
+					// TODO: 目录增加个优先级
 					date: "0",
 				} as SubDirItem;
 			}),
@@ -78,9 +73,8 @@ export const listAllDocs = async (level: string) => {
 	};
 
 	const docs = await walkDir(mdxDir);
-	__docs_store.set(level, docs);
 	return docs;
-};
+});
 
 const DocsCategory = async ({ doc_path }: DocPathParams) => {
 	const level = doc_path[0] as Levels;

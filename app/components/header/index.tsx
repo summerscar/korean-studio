@@ -25,7 +25,7 @@ const Header = async () => {
 	const t = await getServerI18n("Header");
 
 	return (
-		<header className="sticky top-0 h-[--header-height] flex border-b border-slate-900/10 w-full backdrop-blur-lg select-none bg-slate-300/10 text-base-content">
+		<header className="sticky top-0 h-[--header-height] flex border-b border-slate-900/10 w-full backdrop-blur-lg select-none bg-slate-300/10 text-base-content z-10">
 			<div className="w-full px-4 flex justify-between items-center">
 				<Link href="/">
 					<HomeIcon width={32} height={32} viewBox="0 0 24 24" />

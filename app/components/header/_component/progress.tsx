@@ -8,19 +8,15 @@ const Progress = () => {
 	const [showProgress, setShowProgress] = useState(false);
 
 	useEffect(() => {
-		const footerHeight = document
-			.getElementsByTagName("footer")[0]
-			.getBoundingClientRect().height;
-		document.documentElement.style.setProperty(
-			"--footer-height",
-			`${footerHeight}px`,
-		);
-
 		const canScroll =
 			document.body.scrollHeight >
 			(window.innerHeight || document.documentElement.clientHeight);
 
 		setShowProgress(canScroll && pathname.includes("/learn"));
+
+		return () => {
+			setShowProgress(false);
+		};
 	}, [pathname]);
 
 	return (

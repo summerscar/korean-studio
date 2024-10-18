@@ -1,9 +1,9 @@
 import { type DocPathParams, Levels } from "@/types";
 import { getServerI18n } from "@/utils/i18n";
+import { type FileItem, listAllDocs } from "@/utils/list-docs";
 import { loadMDX } from "@/utils/load-mdx";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { type FileItem, listAllDocs } from "./@category/_components/category";
 
 export async function generateMetadata({
 	params,

@@ -1,5 +1,5 @@
-import { DocsLayout } from "@/components/docs-layout";
 import { Levels } from "@/types";
+import { DocsLayout } from "./_components/docs-layout";
 
 export async function generateStaticParams() {
 	return [Levels.Beginner, Levels.Intermediate].map((level) => ({

@@ -2,6 +2,7 @@ import { MDXSpeaker } from "@/components/pronunciation";
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
 import type { PropsWithChildren } from "react";
+import type { JSX } from "react";
 
 // TODO: https://www.zenryoku-kun.com/new-post/nextjs-mdx-remote#problem-mdx
 const header = (level: 1 | 2 | 3, props: PropsWithChildren<{ id: string }>) => {

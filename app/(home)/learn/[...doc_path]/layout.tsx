@@ -1,4 +1,5 @@
 import { Levels } from "@/types";
+import { DocsCategory } from "./_components/category";
 import { DocsLayout } from "./_components/docs-layout";
 
 export async function generateStaticParams() {
@@ -7,12 +8,18 @@ export async function generateStaticParams() {
 	}));
 }
 
-export default function Layout({
+export default async function Layout({
 	children,
-	category,
+	params,
 }: {
 	children: React.ReactNode;
-	category: React.ReactNode;
+	params?: Promise<{ doc_path: string[] }>;
 }) {
-	return <DocsLayout category={category}>{children}</DocsLayout>;
+	const doc_path = (await params)?.doc_path || [Levels.Beginner];
+
+	return (
+		<DocsLayout category={<DocsCategory doc_path={doc_path} />}>
+			{children}
+		</DocsLayout>
+	);
 }

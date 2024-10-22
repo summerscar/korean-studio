@@ -1,12 +1,10 @@
 import { keystoneContext } from "@/../keystone/context";
 import { auth } from "auth";
 import { createYoga } from "graphql-yoga";
-import type { NextApiRequest, NextApiResponse } from "next";
 
 // Use Keystone API to create GraphQL handler
 const { handleRequest } = createYoga<{
-	req: NextApiRequest;
-	res: NextApiResponse;
+	params: Promise<unknown>;
 }>({
 	graphqlEndpoint: "/api/graphql",
 	schema: keystoneContext.graphql.schema,

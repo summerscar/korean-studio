@@ -68,7 +68,7 @@ const ToastForCallable = ({
 		if (!toastWrapper) {
 			toastWrapper = document.createElement("div");
 			toastWrapper.id = "toast";
-			toastWrapper.classList.add("toast", "toast-top", "toast-center");
+			toastWrapper.classList.add("toast", "toast-top", "toast-center", "z-50");
 			document.body.appendChild(toastWrapper);
 		}
 		return toastWrapper;

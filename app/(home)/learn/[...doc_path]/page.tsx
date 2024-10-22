@@ -5,11 +5,10 @@ import { loadMDX } from "@/utils/load-mdx";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-export async function generateMetadata({
-	params,
-}: {
-	params: DocPathParams;
+export async function generateMetadata(props: {
+	params: Promise<DocPathParams>;
 }): Promise<Metadata> {
+	const params = await props.params;
 	const t = await getServerI18n("Header");
 	const level = params.doc_path[0] as Levels;
 
@@ -60,7 +59,8 @@ export async function generateStaticParams() {
 	return staticParams;
 }
 
-export default async function Page({ params }: { params: DocPathParams }) {
+export default async function Page(props: { params: Promise<DocPathParams> }) {
+	const params = await props.params;
 	const level = params.doc_path[0] as Levels;
 
 	if (![Levels.Beginner, Levels.Intermediate].includes(level)) {

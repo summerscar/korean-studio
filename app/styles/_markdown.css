@@ -7,11 +7,9 @@
 		background-color: unset!important;
 	}
 	ol, ul, menu {
-		list-style: unset;
-		margin: unset;
-		padding: unset;
+		list-style: revert;
 	}
 	ol {
-		list-style-type: decimal;
+		/* list-style-type: decimal; */
 	}
 }

@@ -4,19 +4,19 @@ import { TopikLevels, type TopikQuestion } from "@/types";
 import type { Metadata } from "next";
 import type { TopikLevelType } from ".keystone/types";
 
-export async function generateMetadata({
-	params,
-}: {
-	params: { level: TopikLevelType; no: string; question: string };
+export async function generateMetadata(props: {
+	params: Promise<{ level: TopikLevelType; no: string; question: string }>;
 }): Promise<Metadata> {
+	const params = await props.params;
 	return {
 		title: `${TopikLevels[params.level]}-${params.no}th-${params.question}`,
 	};
 }
 
-const TopikQuestionPage = async ({
-	params,
-}: { params: { level: TopikLevelType; no: string; question: string } }) => {
+const TopikQuestionPage = async (props: {
+	params: Promise<{ level: TopikLevelType; no: string; question: string }>;
+}) => {
+	const params = await props.params;
 	const { level, no, question: questionNumber } = params;
 	const topikQuestions = await keystoneContext.query.Topik.findMany({
 		where: {

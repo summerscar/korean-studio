@@ -1,8 +1,12 @@
 import Link from "next/link";
 
-export default function Page({
-	params: { path },
-}: { params: { path: string[] } }) {
+export default async function Page(props: {
+	params: Promise<{ path: string[] }>;
+}) {
+	const params = await props.params;
+
+	const { path } = params;
+
 	return (
 		<nav className="breadcrumbs text-sm">
 			<ul>

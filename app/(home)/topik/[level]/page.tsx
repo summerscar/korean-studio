@@ -5,18 +5,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { TopikLevelType } from ".keystone/types";
 
-export async function generateMetadata({
-	params,
-}: { params: { level: TopikLevelType } }): Promise<Metadata> {
+export async function generateMetadata(props: {
+	params: Promise<{ level: TopikLevelType }>;
+}): Promise<Metadata> {
+	const params = await props.params;
 	const tIndex = await getServerI18n("Index");
 	return {
 		title: `${tIndex("title")}-${TopikLevels[params.level]}`,
 	};
 }
 
-export default async function LevelPage({
-	params,
-}: { params: { level: TopikLevelType } }) {
+export default async function LevelPage(props: {
+	params: Promise<{ level: TopikLevelType }>;
+}) {
+	const params = await props.params;
 	const { level } = params;
 	const topikListByLevel = await keystoneContext.query.Topik.findMany({
 		where: { level: { equals: level } },

@@ -14,7 +14,7 @@ const usePronunciation = (
 		preload: false,
 	},
 ) => {
-	const audioRef = useRef<HTMLAudioElement>();
+	const audioRef = useRef<HTMLAudioElement>(undefined);
 	const [isPlaying, setIsPlaying] = useState(false);
 
 	useEffect(() => {

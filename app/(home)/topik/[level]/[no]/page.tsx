@@ -8,17 +8,19 @@ import { AnswerPanel } from "./_components/answer-panel";
 import { QuestionCard } from "./_components/question-card";
 import type { TopikLevelType } from ".keystone/types";
 
-export async function generateMetadata({
-	params,
-}: { params: { level: TopikLevelType; no: string } }): Promise<Metadata> {
+export async function generateMetadata(props: {
+	params: Promise<{ level: TopikLevelType; no: string }>;
+}): Promise<Metadata> {
+	const params = await props.params;
 	return {
 		title: `${TopikLevels[params.level]}-${params.no}th`,
 	};
 }
 
-export default async function NoPage({
-	params,
-}: { params: { level: TopikLevelType; no: string } }) {
+export default async function NoPage(props: {
+	params: Promise<{ level: TopikLevelType; no: string }>;
+}) {
+	const params = await props.params;
 	const { isStart: isTesting, timeLeft } = await isTestStart(
 		params.level,
 		params.no,

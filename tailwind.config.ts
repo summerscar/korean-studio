@@ -54,6 +54,7 @@ const config: Config = {
 		"alert-success",
 		"alert-warning",
 		"alert-info",
+		"z-50",
 	],
 };
 export default config;

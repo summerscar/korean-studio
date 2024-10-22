@@ -3,9 +3,10 @@ import type { Dicts } from "@/types/dict";
 
 import { fetchDict } from "@/utils/api";
 
-export default async function HomePage({
-	searchParams,
-}: { searchParams: { dict?: Dicts } }) {
+export default async function HomePage(props: {
+	searchParams: Promise<{ dict?: Dicts }>;
+}) {
+	const searchParams = await props.searchParams;
 	const targetDict = searchParams.dict;
 	const dict = await fetchDict(targetDict);
 	return (

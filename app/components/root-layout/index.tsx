@@ -1,6 +1,6 @@
 import { inter } from "@/utils/fonts";
 import "github-markdown-css";
-import "@/globals.css";
+import "@/styles/globals.css";
 import { getThemeFromCookie } from "@/actions/check-theme";
 import { ToastRoot } from "@/hooks/use-toast";
 import { Themes } from "@/types";

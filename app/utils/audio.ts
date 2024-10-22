@@ -1,10 +1,11 @@
-import backspaceAudio from "@/assets/audio/backspace.mp3";
-import baseInputAudio from "@/assets/audio/enter.mp3";
-import incorrectAudio from "@/assets/audio/incorrect.mp3";
-import spaceAudio from "@/assets/audio/space.mp3";
-import swapAudio from "@/assets/audio/swap.mp3";
 import { useMount } from "ahooks";
 import { useRef } from "react";
+
+const backspaceAudio = "/audio/backspace.mp3";
+const baseInputAudio = "/audio/enter.mp3";
+const incorrectAudio = "/audio/incorrect.mp3";
+const spaceAudio = "/audio/space.mp3";
+const swapAudio = "/audio/swap.mp3";
 
 class InputAudioEffect {
 	constructor(src: string) {
@@ -44,7 +45,7 @@ export const createInputAE = () => {
 };
 
 export const useInputAudioEffect = () => {
-	const audioEffectRef = useRef<ReturnType<typeof createInputAE>>();
+	const audioEffectRef = useRef<ReturnType<typeof createInputAE>>(undefined);
 	useMount(() => {
 		audioEffectRef.current = createInputAE();
 	});

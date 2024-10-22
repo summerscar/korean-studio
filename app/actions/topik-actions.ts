@@ -10,7 +10,7 @@ const TestTimeout = 2 * 60 * 60 * 1000;
 
 const startTestAction = async (level: TopikLevelType, no: string) => {
 	// TODO: if login, save to user profile
-	const cookie = cookies();
+	const cookie = await cookies();
 	const status = JSON.parse(
 		cookie.get(TopikTestStatusKey)?.value || JSON.stringify({}),
 	);
@@ -21,7 +21,7 @@ const startTestAction = async (level: TopikLevelType, no: string) => {
 
 const cancelTestAction = async (level: TopikLevelType, no: string) => {
 	// TODO: if login, save to user profile
-	const cookie = cookies();
+	const cookie = await cookies();
 	const status = JSON.parse(
 		cookie.get(TopikTestStatusKey)?.value || JSON.stringify({}),
 	);
@@ -31,7 +31,7 @@ const cancelTestAction = async (level: TopikLevelType, no: string) => {
 };
 
 const isTestStart = async (level: TopikLevelType, no: string) => {
-	const cookie = cookies();
+	const cookie = await cookies();
 	const status = JSON.parse(
 		cookie.get(TopikTestStatusKey)?.value || JSON.stringify({}),
 	);

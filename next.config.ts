@@ -24,6 +24,12 @@ const nextConfig: NextConfig = {
 	// without this, 'Error: Expected Upload to be a GraphQL nullable type.'
 	serverExternalPackages: ["graphql"],
 	experimental: {
+		staleTimes: {
+			// default: 0
+			dynamic: 60 * 0.5,
+			// default: 5min
+			static: 60 * 5,
+		},
 		turbo: {
 			rules: {
 				"*.svg": {

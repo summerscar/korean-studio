@@ -1,7 +1,9 @@
 import { type DocPathParams, Levels } from "@/types";
 import { getServerI18n } from "@/utils/i18n";
+import { isDev } from "@/utils/is-dev";
 import { type FileItem, listAllDocs } from "@/utils/list-docs";
 import { loadMDX } from "@/utils/load-mdx";
+import { timeOut } from "@/utils/time-out";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -70,7 +72,7 @@ export default async function Page(props: { params: Promise<DocPathParams> }) {
 	const { doc_path: docPath } = params;
 	const docPathString = docPath.slice(1).map(decodeURIComponent).join("/");
 	const mdx = await loadMDX(level, docPathString || "_intro");
-
+	isDev && (await timeOut(500));
 	return (
 		<>
 			<article className="markdown-body">{mdx.content}</article>

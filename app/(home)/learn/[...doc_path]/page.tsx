@@ -6,6 +6,8 @@ import { loadMDX } from "@/utils/load-mdx";
 import { timeOut } from "@/utils/time-out";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { MDContentWrapper } from "./_components/markdown-wrapper";
+import { Toc } from "./_components/toc";
 
 export async function generateMetadata(props: {
 	params: Promise<DocPathParams>;
@@ -21,7 +23,7 @@ export async function generateMetadata(props: {
 						level,
 						params.doc_path.slice(1).map(decodeURIComponent).join("/"),
 					)
-				).frontmatter.title as string) ||
+				)[0].frontmatter.title as string) ||
 				decodeURIComponent(params.doc_path.pop() || "")
 			: t(level);
 
@@ -71,11 +73,12 @@ export default async function Page(props: { params: Promise<DocPathParams> }) {
 
 	const { doc_path: docPath } = params;
 	const docPathString = docPath.slice(1).map(decodeURIComponent).join("/");
-	const mdx = await loadMDX(level, docPathString || "_intro");
+	const [mdx, toc] = await loadMDX(level, docPathString || "_intro");
 	isDev && (await timeOut(500));
 	return (
 		<>
-			<article className="markdown-body">{mdx.content}</article>
+			<MDContentWrapper>{mdx.content}</MDContentWrapper>
+			<Toc toc={toc} />
 		</>
 	);
 }

@@ -8,10 +8,8 @@ function DocsLayout({
 	return (
 		<div className="flex w-full">
 			<ScrollToTop />
-			<nav className="self-start w-64 flex-none sticky top-[--header-height] max-h-[calc(100vh-var(--header-height))] overflow-auto">
-				{category}
-			</nav>
-			<section className="flex-auto p-8 border-l-2 border-slate-900/10">
+			{category}
+			<section className="flex flex-auto border-slate-900/10  border-l-2">
 				{children}
 			</section>
 		</div>

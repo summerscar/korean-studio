@@ -79,7 +79,6 @@ const listAllDocs = unstable_cache(
 
 		const docs = await walkDir(mdxDir);
 
-		console.log("[list-docs][CACHE_KEY]", CACHE_KEY);
 		return docs;
 	},
 	[CACHE_KEY],

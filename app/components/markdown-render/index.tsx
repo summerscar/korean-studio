@@ -5,6 +5,7 @@ import type { PropsWithChildren } from "react";
 import type { JSX } from "react";
 
 // TODO: https://www.zenryoku-kun.com/new-post/nextjs-mdx-remote#problem-mdx
+// biome-ignore lint/correctness/noUnusedVariables: <explanation>
 const header = (level: 1 | 2 | 3, props: PropsWithChildren<{ id: string }>) => {
 	const size = {
 		1: "text-2xl",
@@ -25,9 +26,9 @@ const header = (level: 1 | 2 | 3, props: PropsWithChildren<{ id: string }>) => {
 };
 
 const components = {
-	h1: (props: PropsWithChildren<{ id: string }>) => header(1, props),
-	h2: (props: PropsWithChildren<{ id: string }>) => header(2, props),
-	h3: (props: PropsWithChildren<{ id: string }>) => header(3, props),
+	// h1: (props: PropsWithChildren<{ id: string }>) => header(1, props),
+	// h2: (props: PropsWithChildren<{ id: string }>) => header(2, props),
+	// h3: (props: PropsWithChildren<{ id: string }>) => header(3, props),
 	Speak: (props: PropsWithChildren<{ id: string }>) => (
 		<MDXSpeaker {...props} />
 	),

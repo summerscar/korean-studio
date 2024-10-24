@@ -37,18 +37,20 @@ const DocsCategory = async ({ doc_path }: DocPathParams) => {
 		});
 	};
 	return (
-		<ul className="menu">
-			<li>
-				<Link
-					className={clsx("flex", { active: !formattedTitle })}
-					href={`/learn/${level}`}
-				>
-					{/* TODO: i18n */}
-					介绍
-				</Link>
-			</li>
-			{buildTree(docs, ["learn", level])}
-		</ul>
+		<nav className="self-start w-52 flex-none sticky top-[--header-height] max-h-[calc(100vh-var(--header-height))] overflow-auto">
+			<ul className="menu">
+				<li>
+					<Link
+						className={clsx("flex", { active: !formattedTitle })}
+						href={`/learn/${level}`}
+					>
+						{/* TODO: i18n */}
+						介绍
+					</Link>
+				</li>
+				{buildTree(docs, ["learn", level])}
+			</ul>
+		</nav>
 	);
 };
 export { DocsCategory };

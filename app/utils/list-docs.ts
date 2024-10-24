@@ -22,60 +22,67 @@ const DIR_ORDER = {
 	特殊规则: "3",
 };
 
-const listAllDocs = unstable_cache(async (level: string) => {
-	const root = path.resolve();
-	const mdxDir = path.join(root, "mdx", level);
+const CACHE_KEY = `list-docs-${process.env.VERCEL_GIT_COMMIT_SHA || "dev"}`;
 
-	const walkDir = async (
-		dir: string,
-		walkPath: string[] = [],
-	): Promise<(FileItem | SubDirItem)[]> => {
-		const files = (existsSync(dir) ? await readdir(dir) : []).filter(
-			// filter out hidden files
-			(doc) =>
-				!doc.startsWith("_") &&
-				!lstatSync(resolve(dir, doc)).isDirectory() &&
-				(doc.endsWith(".mdx") || doc.endsWith(".md")),
-		);
+const listAllDocs = unstable_cache(
+	async (level: string) => {
+		const root = path.resolve();
+		const mdxDir = path.join(root, "mdx", level);
 
-		const subDirs = (existsSync(dir) ? await readdir(dir) : []).filter((doc) =>
-			lstatSync(resolve(dir, doc)).isDirectory(),
-		);
+		const walkDir = async (
+			dir: string,
+			walkPath: string[] = [],
+		): Promise<(FileItem | SubDirItem)[]> => {
+			const files = (existsSync(dir) ? await readdir(dir) : []).filter(
+				// filter out hidden files
+				(doc) =>
+					!doc.startsWith("_") &&
+					!lstatSync(resolve(dir, doc)).isDirectory() &&
+					(doc.endsWith(".mdx") || doc.endsWith(".md")),
+			);
 
-		const data: FileItem[] = await Promise.all(
-			files.map(async (file) => {
-				const filePath = path.join(dir, file);
-				const data = await readFile(filePath, { encoding: "utf-8" });
+			const subDirs = (existsSync(dir) ? await readdir(dir) : []).filter(
+				(doc) => lstatSync(resolve(dir, doc)).isDirectory(),
+			);
 
-				return {
-					file: file,
-					relativePath: path.join(...walkPath, file),
-					title: data.match(/title: (.*)/)?.[1] || file,
-					date: data.match(/date: (\d{4}-\d{2}-\d{2})/)?.[1] || "0",
-				};
-			}),
-		);
+			const data: FileItem[] = await Promise.all(
+				files.map(async (file) => {
+					const filePath = path.join(dir, file);
+					const data = await readFile(filePath, { encoding: "utf-8" });
 
-		const subData = await Promise.all(
-			subDirs.map(async (subDir) => {
-				const filePath = path.join(dir, subDir);
-				return {
-					title: subDir,
-					children: await walkDir(filePath, [...walkPath, subDir]),
-					date: DIR_ORDER[subDir as keyof typeof DIR_ORDER] || "0",
-				} as SubDirItem;
-			}),
-		);
+					return {
+						file: file,
+						relativePath: path.join(...walkPath, file),
+						title: data.match(/title: (.*)/)?.[1] || file,
+						date: data.match(/date: (\d{4}-\d{2}-\d{2})/)?.[1] || "0",
+					};
+				}),
+			);
 
-		const tree = [...data, ...subData].sort(
-			(a, b) => Date.parse(a.date) - Date.parse(b.date),
-		);
+			const subData = await Promise.all(
+				subDirs.map(async (subDir) => {
+					const filePath = path.join(dir, subDir);
+					return {
+						title: subDir,
+						children: await walkDir(filePath, [...walkPath, subDir]),
+						date: DIR_ORDER[subDir as keyof typeof DIR_ORDER] || "0",
+					} as SubDirItem;
+				}),
+			);
 
-		return tree;
-	};
+			const tree = [...data, ...subData].sort(
+				(a, b) => Date.parse(a.date) - Date.parse(b.date),
+			);
 
-	const docs = await walkDir(mdxDir);
-	return docs;
-});
+			return tree;
+		};
+
+		const docs = await walkDir(mdxDir);
+
+		console.log("[list-docs][CACHE_KEY]", CACHE_KEY);
+		return docs;
+	},
+	[CACHE_KEY],
+);
 
 export { listAllDocs };

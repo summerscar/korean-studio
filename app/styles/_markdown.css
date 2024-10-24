@@ -12,4 +12,7 @@
 	ol {
 		/* list-style-type: decimal; */
 	}
+	table {
+		width: auto;
+	}
 }

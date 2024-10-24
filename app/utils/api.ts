@@ -13,5 +13,9 @@ export const client = () => new GraphQLClient(parseURL("/api/graphql"));
 export const fetchDict = async (
 	target: keyof typeof Dicts = DEFAULT_DICT,
 ): Promise<Dict> => {
-	return await (await fetch(parseURL(`/dicts/${target}.json`))).json();
+	return await (
+		await fetch(parseURL(`/dicts/${target}.json`), {
+			next: { revalidate: 24 * 60 * 60 },
+		})
+	).json();
 };

@@ -2,14 +2,16 @@
 import SpeakerSVG from "@/assets/svg/speaker.svg";
 import { usePronunciation } from "@/hooks/use-pronunciation";
 import clsx from "clsx";
+import { romanize } from "es-hangul";
 import type { ComponentProps } from "react";
 
 const Pronunciation = ({
 	preload = true,
 	text,
 	children,
+	tooltip = false,
 	...svgProps
-}: { text?: string; preload?: boolean } & ComponentProps<
+}: { text?: string; preload?: boolean; tooltip?: boolean } & ComponentProps<
 	typeof SpeakerSVG
 >) => {
 	const DEFAULT_SIZE = 16;
@@ -19,32 +21,39 @@ const Pronunciation = ({
 		className,
 		...rest
 	} = svgProps;
+	const targetText = typeof children === "string" ? children : text || "";
+	const { isPlaying, play } = usePronunciation(targetText, { preload });
 
-	const { isPlaying, play } = usePronunciation(
-		typeof children === "string" ? children : text,
-		{ preload },
+	const speakerEl = (
+		<SpeakerSVG
+			width={width}
+			height={height}
+			onMouseEnter={play}
+			className={clsx(
+				className,
+				isPlaying ? "fill-current" : "text-base-content",
+				"cursor-pointer inline-block",
+			)}
+			{...rest}
+		/>
 	);
 
 	return (
 		<>
 			{children}{" "}
-			<SpeakerSVG
-				width={width}
-				height={height}
-				onMouseEnter={play}
-				className={clsx(
-					className,
-					isPlaying ? "text-accent" : "text-base-content",
-					"cursor-pointer inline-block",
-				)}
-				{...rest}
-			/>
+			{tooltip ? (
+				<span className="tooltip" data-tip={romanize(targetText)}>
+					{speakerEl}
+				</span>
+			) : (
+				speakerEl
+			)}
 		</>
 	);
 };
 
 const MDXSpeaker = (props: ComponentProps<typeof Pronunciation>) => (
-	<Pronunciation preload={false} {...props} />
+	<Pronunciation preload={false} tooltip {...props} />
 );
 
 export { Pronunciation, MDXSpeaker };

@@ -47,6 +47,11 @@ export default (
 			pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
 			// without this, 'Error: Expected Upload to be a GraphQL nullable type.'
 			serverExternalPackages: ["graphql"],
+			logging: {
+				fetches: {
+					fullUrl: true,
+				},
+			},
 			experimental: {
 				staleTimes: {
 					// default: 0

@@ -9,6 +9,7 @@ const config: Config = {
 	],
 	theme: {
 		screens: {
+			xs: "375px",
 			sm: "640px",
 			// => @media (min-width: 640px) { ... }
 
@@ -20,9 +21,6 @@ const config: Config = {
 
 			xl: "1440px",
 			// => @media (min-width: 1440px) { ... }
-
-			"2xl": "1536px",
-			// => @media (min-width: 1536px) { ... }
 		},
 		extend: {
 			backgroundImage: {

@@ -16,13 +16,14 @@
 		"tipsEnter": "Press<enter></enter>to type!"
 	},
 	"Tools": {
+		"description": "Korean text tools: standardize pronunciation, romanize, assemble, disassemble",
 		"standardizePronunciation": "Standardize Pronunciation",
 		"standardizePronunciationDescription": "Standardize Korean text to standard pronunciation",
-		"romanize": "Romanize",
+		"romanize": "Romanize text",
 		"romanizeDescription": "Romanize Korean text",
-		"assemble": "Assemble",
+		"assemble": "Assemble text",
 		"assembleDescription": "Assemble Korean text",
-		"disassemble": "Disassemble",
+		"disassemble": "Disassemble text",
 		"disassembleDescription": "Disassemble Korean text"
 	}
 }

@@ -16,13 +16,14 @@
 		"tipsEnter": "按下<enter></enter>键输入"
 	},
 	"Tools": {
+		"description": "韩语工具: 标准化发音、罗马音转换、字母组合、文字拆分",
 		"standardizePronunciation": "标准化发音",
 		"standardizePronunciationDescription": "将韩文字符串更改为标准发音",
-		"romanize": "罗马字",
-		"romanizeDescription": "将韩文字符串转换为罗马字",
-		"assemble": "组合",
+		"romanize": "罗马音转换",
+		"romanizeDescription": "将韩文字符串转换为罗马音",
+		"assemble": "字母组合",
 		"assembleDescription": "将韩文字母和文字按照韩文规则合成",
-		"disassemble": "拆分",
+		"disassemble": "文字拆分",
 		"disassembleDescription": "将韩文字符串拆分为韩文字母"
 	}
 }

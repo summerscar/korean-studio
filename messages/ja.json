@@ -16,13 +16,14 @@
 		"tipsEnter": "<enter></enter>を押してから入力してください"
 	},
 	"Tools": {
+		"description": "韓国語のツール: 発音の標準化、ローマ字に変換、文字組み立て、文字分解",
 		"standardizePronunciation": "発音の標準化",
 		"standardizePronunciationDescription": "韓文文字列を標準的な発音に変換する",
-		"romanize": "ローマ字",
+		"romanize": "ローマ字に変換",
 		"romanizeDescription": "韓文文字列をローマ字に変換する",
-		"assemble": "組み立て",
+		"assemble": "韓文字組み立て",
 		"assembleDescription": "韓文字列を韓文字母と文字の組み合わせに変換する",
-		"disassemble": "分解",
+		"disassemble": "韓文字分解",
 		"disassembleDescription": "韓文字列を韓文字母と文字の分解に変換する"
 	}
 }

@@ -8,19 +8,19 @@ import { Progress } from "./_component/progress";
 export const headerConfig = (t: Awaited<ReturnType<typeof getServerI18n>>) => [
 	{
 		href: "/learn/beginner",
-		label: `🚧${t("beginner")}`,
+		label: `🔨${t("beginner")}`,
 	},
 	{
 		href: "/learn/intermediate",
-		label: `🚧${t("intermediate")}`,
+		label: `🔨${t("intermediate")}`,
 	},
 	{
 		href: "/topik",
-		label: "🚧TOPIK",
+		label: "🔨TOPIK",
 	},
 	{
 		href: "/tools",
-		label: `🚧${t("tools")}`,
+		label: `${t("tools")}`,
 	},
 ];
 

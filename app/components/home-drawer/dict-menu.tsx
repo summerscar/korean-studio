@@ -1,31 +1,46 @@
 "use client";
+import ShuffleIcon from "@/assets/svg/shuffle.svg";
 import { Dicts } from "@/types/dict";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const DictMenu = () => {
+const DictMenu = ({
+	onShuffle,
+}: {
+	onShuffle?: () => void;
+}) => {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const tIndex = useTranslations("Home");
 	const currentDict = searchParams.get("dict") || Dicts.popular;
 
-	const handleClick = (dict: Dicts) => () => {
-		router.push(`/?dict=${dict}`);
+	const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		router.push(`/?dict=${e.target.value}`);
 	};
-	// TODO: selector
+
 	return (
-		<ul className="menu menu-horizontal menu-sm bg-base-200 rounded-box mb-3 shadow-md">
-			{Object.entries(Dicts).map(([key, value]) => (
-				<li key={key}>
-					<span
-						className={value === currentDict ? "active" : ""}
-						onClick={handleClick(value)}
-					>
-						{tIndex(value)}
-					</span>
-				</li>
-			))}
-		</ul>
+		<div className="bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1">
+			<div className="pl-4">
+				<ShuffleIcon
+					width={20}
+					height={20}
+					viewBox="0 0 24 24"
+					className="cursor-pointer"
+					onClick={onShuffle}
+				/>
+			</div>
+			<select
+				className="select select-bordered w-28 select-sm"
+				value={currentDict}
+				onChange={onChange}
+			>
+				{Object.values(Dicts).map((dict) => (
+					<option key={dict} value={dict}>
+						{tIndex(dict)}
+					</option>
+				))}
+			</select>
+		</div>
 	);
 };
 

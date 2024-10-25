@@ -29,6 +29,7 @@ import {
 import { myeongjo, notoKR } from "@/utils/fonts";
 import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
+import { shuffleArr } from "@/utils/shuffle-array";
 import { useEventListener, useLatest, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { disassemble, romanize, standardizePronunciation } from "es-hangul";
@@ -44,10 +45,11 @@ import {
 import reactStringReplace from "react-string-replace";
 
 const HomeStatus = ({
-	dict,
+	dict: originalDict,
 }: {
 	dict: Dict;
 }) => {
+	const [dict, setDict] = useState(originalDict);
 	const [curWordIndex, setCurWordIndex] = useState(0);
 	const [curInputIndex, setCurInputIndex] = useState(0);
 	const [isComplete, setIsComplete] = useState(false);
@@ -66,6 +68,14 @@ const HomeStatus = ({
 	const inputRef = useRef({
 		handleInputBlur: () => {},
 		handleInputFocus: () => {},
+	});
+
+	useEffect(() => {
+		setDict(originalDict);
+	}, [originalDict]);
+
+	const shuffleDict = useMemoizedFn(() => {
+		setDict((prev) => shuffleArr(prev));
 	});
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -449,6 +459,7 @@ const HomeStatus = ({
 				dict={dict}
 				curWordIndex={curWordIndex}
 				onClick={skipToNextWord}
+				onShuffle={shuffleDict}
 			/>
 		</Wrapper>
 	);

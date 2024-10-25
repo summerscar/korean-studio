@@ -13,12 +13,14 @@ const HomeDrawer = ({
 	dict,
 	curWordIndex,
 	onClick,
+	onShuffle,
 	drawerRef,
 }: {
 	dict: Dict;
 	curWordIndex: number;
 	onClick: (index: number) => void;
 	drawerRef: React.RefObject<{ open: () => void }>;
+	onShuffle: () => void;
 }) => {
 	const locale = useLocale();
 	const controllerRef = useRef<HTMLInputElement>(null);
@@ -40,7 +42,7 @@ const HomeDrawer = ({
 	return (
 		<ClientOnly>
 			{createPortal(
-				<div className="drawer drawer-end">
+				<div className="drawer drawer-end z-20">
 					<input
 						ref={controllerRef}
 						id="my-drawer-4"
@@ -63,7 +65,7 @@ const HomeDrawer = ({
 							className="drawer-overlay"
 						/>
 						<ul className="menu bg-base-100 text-base-content min-h-full w-80 p-4">
-							<DictMenu />
+							<DictMenu onShuffle={onShuffle} />
 							{/* Sidebar content here */}
 							{dict.map((item, index) => (
 								<li

@@ -134,7 +134,9 @@ const HomeStatus = ({
 	const romanized = romanize(displayName);
 
 	/** 韩文标准化发音 */
-	const standardized = standardizePronunciation(displayName);
+	const standardized = standardizePronunciation(displayName, {
+		hardConversion: true,
+	});
 
 	const addShakeAnimation = useCallback((target: HTMLElement) => {
 		const className = "animate-[shake-text_0.25s_1]";

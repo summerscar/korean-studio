@@ -7,7 +7,7 @@ const MDContentWrapper = ({ children }: { children: ReactNode }) => (
 );
 
 const TOCWrapper = ({ children }: { children: ReactNode }) => (
-	<div className="w-48 flex-none text-xs p-3 sticky self-start overflow-auto top-[--header-height] max-h-[calc(100vh-var(--header-height))]">
+	<div className="hidden md:block w-48 flex-none text-xs p-3 sticky self-start overflow-auto top-[--header-height] max-h-[calc(100vh-var(--header-height))]">
 		{children}
 	</div>
 );

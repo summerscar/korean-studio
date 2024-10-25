@@ -33,7 +33,7 @@ const I18nSwitcher = ({ defaultLocale }: { defaultLocale: SITES_LANGUAGE }) => {
 
 	return (
 		<div className="dropdown dropdown-hover dropdown-top">
-			<div role="button" className="btn btn-ghost btn-xs text-lg leading-4">
+			<div className="btn btn-ghost btn-xs text-lg leading-4">
 				{mapForLocale[locale]}
 			</div>
 			<ul className="dropdown-content menu bg-base-100 rounded-box z-[1] p-2 shadow">

@@ -18,6 +18,10 @@ export const headerConfig = (t: Awaited<ReturnType<typeof getServerI18n>>) => [
 		href: "/topik",
 		label: "🚧TOPIK",
 	},
+	{
+		href: "/tools",
+		label: `🚧${t("tools")}`,
+	},
 ];
 
 const Header = async () => {

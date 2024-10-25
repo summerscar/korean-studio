@@ -6,12 +6,23 @@
 	},
 	"Header": {
 		"beginner": "Beginner",
-		"intermediate": "Intermediate"
+		"intermediate": "Intermediate",
+		"tools": "Tools"
 	},
 	"Home": {
 		"viewList": "View list",
 		"popular": "Popular Words",
 		"dirty": "Dirty Words",
 		"tipsEnter": "Press<enter></enter>to type!"
+	},
+	"Tools": {
+		"standardizePronunciation": "Standardize Pronunciation",
+		"standardizePronunciationDescription": "Standardize Korean text to standard pronunciation",
+		"romanize": "Romanize",
+		"romanizeDescription": "Romanize Korean text",
+		"assemble": "Assemble",
+		"assembleDescription": "Assemble Korean text",
+		"disassemble": "Disassemble",
+		"disassembleDescription": "Disassemble Korean text"
 	}
 }

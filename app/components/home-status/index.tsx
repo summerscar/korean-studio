@@ -261,7 +261,9 @@ const HomeStatus = ({
 	const exTranslation = useMemo(() => {
 		if (!currentWord) return null;
 		const exTrans =
-			currentWord.exTrans[locale as keyof Tran] || currentWord.exTrans.en;
+			currentWord.exTrans?.[locale as keyof Tran] ||
+			currentWord.exTrans?.en ||
+			[];
 		return exTrans.join(", ");
 	}, [currentWord, locale]);
 
@@ -424,18 +426,20 @@ const HomeStatus = ({
 				</div>
 			</div>
 			{/* 例句 */}
-			<div className="flex justify-center flex-col items-center">
-				<p className={clsx("relative", myeongjo.className)}>
-					{highLightExample(currentWord?.example)}
-					<Pronunciation
-						width={12}
-						height={12}
-						text={currentWord?.example}
-						className="absolute top-1/2 -right-6 -translate-x-1/2 -translate-y-1/2"
-					/>
-				</p>
-				<p>{exTranslation}</p>
-			</div>
+			{currentWord?.example && (
+				<div className="flex justify-center flex-col items-center">
+					<p className={clsx("relative", myeongjo.className)}>
+						{highLightExample(currentWord.example)}
+						<Pronunciation
+							width={12}
+							height={12}
+							text={currentWord.example}
+							className="absolute top-1/2 -right-6 -translate-x-1/2 -translate-y-1/2"
+						/>
+					</p>
+					<p>{exTranslation}</p>
+				</div>
+			)}
 			{/* 键盘输入 */}
 			<div className="hidden text-[color:var(--font-color-inactive)]">
 				{[...qwerty].map((strItem, idx) => (

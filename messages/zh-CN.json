@@ -11,9 +11,13 @@
 	},
 	"Home": {
 		"viewList": "查看列表",
+		"tipsEnter": "按下<enter></enter>键输入"
+	},
+	"Dict": {
 		"popular": "热门词汇",
 		"dirty": "脏话",
-		"tipsEnter": "按下<enter></enter>键输入"
+		"family": "家族",
+		"onomatopoeia": "拟声词"
 	},
 	"Tools": {
 		"description": "韩语工具: 标准化发音、罗马音转换、字母组合、文字拆分",

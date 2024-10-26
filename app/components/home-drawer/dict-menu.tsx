@@ -11,7 +11,7 @@ const DictMenu = ({
 }) => {
 	const searchParams = useSearchParams();
 	const router = useRouter();
-	const tIndex = useTranslations("Home");
+	const tIndex = useTranslations("Dict");
 	const currentDict = searchParams.get("dict") || Dicts.popular;
 
 	const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

@@ -1,0 +1,194 @@
+[
+	{
+		"name": "또랑또랑",
+		"trans": {
+			"en": ["clear and resonant sound"],
+			"zh-CN": ["清楚地，清脆地，清亮。"],
+			"zh-TW": ["清楚地，清脆地，清亮。"],
+			"ja": ["非常に響き渡りました。"]
+		},
+		"example": "종이 뜯리는 소리는 또랑또랑 했다.",
+		"exTrans": {
+			"en": ["The sound of the paper being torn was clear and resonant."],
+			"zh-CN": ["纸被撕开的声音非常清脆。"],
+			"zh-TW": ["紙被撕開的声音非常清脆。"],
+			"ja": ["紙を引き裂く音は非常に響き渡りました。"]
+		}
+	},
+	{
+		"name": "우물우물",
+		"trans": {
+			"en": ["mumbling sound"],
+			"zh-CN": ["咕哝声。"],
+			"zh-TW": ["咕噥聲。"],
+			"ja": ["もごもごとした音。"]
+		},
+		"example": "그는 우물우물 대답했다.",
+		"exTrans": {
+			"en": ["He mumbled his answer."],
+			"zh-CN": ["他咕哝着回答。"],
+			"zh-TW": ["他咕噥著回答。"],
+			"ja": ["彼はもごもごと答えた。"]
+		}
+	},
+	{
+		"name": "소곤소곤",
+		"trans": {
+			"en": ["whispering sound"],
+			"zh-CN": ["窃窃私语。"],
+			"zh-TW": ["竊竊私語。"],
+			"ja": ["ささやき声。"]
+		},
+		"example": "아이들은 소곤소곤 이야기를 나눴다.",
+		"exTrans": {
+			"en": ["The children whispered to each other."],
+			"zh-CN": ["孩子们窃窃私语。"],
+			"zh-TW": ["孩子們竊竊私語。"],
+			"ja": ["子供たちはささやき声で話し合った。"]
+		}
+	},
+	{
+		"name": "반짝반짝",
+		"trans": {
+			"en": ["sparkling, twinkling"],
+			"zh-CN": ["闪闪发光。"],
+			"zh-TW": ["閃閃發光。"],
+			"ja": ["きらきらと輝く。"]
+		},
+		"example": "별이 반짝반짝 빛났다.",
+		"exTrans": {
+			"en": ["The stars twinkled in the sky."],
+			"zh-CN": ["星星在天空中闪烁。"],
+			"zh-TW": ["星星在天空中閃爍。"],
+			"ja": ["星が空できらきらと輝いた。"]
+		}
+	},
+	{
+		"name": "두근두근",
+		"trans": {
+			"en": ["heart beating fast"],
+			"zh-CN": ["心跳加速。"],
+			"zh-TW": ["心跳加速。"],
+			"ja": ["ドキドキする。"]
+		},
+		"example": "그녀를 보자마자 가슴이 두근두근 뛰었다.",
+		"exTrans": {
+			"en": ["My heart raced as soon as I saw her."],
+			"zh-CN": ["一见到她，我的心就跳得很快。"],
+			"zh-TW": ["一見到她，我的心就跳得很快。"],
+			"ja": ["彼女を見た瞬間、心臓がドキドキした。"]
+		}
+	},
+	{
+		"name": "부들부들",
+		"trans": {
+			"en": ["trembling, shivering"],
+			"zh-CN": ["颤抖。"],
+			"zh-TW": ["顫抖。"],
+			"ja": ["ぶるぶる震える。"]
+		},
+		"example": "추워서 온몸이 부들부들 떨렸다.",
+		"exTrans": {
+			"en": ["My whole body was shivering from the cold."],
+			"zh-CN": ["冷得全身发抖。"],
+			"zh-TW": ["冷得全身發抖。"],
+			"ja": ["寒さで全身がぶるぶる震えた。"]
+		}
+	},
+	{
+		"name": "매끈매끈",
+		"trans": {
+			"en": ["smooth, slick"],
+			"zh-CN": ["光滑。"],
+			"zh-TW": ["光滑。"],
+			"ja": ["つるつるしている。"]
+		},
+		"example": "그녀의 피부는 매끈매끈했다.",
+		"exTrans": {
+			"en": ["Her skin was smooth."],
+			"zh-CN": ["她的皮肤很光滑。"],
+			"zh-TW": ["她的皮膚很光滑。"],
+			"ja": ["彼女の肌はつるつるしていた。"]
+		}
+	},
+	{
+		"name": "히죽히죽",
+		"trans": {
+			"en": ["grinning slyly"],
+			"zh-CN": ["狡黠地笑。"],
+			"zh-TW": ["狡黠地笑。"],
+			"ja": ["にやにや笑う。"]
+		},
+		"example": "그는 히죽히죽 웃으며 나를 바라봤다.",
+		"exTrans": {
+			"en": ["He looked at me with a sly grin."],
+			"zh-CN": ["他狡黠地笑着看着我。"],
+			"zh-TW": ["他狡黠地笑著看著我。"],
+			"ja": ["彼はにやにやしながら私を見た。"]
+		}
+	},
+	{
+		"name": "폭신폭신",
+		"trans": {
+			"en": ["soft and fluffy"],
+			"zh-CN": ["柔软蓬松。"],
+			"zh-TW": ["柔軟蓬鬆。"],
+			"ja": ["ふわふわしている。"]
+		},
+		"example": "침대가 폭신폭신해서 잠이 잘 왔다.",
+		"exTrans": {
+			"en": ["The bed was so soft and fluffy, I slept well."],
+			"zh-CN": ["床很柔软蓬松，我睡得很好。"],
+			"zh-TW": ["床很柔軟蓬鬆，我睡得很好。"],
+			"ja": ["ベッドがふわふわしていて、よく眠れた。"]
+		}
+	},
+	{
+		"name": "홀짝홀짝",
+		"trans": {
+			"en": ["sipping, slurping"],
+			"zh-CN": ["啜饮。"],
+			"zh-TW": ["啜飲。"],
+			"ja": ["ちびちび飲む。"]
+		},
+		"example": "그는 커피를 홀짝홀짝 마셨다.",
+		"exTrans": {
+			"en": ["He sipped his coffee."],
+			"zh-CN": ["他啜饮着咖啡。"],
+			"zh-TW": ["他啜飲著咖啡。"],
+			"ja": ["彼はコーヒーをちびちびと飲んだ。"]
+		}
+	},
+	{
+		"name": "생글생글",
+		"trans": {
+			"en": ["smiling warmly"],
+			"zh-CN": ["微笑。"],
+			"zh-TW": ["微笑。"],
+			"ja": ["にこにこと微笑む。"]
+		},
+		"example": "그녀는 나를 보며 생글생글 웃었다.",
+		"exTrans": {
+			"en": ["She smiled warmly at me."],
+			"zh-CN": ["她对我微笑。"],
+			"zh-TW": ["她對我微笑。"],
+			"ja": ["彼女は私を見てにこにこと笑った。"]
+		}
+	},
+	{
+		"name": "쓰담쓰담",
+		"trans": {
+			"en": ["patting gently"],
+			"zh-CN": ["轻拍。"],
+			"zh-TW": ["輕拍。"],
+			"ja": ["なでる。"]
+		},
+		"example": "그녀는 아이의 머리를 쓰담쓰담 했다.",
+		"exTrans": {
+			"en": ["She gently patted the child's head."],
+			"zh-CN": ["她轻轻地拍了拍孩子的头。"],
+			"zh-TW": ["她輕輕地拍了拍孩子的頭。"],
+			"ja": ["彼女は子供の頭を優しくなでた。"]
+		}
+	}
+]

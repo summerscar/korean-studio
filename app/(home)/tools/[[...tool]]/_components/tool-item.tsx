@@ -20,9 +20,9 @@ const ToolItem = ({
 		<div className="flex flex-col gap-3 items-center">
 			{title && <h1 className="text-2xl">{title}</h1>}
 			{description && <p>{description}</p>}
-			<div className="flex items-center">
+			<div className="flex flex-col sm:flex-row items-center">
 				{inputEl}
-				<NextIcon className="mx-6 h-6" />
+				<NextIcon className="mx-6 h-6 rotate-90 sm:rotate-0" />
 				<input
 					type="text"
 					className="input input-bordered input-sm"

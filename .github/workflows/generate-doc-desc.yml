@@ -16,10 +16,6 @@ jobs:
           npm install
           npm run script:docs
 
-      - name: Commit changes
-        run: |
-          git config --global user.email "lqG3A@example.com"
-          git config --global user.name "github-actions"
-          git add .
-          git commit -m "📃 docs(content): edit by chatGPT"
-          git push
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "📃 docs(content): edit by chatGPT"

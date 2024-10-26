@@ -1,0 +1,25 @@
+name: Generate doc description
+run-name: Generate doc description
+on: [push]
+jobs:
+  update-doc:
+    runs-on: ubuntu-latest
+    env:
+      GPT_URL: ${{ secrets.GPT_URL }}
+      GPT_KEY: ${{ secrets.GPT_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run script:docs
+        run: |
+          npm install
+          npm run script:docs
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "lqG3A@example.com"
+          git config --global user.name "github-actions"
+          git add .
+          git commit -m "📃 docs(content): edit by chatGPT"
+          git push

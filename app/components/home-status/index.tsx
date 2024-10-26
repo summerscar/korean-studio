@@ -122,7 +122,7 @@ const HomeStatus = ({
 		const currentSpan = hangulEls[curInputIndex] as HTMLSpanElement;
 		const rect = currentSpan.getBoundingClientRect();
 		setInputPosition(rect);
-	}, [curInputIndex, curWordIndex]);
+	}, [curInputIndex, curWordIndex, dict]);
 
 	const currentWord = useMemo(() => {
 		if (curWordIndex < dict.length) {

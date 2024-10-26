@@ -388,12 +388,7 @@ const HomeStatus = ({
 					},
 				)}
 			>
-				<style
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-					dangerouslySetInnerHTML={{
-						__html: inlineStyle,
-					}}
-				/>
+				<style>{inlineStyle}</style>
 				<KoreanKeyBoardSVG
 					viewBox="0 0 910 310"
 					width={"100%"}

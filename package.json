@@ -17,7 +17,7 @@
 		"check": "biome check --apply <files>",
 		"prepare": "husky",
 		"lint-staged": "lint-staged",
-		"run-crawler": "tsx scripts/index.ts"
+		"script:docs": "tsx scripts/generate-doc-desc.ts"
 	},
 	"dependencies": {
 		"@keystone-6/auth": "^8.0.0",

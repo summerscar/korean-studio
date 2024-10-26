@@ -11,9 +11,13 @@
 	},
 	"Home": {
 		"viewList": "View list",
+		"tipsEnter": "Press<enter></enter>to type!"
+	},
+	"Dict": {
 		"popular": "Popular Words",
 		"dirty": "Dirty Words",
-		"tipsEnter": "Press<enter></enter>to type!"
+		"family": "Family",
+		"onomatopoeia": "Onomatopoeia"
 	},
 	"Tools": {
 		"description": "Korean text tools: standardize pronunciation, romanize, assemble, disassemble",

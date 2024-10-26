@@ -78,13 +78,13 @@ export default async function Layout({
 	const tool = ((await params).tool || [])[0] as ToolName;
 
 	return (
-		<div className="flex flex-col w-full gap-8">
-			<div className="tabs tabs-bordered tabs-lg">
+		<div className="flex flex-col w-full gap-4">
+			<div className="tabs tabs-bordered tabs-sm sm:tabs-lg">
 				{list.map(({ href, intlKey, title }) => (
 					<Link
 						key={href}
 						href={href}
-						className={clsx("tab tab-lg tab-bordered", {
+						className={clsx("tab", {
 							"tab-active": tool === title,
 						})}
 					>

@@ -8,13 +8,15 @@ export interface Tran {
 export interface DictItem {
 	name: string;
 	trans: Tran;
-	example: string;
-	exTrans: Tran;
+	example?: string;
+	exTrans?: Tran;
 }
 
 export enum Dicts {
 	popular = "popular",
 	dirty = "dirty",
+	family = "family",
+	onomatopoeia = "onomatopoeia",
 }
 
 export const DEFAULT_DICT = Dicts.popular;

@@ -11,9 +11,13 @@
 	},
 	"Home": {
 		"viewList": "リストを見る",
+		"tipsEnter": "<enter></enter>を押してから入力してください"
+	},
+	"Dict": {
 		"popular": "トレンド用語",
 		"dirty": "悪口",
-		"tipsEnter": "<enter></enter>を押してから入力してください"
+		"family": "家族",
+		"onomatopoeia": "オノマトペ"
 	},
 	"Tools": {
 		"description": "韓国語のツール: 発音の標準化、ローマ字に変換、文字組み立て、文字分解",

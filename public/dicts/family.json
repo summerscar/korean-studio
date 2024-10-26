@@ -1,0 +1,110 @@
+[
+	{
+		"name": "어머니",
+		"trans": {
+			"en": ["mother"],
+			"zh-CN": ["母亲"],
+			"zh-TW": ["母親"],
+			"ja": ["お母さん"]
+		}
+	},
+	{
+		"name": "아버지",
+		"trans": {
+			"en": ["father"],
+			"zh-CN": ["父亲"],
+			"zh-TW": ["父親"],
+			"ja": ["お父さん"]
+		}
+	},
+	{
+		"name": "엄마",
+		"trans": {
+			"en": ["mam"],
+			"zh-CN": ["妈妈"],
+			"zh-TW": ["媽媽"],
+			"ja": ["ハハ"]
+		}
+	},
+	{
+		"name": "아빠",
+		"trans": {
+			"en": ["dad"],
+			"zh-CN": ["爸爸"],
+			"zh-TW": ["爸爸"],
+			"ja": ["お父さん"]
+		}
+	},
+	{
+		"name": "할아버지",
+		"trans": {
+			"en": ["grandfather"],
+			"zh-CN": ["爷爷"],
+			"zh-TW": ["爺爺"],
+			"ja": ["じいじ"]
+		}
+	},
+	{
+		"name": "할머니",
+		"trans": {
+			"en": ["grandmother"],
+			"zh-CN": ["奶奶"],
+			"zh-TW": ["奶奶"],
+			"ja": ["じいじ"]
+		}
+	},
+	{
+		"name": "남동생",
+		"trans": {
+			"en": ["younger brother"],
+			"zh-CN": ["弟弟"],
+			"zh-TW": ["弟弟"],
+			"ja": ["弟"]
+		}
+	},
+	{
+		"name": "여동생",
+		"trans": {
+			"en": ["younger sister"],
+			"zh-CN": ["妹妹"],
+			"zh-TW": ["妹妹"],
+			"ja": ["妹"]
+		}
+	},
+	{
+		"name": "언니",
+		"trans": {
+			"en": ["older sister (female)"],
+			"zh-CN": ["姐姐（女性用）"],
+			"zh-TW": ["姊姊 (女性用)"],
+			"ja": ["姉 (女性用)"]
+		}
+	},
+	{
+		"name": "오빠",
+		"trans": {
+			"en": ["older brother (female)"],
+			"zh-CN": ["哥哥（女性用）"],
+			"zh-TW": ["哥哥 (女性用)"],
+			"ja": ["兄 (女性用)"]
+		}
+	},
+	{
+		"name": "누나",
+		"trans": {
+			"en": ["older sister (male)"],
+			"zh-CN": ["姐姐（男性用）"],
+			"zh-TW": ["姊姊 (男性用)"],
+			"ja": ["姉 (男性用)"]
+		}
+	},
+	{
+		"name": "형",
+		"trans": {
+			"en": ["older brother (male)"],
+			"zh-CN": ["哥哥（男性用）"],
+			"zh-TW": ["哥哥 (男性用)"],
+			"ja": ["兄 (男性用)"]
+		}
+	}
+]

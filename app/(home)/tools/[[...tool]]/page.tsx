@@ -11,7 +11,7 @@ export default async function ToolPage({
 	const tool = ((await params).tool || [])[0] as ToolName;
 	return (
 		<div
-			className={clsx("flex flex-col gap-8 w-full text-center", {
+			className={clsx("flex flex-col gap-8 w-full text-center py-8", {
 				"pt-24": tool,
 			})}
 		>

@@ -16,10 +16,13 @@ const DocsCategory = async ({ doc_path }: DocPathParams) => {
 	const buildTree = (docs: (FileItem | SubDirItem)[], path: string[] = []) => {
 		return docs.map((doc) => {
 			if ("children" in doc) {
+				const isOpen = doc.children.find(
+					(child) => child.title === formattedTitle,
+				);
 				return (
 					<li key={doc.title}>
-						<details open>
-							<summary>{doc.title}</summary>
+						<details open={!!isOpen}>
+							<summary className="font-bold">{doc.title}</summary>
 							<ul>{buildTree(doc.children, [...path, doc.title])}</ul>
 						</details>
 					</li>
@@ -41,8 +44,8 @@ const DocsCategory = async ({ doc_path }: DocPathParams) => {
 		});
 	};
 	return (
-		<nav className="self-start w-full sm:w-52 backdrop-blur-xl sm:backdrop-blur-none z-10 sm:z-0 flex-none sticky sm:block top-[--header-height] max-h-[calc(100vh-var(--header-height))] overflow-auto">
-			<div className="block sm:hidden p-3 sticky top-0 backdrop-blur-xl z-10">
+		<nav className="self-start w-full sm:w-52 mobile:backdrop-blur-lg mobile:z-10 mobile:shadow-md flex-none sticky top-[--header-height] max-h-[calc(100vh-var(--header-height))] overflow-auto">
+			<div className="block sm:hidden mobile:shadow-md p-3 sticky top-0 backdrop-blur-lg z-10">
 				<label htmlFor="category-drawer">
 					<MenuIcon className="inline-block h-6 w-6" />
 					<span className="pl-3">
@@ -59,7 +62,7 @@ const DocsCategory = async ({ doc_path }: DocPathParams) => {
 				type="checkbox"
 				className="drawer-toggle peer"
 			/>
-			<ul className="menu peer-checked:block hidden sm:block">
+			<ul className="menu peer-checked:mobile:h-[calc(75vh-var(--header-height))] peer-checked:py-[unset] peer-checked:overflow-auto mobile:py-0 mobile:h-0 mobile:flex-nowrap mobile:transition-all mobile:duration-500 mobile:overflow-hidden">
 				<li>
 					<Link
 						className={clsx("flex", { active: !formattedTitle })}

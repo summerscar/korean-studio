@@ -15,6 +15,7 @@ export interface DictItem {
 export enum Dicts {
 	popular = "popular",
 	dirty = "dirty",
+	adverb = "adverb",
 	family = "family",
 	onomatopoeia = "onomatopoeia",
 }

@@ -19,7 +19,7 @@ const DictMenu = ({
 	};
 
 	return (
-		<div className="bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1">
+		<div className="sticky top-2 z-10 bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1">
 			<div className="pl-4">
 				<ShuffleIcon
 					width={20}

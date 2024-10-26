@@ -16,6 +16,7 @@
 	"Dict": {
 		"popular": "Popular Words",
 		"dirty": "Dirty Words",
+		"adverb": "Adverb",
 		"family": "Family",
 		"onomatopoeia": "Onomatopoeia"
 	},

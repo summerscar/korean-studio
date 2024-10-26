@@ -16,46 +16,6 @@
 		}
 	},
 	{
-		"name": "사이다",
-		"trans": {
-			"en": [
-				"Literally 'cider', used in internet slang to mean 'refreshing' or 'satisfying response'."
-			],
-			"zh-CN": [
-				"字面上是“汽水”，在网络用语中表示“令人畅快”或“痛快的回应”。"
-			],
-			"zh-TW": [
-				"字面上是“汽水”，在網絡用語中表示“令人暢快”或“痛快的回應”。"
-			],
-			"ja": [
-				"文字通り「サイダー」、インターネットスラングで「爽快」または「痛快な返事」を意味します。"
-			]
-		},
-		"example": "그녀의 말은 사이다 같았어요.",
-		"exTrans": {
-			"en": ["Her words felt refreshing."],
-			"zh-CN": ["她的话让人觉得很痛快。"],
-			"zh-TW": ["她的話讓人覺得很痛快。"],
-			"ja": ["彼女の言葉は爽快だった。"]
-		}
-	},
-	{
-		"name": "갑",
-		"trans": {
-			"en": ["The best or the top."],
-			"zh-CN": ["「最棒」或「最佳」。"],
-			"zh-TW": ["『最棒』或『最佳』。"],
-			"ja": ["最高またはベスト。"]
-		},
-		"example": "오늘의 갑은 바로 너야!",
-		"exTrans": {
-			"en": ["You are the best today!"],
-			"zh-CN": ["今天最棒的人就是你！"],
-			"zh-TW": ["今天最棒的人就是你！"],
-			"ja": ["今日のベストは君だ！"]
-		}
-	},
-	{
 		"name": "덕질",
 		"trans": {
 			"en": ["Fan activities or stanning."],
@@ -69,40 +29,6 @@
 			"zh-CN": ["似乎是靠追星的乐趣在生活。"],
 			"zh-TW": ["似乎是靠追星的樂趣在生活。"],
 			"ja": ["ファン活動の楽しみで生きているようです。"]
-		}
-	},
-	{
-		"name": "인싸",
-		"trans": {
-			"en": [
-				"A social butterfly, someone who is popular and good at socializing."
-			],
-			"zh-CN": ["社交达人，形容善于社交、很受欢迎的人。"],
-			"zh-TW": ["社交達人，形容善於社交、很受歡迎的人。"],
-			"ja": ["社交的な人、人気のある人。"]
-		},
-		"example": "그는 인싸라서 친구가 많아요.",
-		"exTrans": {
-			"en": ["He is a social butterfly, so he has many friends."],
-			"zh-CN": ["他是社交达人，所以朋友很多。"],
-			"zh-TW": ["他是社交達人，所以朋友很多。"],
-			"ja": ["彼は社交的な人なので友達が多い。"]
-		}
-	},
-	{
-		"name": "아싸",
-		"trans": {
-			"en": ["An outsider, someone who does not like to socialize."],
-			"zh-CN": ["社交圈外的人，形容不喜欢社交的人。"],
-			"zh-TW": ["社交圈外的人，形容不喜歡社交的人。"],
-			"ja": ["アウトサイダー、社交が苦手な人。"]
-		},
-		"example": "저는 아싸라서 혼자 있는 게 좋아요.",
-		"exTrans": {
-			"en": ["I am an outsider, so I like being alone."],
-			"zh-CN": ["我是社交圈外的人，所以喜欢独处。"],
-			"zh-TW": ["我是社交圈外的人，所以喜歡獨處。"],
-			"ja": ["私はアウトサイダーなので一人でいるのが好きです。"]
 		}
 	},
 	{
@@ -215,6 +141,390 @@
 			"zh-CN": ["考试加油，祝你好运！"],
 			"zh-TW": ["考試加油，祝你好運！"],
 			"ja": ["試験がんばって、ファイト！"]
+		}
+	},
+	{
+		"name": "아이고",
+		"trans": {
+			"en": ["Oh my!", "Oh dear!"],
+			"zh-CN": ["哎呀（表达惊讶或无奈）"],
+			"zh-TW": ["哎呀（表达惊讶或无奈）"],
+			"ja": ["あらまあ"]
+		},
+		"example": "아이고, 정말 큰일이다!",
+		"exTrans": {
+			"en": ["Oh dear, this is really a big problem!"],
+			"zh-CN": ["哎呀，真是个大麻烦！"],
+			"zh-TW": ["哎呀，真是個大麻煩！"],
+			"ja": ["あらまあ、これは本当に大変だ！"]
+		}
+	},
+	{
+		"name": "어떡해",
+		"trans": {
+			"en": ["What should I do?"],
+			"zh-CN": ["怎么办？"],
+			"zh-TW": ["怎麼辦？"],
+			"ja": ["どうしよう？"]
+		},
+		"example": "어떡해, 이 상황을 어떻게 해결해?",
+		"exTrans": {
+			"en": ["What should I do, how can I solve this situation?"],
+			"zh-CN": ["我该怎么办，我该如何解决这个情况？"],
+			"zh-TW": ["我該怎麼辦，我該如何解決這個情況？"],
+			"ja": ["どうしよう、この状況をどう解決すればいいの？"]
+		}
+	},
+	{
+		"name": "정말",
+		"trans": {
+			"en": ["Really?"],
+			"zh-CN": ["真的？"],
+			"zh-TW": ["真的嗎？"],
+			"ja": ["本当？"]
+		},
+		"example": "정말, 이게 사실인가?",
+		"exTrans": {
+			"en": ["Really, is this true?"],
+			"zh-CN": ["真的，这是真的吗？"],
+			"zh-TW": ["真的，這是真的嗎？"],
+			"ja": ["本当に、これは本当なの？"]
+		}
+	},
+	{
+		"name": "미쳤어",
+		"trans": {
+			"en": ["Are you crazy?"],
+			"zh-CN": ["你疯了吗？"],
+			"zh-TW": ["你瘋了嗎？"],
+			"ja": ["気が狂ったの？"]
+		},
+		"example": "미쳤어? 그런 짓을 해?",
+		"exTrans": {
+			"en": ["Are you crazy? Why would you do that?"],
+			"zh-CN": ["你疯了吗？你为什么要那样做？"],
+			"zh-TW": ["你瘋了嗎？你為什麼要那樣做？"],
+			"ja": ["気が狂ったの？なんでそんなことするの？"]
+		}
+	},
+	{
+		"name": "세상에",
+		"trans": {
+			"en": ["Oh my goodness!"],
+			"zh-CN": ["天啊！"],
+			"zh-TW": ["天啊！"],
+			"ja": ["なんてこと！"]
+		},
+		"example": "세상에, 믿을 수 없어!",
+		"exTrans": {
+			"en": ["Oh my goodness, I can't believe it!"],
+			"zh-CN": ["天啊，我不敢相信！"],
+			"zh-TW": ["天啊，我不敢相信！"],
+			"ja": ["なんてこと、信じられない！"]
+		}
+	},
+	{
+		"name": "그럴 리가 없어",
+		"trans": {
+			"en": ["That can't be true!"],
+			"zh-CN": ["不可能！"],
+			"zh-TW": ["不可能！"],
+			"ja": ["そんなはずがない！"]
+		},
+		"example": "그럴 리가 없어, 그런 일이 일어날 리가 없어!",
+		"exTrans": {
+			"en": ["That can't be true, there's no way that could happen!"],
+			"zh-CN": ["不可能，绝对不可能发生！"],
+			"zh-TW": ["不可能，絕對不可能發生！"],
+			"ja": ["そんなはずがない、そんなことはあり得ない！"]
+		}
+	},
+	{
+		"name": "에이 설마",
+		"trans": {
+			"en": ["No way!"],
+			"zh-CN": ["哎，不会吧！"],
+			"zh-TW": ["哎，不會吧！"],
+			"ja": ["まさか！"]
+		},
+		"example": "에이 설마, 정말 그런 일이 일어날 리가 없어!",
+		"exTrans": {
+			"en": ["No way, there's no way something like that could happen!"],
+			"zh-CN": ["哎，不会吧，真的不会发生这样的事情！"],
+			"zh-TW": ["哎，不會吧，真的不會發生這樣的事！"],
+			"ja": ["まさか、そんなことが本当に起こるわけがない！"]
+		}
+	},
+	{
+		"name": "알았어",
+		"trans": {
+			"en": ["Got it", "I understand"],
+			"zh-CN": ["知道了", "明白了"],
+			"zh-TW": ["知道了", "明白了"],
+			"ja": ["わかった", "了解"]
+		},
+		"example": "알았어, 이제 어떻게 해야 할지 알겠어.",
+		"exTrans": {
+			"en": ["Got it, now I know what to do."],
+			"zh-CN": ["知道了，现在我知道该怎么做了。"],
+			"zh-TW": ["知道了，現在我知道該怎麼做了。"],
+			"ja": ["わかった、これからどうすればいいか分かった。"]
+		}
+	},
+	{
+		"name": "어머나",
+		"trans": {
+			"en": ["Oh my!"],
+			"zh-CN": ["哎呀！（多用于女性）"],
+			"zh-TW": ["哎呀！（多用於女性）"],
+			"ja": ["まあ！"]
+		},
+		"example": "어머나, 이건 너무 예쁘다!",
+		"exTrans": {
+			"en": ["Oh my, this is so beautiful!"],
+			"zh-CN": ["哎呀，这太美了！"],
+			"zh-TW": ["哎呀，這太美了！"],
+			"ja": ["まあ、これはとても美しい！"]
+		}
+	},
+	{
+		"name": "헐",
+		"trans": {
+			"en": ["Wow!"],
+			"zh-CN": ["天啊！（表示惊讶）"],
+			"zh-TW": ["天啊！（表示驚訝）"],
+			"ja": ["はっ！"]
+		},
+		"example": "헐, 이건 진짜 놀라워!",
+		"exTrans": {
+			"en": ["Wow, this is really amazing!"],
+			"zh-CN": ["天啊，这真是太惊人了！"],
+			"zh-TW": ["天啊，這真是太驚人了！"],
+			"ja": ["はっ、これは本当に驚くべきことだ！"]
+		}
+	},
+	{
+		"name": "어떡하지",
+		"trans": {
+			"en": ["What do I do?"],
+			"zh-CN": ["我该怎么办？"],
+			"zh-TW": ["我該怎麼辦？"],
+			"ja": ["どうしよう？"]
+		},
+		"example": "어떡하지, 도와줄 사람이 필요해.",
+		"exTrans": {
+			"en": ["What do I do, I need someone to help me."],
+			"zh-CN": ["我该怎么办，我需要有人来帮助我。"],
+			"zh-TW": ["我該怎麼辦，我需要有人幫助我。"],
+			"ja": ["どうしよう、助けてくれる人が必要だ。"]
+		}
+	},
+	{
+		"name": "대단해",
+		"trans": {
+			"en": ["Wow, amazing!"],
+			"zh-CN": ["好厉害！"],
+			"zh-TW": ["好厲害！"],
+			"ja": ["すごい！"]
+		},
+		"example": "대단해, 이런 걸 할 수 있다니!",
+		"exTrans": {
+			"en": ["Wow, I can't believe you can do this!"],
+			"zh-CN": ["好厉害，居然能做到这个！"],
+			"zh-TW": ["好厲害，居然能做到這個！"],
+			"ja": ["すごい、こんなことができるなんて！"]
+		}
+	},
+	{
+		"name": "몰라",
+		"trans": {
+			"en": ["I don’t know!"],
+			"zh-CN": ["不知道！"],
+			"zh-TW": ["不知道！"],
+			"ja": ["わからない！"]
+		},
+		"example": "몰라, 그에 대해 전혀 몰라.",
+		"exTrans": {
+			"en": ["I don't know, I have no idea about that."],
+			"zh-CN": ["我不知道，我对那完全没有了解。"],
+			"zh-TW": ["我不知道，我對那完全沒有了解。"],
+			"ja": ["わからない、それについて全く知らない。"]
+		}
+	},
+	{
+		"name": "힘내",
+		"trans": {
+			"en": ["Cheer up!"],
+			"zh-CN": ["加油！"],
+			"zh-TW": ["加油！"],
+			"ja": ["頑張って！"]
+		},
+		"example": "힘내, 힘든 시간이 지나갈 거야.",
+		"exTrans": {
+			"en": ["Cheer up, this tough time will pass."],
+			"zh-CN": ["加油，这段艰难的时间会过去。"],
+			"zh-TW": ["加油，這段艱難的時間會過去。"],
+			"ja": ["頑張って、この厳しい時期は過ぎ去るよ。"]
+		}
+	},
+	{
+		"name": "믿을 수 없어",
+		"trans": {
+			"en": ["I can't believe it!"],
+			"zh-CN": ["不敢相信！"],
+			"zh-TW": ["不敢相信！"],
+			"ja": ["信じられない！"]
+		},
+		"example": "믿을 수 없어, 이렇게 좋은 일이 생길 수 있어?",
+		"exTrans": {
+			"en": ["I can't believe it, can something this good really happen?"],
+			"zh-CN": ["不敢相信，这么好的事情真的会发生吗？"],
+			"zh-TW": ["不敢相信，這麼好的事情真的會發生嗎？"],
+			"ja": ["信じられない、こんなに良いことが本当に起こるの？"]
+		}
+	},
+	{
+		"name": "그러게 말이야",
+		"trans": {
+			"en": ["That's what I'm saying!"],
+			"zh-CN": ["就是啊！"],
+			"zh-TW": ["就是啊！"],
+			"ja": ["その通りだ！"]
+		},
+		"example": "그러게 말이야, 나도 그렇게 생각했어.",
+		"exTrans": {
+			"en": ["That's what I'm saying, I thought the same!"],
+			"zh-CN": ["就是啊，我也是这样想的！"],
+			"zh-TW": ["就是啊，我也是這樣想的！"],
+			"ja": ["その通り、私もそう思った！"]
+		}
+	},
+	{
+		"name": "너무해",
+		"trans": {
+			"en": ["That's too much!"],
+			"zh-CN": ["太过分了！"],
+			"zh-TW": ["太過分了！"],
+			"ja": ["ひどい！"]
+		},
+		"example": "너무해, 나한테 그런 말을 해?",
+		"exTrans": {
+			"en": ["That's too much, are you really saying that to me?"],
+			"zh-CN": ["太过分了，你真的对我说那样的话？"],
+			"zh-TW": ["太過分了，你真的對我說那樣的話嗎？"],
+			"ja": ["ひどい、私にそんなこと言うの？"]
+		}
+	},
+	{
+		"name": "뭐라고",
+		"trans": {
+			"en": ["What did you say?"],
+			"zh-CN": ["你说什么？"],
+			"zh-TW": ["你說什麼？"],
+			"ja": ["何だって？"]
+		},
+		"example": "뭐라고? 다시 한 번 말해봐.",
+		"exTrans": {
+			"en": ["What did you say? Say it again."],
+			"zh-CN": ["你说什么？再说一遍。"],
+			"zh-TW": ["你說什麼？再說一次。"],
+			"ja": ["何だって？もう一度言って。"]
+		}
+	},
+	{
+		"name": "그만해",
+		"trans": {
+			"en": ["Stop it!"],
+			"zh-CN": ["停下！"],
+			"zh-TW": ["停下！"],
+			"ja": ["やめて！"]
+		},
+		"example": "그만해, 더는 듣고 싶지 않아!",
+		"exTrans": {
+			"en": ["Stop it, I don't want to hear any more!"],
+			"zh-CN": ["停下，我不想再听了！"],
+			"zh-TW": ["停下，我不想再聽了！"],
+			"ja": ["やめて、もう聞きたくない！"]
+		}
+	},
+	{
+		"name": "어쩔 수 없어",
+		"trans": {
+			"en": ["It can't be helped"],
+			"zh-CN": ["没办法"],
+			"zh-TW": ["沒辦法"],
+			"ja": ["仕方がない"]
+		},
+		"example": "어쩔 수 없어, 이렇게 된 거야.",
+		"exTrans": {
+			"en": ["It can't be helped, it has come to this."],
+			"zh-CN": ["没办法，事情就是这样。"],
+			"zh-TW": ["沒辦法，事情就是這樣。"],
+			"ja": ["仕方がない、こうなってしまった。"]
+		}
+	},
+	{
+		"name": "귀찮아",
+		"trans": {
+			"en": ["Annoying", "I'm tired of this"],
+			"zh-CN": ["好烦"],
+			"zh-TW": ["好煩"],
+			"ja": ["面倒くさい"]
+		},
+		"example": "귀찮아, 왜 이렇게 힘들어야 해?",
+		"exTrans": {
+			"en": ["This is annoying, why does it have to be so hard?"],
+			"zh-CN": ["好烦，为什么这么难？"],
+			"zh-TW": ["好煩，為什麼這麼難？"],
+			"ja": ["面倒くさい、どうしてこんなに大変なの？"]
+		}
+	},
+	{
+		"name": "거짓말이지",
+		"trans": {
+			"en": ["You're lying, right?"],
+			"zh-CN": ["是假的吧？"],
+			"zh-TW": ["是假的吧？"],
+			"ja": ["嘘でしょ？"]
+		},
+		"example": "거짓말이지, 이렇게 잘 될 수는 없어.",
+		"exTrans": {
+			"en": ["You're lying, right? It can't be this good."],
+			"zh-CN": ["是假的吧？不可能这么好。"],
+			"zh-TW": ["是假的吧？不可能這麼好。"],
+			"ja": ["嘘でしょ？こんなにうまくいくわけがない。"]
+		}
+	},
+	{
+		"name": "됐어",
+		"trans": {
+			"en": ["Forget it!"],
+			"zh-CN": ["算了！"],
+			"zh-TW": ["算了！"],
+			"ja": ["もういい！"]
+		},
+		"example": "됐어, 더 이상 이야기하지 말자.",
+		"exTrans": {
+			"en": ["Forget it, let's not talk about it anymore."],
+			"zh-CN": ["算了，我们不再谈论这个了。"],
+			"zh-TW": ["算了，我們不再談論這個了。"],
+			"ja": ["もういい、これ以上話さないでおこう。"]
+		}
+	},
+	{
+		"name": "신경 쓰지 마",
+		"trans": {
+			"en": ["Don't worry about me"],
+			"zh-CN": ["别管我"],
+			"zh-TW": ["別管我"],
+			"ja": ["気にしないで"]
+		},
+		"example": "신경 쓰지 마, 나는 괜찮아.",
+		"exTrans": {
+			"en": ["Don't worry about me, I'm fine."],
+			"zh-CN": ["别管我，我没事。"],
+			"zh-TW": ["別管我，我沒事。"],
+			"ja": ["気にしないで、私は大丈夫。"]
 		}
 	},
 	{

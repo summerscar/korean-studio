@@ -5,7 +5,7 @@ import { TOCWrapper } from "./markdown-wrapper";
 const Toc = ({ toc }: { toc: TocItem[] }) => {
 	const trimTitle = (str: string) => str.replace(/[:：]$/, "");
 	return (
-		<TOCWrapper>
+		<TOCWrapper toc={toc}>
 			{toc.map((item) => (
 				<a
 					href={item.href}

@@ -5,7 +5,6 @@ import { components } from "@/components/markdown-render";
 import type { Levels } from "@/types";
 import { fromHtmlIsomorphic } from "hast-util-from-html-isomorphic";
 import { compileMDX } from "next-mdx-remote/rsc";
-import { unstable_cache } from "next/cache";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -13,7 +12,7 @@ import rehypeSlug from "rehype-slug";
 import remarkFlexibleToc, { type TocItem } from "remark-flexible-toc";
 import remarkGfm from "remark-gfm";
 
-const loadMDXData = unstable_cache(async (level: Levels, title: string) => {
+const loadMDXData = async (level: Levels, title: string) => {
 	const root = path.resolve();
 	const mdxPath = path.join(root, "mdx", level, `${title}.mdx`);
 	const mdPath = path.join(root, "mdx", level, `${title}.md`);
@@ -29,7 +28,7 @@ const loadMDXData = unstable_cache(async (level: Levels, title: string) => {
 
 	const data = await readFile(filePath, { encoding: "utf-8" });
 	return data;
-});
+};
 
 export const loadMDX = cache(async (level: Levels, title: string) => {
 	const toc: TocItem[] = [];

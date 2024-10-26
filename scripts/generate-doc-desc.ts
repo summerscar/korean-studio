@@ -19,13 +19,15 @@ envConfig({ path: ["./.env", "./.env.local"] });
 	const docsNeedToGenerateDescription = docs.filter((doc) => {
 		const docString = readFileSync(doc.path, "utf-8");
 		doc.content = docString;
-		const description = docString.match(/description: (.*)/)?.[1];
-		return description && description.length < DESC_MIN_LENGTH;
+		const description = docString.match(/description:(.*)/)?.[1];
+		return description !== undefined && description.length < DESC_MIN_LENGTH;
 	});
 
 	console.log(
 		"[generate-doc-desc]: start...\n",
-		docsNeedToGenerateDescription.map((doc) => `【${doc.title}】`).join("\n"),
+		docsNeedToGenerateDescription
+			.map((doc) => `【${doc.title}】...`)
+			.join("\n"),
 		"\namount: ",
 		docsNeedToGenerateDescription.length,
 	);
@@ -36,7 +38,7 @@ envConfig({ path: ["./.env", "./.env.local"] });
 			console.log("[generate-doc-desc][title][", doc.title, "]: ", description);
 			// 将 description 写入 frontmatter
 			const newDocString = doc.content.replace(
-				/description: (.*)/,
+				/description:(.*)/,
 				`description: ${description}`,
 			);
 			writeFileSync(doc.path, newDocString, "utf-8");

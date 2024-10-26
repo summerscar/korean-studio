@@ -16,19 +16,19 @@ export async function generateMetadata(props: {
 	const t = await getServerI18n("Header");
 	const level = params.doc_path[0] as Levels;
 
+	if (params.doc_path.length <= 1) return { title: t(level) };
+
+	const docData = await loadMDX(
+		level,
+		params.doc_path.slice(1).map(decodeURIComponent).join("/"),
+	);
 	const title =
-		params.doc_path.length > 1
-			? ((
-					await loadMDX(
-						level,
-						params.doc_path.slice(1).map(decodeURIComponent).join("/"),
-					)
-				)[0].frontmatter.title as string) ||
-				decodeURIComponent(params.doc_path.pop() || "")
-			: t(level);
+		(docData[0].frontmatter.title as string) ||
+		decodeURIComponent(params.doc_path.pop() || "");
 
 	return {
 		title,
+		description: docData[0].frontmatter.description as string,
 	};
 }
 

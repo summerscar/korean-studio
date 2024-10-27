@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { Levels } from "@/types";
 import {
 	type FileItem,
 	_listAllDocs as _listAllDocsByLevel,
@@ -10,10 +11,8 @@ envConfig({ path: ["./.env", "./.env.local"] });
 
 (async () => {
 	const DESC_MIN_LENGTH = 10;
-	const levels = ["beginner", "intermediate"];
-	const docs = (
-		await Promise.all(levels.map((level) => listAllDocsByLevel(level)))
-	).flat();
+
+	const docs = await flattenAllDocs();
 	// console.log("[generate-doc-desc]: \n", docs);
 	// 筛序出文档中的 frontmatter 的 description 部分少于 DESC_MIN_LENGTH 个字的
 	const docsNeedToGenerateDescription = docs.filter((doc) => {
@@ -33,6 +32,7 @@ envConfig({ path: ["./.env", "./.env.local"] });
 	);
 	await Promise.all(
 		docsNeedToGenerateDescription.map(async (doc) => {
+			if (doc.content === undefined) return;
 			const description = await fetchChatCompletion(doc.content);
 			if (!description) return;
 			console.log("[generate-doc-desc][title][", doc.title, "]: ", description);
@@ -48,6 +48,14 @@ envConfig({ path: ["./.env", "./.env.local"] });
 	console.log("[generate-doc-desc][all]: success!");
 })();
 
+export async function flattenAllDocs() {
+	const levels = [Levels.Beginner, Levels.Intermediate];
+
+	return (
+		await Promise.all(levels.map((level) => listAllDocsByLevel(level)))
+	).flat();
+}
+
 async function listAllDocsByLevel(level: string) {
 	const docs = await _listAllDocsByLevel(level);
 	const flattenDocs = docs
@@ -61,8 +69,7 @@ async function listAllDocsByLevel(level: string) {
 			return {
 				title: doc.title,
 				path: join(process.cwd(), "mdx", level, (doc as FileItem).relativePath),
-				content: "",
-			};
+			} as { title: string; path: string; content?: string };
 		});
 	return flattenDocs;
 }

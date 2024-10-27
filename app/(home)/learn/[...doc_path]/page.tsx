@@ -75,7 +75,7 @@ export default async function Page(props: { params: Promise<DocPathParams> }) {
 	const docPathString = docPath.slice(1).map(decodeURIComponent).join("/");
 	const [mdx, toc] = await loadMDX(level, docPathString || "_intro");
 	const lastModified = new Date(
-		Number((mdx.frontmatter["last-modified"] as string) || 0) * 1000,
+		Number((mdx.frontmatter["last-modified"] as string) || 0),
 	).toUTCString();
 
 	isDev && (await timeOut(500));

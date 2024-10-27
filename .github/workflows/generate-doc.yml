@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Install dependencies
         run: npm install
@@ -22,4 +20,4 @@ jobs:
       - name: Commit docs-desc
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "📃 docs(description): generate description by chatGPT"
+          commit_message: "📃 docs(description): Generate description by chatGPT"

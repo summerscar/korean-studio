@@ -25,7 +25,7 @@ import { flattenAllDocs, insertOrUpdateFrontmatterKey } from "./list-all-docs";
 		console.log(
 			`[generate-doc-last-modified]: ${doc.title} -> ${frontmatterKey}: ${doc.lastModified} ${new Date(
 				Number(doc.lastModified) * 1000,
-			).toLocaleString("zh-CN")}`,
+			).toLocaleString()}`,
 		);
 	});
 	// console.log("[generate-doc-last-modification]: \n", docsWithLastModification);

@@ -10,7 +10,9 @@ export interface DirItem {
 
 export interface FileItem extends DirItem {
 	file: string;
+	fileName: string;
 	relativePath: string;
+	relativeUrl: string;
 }
 export interface SubDirItem extends DirItem {
 	children: (SubDirItem | FileItem)[];
@@ -48,11 +50,13 @@ const _listAllDocs = async (level: string) => {
 			files.map(async (file) => {
 				const filePath = path.join(dir, file);
 				const data = await readFile(filePath, { encoding: "utf-8" });
-
+				const fileName = file.replace(/\.mdx?/, "");
 				return {
 					file: file,
+					fileName,
+					relativeUrl: path.join(level, ...walkPath, fileName),
 					relativePath: path.join(...walkPath, file),
-					title: data.match(/title: (.*)/)?.[1] || file,
+					title: data.match(/title: (.*)/)?.[1] || fileName,
 					date: data.match(/date: (\d{4}-\d{2}-\d{2})/)?.[1] || "0",
 				};
 			}),

@@ -17,7 +17,7 @@ const DocsCategory = async ({ doc_path }: DocPathParams) => {
 		return docs.map((doc) => {
 			if ("children" in doc) {
 				const isOpen = doc.children.find(
-					(child) => child.title === formattedTitle,
+					(child) => (child as FileItem).fileName === formattedTitle,
 				);
 				return (
 					<li key={doc.title}>
@@ -28,13 +28,13 @@ const DocsCategory = async ({ doc_path }: DocPathParams) => {
 					</li>
 				);
 			}
-			const docFileTitle = doc.file.replace(/\.mdx?/, "");
+
 			return (
 				<li key={doc.title}>
 					<Link
-						href={`/${path.join("/")}/${docFileTitle}`}
+						href={`/${path.join("/")}/${doc.fileName}`}
 						className={clsx("flex", {
-							active: formattedTitle === docFileTitle,
+							active: formattedTitle === doc.fileName,
 						})}
 					>
 						{doc.title}

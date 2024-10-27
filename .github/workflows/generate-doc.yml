@@ -1,5 +1,5 @@
-name: Generate doc description
-run-name: Generate doc description
+name: Generate doc
+run-name: Generate doc
 on: [push]
 jobs:
   update-doc:
@@ -14,7 +14,7 @@ jobs:
       - name: Run script:docs
         run: |
           npm install
-          npm run script:docs
+          npm run script:docs-desc
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:

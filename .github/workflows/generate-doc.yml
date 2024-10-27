@@ -9,13 +9,25 @@ jobs:
       GPT_KEY: ${{ secrets.GPT_KEY }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Run script:docs
-        run: |
-          npm install
-          npm run script:docs-desc
-
-      - uses: stefanzweifel/git-auto-commit-action@v4
+        uses: actions/checkout@v4
         with:
-          commit_message: "📃 docs(content): edit by chatGPT"
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run script:docs-desc
+        run: npm run script:docs-desc
+
+      - name: Commit docs-desc
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "📃 docs(description): generate description by chatGPT"
+
+      - name: Run script:docs-modified
+        run: npm run script:docs-modified
+
+      - name: Commit docs-modified
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "📃 docs(last-modified): update doc last-modified"

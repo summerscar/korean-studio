@@ -2,8 +2,14 @@
 import { type ReactNode, useEffect, useState } from "react";
 import type { TocItem } from "remark-flexible-toc";
 
-const MDContentWrapper = ({ children }: { children: ReactNode }) => (
-	<article className="markdown-body p-8 border-r-2 border-slate-900/10 flex-auto">
+const MDContentWrapper = ({
+	children,
+	lastModified,
+}: { children: ReactNode; lastModified?: string }) => (
+	<article
+		data-last-modified={lastModified}
+		className="markdown-body p-8 border-r-2 border-slate-900/10 flex-auto"
+	>
 		{children}
 	</article>
 );

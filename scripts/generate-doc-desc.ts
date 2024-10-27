@@ -1,19 +1,12 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
-import { Levels } from "@/types";
-import {
-	type FileItem,
-	_listAllDocs as _listAllDocsByLevel,
-} from "@/utils/list-docs";
-import { config as envConfig } from "dotenv";
-import OpenAI from "openai";
-envConfig({ path: ["./.env", "./.env.local"] });
+import { _listAllDocs as _listAllDocsByLevel } from "@/utils/list-docs";
+import { flattenAllDocs, insertOrUpdateFrontmatterKey } from "./list-all-docs";
+import { fetchChatCompletion } from "./open-ai";
 
 (async () => {
 	const DESC_MIN_LENGTH = 10;
 
 	const docs = await flattenAllDocs();
-	// console.log("[generate-doc-desc]: \n", docs);
 	// 筛序出文档中的 frontmatter 的 description 部分少于 DESC_MIN_LENGTH 个字的
 	const docsNeedToGenerateDescription = docs.filter((doc) => {
 		const docString = readFileSync(doc.path, "utf-8");
@@ -22,24 +15,39 @@ envConfig({ path: ["./.env", "./.env.local"] });
 		return description !== undefined && description.length < DESC_MIN_LENGTH;
 	});
 
+	console.log("[generate-doc-desc]: start...");
 	console.log(
-		"[generate-doc-desc]: start...\n",
-		docsNeedToGenerateDescription
-			.map((doc) => `【${doc.title}】...`)
-			.join("\n"),
-		"\namount: ",
-		docsNeedToGenerateDescription.length,
+		docsNeedToGenerateDescription.map((doc) => `[${doc.title}]...`).join("\n"),
 	);
+	console.log("[generate-doc-desc][find]: ↑↑↑↑↑↑↑↑↑↑↑↑");
 	await Promise.all(
 		docsNeedToGenerateDescription.map(async (doc) => {
 			if (doc.content === undefined) return;
-			const description = await fetchChatCompletion(doc.content);
+
+			console.log("[generate-doc-desc][title][", doc.title, "]: generate...");
+			const description = await fetchChatCompletion([
+				{
+					role: "user",
+					content:
+						"我将发你一份韩语学习相关教程，你将总结这份教程，生成的描述，控制在20-100个字。",
+				},
+				{
+					role: "user",
+					content: doc.content,
+				},
+			]);
 			if (!description) return;
-			console.log("[generate-doc-desc][title][", doc.title, "]: ", description);
+			console.log(
+				"[generate-doc-desc][title][",
+				doc.title,
+				"][update]: ",
+				description,
+			);
 			// 将 description 写入 frontmatter
-			const newDocString = doc.content.replace(
-				/description:(.*)/,
-				`description: ${description}`,
+			const newDocString = insertOrUpdateFrontmatterKey(
+				doc.content,
+				"description",
+				description,
 			);
 			writeFileSync(doc.path, newDocString, "utf-8");
 			console.log("[generate-doc-desc][title][", doc.title, "]: success!");
@@ -47,53 +55,3 @@ envConfig({ path: ["./.env", "./.env.local"] });
 	);
 	console.log("[generate-doc-desc][all]: success!");
 })();
-
-export async function flattenAllDocs() {
-	const levels = [Levels.Beginner, Levels.Intermediate];
-
-	return (
-		await Promise.all(levels.map((level) => listAllDocsByLevel(level)))
-	).flat();
-}
-
-async function listAllDocsByLevel(level: string) {
-	const docs = await _listAllDocsByLevel(level);
-	const flattenDocs = docs
-		.flatMap((doc) => {
-			if ("children" in doc) {
-				return doc.children;
-			}
-			return doc;
-		})
-		.map((doc) => {
-			return {
-				title: doc.title,
-				path: join(process.cwd(), "mdx", level, (doc as FileItem).relativePath),
-			} as { title: string; path: string; content?: string };
-		});
-	return flattenDocs;
-}
-
-const openai = new OpenAI({
-	apiKey: process.env.GPT_KEY,
-	baseURL: process.env.GPT_URL,
-});
-
-async function fetchChatCompletion(docContent: string) {
-	const result = await openai.chat.completions.create({
-		model: "gpt-3.5-turbo",
-		messages: [
-			{
-				role: "user",
-				content:
-					"我将发你一份韩语学习相关教程，你将总结这份教程，生成的描述，控制在20-100个字。",
-			},
-			{
-				role: "user",
-				content: docContent,
-			},
-		],
-	});
-	console.log(`[chatGPT]: use ${result.usage?.total_tokens} tokens.`);
-	return result.choices[0].message.content;
-}

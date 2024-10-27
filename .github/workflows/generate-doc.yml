@@ -20,14 +20,6 @@ jobs:
         run: npm run script:docs-desc
 
       - name: Commit docs-desc
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "📃 docs(description): generate description by chatGPT"
-
-      - name: Run script:docs-modified
-        run: npm run script:docs-modified
-
-      - name: Commit docs-modified
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "📃 docs(last-modified): update doc last-modified"
+          commit_message: "📃 docs(description): generate description by chatGPT"

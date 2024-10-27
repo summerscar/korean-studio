@@ -5,12 +5,14 @@ import type { TocItem } from "remark-flexible-toc";
 const MDContentWrapper = ({
 	children,
 	lastModified,
-}: { children: ReactNode; lastModified?: string }) => (
+	bottomNav,
+}: { children: ReactNode; lastModified?: string; bottomNav?: ReactNode }) => (
 	<article
 		data-last-modified={lastModified}
-		className="markdown-body p-8 border-r-2 border-slate-900/10 flex-auto"
+		className="p-8 border-r-2 border-slate-900/10 flex-auto"
 	>
-		{children}
+		<div className="markdown-body">{children}</div>
+		{bottomNav}
 	</article>
 );
 

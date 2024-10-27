@@ -1,3 +1,5 @@
+import NextIcon from "@/assets/svg/next.svg";
+import PrevIcon from "@/assets/svg/prev.svg";
 import { type DocPathParams, Levels } from "@/types";
 import { getServerI18n } from "@/utils/i18n";
 import { isDev } from "@/utils/is-dev";
@@ -5,6 +7,7 @@ import { type FileItem, listAllDocs } from "@/utils/list-docs";
 import { loadMDX } from "@/utils/load-mdx";
 import { timeOut } from "@/utils/time-out";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { MDContentWrapper } from "./_components/markdown-wrapper";
 import { Toc } from "./_components/toc";
@@ -44,11 +47,7 @@ export async function generateStaticParams() {
 					}
 					return doc;
 				})
-				.map((doc) =>
-					`${level}/${(doc as FileItem).relativePath}`
-						.replace(/\.mdx?/, "")
-						.split("/"),
-				);
+				.map((doc) => (doc as FileItem).relativeUrl.split("/"));
 			return flatten;
 		}),
 	);
@@ -73,17 +72,60 @@ export default async function Page(props: { params: Promise<DocPathParams> }) {
 
 	const { doc_path: docPath } = params;
 	const docPathString = docPath.slice(1).map(decodeURIComponent).join("/");
+	const docs = (await listAllDocs(level)).flatMap((doc) => {
+		if ("children" in doc) {
+			return doc.children;
+		}
+		return doc;
+	}) as FileItem[];
 	const [mdx, toc] = await loadMDX(level, docPathString || "_intro");
+
 	const lastModified = new Date(
 		Number((mdx.frontmatter["last-modified"] as string) || 0),
 	).toUTCString();
 
+	const targetDocIndex = docs.findIndex(
+		(doc) => doc.title === (mdx.frontmatter.title as string),
+	);
+	const prevDoc = docs[targetDocIndex - 1];
+	const nextDoc = docs[targetDocIndex + 1];
+
 	isDev && (await timeOut(500));
+
+	const bottomNav = (
+		<div className="flex justify-between pt-2">
+			<div>
+				{prevDoc && (
+					<Link
+						prefetch
+						href={`/learn/${prevDoc.relativeUrl}`}
+						className="btn glass btn-md gap-3"
+					>
+						<PrevIcon className="w-4 h-4" />
+						{prevDoc.title}
+					</Link>
+				)}
+			</div>
+			<div>
+				{nextDoc && (
+					<Link
+						prefetch
+						href={`/learn/${nextDoc.relativeUrl}`}
+						className="btn glass btn-md gap-3"
+					>
+						{nextDoc.title}
+						<NextIcon className="w-4 h-4" />
+					</Link>
+				)}
+			</div>
+		</div>
+	);
 
 	return (
 		<>
-			<MDContentWrapper lastModified={lastModified}>
+			<MDContentWrapper lastModified={lastModified} bottomNav={bottomNav}>
 				{mdx.content}
+				<div className="divider" />
 			</MDContentWrapper>
 			<Toc toc={toc} />
 		</>

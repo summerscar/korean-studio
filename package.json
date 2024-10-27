@@ -18,7 +18,7 @@
 		"prepare": "husky",
 		"lint-staged": "lint-staged",
 		"script:docs-desc": "tsx scripts/generate-doc-desc.ts",
-		"script:docs-modify": "tsx scripts/generate-doc-last-modification.ts"
+		"script:docs-modified": "tsx scripts/generate-doc-last-modified.ts"
 	},
 	"dependencies": {
 		"@keystone-6/auth": "^8.0.0",

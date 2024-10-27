@@ -119,7 +119,8 @@
 		],
 		"*": [
 			"biome check --no-errors-on-unmatched --files-ignore-unknown=true"
-		]
+		],
+		"*.{mdx,md}": ["npm run script:docs-modified"]
 	},
 	"volta": {
 		"node": "20.17.0"

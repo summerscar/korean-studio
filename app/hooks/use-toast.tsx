@@ -81,7 +81,7 @@ const ToastForCallable = ({
 };
 
 const { call, Root } = createCallable<
-	{ type: string; message: string },
+	{ type: "success" | "error" | "info" | "warning"; message: string },
 	string
 >(ToastForCallable);
 

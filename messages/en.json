@@ -18,7 +18,8 @@
 		"dirty": "Dirty Words",
 		"adverb": "Adverb",
 		"family": "Family",
-		"onomatopoeia": "Onomatopoeia"
+		"onomatopoeia": "Onomatopoeia",
+		"_local": "My Words"
 	},
 	"Tools": {
 		"description": "Korean text tools: standardize pronunciation, romanize, assemble, disassemble",

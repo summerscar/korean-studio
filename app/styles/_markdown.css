@@ -18,23 +18,13 @@
 	h1, h2, h3, h4, h5, h6 {
 		position: relative;
 		a {
-			position: absolute;
-			top: 50%;
-			left: -22px;
-			display: flex;
-			width: 20px;
-			height: 20px;
-			margin: auto;
+			@apply absolute top-1/2 left-[-22px] flex w-5 h-5 m-auto rounded-md opacity-0 justify-center items-center -translate-y-2/4;
 			border-radius: var(--borderRadius-medium);
-			opacity: 0;
-			justify-content: center;
-			align-items: center;
-			transform: translateY(-50%);
 			color: theme(colors.base-content);
 		}
 		&:hover {
 			a {
-				opacity: 1;
+				@apply opacity-100
 			}
 		}
 	}

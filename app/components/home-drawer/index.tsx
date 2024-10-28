@@ -82,14 +82,19 @@ const HomeDrawer = ({
 							{dict.map((item, index) => (
 								<li
 									key={item.name}
-									className={clsx("cursor-pointer relative group")}
+									className={clsx(
+										"cursor-pointer relative group mb-1 last:mb-0",
+									)}
 								>
 									<div
-										className={clsx({
+										className={clsx("block", {
 											active: index === curWordIndex,
 										})}
 									>
-										<div className="contents" onClick={() => onClick(index)}>
+										<div
+											className="grid grid-flow-col"
+											onClick={() => onClick(index)}
+										>
 											<span>
 												{index + 1}. {item.name}
 											</span>

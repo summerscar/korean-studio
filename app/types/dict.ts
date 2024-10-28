@@ -18,7 +18,10 @@ export enum Dicts {
 	adverb = "adverb",
 	family = "family",
 	onomatopoeia = "onomatopoeia",
+	user = "_local",
 }
+
+export const dictList = Object.values(Dicts);
 
 export const DEFAULT_DICT = Dicts.popular;
 

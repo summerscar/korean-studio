@@ -11,7 +11,7 @@ export const client = () => new GraphQLClient(parseURL("/api/graphql"));
 
 /** server api */
 export const fetchDict = async (
-	target: keyof typeof Dicts = DEFAULT_DICT,
+	target: Dicts = DEFAULT_DICT,
 ): Promise<Dict> => {
 	return await (
 		await fetch(parseURL(`/dicts/${target}.json`), {

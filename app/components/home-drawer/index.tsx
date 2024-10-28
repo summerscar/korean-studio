@@ -14,6 +14,7 @@ const HomeDrawer = ({
 	curWordIndex,
 	onClick,
 	onShuffle,
+	onUserDictUpdate,
 	drawerRef,
 }: {
 	dict: Dict;
@@ -21,6 +22,7 @@ const HomeDrawer = ({
 	onClick: (index: number) => void;
 	drawerRef: React.RefObject<{ open: () => void }>;
 	onShuffle: () => void;
+	onUserDictUpdate: () => void;
 }) => {
 	const locale = useLocale();
 	const controllerRef = useRef<HTMLInputElement>(null);
@@ -65,7 +67,10 @@ const HomeDrawer = ({
 							className="drawer-overlay"
 						/>
 						<ul className="menu bg-base-100 text-base-content min-h-full w-80 p-4">
-							<DictMenu onShuffle={onShuffle} />
+							<DictMenu
+								onShuffle={onShuffle}
+								onUserDictUpdate={onUserDictUpdate}
+							/>
 							{/* Sidebar content here */}
 							{dict.map((item, index) => (
 								<li

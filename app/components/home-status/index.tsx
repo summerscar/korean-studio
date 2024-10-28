@@ -9,7 +9,7 @@ import { DictNav } from "@/components/dict-nav";
 import { HomeDrawer } from "@/components/home-drawer";
 import { HomeInput } from "@/components/home-input";
 import { Pronunciation } from "@/components/pronunciation";
-import type { Dict } from "@/types/dict";
+import { type Dict, Dicts } from "@/types/dict";
 import type { Tran } from "@/types/dict";
 import { useInputAudioEffect } from "@/utils/audio";
 import { playConfetti } from "@/utils/confetti";
@@ -30,6 +30,7 @@ import { myeongjo, notoKR } from "@/utils/fonts";
 import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
 import { shuffleArr } from "@/utils/shuffle-array";
+import { getUserDict } from "@/utils/user-dict";
 import { useEventListener, useLatest, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { disassemble, romanize, standardizePronunciation } from "es-hangul";
@@ -70,9 +71,19 @@ const HomeStatus = ({
 		handleInputFocus: () => {},
 	});
 
+	const setUserDict = useMemoizedFn(() => {
+		const userDict = getUserDict();
+		setDict(userDict);
+	});
+
 	useEffect(() => {
+		const searchParams = new URLSearchParams(window.location.search);
+		if (searchParams.get("dict") === Dicts.user) {
+			setUserDict();
+			return;
+		}
 		setDict(originalDict);
-	}, [originalDict]);
+	}, [originalDict, setUserDict]);
 
 	const shuffleDict = useMemoizedFn(() => {
 		setDict((prev) => shuffleArr(prev));
@@ -459,6 +470,7 @@ const HomeStatus = ({
 				curWordIndex={curWordIndex}
 				onClick={skipToNextWord}
 				onShuffle={shuffleDict}
+				onUserDictUpdate={setUserDict}
 			/>
 		</Wrapper>
 	);

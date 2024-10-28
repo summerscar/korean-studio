@@ -3,6 +3,7 @@ import { getServerI18n } from "@/utils/i18n";
 import { auth } from "auth";
 import Link from "next/link";
 import { ActiveLinks } from "./_component/active-links";
+import { MobileMenu } from "./_component/mobile-menu";
 import { Progress } from "./_component/progress";
 
 export const headerConfig = (t: Awaited<ReturnType<typeof getServerI18n>>) => [
@@ -29,12 +30,12 @@ const Header = async () => {
 	const t = await getServerI18n("Header");
 
 	return (
-		<header className="sticky top-0 h-[--header-height] flex border-b border-slate-900/10 w-full backdrop-blur-lg select-none bg-slate-300/10 text-base-content z-10">
+		<header className="before-backdrop-shadow sticky top-0 h-[--header-height] flex border-b border-slate-900/10 w-full select-none bg-slate-300/10 text-base-content z-20 before:">
 			<div className="w-full px-4 flex justify-between items-center">
 				<Link href="/">
 					<HomeIcon width={32} height={32} viewBox="0 0 24 24" />
 				</Link>
-				<div className="flex items-center">
+				<div className="flex items-center mobile:hidden">
 					{<ActiveLinks links={headerConfig(t)} />}
 					<span>
 						{session ? (
@@ -48,6 +49,9 @@ const Header = async () => {
 							<Link href="/api/auth/signin">Sign In</Link>
 						)}
 					</span>
+				</div>
+				<div className="hidden mobile:block">
+					<MobileMenu links={headerConfig(t)} session={session} />
 				</div>
 			</div>
 			<Progress />

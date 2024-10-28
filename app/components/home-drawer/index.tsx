@@ -42,7 +42,7 @@ const HomeDrawer = ({
 	return (
 		<ClientOnly>
 			{createPortal(
-				<div className="drawer drawer-end z-20">
+				<div className="drawer drawer-end z-30">
 					<input
 						ref={controllerRef}
 						id="my-drawer-4"

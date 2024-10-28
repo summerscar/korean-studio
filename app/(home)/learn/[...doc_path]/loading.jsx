@@ -1,5 +1,4 @@
 import { MDContentWrapper, TOCWrapper } from "./_components/markdown-wrapper";
-import { Toc } from "./_components/toc";
 
 export default function Loading() {
 	return (

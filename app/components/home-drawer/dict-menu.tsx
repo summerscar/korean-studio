@@ -29,10 +29,15 @@ const DictMenu = ({
 		const word = prompt("Enter new word", "좋아요");
 		if (word) {
 			callToast({ type: "info", message: "Generating word..." });
-			const result = await generateWordAction(word);
-			result && addUserDict(JSON.parse(result));
-			onUserDictUpdate?.();
-			callToast({ type: "success", message: "Generated Success!" });
+			try {
+				const result = await generateWordAction(word);
+				result && addUserDict(JSON.parse(result));
+				onUserDictUpdate?.();
+				callToast({ type: "success", message: "Generated Success!" });
+			} catch (error) {
+				console.error("[createWord]:\n", error);
+				callToast({ type: "error", message: "Generated Failed!" });
+			}
 		}
 	};
 

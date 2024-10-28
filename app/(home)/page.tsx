@@ -1,5 +1,5 @@
 import { HomeStatus } from "@/components/home-status";
-import { Dicts, dictList } from "@/types/dict";
+import { Dicts, dictNameList } from "@/types/dict";
 
 import { fetchDict } from "@/utils/api";
 
@@ -9,7 +9,7 @@ export default async function HomePage(props: {
 	const searchParams = await props.searchParams;
 	const targetDict =
 		searchParams &&
-		dictList.includes(searchParams.dict as unknown as Dicts) &&
+		dictNameList.includes(searchParams.dict as unknown as Dicts) &&
 		searchParams.dict !== Dicts.user
 			? (searchParams.dict as unknown as Dicts)
 			: Dicts.popular;

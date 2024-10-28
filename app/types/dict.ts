@@ -21,7 +21,7 @@ export enum Dicts {
 	user = "_local",
 }
 
-export const dictList = Object.values(Dicts);
+export const dictNameList = Object.values(Dicts);
 
 export const DEFAULT_DICT = Dicts.popular;
 

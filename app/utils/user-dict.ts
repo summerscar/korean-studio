@@ -2,20 +2,24 @@ import type { DictItem } from "@/types/dict";
 const USER_DICT_KEY = "userDict";
 
 const WORD_EXAMPLE = {
-	name: "나의 단어",
+	name: "하늘",
 	trans: {
-		en: ["My word"],
-		"zh-CN": ["我的单词"],
-		"zh-TW": ["我的單字"],
-		ja: ["私の単語"],
+		en: ["Sky", "Heaven", "God"],
+		"zh-CN": ["天空", "天堂", "上帝"],
+		"zh-TW": ["天空", "天堂", "上帝"],
+		ja: ["空", "天", "上帝"],
 	},
-	example: "나의 단어를 만듭니다.",
+	example: "하늘을 바라보세요.",
 	exTrans: {
-		en: ["Create my word."],
-		"zh-CN": ["创建我的单词。"],
-		"zh-TW": ["建立我的單字。"],
-		ja: ["私の単語を作成します。"],
+		en: ["Look at the sky."],
+		"zh-CN": ["仰望天空。"],
+		"zh-TW": ["仰望天空。"],
+		ja: ["空を見てください。"],
 	},
+};
+
+const setUserDict = (dictItem: DictItem[]) => {
+	localStorage.setItem(USER_DICT_KEY, JSON.stringify(dictItem));
 };
 
 const getUserDict = (): DictItem[] => {
@@ -27,24 +31,55 @@ const getUserDict = (): DictItem[] => {
 	return userDict;
 };
 
-const addUserDict = (dictItem: DictItem) => {
+const addUserDict = (...dictItem: DictItem[]) => {
 	console.log("[addUserDict]", dictItem);
 	const userDict = getUserDict();
 	const newDict = [
-		...userDict.filter((item) => item.name !== dictItem.name),
-		dictItem,
+		...userDict.filter((item) => !dictItem.find((i) => i.name === item.name)),
+		...dictItem,
 	];
-	localStorage.setItem(USER_DICT_KEY, JSON.stringify(newDict));
+	setUserDict(newDict);
 };
 
 const removeUserDict = (dictName: string) => {
 	const userDict = getUserDict();
 	const newDict = userDict.filter((item) => item.name !== dictName);
-	localStorage.setItem(USER_DICT_KEY, JSON.stringify(newDict));
+	setUserDict(newDict);
 };
 
 const initUserDict = () => {
-	localStorage.setItem(USER_DICT_KEY, JSON.stringify([WORD_EXAMPLE]));
+	setUserDict([WORD_EXAMPLE]);
+};
+
+const downLoadDict = () => {
+	const userDict = getUserDict();
+	const blob = new Blob([JSON.stringify(userDict, null, 2)], {
+		type: "application/json",
+	});
+	const url = URL.createObjectURL(blob);
+	const link = document.createElement("a");
+	link.href = url;
+	link.download = `${USER_DICT_KEY}.json`;
+	link.click();
+	URL.revokeObjectURL(url);
+};
+
+const importDict = (cb?: () => void) => {
+	const file = document.createElement("input");
+	file.type = "file";
+	file.accept = "application/json";
+	file.click();
+	file.onchange = (e) => {
+		const file = (e.target as HTMLInputElement).files?.[0];
+		if (!file) return;
+		const reader = new FileReader();
+		reader.onload = () => {
+			const userDict = JSON.parse(reader.result as string);
+			setUserDict(userDict);
+			cb?.();
+		};
+		reader.readAsText(file);
+	};
 };
 
 export {
@@ -52,6 +87,8 @@ export {
 	initUserDict,
 	addUserDict,
 	removeUserDict,
+	importDict,
+	downLoadDict,
 	USER_DICT_KEY,
 	WORD_EXAMPLE,
 };

@@ -1,9 +1,11 @@
 "use client";
 import { generateWordAction } from "@/actions/generate-word-action";
+import DownloadIcon from "@/assets/svg/download.svg";
+import FileImportIcon from "@/assets/svg/file-import.svg";
 import ShuffleIcon from "@/assets/svg/shuffle.svg";
-import { callToast } from "@/hooks/use-toast";
-import { Dicts } from "@/types/dict";
-import { addUserDict } from "@/utils/user-dict";
+import { createToast } from "@/hooks/use-toast";
+import { type DictItem, Dicts } from "@/types/dict";
+import { addUserDict, downLoadDict, importDict } from "@/utils/user-dict";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -28,17 +30,43 @@ const DictMenu = ({
 		// TODO: intl
 		const word = prompt("Enter new word", "좋아요");
 		if (word) {
-			callToast({ type: "info", message: "Generating word..." });
+			const removeInfoToast = createToast({
+				type: "info",
+				delay: 60 * 1000 * 5,
+				message: (
+					<span>
+						<span className="loading loading-spinner loading-sm" />{" "}
+						Generating...
+					</span>
+				),
+			});
+
 			try {
-				const result = await generateWordAction(word);
-				result && addUserDict(JSON.parse(result));
+				const result = await Promise.all(
+					word
+						.split(",")
+						.map(
+							async (w) =>
+								JSON.parse((await generateWordAction(w)) || "{}") as DictItem,
+						),
+				);
+				addUserDict(...result);
 				onUserDictUpdate?.();
-				callToast({ type: "success", message: "Generated Success!" });
+				createToast({
+					type: "success",
+					message: <span>Generated Success!</span>,
+				});
 			} catch (error) {
 				console.error("[createWord]:\n", error);
-				callToast({ type: "error", message: "Generated Failed!" });
+				createToast({ type: "error", message: "Generated Failed!" });
+			} finally {
+				removeInfoToast();
 			}
 		}
+	};
+
+	const handleImport = async () => {
+		importDict(onUserDictUpdate);
 	};
 
 	return (
@@ -52,12 +80,26 @@ const DictMenu = ({
 					onClick={onShuffle}
 				/>
 				{isUserDict && (
-					<span
-						onClick={createWord}
-						className="inline-block px-2 text-xl cursor-pointer"
-					>
-						+
-					</span>
+					<>
+						<span
+							onClick={createWord}
+							className="inline-block px-2 text-xl cursor-pointer"
+						>
+							+
+						</span>
+						<DownloadIcon
+							width={20}
+							height={20}
+							onClick={downLoadDict}
+							className="cursor-pointer inline-block mx-1"
+						/>
+						<FileImportIcon
+							width={20}
+							height={20}
+							onClick={handleImport}
+							className="cursor-pointer inline-block mx-1"
+						/>
+					</>
 				)}
 			</div>
 			<select

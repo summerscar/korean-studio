@@ -335,7 +335,7 @@ const HomeStatus = ({
 				{displayName}
 				<div
 					className="tooltip tooltip-top sm:tooltip-right absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-1/2"
-					data-tip={`${romanized} / ${standardized}`}
+					data-tip={`${romanized} [${standardized}]`}
 				>
 					<Pronunciation width={20} height={20} text={currentWord?.name} />
 				</div>

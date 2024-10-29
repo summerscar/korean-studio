@@ -105,7 +105,7 @@ const HomeDrawer = ({
 												{getTranslation(item, locale)}
 											</span>
 										</div>
-										{isUserDict && (
+										{isUserDict && dict.length > 1 && (
 											<div
 												className="absolute -top-1 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
 												onClick={() => {

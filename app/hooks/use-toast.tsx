@@ -18,7 +18,7 @@ const createToast = ({
 	if (!toastWrapper) {
 		toastWrapper = document.createElement("div");
 		toastWrapper.id = "toast";
-		toastWrapper.classList.add("toast", "toast-top", "toast-center");
+		toastWrapper.classList.add("toast", "toast-top", "toast-center", "z-50");
 		document.body.appendChild(toastWrapper);
 	}
 	const toastEl = document.createElement("div");
@@ -26,10 +26,15 @@ const createToast = ({
 
 	toastEl.innerHTML = renderToString(message);
 	toastWrapper?.appendChild(toastEl);
-	setTimeout(() => {
+	let unmount = () => {
 		toastWrapper?.removeChild(toastEl);
-	}, delay);
-	return () => toastWrapper?.removeChild(toastEl);
+		unmount = () => {};
+	};
+	const timeout = setTimeout(() => unmount(), delay);
+	return () => {
+		clearTimeout(timeout);
+		unmount();
+	};
 };
 
 const useToast = () => {

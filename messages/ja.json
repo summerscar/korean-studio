@@ -12,7 +12,8 @@
 	"Home": {
 		"viewList": "リストを見る",
 		"tipsEnter": "<enter></enter>を押してから入力してください",
-		"createWord": "単語を入力してください。例：こんにちは,안녕",
+		"createWord": "単語もしくわ単語の意味を入力してください、複数の単語はカンマで区切ってください。例：안녕,ありがとう",
+		"exampleWord": "안녕,ありがとう",
 		"generating": "生成中...",
 		"generated": "生成に成功しました!",
 		"generateError": "生成に失敗しました。もう一度お試しください。",

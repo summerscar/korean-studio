@@ -34,16 +34,16 @@ const DictMenu = ({
 	};
 
 	const createWord = async () => {
-		const word = prompt(tHome("createWord"), "안녕");
+		const word = prompt(tHome("createWord"), tHome("exampleWord"));
 		if (word) {
 			const removeInfoToast = createToast({
 				type: "info",
 				delay: 60 * 1000 * 5,
 				message: (
-					<span>
-						<span className="loading loading-spinner loading-sm" />{" "}
+					<div className="flex items-center">
+						<span className="loading loading-spinner loading-sm mr-2" />
 						{tHome("generating")}
-					</span>
+					</div>
 				),
 			});
 

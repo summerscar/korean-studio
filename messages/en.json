@@ -11,7 +11,11 @@
 	},
 	"Home": {
 		"viewList": "View list",
-		"tipsEnter": "Press<enter></enter>to type!"
+		"tipsEnter": "Press<enter></enter>to type!",
+		"createWord": "Please input words, separated by commas. For example: Hello,안녕",
+		"generating": "Generating...",
+		"generated": "Generated successfully!",
+		"generateError": "Failed to generate. Please try again."
 	},
 	"Dict": {
 		"popular": "Popular Words",

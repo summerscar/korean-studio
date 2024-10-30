@@ -16,22 +16,6 @@
 		}
 	},
 	{
-		"name": "덕질",
-		"trans": {
-			"en": ["Fan activities or stanning."],
-			"zh-CN": ["追星或粉丝活动。"],
-			"zh-TW": ["追星或粉絲活動。"],
-			"ja": ["ファン活動。"]
-		},
-		"example": "덕질하는 재미로 사는 것 같아요.",
-		"exTrans": {
-			"en": ["It seems like I live for the fun of stanning."],
-			"zh-CN": ["似乎是靠追星的乐趣在生活。"],
-			"zh-TW": ["似乎是靠追星的樂趣在生活。"],
-			"ja": ["ファン活動の楽しみで生きているようです。"]
-		}
-	},
-	{
 		"name": "보고 싶어",
 		"trans": {
 			"en": ["I miss you."],

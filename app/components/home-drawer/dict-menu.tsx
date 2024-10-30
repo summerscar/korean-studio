@@ -16,6 +16,7 @@ const DictMenu = ({
 	onShuffle?: () => void;
 	onUserDictUpdate?: () => void;
 }) => {
+	const tHome = useTranslations("Home");
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const tIndex = useTranslations("Dict");
@@ -27,8 +28,7 @@ const DictMenu = ({
 	};
 
 	const createWord = async () => {
-		// TODO: intl
-		const word = prompt("Enter new word", "좋아요");
+		const word = prompt(tHome("createWord"), "안녕");
 		if (word) {
 			const removeInfoToast = createToast({
 				type: "info",
@@ -36,7 +36,7 @@ const DictMenu = ({
 				message: (
 					<span>
 						<span className="loading loading-spinner loading-sm" />{" "}
-						Generating...
+						{tHome("generating")}
 					</span>
 				),
 			});
@@ -45,6 +45,7 @@ const DictMenu = ({
 				const result = await Promise.all(
 					word
 						.split(",")
+						.map((w) => w.trim())
 						.map(
 							async (w) =>
 								JSON.parse((await generateWordAction(w)) || "{}") as DictItem,
@@ -54,11 +55,11 @@ const DictMenu = ({
 				onUserDictUpdate?.();
 				createToast({
 					type: "success",
-					message: <span>Generated Success!</span>,
+					message: <span>{tHome("generated")}</span>,
 				});
 			} catch (error) {
 				console.error("[createWord]:\n", error);
-				createToast({ type: "error", message: "Generated Failed!" });
+				createToast({ type: "error", message: tHome("generateError") });
 			} finally {
 				removeInfoToast();
 			}

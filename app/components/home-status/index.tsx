@@ -65,7 +65,7 @@ const HomeStatus = ({
 	const [showKeyboard, setShowKeyboard] = useState(true);
 
 	const [setting, setSetting] = useState<HomeSetting>({
-		autoVoice: true,
+		autoVoice: false,
 		showMeaning: true,
 		enableAudio: true,
 	});
@@ -101,7 +101,7 @@ const HomeStatus = ({
 
 	const setDictAndDisableVoice = useMemoizedFn(
 		(val: Parameters<typeof setDict>[0]) => {
-			// 切换字典时 autoVoice 置为 false, 也避免首次无法播放而报错
+			// 切换字典时 autoVoice 置为 false
 			setSetting((prevSetting) => {
 				prevSetting.autoVoice &&
 					setTimeout(() => {
@@ -450,7 +450,7 @@ const HomeStatus = ({
 			{/* 键盘图案 */}
 			<div
 				className={clsx(
-					"drop-shadow-xl w-[80vw] my-2 rounded-md overflow-hidden relative",
+					"drop-shadow-xl  w-[90vw] sm:w-[80vw] md:w-[70vw] my-2 rounded-md overflow-hidden relative",
 					{
 						invisible: !showKeyboard,
 					},

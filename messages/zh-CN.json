@@ -15,7 +15,10 @@
 		"createWord": "请输入单词或单词解释，用逗号分隔 例如：안녕,你好",
 		"generating": "生成中...",
 		"generated": "生成成功!",
-		"generateError": "生成失败，请重试。"
+		"generateError": "生成失败，请重试。",
+		"autoVoice": "自动朗读",
+		"showMeaning": "显示释义",
+		"enableAudio": "启用音效"
 	},
 	"Dict": {
 		"popular": "热门词汇",

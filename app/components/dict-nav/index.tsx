@@ -1,6 +1,7 @@
 import NextIcon from "@/assets/svg/next.svg";
 import PrevIcon from "@/assets/svg/prev.svg";
 
+import { HideText } from "@/components/hide-text";
 import type { Dict, DictItem, Tran } from "@/types/dict";
 import { getTranslation } from "@/utils/convert-input";
 import { notoKR } from "@/utils/fonts";
@@ -12,11 +13,13 @@ const DictNav = ({
 	curWordIndex,
 	onPrev,
 	onNext,
+	hideMeaning,
 }: {
 	dict: Dict;
 	curWordIndex: number;
 	onPrev: () => void;
 	onNext: () => void;
+	hideMeaning: boolean;
 }) => {
 	const prev = curWordIndex - 1 >= 0 ? dict[curWordIndex - 1] : null;
 	const next = curWordIndex + 1 < dict.length ? dict[curWordIndex + 1] : null;
@@ -53,7 +56,11 @@ const DictNav = ({
 							title={getTranslation(item, locale)}
 							className="text-xs text-gray-500 max-w-40 overflow-hidden text-ellipsis text-nowrap"
 						>
-							{getTranslation(item, locale)}
+							{
+								<HideText hide={hideMeaning}>
+									{getTranslation(item, locale)}
+								</HideText>
+							}
 						</p>
 					</div>
 				</div>

@@ -15,7 +15,10 @@
 		"createWord": "単語を入力してください。例：こんにちは,안녕",
 		"generating": "生成中...",
 		"generated": "生成に成功しました!",
-		"generateError": "生成に失敗しました。もう一度お試しください。"
+		"generateError": "生成に失敗しました。もう一度お試しください。",
+		"autoVoice": "自動読み上げ",
+		"showMeaning": "意味を表示",
+		"enableAudio": "オーバイドエフェクト"
 	},
 	"Dict": {
 		"popular": "トレンド用語",

@@ -1,5 +1,6 @@
 import CloseIcon from "@/assets/svg/close.svg";
 import { ClientOnly } from "@/components/client-only";
+import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
 import { getTranslation } from "@/utils/convert-input";
 import { isServer } from "@/utils/is-server";
@@ -19,6 +20,8 @@ const HomeDrawer = ({
 	onShuffle,
 	onUserDictUpdate,
 	drawerRef,
+	setting,
+	onSettingChange,
 }: {
 	dict: Dict;
 	curWordIndex: number;
@@ -26,6 +29,8 @@ const HomeDrawer = ({
 	drawerRef: React.RefObject<{ open: () => void }>;
 	onShuffle: () => void;
 	onUserDictUpdate: () => void;
+	setting: HomeSetting;
+	onSettingChange: (val: Partial<HomeSetting>) => void;
 }) => {
 	const locale = useLocale();
 	const searchParams = useSearchParams();
@@ -75,6 +80,8 @@ const HomeDrawer = ({
 						/>
 						<ul className="menu bg-base-100 text-base-content min-h-full w-5/6 sm:w-80 p-4">
 							<DictMenu
+								setting={setting}
+								onSettingChange={onSettingChange}
 								onShuffle={onShuffle}
 								onUserDictUpdate={onUserDictUpdate}
 							/>

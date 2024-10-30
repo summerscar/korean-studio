@@ -8,3 +8,7 @@
 .before-backdrop-shadow {
 	@apply before:absolute before:content-[''] before:backdrop-blur-lg before:top-0 before:left-0 before:right-0 before:bottom-0 before:z-[-1];
 }
+
+.after-backdrop-shadow {
+	@apply before:absolute before:content-[''] before:backdrop-blur-lg before:rounded-lg before:top-0 before:left-0 before:right-0 before:bottom-0 before:z-[1];
+}

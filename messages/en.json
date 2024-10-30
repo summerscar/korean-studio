@@ -15,7 +15,10 @@
 		"createWord": "Please input words, separated by commas. For example: Hello,안녕",
 		"generating": "Generating...",
 		"generated": "Generated successfully!",
-		"generateError": "Failed to generate. Please try again."
+		"generateError": "Failed to generate. Please try again.",
+		"autoVoice": "Auto read",
+		"showMeaning": "Show meaning",
+		"enableAudio": "Enable audio effect"
 	},
 	"Dict": {
 		"popular": "Popular Words",

@@ -5,14 +5,19 @@ import KeyboardIcon from "@/assets/svg/keyboard.svg";
 import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
 import ScoreIcon from "@/assets/svg/score.svg";
+import SpeakerIcon from "@/assets/svg/speaker.svg";
 import { DictNav } from "@/components/dict-nav";
+import { HideText } from "@/components/hide-text";
 import { HomeDrawer } from "@/components/home-drawer";
 import { HomeInput } from "@/components/home-input";
 import { Pronunciation } from "@/components/pronunciation";
+import { usePronunciation } from "@/hooks/use-pronunciation";
+import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
 import type { Tran } from "@/types/dict";
 import { useInputAudioEffect } from "@/utils/audio";
 import { playConfetti } from "@/utils/confetti";
+import { HOME_SETTING_KEY } from "@/utils/config";
 import {
 	NextKeyShortcut,
 	PrevKeyShortcut,
@@ -31,11 +36,12 @@ import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
 import { shuffleArr } from "@/utils/shuffle-array";
 import { getUserDict } from "@/utils/user-dict";
-import { useEventListener, useLatest, useMemoizedFn } from "ahooks";
+import { useEventListener, useLatest, useMemoizedFn, useMount } from "ahooks";
 import clsx from "clsx";
 import { disassemble, romanize, standardizePronunciation } from "es-hangul";
 import { useLocale, useTranslations } from "next-intl";
 import {
+	type PropsWithChildren,
 	type ReactNode,
 	useCallback,
 	useEffect,
@@ -57,7 +63,29 @@ const HomeStatus = ({
 	const [isInputError, setIsInputError] = useState(false);
 	const [isInputFocused, setIsInputFocused] = useState(false);
 	const [showKeyboard, setShowKeyboard] = useState(true);
-	const inputAE = useInputAudioEffect();
+
+	const [setting, setSetting] = useState<HomeSetting>({
+		autoVoice: true,
+		showMeaning: true,
+		enableAudio: true,
+	});
+	useMount(() => {
+		const settingStr = localStorage.getItem(HOME_SETTING_KEY);
+		if (settingStr) {
+			const newSetting = JSON.parse(settingStr);
+			setSetting(newSetting);
+		}
+	});
+
+	const onSettingChange = (newVal: Partial<typeof setting>) => {
+		setSetting((val) => {
+			const newSetting = { ...val, ...newVal };
+			localStorage.setItem(HOME_SETTING_KEY, JSON.stringify(newSetting));
+			return newSetting;
+		});
+	};
+
+	const inputAE = useInputAudioEffect(setting.enableAudio);
 	const toggleShowKeyboard = useMemoizedFn(() =>
 		setShowKeyboard(!showKeyboard),
 	);
@@ -71,9 +99,23 @@ const HomeStatus = ({
 		handleInputFocus: () => {},
 	});
 
+	const setDictAndDisableVoice = useMemoizedFn(
+		(val: Parameters<typeof setDict>[0]) => {
+			// 切换字典时 autoVoice 置为 false, 也避免首次无法播放而报错
+			setSetting((prevSetting) => {
+				prevSetting.autoVoice &&
+					setTimeout(() => {
+						setSetting(prevSetting);
+					}, 300);
+				return { ...prevSetting, autoVoice: false };
+			});
+			setDict(val);
+		},
+	);
+
 	const setUserDict = useMemoizedFn(() => {
 		const userDict = getUserDict();
-		setDict(userDict);
+		setDictAndDisableVoice(userDict);
 	});
 
 	useEffect(() => {
@@ -82,11 +124,11 @@ const HomeStatus = ({
 			setUserDict();
 			return;
 		}
-		setDict(originalDict);
-	}, [originalDict, setUserDict]);
+		setDictAndDisableVoice(originalDict);
+	}, [originalDict, setUserDict, setDictAndDisableVoice]);
 
 	const shuffleDict = useMemoizedFn(() => {
-		setDict((prev) => shuffleArr(prev));
+		setDictAndDisableVoice((prev) => shuffleArr(prev));
 	});
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -141,7 +183,10 @@ const HomeStatus = ({
 		}
 		return null;
 	}, [curWordIndex, dict]);
-
+	const { isPlaying: isWordPlaying, play: playWord } = usePronunciation(
+		currentWord?.name,
+		{ autoPlay: setting.autoVoice },
+	);
 	/** 韩文单词 */
 	const displayName = currentWord?.name || "";
 	/** 韩文字母 */
@@ -225,6 +270,7 @@ const HomeStatus = ({
 			setCurWordIndex(targetIndex);
 			setCurInputIndex(0);
 			setIsInputError(false);
+
 			console.log(
 				`skip to next word! ${targetIndex + 1}/${dict.length}  \n`,
 				dict[targetIndex],
@@ -330,6 +376,7 @@ const HomeStatus = ({
 				onPrev={toPrevWord}
 				dict={dict}
 				curWordIndex={curWordIndex}
+				hideMeaning={!setting.showMeaning}
 			/>
 			<div className={clsx(notoKR.className, "text-4xl font-bold relative")}>
 				{displayName}
@@ -337,10 +384,20 @@ const HomeStatus = ({
 					className="tooltip tooltip-top sm:tooltip-right absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-1/2"
 					data-tip={`${romanized} [${standardized}]`}
 				>
-					<Pronunciation width={20} height={20} text={currentWord?.name} />
+					<SpeakerIcon
+						width={20}
+						height={20}
+						onMouseEnter={playWord}
+						className={clsx(
+							isWordPlaying ? "fill-current" : "text-base-content",
+							"cursor-pointer inline-block",
+						)}
+					/>{" "}
 				</div>
 			</div>
-			<div className="text-lg text-gray-500 my-2">{translation}</div>
+			<div className="text-lg text-gray-500 my-2">
+				<HideText hide={!setting.showMeaning}>{translation}</HideText>
+			</div>
 			{/* 韩语音节 */}
 			<div
 				className={clsx(
@@ -443,7 +500,9 @@ const HomeStatus = ({
 							className="absolute top-1/2 -right-6 -translate-x-1/2 -translate-y-1/2"
 						/>
 					</p>
-					<p>{exTranslation}</p>
+					<p>
+						<HideText hide={!setting.showMeaning}>{exTranslation}</HideText>
+					</p>
 				</div>
 			)}
 			{/* 键盘输入 */}
@@ -471,6 +530,8 @@ const HomeStatus = ({
 				onClick={skipToNextWord}
 				onShuffle={shuffleDict}
 				onUserDictUpdate={setUserDict}
+				setting={setting}
+				onSettingChange={onSettingChange}
 			/>
 		</Wrapper>
 	);

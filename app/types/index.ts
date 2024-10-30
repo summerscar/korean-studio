@@ -31,3 +31,12 @@ export enum Themes {
 export type DocPathParams = {
 	doc_path: string[];
 };
+
+export type HomeSetting = {
+	/** 切换单词时是否自动发音 */
+	autoVoice: boolean;
+	/** 显示释义 */
+	showMeaning: boolean;
+	/** 启用音效 */
+	enableAudio: boolean;
+};

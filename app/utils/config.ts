@@ -16,6 +16,8 @@ const DEFAULT_COOKIE_CONFIG = {
 	path: "/",
 };
 
+const HOME_SETTING_KEY = "home_setting";
+
 /**
  * @param site 本站学习语言
  * @param language UI 语言
@@ -30,4 +32,10 @@ const getSiteConfig = (language: SITES_LANGUAGE = DEFAULT_SITE_LANGUAGE) => {
 
 const siteConfig = getSiteConfig();
 
-export { siteConfig, DEFAULT_SITE_LANGUAGE, LOCAL_KEY, DEFAULT_COOKIE_CONFIG };
+export {
+	siteConfig,
+	DEFAULT_SITE_LANGUAGE,
+	LOCAL_KEY,
+	DEFAULT_COOKIE_CONFIG,
+	HOME_SETTING_KEY,
+};

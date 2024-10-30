@@ -1,5 +1,5 @@
 import { useMount } from "ahooks";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const backspaceAudio = "/audio/backspace.mp3";
 const baseInputAudio = "/audio/enter.mp3";
@@ -8,6 +8,7 @@ const spaceAudio = "/audio/space.mp3";
 const swapAudio = "/audio/swap.mp3";
 
 class InputAudioEffect {
+	_enable = true;
 	constructor(src: string) {
 		this.audio = new Audio();
 		this.audio.src = src;
@@ -18,6 +19,9 @@ class InputAudioEffect {
 	private audio: HTMLAudioElement;
 
 	play() {
+		if (!this._enable) {
+			return;
+		}
 		this.audio.currentTime = 0;
 		this.audio.play();
 	}
@@ -33,6 +37,10 @@ class InputAudioEffect {
 	setRate(rate: number) {
 		this.audio.playbackRate = rate;
 	}
+
+	setEnable(enable: boolean) {
+		this._enable = enable;
+	}
 }
 
 export const createInputAE = () => {
@@ -44,10 +52,25 @@ export const createInputAE = () => {
 	return { baseInputAE, incorrectAE, spaceAE, backspaceAE, swapAE };
 };
 
-export const useInputAudioEffect = () => {
+export const useInputAudioEffect = (enable = true) => {
 	const audioEffectRef = useRef<ReturnType<typeof createInputAE>>(undefined);
 	useMount(() => {
 		audioEffectRef.current = createInputAE();
 	});
+	useEffect(() => {
+		const allEffect = Object.values(audioEffectRef.current || {});
+
+		if (!enable) {
+			for (const effect of allEffect) {
+				effect.setEnable(false);
+			}
+		}
+
+		return () => {
+			for (const effect of allEffect) {
+				effect.setEnable(true);
+			}
+		};
+	}, [enable]);
 	return audioEffectRef;
 };

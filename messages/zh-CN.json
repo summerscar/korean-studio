@@ -12,7 +12,8 @@
 	"Home": {
 		"viewList": "查看列表",
 		"tipsEnter": "按下<enter></enter>键输入",
-		"createWord": "请输入单词或单词解释，用逗号分隔 例如：안녕,你好",
+		"createWord": "请输入单词或单词解释，多个单词用逗号分隔 例如：안녕,谢谢",
+		"exampleWord": "안녕,谢谢",
 		"generating": "生成中...",
 		"generated": "生成成功!",
 		"generateError": "生成失败，请重试。",

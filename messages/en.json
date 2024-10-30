@@ -12,7 +12,8 @@
 	"Home": {
 		"viewList": "View list",
 		"tipsEnter": "Press<enter></enter>to type!",
-		"createWord": "Please input words, separated by commas. For example: Hello,안녕",
+		"createWord": "Please input words or meanings, multiple words are separated by commas. For example: 안녕,thank you",
+		"exampleWord": "안녕,thank you",
 		"generating": "Generating...",
 		"generated": "Generated successfully!",
 		"generateError": "Failed to generate. Please try again.",

@@ -24,7 +24,7 @@ async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
 
 	if (process.env.AI === "gemini") {
 		const geminiModel = gemini_AI.getGenerativeModel({
-			model: "gemini-1.5-flash",
+			model: "gemini-1.5-pro",
 		});
 		const result = await geminiModel.generateContent(
 			messages[0].content as string,

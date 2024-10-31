@@ -8,11 +8,7 @@ const Progress = () => {
 	const [showProgress, setShowProgress] = useState(false);
 
 	useEffect(() => {
-		const canScroll =
-			document.body.scrollHeight >
-			(window.innerHeight || document.documentElement.clientHeight);
-
-		setShowProgress(canScroll && pathname.includes("/learn"));
+		setShowProgress(pathname.includes("/learn"));
 
 		return () => {
 			setShowProgress(false);

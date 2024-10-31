@@ -1,4 +1,5 @@
 "use client";
+import { usePathname } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
 import type { TocItem } from "remark-flexible-toc";
 
@@ -21,6 +22,17 @@ const TOCWrapper = ({
 	toc = [],
 }: { children: ReactNode; toc?: TocItem[] }) => {
 	const [activeToc, setActiveToc] = useState("");
+
+	/** 给 progress bar 用，刚好有个 RSC 组件，物尽其用 */
+	const pathname = usePathname();
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		const canScroll =
+			document.body.scrollHeight >
+			(window.innerHeight || document.documentElement.clientHeight);
+		document.body.setAttribute("data-can-scroll", String(canScroll));
+	}, [pathname]);
+	/** end */
 
 	useEffect(() => {
 		if (toc.length === 0) {

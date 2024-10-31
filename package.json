@@ -21,6 +21,7 @@
 		"script:docs-modified": "tsx scripts/generate-doc-last-modified.ts"
 	},
 	"dependencies": {
+		"@google/generative-ai": "^0.21.0",
 		"@keystone-6/auth": "^8.0.0",
 		"@keystone-6/core": "^6.2.0",
 		"@keystone-6/document-renderer": "^1.1.2",
@@ -120,7 +121,9 @@
 		"*": [
 			"biome check --no-errors-on-unmatched --files-ignore-unknown=true"
 		],
-		"*.{mdx,md}": ["npm run script:docs-modified"]
+		"*.{mdx,md}": [
+			"npm run script:docs-modified"
+		]
 	},
 	"volta": {
 		"node": "20.17.0"

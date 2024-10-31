@@ -39,7 +39,7 @@
 			"allowComments": true
 		},
 		"formatter": {
-			"lineWidth": 75
+			"lineWidth": 48
 		}
 	},
 	"vcs": {

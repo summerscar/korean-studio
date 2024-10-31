@@ -145,7 +145,14 @@ const HomeStatus = ({
 				focusInput();
 				return;
 			}
-
+			if (e.code === "Quote") {
+				onSettingChange({ showMeaning: !setting.showMeaning });
+				return;
+			}
+			if (e.code === "Semicolon") {
+				playWord();
+				return;
+			}
 			/** 单词导航 */
 			if ([NextKeyShortcut, PrevKeyShortcut].includes(e.code)) {
 				if (isComplete || (curWordIndex === 0 && e.code === PrevKeyShortcut))
@@ -336,7 +343,8 @@ const HomeStatus = ({
 		clsx({
 			"font-bold text-[color:var(--font-color-error)]":
 				isInputError && curInputIndex === strIndex,
-			"text-[color:var(--font-color-active)]": curInputIndex > strIndex,
+			"text-[color:var(--font-color-active)] font-bold":
+				curInputIndex > strIndex,
 		});
 
 	const inlineStyle = useMemo(() => {
@@ -484,7 +492,11 @@ const HomeStatus = ({
 					<div className="text-sm">
 						tips: Try <kbd className="kbd kbd-xs">[</kbd>
 						{" / "}
-						<kbd className="kbd kbd-xs">]</kbd>.
+						<kbd className="kbd kbd-xs">]</kbd>
+						{" / "}
+						<kbd className="kbd kbd-xs">;</kbd>
+						{" / "}
+						<kbd className="kbd kbd-xs">'</kbd>.
 					</div>
 				</div>
 			</div>

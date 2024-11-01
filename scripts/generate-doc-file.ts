@@ -42,7 +42,7 @@ const generateDoc = async (title: string) => {
 			.normalize("NFD")
 			// biome-ignore lint/suspicious/noMisleadingCharacterClass: <explanation>
 			.replace(/[\u0300-\u036f]/g, "")
-			.replace(/[:：－〜]/g, "-")
+			.replace(/[:：－〜/]/g, "-")
 			.replace(/\(.*?\)/, "")
 			.replace(/\s/g, "")
 			.toLowerCase()}.md`,
@@ -70,14 +70,19 @@ export const generateDocs = async (docs: string[]) => {
 	await sequentialChatCompletion(
 		docs
 			.map((item) => item.trim())
+			.filter(Boolean)
 			.map((title) => async () => {
 				await generateDoc(title);
 			}),
 	);
-	console.log("[generate-doc-file]: done");
+	console.log("[generate-doc-file][all]: done");
 };
 
 (async () => {
 	const docs = process.argv.slice(2);
 	generateDocs(docs);
 })();
+
+// const elements = [""];
+
+// generateDocs([...new Set(elements)]);

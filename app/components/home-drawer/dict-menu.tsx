@@ -1,5 +1,5 @@
 "use client";
-import { generateWordAction } from "@/actions/generate-word-action";
+import { generateWordsAction } from "@/actions/generate-word-action";
 import DownloadIcon from "@/assets/svg/download.svg";
 import FileImportIcon from "@/assets/svg/file-import.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
@@ -48,15 +48,7 @@ const DictMenu = ({
 			});
 
 			try {
-				const result = await Promise.all(
-					word
-						.split(",")
-						.map((w) => w.trim())
-						.map(
-							async (w) =>
-								JSON.parse((await generateWordAction(w)) || "{}") as DictItem,
-						),
-				);
+				const result = await generateWordsAction(word.split(","));
 				addUserDict(...result);
 				onUserDictUpdate?.();
 				createToast({

@@ -1,3 +1,4 @@
+import { timeOut } from "@/utils/time-out";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { config as envConfig } from "dotenv";
 import OpenAI from "openai";
@@ -12,8 +13,11 @@ const openai = new OpenAI({
 
 const gemini_AI = new GoogleGenerativeAI(process.env.GEMINI_KEY || "");
 
+export const isOpenAi = () => !process.env.AI || process.env.AI === "openai";
+export const isGemini = () => process.env.AI === "gemini";
+
 async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
-	if (!process.env.AI || process.env.AI === "openai") {
+	if (isOpenAi()) {
 		const result = await openai.chat.completions.create({
 			model: "gpt-3.5-turbo",
 			messages,
@@ -22,12 +26,12 @@ async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
 		return result.choices[0].message.content;
 	}
 
-	if (process.env.AI === "gemini") {
+	if (isGemini()) {
 		const geminiModel = gemini_AI.getGenerativeModel({
 			model: "gemini-1.5-pro",
 		});
 		const result = await geminiModel.generateContent(
-			messages[0].content as string,
+			messages.map((message) => message.content as string),
 		);
 		console.log(
 			`[AI][Gemini]: use ${result.response.usageMetadata?.totalTokenCount} tokens.`,
@@ -37,3 +41,19 @@ async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
 }
 
 export { fetchChatCompletion };
+
+/** 控制一下执行速率, gemini AI 2rpm */
+export async function sequentialChatCompletion<T>(
+	promises: (() => Promise<T>)[],
+): Promise<T[]> {
+	const results: T[] = [];
+	for (const [key, promise, index = Number(key)] of Object.entries(promises)) {
+		const result = await promise();
+		results.push(result);
+		isGemini() &&
+			index % 2 &&
+			index !== promises.length - 1 &&
+			(await timeOut(60 * 1000));
+	}
+	return results;
+}

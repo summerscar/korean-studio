@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { _listAllDocs as _listAllDocsByLevel } from "@/utils/list-docs";
 import { flattenAllDocs, insertOrUpdateFrontmatterKey } from "./list-all-docs";
-import { fetchChatCompletion } from "./open-ai";
+import { fetchChatCompletion, sequentialChatCompletion } from "./open-ai";
 
 (async () => {
 	const DESC_MIN_LENGTH = 10;
@@ -20,8 +20,8 @@ import { fetchChatCompletion } from "./open-ai";
 		docsNeedToGenerateDescription.map((doc) => `[${doc.title}]...`).join("\n"),
 	);
 	console.log("[generate-doc-desc][find]: ↑↑↑↑↑↑↑↑↑↑↑↑");
-	await Promise.all(
-		docsNeedToGenerateDescription.map(async (doc) => {
+	await sequentialChatCompletion(
+		docsNeedToGenerateDescription.map((doc) => async () => {
 			if (doc.content === undefined) return;
 
 			console.log("[generate-doc-desc][title][", doc.title, "]: generate...");
@@ -38,10 +38,7 @@ import { fetchChatCompletion } from "./open-ai";
 			]);
 			if (!description) return;
 			console.log(
-				"[generate-doc-desc][title][",
-				doc.title,
-				"][update]: ",
-				description,
+				`[generate-doc-desc][title][${doc.title}][update]: ${description}`,
 			);
 			// 将 description 写入 frontmatter
 			const newDocString = insertOrUpdateFrontmatterKey(

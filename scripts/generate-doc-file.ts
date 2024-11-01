@@ -42,8 +42,9 @@ const generateDoc = async (title: string) => {
 			.normalize("NFD")
 			// biome-ignore lint/suspicious/noMisleadingCharacterClass: <explanation>
 			.replace(/[\u0300-\u036f]/g, "")
-			.replace(/[:：－]/g, "-")
+			.replace(/[:：－〜]/g, "-")
 			.replace(/\(.*?\)/, "")
+			.replace(/\s/g, "")
 			.toLowerCase()}.md`,
 	);
 

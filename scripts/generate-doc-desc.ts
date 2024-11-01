@@ -39,7 +39,8 @@ import { fetchChatCompletion, sequentialChatCompletion } from "./open-ai";
 				])
 			)
 				.trim()
-				.replace(/\n/g, "");
+				.replace(/\n/g, "")
+				.replace(/[:：－〜]/g, " ");
 
 			if (!description) return;
 			console.log(

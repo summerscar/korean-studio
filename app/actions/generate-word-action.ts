@@ -1,7 +1,11 @@
 "use server";
+import type { DictItem } from "@/types/dict";
 import { isDev } from "@/utils/is-dev";
 import { WORD_EXAMPLE } from "@/utils/user-dict";
-import { fetchChatCompletion } from "../../scripts/open-ai";
+import {
+	fetchChatCompletion,
+	sequentialChatCompletion,
+} from "../../scripts/open-ai";
 
 const promptTemplate = (word: string) => {
 	return `
@@ -25,4 +29,15 @@ export const generateWordAction = async (word: string) => {
 	]);
 	isDev && console.log("[generateWordAction][result]:", result);
 	return result?.match(/([\[\{][\s\S]*[\}\]])/)?.[1];
+};
+
+export const generateWordsAction = async (words: string[]) => {
+	return await sequentialChatCompletion(
+		words
+			.map((w) => w.trim())
+			.map(
+				(w) => async () =>
+					JSON.parse((await generateWordAction(w)) || "{}") as DictItem,
+			),
+	);
 };

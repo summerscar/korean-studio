@@ -20,8 +20,10 @@ export interface SubDirItem extends DirItem {
 
 const DIR_ORDER = {
 	文字与发音: "1",
-	语法: "2",
-	特殊规则: "3",
+	语法基础: "2",
+	语法形态: "3",
+	单词构成: "4",
+	特殊规则: "5",
 };
 
 const CACHE_KEY = `list-docs-${process.env.VERCEL_GIT_COMMIT_SHA || "dev"}`;

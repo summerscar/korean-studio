@@ -35,7 +35,7 @@ jobs:
         run: npm install
 
       - name: Run script:docs-file
-        run: npm run script:docs-file ${{ env.DOC_TITLE }}
+        run: npm run script:docs-file "${{ env.DOC_TITLE }}"
 
       - name: Run script:docs-desc
         run: npm run script:docs-desc

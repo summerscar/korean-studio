@@ -40,7 +40,7 @@ export async function DefaultLayout({
 			>
 				<div id="bg" />
 				<NextIntlClientProvider messages={messages}>
-					<main className="flex min-h-screen flex-col">{children}</main>
+					<main className="flex min-h-dvh flex-col">{children}</main>
 				</NextIntlClientProvider>
 				<ToastRoot />
 				{isProd && <SpeedInsights />}

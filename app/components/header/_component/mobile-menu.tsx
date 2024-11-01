@@ -34,7 +34,7 @@ const MobileMenu = ({
 			</label>
 			<div
 				className={clsx(
-					"absolute w-screen h-[calc(100vh-var(--header-height))] left-0 top-[--header-height] flex flex-col backdrop-blur-lg p-2",
+					"absolute w-screen h-[calc(100dvh-var(--header-height))] left-0 top-[--header-height] flex flex-col backdrop-blur-lg p-2",
 					!isOpen && "hidden",
 				)}
 			>

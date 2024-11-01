@@ -69,7 +69,7 @@ const TOCWrapper = ({
 	}, [toc]);
 
 	return (
-		<div className="hidden md:block w-48 flex-none text-xs p-3 sticky self-start overflow-auto top-[--header-height] max-h-[calc(100vh-var(--header-height))]">
+		<div className="hidden md:block w-48 flex-none text-xs p-3 sticky self-start overflow-auto top-[--header-height] max-h-[calc(100dvh-var(--header-height))]">
 			{activeToc && (
 				<style>
 					{`

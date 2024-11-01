@@ -5,6 +5,7 @@ import KeyboardIcon from "@/assets/svg/keyboard.svg";
 import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
 import ScoreIcon from "@/assets/svg/score.svg";
+import SettingIcon from "@/assets/svg/setting.svg";
 import SpeakerIcon from "@/assets/svg/speaker.svg";
 import { DictNav } from "@/components/dict-nav";
 import { HideText } from "@/components/hide-text";
@@ -400,10 +401,10 @@ const HomeStatus = ({
 							isWordPlaying ? "fill-current" : "text-base-content",
 							"cursor-pointer inline-block",
 						)}
-					/>{" "}
+					/>
 				</div>
 			</div>
-			<div className="text-lg text-gray-500 my-2">
+			<div className="text-lg text-gray-500 mt-3 mb-2">
 				<HideText hide={!setting.showMeaning}>{translation}</HideText>
 			</div>
 			{/* 韩语音节 */}
@@ -458,7 +459,7 @@ const HomeStatus = ({
 			{/* 键盘图案 */}
 			<div
 				className={clsx(
-					"drop-shadow-xl  w-[90vw] sm:w-[80vw] md:w-[70vw] my-2 rounded-md overflow-hidden relative",
+					"drop-shadow-xl  w-[90vw] sm:w-[80vw] md:w-[70vw] my-3 rounded-md overflow-hidden relative",
 					{
 						invisible: !showKeyboard,
 					},
@@ -487,6 +488,7 @@ const HomeStatus = ({
 						type="button"
 						onClick={() => drawerRef.current.open()}
 					>
+						<SettingIcon className="size-5" />
 						{tHome("viewList")}
 					</button>
 					<div className="text-sm">

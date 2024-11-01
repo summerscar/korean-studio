@@ -24,7 +24,9 @@ const header = (level: 1 | 2 | 3, props: PropsWithChildren<{ id: string }>) => {
 		</Header>
 	);
 };
-
+const Alink = (props: PropsWithChildren<{ href: string }>) => (
+	<Link {...props} />
+);
 const components = {
 	// h1: (props: PropsWithChildren<{ id: string }>) => header(1, props),
 	// h2: (props: PropsWithChildren<{ id: string }>) => header(2, props),
@@ -32,6 +34,7 @@ const components = {
 	Speak: (props: PropsWithChildren<{ id: string }>) => (
 		<MDXSpeaker {...props} />
 	),
+	a: (props: PropsWithChildren<{ href: string }>) => Alink(props),
 } as Readonly<MDXComponents>;
 
 export { components };

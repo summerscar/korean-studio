@@ -41,7 +41,7 @@ const Pronunciation = ({
 	return (
 		<>
 			{children}{" "}
-			{tooltip ? (
+			{tooltip && targetText.length < 10 ? (
 				<span className="tooltip" data-tip={romanize(targetText)}>
 					{speakerEl}
 				</span>

@@ -1,10 +1,28 @@
 name: Generate doc
 run-name: Generate doc
-on: [push]
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      docLevel:
+        description: "Doc level"
+        required: true
+        default: "beginner"
+        type: choice
+        options:
+          - beginner
+          - intermediate
+      docTitle:
+        description: "Doc title"
+        required: true
+        type: string
+
 jobs:
   update-doc:
     runs-on: ubuntu-latest
     env:
+      DOC_LEVEL: ${{ inputs.docLevel }}
+      DOC_TITLE: ${{ inputs.docTitle }}
       AI: ${{ secrets.AI }}
       GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
       GPT_URL: ${{ secrets.GPT_URL }}
@@ -15,6 +33,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Run script:docs-file
+        run: npm run script:docs-file ${{ env.DOC_TITLE }}
 
       - name: Run script:docs-desc
         run: npm run script:docs-desc

@@ -18,6 +18,7 @@
 		"prepare": "husky",
 		"lint-staged": "lint-staged",
 		"script:docs-desc": "tsx scripts/generate-doc-desc.ts",
+		"script:docs-file": "tsx scripts/generate-doc-file.ts",
 		"script:docs-modified": "tsx scripts/generate-doc-last-modified.ts"
 	},
 	"dependencies": {

@@ -25,17 +25,22 @@ import { fetchChatCompletion, sequentialChatCompletion } from "./open-ai";
 			if (doc.content === undefined) return;
 
 			console.log("[generate-doc-desc][title][", doc.title, "]: generate...");
-			const description = await fetchChatCompletion([
-				{
-					role: "user",
-					content:
-						"我将发你一份韩语学习相关教程，你将总结这份教程，生成的描述，控制在20-100个字。",
-				},
-				{
-					role: "user",
-					content: doc.content,
-				},
-			]);
+			const description = (
+				await fetchChatCompletion([
+					{
+						role: "user",
+						content:
+							"我将发你一份韩语学习相关教程，你将总结这份教程，生成的描述，控制在20-100个字。",
+					},
+					{
+						role: "user",
+						content: doc.content,
+					},
+				])
+			)
+				.trim()
+				.replace(/\n/g, "");
+
 			if (!description) return;
 			console.log(
 				`[generate-doc-desc][title][${doc.title}][update]: ${description}`,

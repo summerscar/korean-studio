@@ -23,7 +23,7 @@ async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
 			messages,
 		});
 		console.log(`[AI][OpenAI]: use ${result.usage?.total_tokens} tokens.`);
-		return result.choices[0].message.content;
+		return result.choices[0].message.content || "";
 	}
 
 	if (isGemini()) {
@@ -38,12 +38,12 @@ async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
 		);
 		return result.response.text();
 	}
+
+	return "";
 }
 
-export { fetchChatCompletion };
-
 /** 控制一下执行速率, gemini AI 2rpm */
-export async function sequentialChatCompletion<T>(
+async function sequentialChatCompletion<T>(
 	promises: (() => Promise<T>)[],
 ): Promise<T[]> {
 	const results: T[] = [];
@@ -57,3 +57,5 @@ export async function sequentialChatCompletion<T>(
 	}
 	return results;
 }
+
+export { fetchChatCompletion, sequentialChatCompletion };

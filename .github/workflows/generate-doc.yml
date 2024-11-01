@@ -5,6 +5,8 @@ jobs:
   update-doc:
     runs-on: ubuntu-latest
     env:
+      AI: ${{ secrets.AI }}
+      GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
       GPT_URL: ${{ secrets.GPT_URL }}
       GPT_KEY: ${{ secrets.GPT_KEY }}
     steps:

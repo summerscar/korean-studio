@@ -32,6 +32,7 @@ const HomeDrawer = ({
 	setting: HomeSetting;
 	onSettingChange: (val: Partial<HomeSetting>) => void;
 }) => {
+	const drawerListRef = useRef<HTMLUListElement>(null);
 	const locale = useLocale();
 	const searchParams = useSearchParams();
 	const currentDict = searchParams.get("dict") || Dicts.popular;
@@ -51,6 +52,14 @@ const HomeDrawer = ({
 			drawerRef.current.open = open;
 		}
 	}, [drawerRef, open]);
+
+	const handleUserDictUpdate = useMemoizedFn(() => {
+		onUserDictUpdate();
+		drawerListRef.current?.parentElement?.scrollTo({
+			top: drawerListRef.current?.parentElement?.scrollHeight,
+			behavior: "smooth",
+		});
+	});
 
 	if (isServer) return null;
 	return (
@@ -78,12 +87,15 @@ const HomeDrawer = ({
 							aria-label="close sidebar"
 							className="drawer-overlay"
 						/>
-						<ul className="menu bg-base-100 text-base-content min-h-full w-5/6 sm:w-80 p-4">
+						<ul
+							ref={drawerListRef}
+							className="menu bg-base-100 text-base-content min-h-full w-5/6 sm:w-80 p-4"
+						>
 							<DictMenu
 								setting={setting}
 								onSettingChange={onSettingChange}
 								onShuffle={onShuffle}
-								onUserDictUpdate={onUserDictUpdate}
+								onUserDictUpdate={handleUserDictUpdate}
 							/>
 							{/* Sidebar content here */}
 							{dict.map((item, index) => (

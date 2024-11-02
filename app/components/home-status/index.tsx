@@ -37,7 +37,13 @@ import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
 import { shuffleArr } from "@/utils/shuffle-array";
 import { getUserDict } from "@/utils/user-dict";
-import { useEventListener, useLatest, useMemoizedFn, useMount } from "ahooks";
+import {
+	useEventListener,
+	useLatest,
+	useMemoizedFn,
+	useMount,
+	usePrevious,
+} from "ahooks";
 import clsx from "clsx";
 import { disassemble, romanize, standardizePronunciation } from "es-hangul";
 import { useLocale, useTranslations } from "next-intl";
@@ -54,8 +60,10 @@ import reactStringReplace from "react-string-replace";
 
 const HomeStatus = ({
 	dict: originalDict,
+	dictName,
 }: {
 	dict: Dict;
+	dictName: Dicts;
 }) => {
 	const [dict, setDict] = useState(originalDict);
 	const [curWordIndex, setCurWordIndex] = useState(0);
@@ -100,8 +108,11 @@ const HomeStatus = ({
 		handleInputFocus: () => {},
 	});
 
+	/**
+	 * updateCurrentWord - 重新排序或者仅增减了字典后，保证index仍在附近位置
+	 */
 	const setDictAndDisableVoice = useMemoizedFn(
-		(val: Parameters<typeof setDict>[0]) => {
+		(dict: Parameters<typeof setDict>[0], updateCurrentWord = false) => {
 			// 切换字典时 autoVoice 置为 false
 			setSetting((prevSetting) => {
 				prevSetting.autoVoice &&
@@ -110,13 +121,17 @@ const HomeStatus = ({
 					}, 300);
 				return { ...prevSetting, autoVoice: false };
 			});
-			setDict(val);
+
+			setDict(dict);
+			if (updateCurrentWord && curWordIndex >= dict.length) {
+				skipToNextWord(dict.length - 1);
+			}
 		},
 	);
 
-	const setUserDict = useMemoizedFn(() => {
+	const setUserDict = useMemoizedFn((updateCurrentWord = false) => {
 		const userDict = getUserDict();
-		setDictAndDisableVoice(userDict);
+		setDictAndDisableVoice(userDict, updateCurrentWord);
 	});
 
 	useEffect(() => {
@@ -129,13 +144,13 @@ const HomeStatus = ({
 	}, [originalDict, setUserDict, setDictAndDisableVoice]);
 
 	const shuffleDict = useMemoizedFn(() => {
-		setDictAndDisableVoice((prev) => shuffleArr(prev));
+		setDictAndDisableVoice((prev) => shuffleArr(prev), true);
 	});
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		resetWord();
-	}, [dict]);
+	}, [dictName]);
 
 	useEventListener(
 		"keyup",
@@ -266,26 +281,23 @@ const HomeStatus = ({
 		inputRef.current.handleInputBlur?.();
 	}, []);
 
-	const skipToNextWord = useCallback(
-		(nextWordIndex: number) => {
-			if (nextWordIndex >= dict.length) {
-				setIsComplete(true);
-			} else {
-				setIsComplete(false);
-				setTimeout(focusInput);
-			}
-			const targetIndex = Math.max(0, nextWordIndex);
-			setCurWordIndex(targetIndex);
-			setCurInputIndex(0);
-			setIsInputError(false);
+	const skipToNextWord = useMemoizedFn((nextWordIndex: number) => {
+		if (nextWordIndex >= dict.length) {
+			setIsComplete(true);
+		} else {
+			setIsComplete(false);
+			setTimeout(focusInput);
+		}
+		const targetIndex = Math.max(0, nextWordIndex);
+		setCurWordIndex(targetIndex);
+		setCurInputIndex(0);
+		setIsInputError(false);
 
-			console.log(
-				`skip to next word! ${targetIndex + 1}/${dict.length}  \n`,
-				dict[targetIndex],
-			);
-		},
-		[focusInput, dict],
-	);
+		console.log(
+			`skip to next word! ${targetIndex + 1}/${dict.length}  \n`,
+			dict[targetIndex],
+		);
+	});
 
 	const toPrevWord = useMemoizedFn(() => {
 		skipToNextWord(curWordIndex - 1);
@@ -543,7 +555,7 @@ const HomeStatus = ({
 				curWordIndex={curWordIndex}
 				onClick={skipToNextWord}
 				onShuffle={shuffleDict}
-				onUserDictUpdate={setUserDict}
+				onUserDictUpdate={() => setUserDict(true)}
 				setting={setting}
 				onSettingChange={onSettingChange}
 			/>

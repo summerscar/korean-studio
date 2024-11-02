@@ -30,6 +30,7 @@ export enum Themes {
 
 export type DocPathParams = {
 	doc_path: string[];
+	level: Levels;
 };
 
 export type HomeSetting = {

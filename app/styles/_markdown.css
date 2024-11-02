@@ -13,7 +13,9 @@
 		/* list-style-type: decimal; */
 	}
 	table {
-		width: auto!important;
+		@apply !w-auto;
+		@apply mobile:max-w-[calc(100vw-5rem)];
+		@apply overflow-x-auto
 	}
 	h1, h2, h3, h4, h5, h6 {
 		position: relative;

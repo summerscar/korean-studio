@@ -18,6 +18,8 @@ const DEFAULT_COOKIE_CONFIG = {
 
 const HOME_SETTING_KEY = "home_setting";
 
+export const ScrollIntoViewKey = "data-doc-category-active";
+
 /**
  * @param site 本站学习语言
  * @param language UI 语言

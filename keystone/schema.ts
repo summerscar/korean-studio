@@ -91,6 +91,7 @@ export const lists = {
 				validation: { isRequired: true },
 				label: "级别",
 			}),
+			// TODO: add parentId
 			questionNumber: integer({
 				validation: { isRequired: true },
 				label: "题号",

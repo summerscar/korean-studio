@@ -56,7 +56,7 @@ const _listAllDocs = async (level: string) => {
 				return {
 					file: file,
 					fileName,
-					relativeUrl: path.join(level, ...walkPath, fileName),
+					relativeUrl: path.join(...walkPath, fileName),
 					relativePath: path.join(...walkPath, file),
 					title: data.match(/title: (.*)/)?.[1] || fileName,
 					date: data.match(/date: (.*)/)?.[1] || "0",

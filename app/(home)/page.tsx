@@ -17,7 +17,7 @@ export default async function HomePage(props: {
 	const dict = await fetchDict(targetDict);
 	return (
 		<main className="w-full flex flex-col items-center justify-center">
-			<HomeStatus dict={dict} />
+			<HomeStatus dictName={targetDict} dict={dict} />
 		</main>
 	);
 }

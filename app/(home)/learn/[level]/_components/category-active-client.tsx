@@ -16,7 +16,8 @@ const CategoryActiveClient = ({
 		.split("/")
 		.filter(Boolean)
 		.slice(2)
-		.pop();
+		.pop()
+		?.normalize("NFC");
 	const isActive = doc?.fileName === curFileName;
 	return (
 		<Link

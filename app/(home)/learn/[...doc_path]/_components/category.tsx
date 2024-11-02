@@ -1,5 +1,6 @@
 import MenuIcon from "@/assets/svg/menu.svg";
 import type { DocPathParams, Levels } from "@/types";
+import { ScrollIntoViewKey } from "@/utils/config";
 import { getServerI18n } from "@/utils/i18n";
 import { type FileItem, type SubDirItem, listAllDocs } from "@/utils/list-docs";
 import clsx from "clsx";
@@ -35,6 +36,9 @@ const DocsCategory = async ({ doc_path }: DocPathParams) => {
 						href={`/${path.join("/")}/${doc.fileName}`}
 						className={clsx("flex", {
 							active: formattedTitle === doc.fileName,
+						})}
+						{...(formattedTitle === doc.fileName && {
+							[ScrollIntoViewKey]: "",
 						})}
 					>
 						{doc.title}

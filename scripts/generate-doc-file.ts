@@ -18,7 +18,7 @@ const promptTemplate = (title: string) => `
 句型 部分的说明尽量简洁。
 例子部分 给出的韩文句子请使用 <Speak></Speak> 标签包裹。
 参考如下的 Markdown 格式文本，请以 Markdown 格式给出该韩文语法的说明文档。
-# [标题]
+# ${title}
 ## 句型
 [根据所接续的不同词性，如何接续？如何活用？分别列出。]
 ## 含义
@@ -45,6 +45,7 @@ const generateDoc = async (title: string) => {
 			.replace(/[:：－〜/]/g, "-")
 			.replace(/\(.*?\)/, "")
 			.replace(/\s/g, "")
+			.replace(/\?/g, "")
 			.toLowerCase()}.md`,
 	);
 
@@ -57,7 +58,7 @@ const generateDoc = async (title: string) => {
 
 	const content = `${frontmatterTemplate(title)}\n${gptContent}`;
 
-	console.log(`[generate-doc-file][content]: \n${content}`);
+	// console.log(`[generate-doc-file][content]: \n${content}`);
 	writeFileSync(docPath, content);
 	console.log(`[generate-doc-file][path]: ${docPath}`);
 	console.log("[generate-doc-file]: done");
@@ -83,6 +84,4 @@ export const generateDocs = async (docs: string[]) => {
 	generateDocs(docs);
 })();
 
-// const elements = [""];
-
-// generateDocs([...new Set(elements)]);
+// generateDocs([...new Set([])]);

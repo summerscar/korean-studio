@@ -15,26 +15,33 @@ const gemini_AI = new GoogleGenerativeAI(process.env.GEMINI_KEY || "");
 
 export const isOpenAi = () => !process.env.AI || process.env.AI === "openai";
 export const isGemini = () => process.env.AI === "gemini";
+export const currentModel = () =>
+	process.env.GPT_MODEL ||
+	(isOpenAi() ? "gpt-3.5-turbo" : isGemini() ? "gemini-1.5-flash" : "");
 
 async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
 	if (isOpenAi()) {
+		const model = currentModel();
 		const result = await openai.chat.completions.create({
-			model: "gpt-3.5-turbo",
+			model,
 			messages,
 		});
-		console.log(`[AI][OpenAI]: use ${result.usage?.total_tokens} tokens.`);
+		console.log(
+			`[AI][OpenAI][${model}]: use ${result.usage?.total_tokens} tokens.`,
+		);
 		return result.choices[0].message.content || "";
 	}
 
 	if (isGemini()) {
+		const model = currentModel();
 		const geminiModel = gemini_AI.getGenerativeModel({
-			model: "gemini-1.5-pro",
+			model,
 		});
 		const result = await geminiModel.generateContent(
 			messages.map((message) => message.content as string),
 		);
 		console.log(
-			`[AI][Gemini]: use ${result.response.usageMetadata?.totalTokenCount} tokens.`,
+			`[AI][Gemini][${model}]: use ${result.response.usageMetadata?.totalTokenCount} tokens.`,
 		);
 		return result.response.text();
 	}
@@ -50,10 +57,13 @@ async function sequentialChatCompletion<T>(
 	for (const [key, promise, index = Number(key)] of Object.entries(promises)) {
 		const result = await promise();
 		results.push(result);
+		console.log(
+			`[sequentialChatCompletion][progress]: ${index + 1}/${promises.length}.......`,
+		);
 		isGemini() &&
 			index % 2 &&
 			index !== promises.length - 1 &&
-			(await timeOut(60 * 1000));
+			(await timeOut((currentModel() === "gemini-1.5-pro" ? 60 : 8) * 1000));
 	}
 	return results;
 }

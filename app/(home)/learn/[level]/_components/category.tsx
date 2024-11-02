@@ -1,5 +1,5 @@
 import MenuIcon from "@/assets/svg/menu.svg";
-import type { DocPathParams, Levels } from "@/types";
+import type { DocPathParams } from "@/types";
 import { getServerI18n } from "@/utils/i18n";
 import { type FileItem, type SubDirItem, listAllDocs } from "@/utils/list-docs";
 import {

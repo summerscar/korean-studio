@@ -8,8 +8,11 @@ const CategoryParentClient = ({
 	list,
 	children,
 }: PropsWithChildren<{ list: FileItem[] }>) => {
-	const pathname = usePathname();
-	const curFileName = decodeURIComponent(pathname).split("/").pop();
+	const pathname = usePathname().normalize("NFC");
+	const curFileName = decodeURIComponent(pathname)
+		.split("/")
+		.pop()
+		?.normalize("NFC");
 	const isOpen = !!list.find((item) => item.fileName === curFileName);
 
 	return <details open={isOpen}>{children}</details>;

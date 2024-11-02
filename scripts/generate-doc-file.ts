@@ -39,10 +39,10 @@ const generateDoc = async (title: string) => {
 		process.env.DOC_LEVEL || Levels.Beginner,
 		"语法形态",
 		`${title
-			.normalize("NFD")
+			.normalize("NFC")
 			// biome-ignore lint/suspicious/noMisleadingCharacterClass: <explanation>
 			.replace(/[\u0300-\u036f]/g, "")
-			.replace(/[:：－〜/]/g, "-")
+			.replace(/[:：－〜,/]/g, "-")
 			.replace(/\(.*?\)/, "")
 			.replace(/\s/g, "")
 			.replace(/\?/g, "")
@@ -66,7 +66,7 @@ const generateDoc = async (title: string) => {
 
 export const generateDocs = async (docs: string[]) => {
 	console.log("[generate-doc-file]: start...");
-	console.log("[generate-doc-file][docs]: \n", docs.join("\n"));
+	console.log("[generate-doc-file][docs][all]: \n", docs.join("\n"));
 
 	await sequentialChatCompletion(
 		docs

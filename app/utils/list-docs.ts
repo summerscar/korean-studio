@@ -36,13 +36,15 @@ const _listAllDocs = async (level: string) => {
 		dir: string,
 		walkPath: string[] = [],
 	): Promise<(FileItem | SubDirItem)[]> => {
-		const files = (existsSync(dir) ? await readdir(dir) : []).filter(
-			// filter out hidden files
-			(doc) =>
-				!doc.startsWith("_") &&
-				!lstatSync(resolve(dir, doc)).isDirectory() &&
-				(doc.endsWith(".mdx") || doc.endsWith(".md")),
-		);
+		const files = (existsSync(dir) ? await readdir(dir) : [])
+			.filter(
+				// filter out hidden files
+				(doc) =>
+					!doc.startsWith("_") &&
+					!lstatSync(resolve(dir, doc)).isDirectory() &&
+					(doc.endsWith(".mdx") || doc.endsWith(".md")),
+			)
+			.map((doc) => doc.normalize("NFC"));
 
 		const subDirs = (existsSync(dir) ? await readdir(dir) : []).filter((doc) =>
 			lstatSync(resolve(dir, doc)).isDirectory(),

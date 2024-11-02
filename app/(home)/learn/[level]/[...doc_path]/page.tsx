@@ -64,7 +64,10 @@ export default async function Page(props: { params: Promise<DocPathParams> }) {
 		return;
 	}
 
-	const docPathString = docPath.map(decodeURIComponent).join("/");
+	const docPathString = docPath
+		.map(decodeURIComponent)
+		.map((_) => _.normalize("NFC"))
+		.join("/");
 	const docs = (await listAllDocs(level)).flatMap((doc) => {
 		if ("children" in doc) {
 			return doc.children;

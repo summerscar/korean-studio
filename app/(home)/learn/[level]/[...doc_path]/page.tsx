@@ -38,8 +38,7 @@ export async function generateMetadata(props: {
 export async function generateStaticParams(props: {
 	params: Promise<DocPathParams>;
 }) {
-	const params = await props.params;
-	const level = params.level;
+	const { level } = await props.params;
 	const docs = await listAllDocs(level);
 	const flatten = docs
 		.flatMap((doc) => {
@@ -94,7 +93,7 @@ export default async function Page(props: { params: Promise<DocPathParams> }) {
 				{prevDoc && (
 					<Link
 						prefetch
-						href={`/learn/${prevDoc.relativeUrl}`}
+						href={`/learn/${level}/${prevDoc.relativeUrl}`}
 						className="btn glass btn-md gap-3"
 					>
 						<PrevIcon className="w-4 h-4" />
@@ -106,7 +105,7 @@ export default async function Page(props: { params: Promise<DocPathParams> }) {
 				{nextDoc && (
 					<Link
 						prefetch
-						href={`/learn/${nextDoc.relativeUrl}`}
+						href={`/learn/${level}/${nextDoc.relativeUrl}`}
 						className="btn glass btn-md gap-3"
 					>
 						{nextDoc.title}

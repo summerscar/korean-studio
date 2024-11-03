@@ -1,9 +1,11 @@
 import CloseIcon from "@/assets/svg/close.svg";
+import SearchIcon from "@/assets/svg/search.svg";
 import { ClientOnly } from "@/components/client-only";
 import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
 import { getTranslation } from "@/utils/convert-input";
 import { isServer } from "@/utils/is-server";
+import { timeOut } from "@/utils/time-out";
 import { removeUserDict } from "@/utils/user-dict";
 import { useMemoizedFn } from "ahooks";
 import clsx from "clsx";
@@ -37,7 +39,6 @@ const HomeDrawer = ({
 	const searchParams = useSearchParams();
 	const currentDict = searchParams.get("dict") || Dicts.popular;
 	const isUserDict = currentDict === Dicts.user;
-
 	const controllerRef = useRef<HTMLInputElement>(null);
 	const open = useMemoizedFn(() => {
 		if (controllerRef.current) {
@@ -53,8 +54,9 @@ const HomeDrawer = ({
 		}
 	}, [drawerRef, open]);
 
-	const handleUserDictUpdate = useMemoizedFn(() => {
+	const handleUserDictUpdate = useMemoizedFn(async () => {
 		onUserDictUpdate();
+		await timeOut(100);
 		drawerListRef.current?.parentElement?.scrollTo({
 			top: drawerListRef.current?.parentElement?.scrollHeight,
 			behavior: "smooth",
@@ -109,11 +111,9 @@ const HomeDrawer = ({
 										className={clsx("block", {
 											active: index === curWordIndex,
 										})}
+										onClick={() => onClick(index)}
 									>
-										<div
-											className="grid grid-flow-col"
-											onClick={() => onClick(index)}
-										>
+										<div className="grid grid-flow-col">
 											<span>
 												{index + 1}. {item.name}
 											</span>
@@ -126,15 +126,30 @@ const HomeDrawer = ({
 										</div>
 										{isUserDict && dict.length > 1 && (
 											<div
-												className="absolute -top-1 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
-												onClick={() => {
-													removeUserDict(item.name);
-													onUserDictUpdate();
+												className="absolute -top-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
+												onClick={(e) => {
+													e.stopPropagation();
+													if (confirm()) {
+														removeUserDict(item.name);
+														onUserDictUpdate();
+													}
 												}}
 											>
 												<CloseIcon className="w-4 h-4" />
 											</div>
 										)}
+										<div
+											className="absolute -bottom-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
+											onClick={(e) => {
+												e.stopPropagation();
+												window.open(
+													`https://papago.naver.com/?sk=ko&tk=${locale}&st=${item.name}`,
+													"_blank",
+												);
+											}}
+										>
+											<SearchIcon className="w-4 h-4" />
+										</div>
 									</div>
 								</li>
 							))}

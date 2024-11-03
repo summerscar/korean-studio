@@ -1,5 +1,5 @@
 import { HomeStatus } from "@/components/home-status";
-import { Dicts, dictNameList } from "@/types/dict";
+import { Dict, Dicts, dictNameList } from "@/types/dict";
 
 import { fetchDict } from "@/utils/api";
 
@@ -7,17 +7,20 @@ export default async function HomePage(props: {
 	searchParams: Promise<{ dict?: string }>;
 }) {
 	const searchParams = await props.searchParams;
+	const searchParamsDict = searchParams.dict as unknown as Dicts;
+
+	/** 本地字典仍然返回默认字典 */
 	const targetDict =
 		searchParams &&
-		dictNameList.includes(searchParams.dict as unknown as Dicts) &&
+		dictNameList.includes(searchParamsDict) &&
 		searchParams.dict !== Dicts.user
-			? (searchParams.dict as unknown as Dicts)
+			? searchParamsDict
 			: Dicts.popular;
 
 	const dict = await fetchDict(targetDict);
 	return (
 		<main className="w-full flex flex-col items-center justify-center">
-			<HomeStatus dictName={targetDict} dict={dict} />
+			<HomeStatus dictName={searchParamsDict} dict={dict} />
 		</main>
 	);
 }

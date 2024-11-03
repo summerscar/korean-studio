@@ -42,6 +42,7 @@ const addUserDict = (...dictItem: DictItem[]) => {
 };
 
 const removeUserDict = (dictName: string) => {
+	console.log("[removeUserDict]", dictName);
 	const userDict = getUserDict();
 	const newDict = userDict.filter((item) => item.name !== dictName);
 	setUserDict(newDict);

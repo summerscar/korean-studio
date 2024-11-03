@@ -48,7 +48,9 @@ const DictMenu = ({
 			});
 
 			try {
-				const result = await generateWordsAction(word.split(","));
+				const result = await generateWordsAction(
+					word.split(/[,，、]+/).map((_) => _.trim()),
+				);
 				addUserDict(...result);
 				onUserDictUpdate?.();
 				createToast({

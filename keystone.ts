@@ -10,6 +10,13 @@ const session = statelessSessions({
 	secret: process.env.AUTH_SECRET,
 	maxAge: 60 * 60 * 24 * 30,
 });
+const _start = session.start;
+session.start = function (...args) {
+	if (!args[0].context?.res)
+		return Promise.resolve("hooks.session.start from nextauth.js");
+	return _start.call(this, ...args);
+};
+
 export default withAuth(
 	config({
 		server: {

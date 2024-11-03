@@ -11,7 +11,7 @@ export const LOGO = ({ fontSize = 20 }: { fontSize?: number }) => (
 	<div
 		style={{
 			fontSize,
-			background: "#65c6ec",
+			background: "#66ccff",
 			width: "100%",
 			height: "100%",
 			display: "flex",

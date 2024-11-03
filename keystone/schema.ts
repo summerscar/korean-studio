@@ -1,6 +1,6 @@
 import type { createAuth } from "@keystone-6/auth";
 import { list } from "@keystone-6/core";
-import { allOperations, allowAll } from "@keystone-6/core/access";
+import { allOperations, allowAll, denyAll } from "@keystone-6/core/access";
 import {
 	checkbox,
 	integer,
@@ -48,12 +48,21 @@ export const lists = {
 	User: list({
 		access: {
 			operation: {
+				// TODO: add auth
 				...allOperations(allowAll),
 				// hint: unconditionally returning `true` is equivalent to using allowAll for this operation
 				query: async ({ session, context, listKey, operation }) => {
-					console.log("-----no session-----");
-					if (!session) return false;
-					console.log(`[keystone][${operation}][${listKey}]: start...`);
+					if (!session) {
+						console.log(
+							`[keystone][${operation}][${listKey}]: `,
+							"-----no session-----",
+						);
+						return false;
+					}
+					console.log(
+						`[keystone][${operation}][${listKey}]: start...`,
+						session,
+					);
 					if (isFromNextAuth(session)) {
 						const user = await getUserFromNextAuth(context, session);
 						console.log(

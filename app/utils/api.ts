@@ -7,7 +7,7 @@ const parseURL = (url: string) =>
 	url.startsWith("http") ? url : `${getBaseURL()}${url}`;
 
 /** client api */
-export const client = () => new GraphQLClient(parseURL("/api/graphql"));
+export const client = new GraphQLClient(parseURL("/api/graphql"));
 
 /** server api */
 export const fetchDict = async (

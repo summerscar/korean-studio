@@ -5,6 +5,7 @@ export const authenticateUserWithPassword = async (
 	password: string,
 ) => {
 	const res = await keystoneContext.graphql.run<
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		Record<string, any>,
 		{ identity: string; secret: string }
 	>({
@@ -25,10 +26,10 @@ export const authenticateUserWithPassword = async (
 			secret: password,
 		},
 	});
-
-	if (res.authenticate?.message === "Failed to start session.") {
+	const userId = res.authenticate?.item?.id;
+	if (userId) {
 		return await keystoneContext.sudo().query.User.findOne({
-			where: { email },
+			where: { id: userId },
 			query: "id name email",
 		});
 	}

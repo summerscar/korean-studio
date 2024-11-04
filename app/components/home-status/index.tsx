@@ -282,6 +282,7 @@ const HomeStatus = ({
 	}, []);
 
 	const skipToNextWord = useMemoizedFn((nextWordIndex: number) => {
+		if (!dict.length) return;
 		if (nextWordIndex >= dict.length) {
 			setIsComplete(true);
 		} else {
@@ -320,6 +321,7 @@ const HomeStatus = ({
 	/** 完成输入，下一个单词 放在useEffect可能有点问题, 仅curInputIndex更新时触发 */
 	useEffect(() => {
 		if (
+			curInputIndex > 0 &&
 			curInputIndex >= lastedHangul.current.length &&
 			isEmptyInput(inputKeys)
 		) {
@@ -379,6 +381,10 @@ const HomeStatus = ({
 		));
 	};
 
+	if (dict.length === 0) {
+		return null;
+	}
+
 	if (isComplete) {
 		return (
 			<Wrapper>
@@ -389,7 +395,6 @@ const HomeStatus = ({
 			</Wrapper>
 		);
 	}
-
 	return (
 		<Wrapper>
 			<DictNav

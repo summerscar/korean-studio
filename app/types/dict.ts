@@ -1,3 +1,5 @@
+import type { Lists } from ".keystone/types";
+
 export interface Tran {
 	en: string[];
 	"zh-CN": string[];
@@ -18,11 +20,15 @@ export enum Dicts {
 	adverb = "adverb",
 	family = "family",
 	onomatopoeia = "onomatopoeia",
-	user = "_local",
+	local = "_local",
 }
 
 export const dictNameList = Object.values(Dicts);
 
 export const DEFAULT_DICT = Dicts.popular;
+
+export type UserDicts = Array<
+	Lists.Dict.Item & { list: Lists.DictItem.Item[] }
+>;
 
 export type Dict = DictItem[];

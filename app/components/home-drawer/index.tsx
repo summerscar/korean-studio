@@ -2,11 +2,11 @@ import CloseIcon from "@/assets/svg/close.svg";
 import SearchIcon from "@/assets/svg/search.svg";
 import { ClientOnly } from "@/components/client-only";
 import type { HomeSetting } from "@/types";
-import { type Dict, Dicts } from "@/types/dict";
+import { type Dict, Dicts, type UserDicts } from "@/types/dict";
 import { getTranslation } from "@/utils/convert-input";
 import { isServer } from "@/utils/is-server";
+import { removeLocalDict } from "@/utils/local-dict";
 import { timeOut } from "@/utils/time-out";
-import { removeUserDict } from "@/utils/user-dict";
 import { useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { useLocale } from "next-intl";
@@ -16,29 +16,32 @@ import { createPortal } from "react-dom";
 import { DictMenu } from "./dict-menu";
 
 const HomeDrawer = ({
+	isLocalDict,
+	isUserDict,
 	dict,
+	userDicts,
 	curWordIndex,
 	onClick,
 	onShuffle,
-	onUserDictUpdate,
+	onLocalDictUpdate,
 	drawerRef,
 	setting,
 	onSettingChange,
 }: {
+	isLocalDict: boolean;
+	isUserDict: boolean;
 	dict: Dict;
+	userDicts: UserDicts;
 	curWordIndex: number;
 	onClick: (index: number) => void;
 	drawerRef: React.RefObject<{ open: () => void }>;
 	onShuffle: () => void;
-	onUserDictUpdate: () => void;
+	onLocalDictUpdate: () => void;
 	setting: HomeSetting;
 	onSettingChange: (val: Partial<HomeSetting>) => void;
 }) => {
 	const drawerListRef = useRef<HTMLUListElement>(null);
 	const locale = useLocale();
-	const searchParams = useSearchParams();
-	const currentDict = searchParams.get("dict") || Dicts.popular;
-	const isUserDict = currentDict === Dicts.user;
 	const controllerRef = useRef<HTMLInputElement>(null);
 	const open = useMemoizedFn(() => {
 		if (controllerRef.current) {
@@ -55,7 +58,7 @@ const HomeDrawer = ({
 	}, [drawerRef, open]);
 
 	const handleUserDictUpdate = useMemoizedFn(async () => {
-		onUserDictUpdate();
+		onLocalDictUpdate();
 		await timeOut(100);
 		drawerListRef.current?.parentElement?.scrollTo({
 			top: drawerListRef.current?.parentElement?.scrollHeight,
@@ -94,10 +97,13 @@ const HomeDrawer = ({
 							className="menu bg-base-100 text-base-content min-h-full w-5/6 sm:w-80 p-4"
 						>
 							<DictMenu
+								isUserDict={isUserDict}
+								isLocalDict={isLocalDict}
+								userDicts={userDicts}
 								setting={setting}
 								onSettingChange={onSettingChange}
 								onShuffle={onShuffle}
-								onUserDictUpdate={handleUserDictUpdate}
+								onLocalDictUpdate={handleUserDictUpdate}
 							/>
 							{/* Sidebar content here */}
 							{dict.map((item, index) => (
@@ -124,14 +130,14 @@ const HomeDrawer = ({
 												{getTranslation(item, locale)}
 											</span>
 										</div>
-										{isUserDict && dict.length > 1 && (
+										{isLocalDict && dict.length > 1 && (
 											<div
 												className="absolute -top-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
 												onClick={(e) => {
 													e.stopPropagation();
 													if (confirm()) {
-														removeUserDict(item.name);
-														onUserDictUpdate();
+														removeLocalDict(item.name);
+														onLocalDictUpdate();
 													}
 												}}
 											>

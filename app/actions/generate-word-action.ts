@@ -1,7 +1,7 @@
 "use server";
 import type { DictItem } from "@/types/dict";
 import { isDev } from "@/utils/is-dev";
-import { WORD_EXAMPLE } from "@/utils/user-dict";
+import { WORD_EXAMPLE } from "@/utils/local-dict";
 import {
 	fetchChatCompletion,
 	sequentialChatCompletion,

@@ -4,7 +4,11 @@
 		"enabled": true
 	},
 	"files": {
-		"ignore": ["**/*.css"]
+		"ignore": [
+			"**/*.css",
+			"schema.prisma",
+			"schema.graphql"
+		]
 	},
 	"linter": {
 		"enabled": true,

@@ -251,6 +251,158 @@ input TopikCreateInput {
   explanation: String
 }
 
+type Dict {
+  id: ID!
+  name: String
+  public: Boolean
+  createdAt: DateTime
+  createdBy: User
+  list(where: DictItemWhereInput! = {}, orderBy: [DictItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictItemWhereUniqueInput): [DictItem!]
+  listCount(where: DictItemWhereInput! = {}): Int
+}
+
+input DictWhereUniqueInput {
+  id: ID
+}
+
+input DictWhereInput {
+  AND: [DictWhereInput!]
+  OR: [DictWhereInput!]
+  NOT: [DictWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  public: BooleanFilter
+  createdAt: DateTimeNullableFilter
+  createdBy: UserWhereInput
+  list: DictItemManyRelationFilter
+}
+
+input DictItemManyRelationFilter {
+  every: DictItemWhereInput
+  some: DictItemWhereInput
+  none: DictItemWhereInput
+}
+
+input DictOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  public: OrderDirection
+  createdAt: OrderDirection
+}
+
+input DictUpdateInput {
+  name: String
+  public: Boolean
+  createdAt: DateTime
+  createdBy: UserRelateToOneForUpdateInput
+  list: DictItemRelateToManyForUpdateInput
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input DictItemRelateToManyForUpdateInput {
+  disconnect: [DictItemWhereUniqueInput!]
+  set: [DictItemWhereUniqueInput!]
+  create: [DictItemCreateInput!]
+  connect: [DictItemWhereUniqueInput!]
+}
+
+input DictUpdateArgs {
+  where: DictWhereUniqueInput!
+  data: DictUpdateInput!
+}
+
+input DictCreateInput {
+  name: String
+  public: Boolean
+  createdAt: DateTime
+  createdBy: UserRelateToOneForCreateInput
+  list: DictItemRelateToManyForCreateInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input DictItemRelateToManyForCreateInput {
+  create: [DictItemCreateInput!]
+  connect: [DictItemWhereUniqueInput!]
+}
+
+type DictItem {
+  id: ID!
+  name: String
+  trans: JSON
+  example: String
+  exTrans: JSON
+  dict(where: DictWhereInput! = {}, orderBy: [DictOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictWhereUniqueInput): [Dict!]
+  dictCount(where: DictWhereInput! = {}): Int
+}
+
+input DictItemWhereUniqueInput {
+  id: ID
+}
+
+input DictItemWhereInput {
+  AND: [DictItemWhereInput!]
+  OR: [DictItemWhereInput!]
+  NOT: [DictItemWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  example: StringFilter
+  dict: DictManyRelationFilter
+}
+
+input DictManyRelationFilter {
+  every: DictWhereInput
+  some: DictWhereInput
+  none: DictWhereInput
+}
+
+input DictItemOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  example: OrderDirection
+}
+
+input DictItemUpdateInput {
+  name: String
+  trans: JSON
+  example: String
+  exTrans: JSON
+  dict: DictRelateToManyForUpdateInput
+}
+
+input DictRelateToManyForUpdateInput {
+  disconnect: [DictWhereUniqueInput!]
+  set: [DictWhereUniqueInput!]
+  create: [DictCreateInput!]
+  connect: [DictWhereUniqueInput!]
+}
+
+input DictItemUpdateArgs {
+  where: DictItemWhereUniqueInput!
+  data: DictItemUpdateInput!
+}
+
+input DictItemCreateInput {
+  name: String
+  trans: JSON
+  example: String
+  exTrans: JSON
+  dict: DictRelateToManyForCreateInput
+}
+
+input DictRelateToManyForCreateInput {
+  create: [DictCreateInput!]
+  connect: [DictWhereUniqueInput!]
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -269,6 +421,18 @@ type Mutation {
   updateTopiks(data: [TopikUpdateArgs!]!): [Topik]
   deleteTopik(where: TopikWhereUniqueInput!): Topik
   deleteTopiks(where: [TopikWhereUniqueInput!]!): [Topik]
+  createDict(data: DictCreateInput!): Dict
+  createDicts(data: [DictCreateInput!]!): [Dict]
+  updateDict(where: DictWhereUniqueInput!, data: DictUpdateInput!): Dict
+  updateDicts(data: [DictUpdateArgs!]!): [Dict]
+  deleteDict(where: DictWhereUniqueInput!): Dict
+  deleteDicts(where: [DictWhereUniqueInput!]!): [Dict]
+  createDictItem(data: DictItemCreateInput!): DictItem
+  createDictItems(data: [DictItemCreateInput!]!): [DictItem]
+  updateDictItem(where: DictItemWhereUniqueInput!, data: DictItemUpdateInput!): DictItem
+  updateDictItems(data: [DictItemUpdateArgs!]!): [DictItem]
+  deleteDictItem(where: DictItemWhereUniqueInput!): DictItem
+  deleteDictItems(where: [DictItemWhereUniqueInput!]!): [DictItem]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -298,6 +462,12 @@ type Query {
   topik(where: TopikWhereUniqueInput!): Topik
   topiks(where: TopikWhereInput! = {}, orderBy: [TopikOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopikWhereUniqueInput): [Topik!]
   topiksCount(where: TopikWhereInput! = {}): Int
+  dict(where: DictWhereUniqueInput!): Dict
+  dicts(where: DictWhereInput! = {}, orderBy: [DictOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictWhereUniqueInput): [Dict!]
+  dictsCount(where: DictWhereInput! = {}): Int
+  dictItem(where: DictItemWhereUniqueInput!): DictItem
+  dictItems(where: DictItemWhereInput! = {}, orderBy: [DictItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictItemWhereUniqueInput): [DictItem!]
+  dictItemsCount(where: DictItemWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

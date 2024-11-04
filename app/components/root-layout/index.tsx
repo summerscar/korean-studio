@@ -9,6 +9,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import clsx from "clsx";
+import { SessionProvider } from "next-auth/react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 
@@ -39,9 +40,11 @@ export async function DefaultLayout({
 				className={clsx(inter.className, bodyClassName, "text-base-content")}
 			>
 				<div id="bg" />
-				<NextIntlClientProvider messages={messages}>
-					<main className="flex min-h-dvh flex-col">{children}</main>
-				</NextIntlClientProvider>
+				<SessionProvider>
+					<NextIntlClientProvider messages={messages}>
+						<main className="flex min-h-dvh flex-col">{children}</main>
+					</NextIntlClientProvider>
+				</SessionProvider>
 				<ToastRoot />
 				{isProd && <SpeedInsights />}
 				{isProd && <Analytics />}

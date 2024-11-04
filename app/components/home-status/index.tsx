@@ -15,7 +15,7 @@ import { Pronunciation } from "@/components/pronunciation";
 import { usePronunciation } from "@/hooks/use-pronunciation";
 import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
-import type { Tran } from "@/types/dict";
+import type { Tran, UserDicts } from "@/types/dict";
 import { useInputAudioEffect } from "@/utils/audio";
 import { playConfetti } from "@/utils/confetti";
 import { HOME_SETTING_KEY } from "@/utils/config";
@@ -35,8 +35,8 @@ import {
 import { myeongjo, notoKR } from "@/utils/fonts";
 import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
+import { getLocalDict } from "@/utils/local-dict";
 import { shuffleArr } from "@/utils/shuffle-array";
-import { getUserDict } from "@/utils/user-dict";
 import {
 	useEventListener,
 	useLatest,
@@ -59,9 +59,15 @@ import {
 import reactStringReplace from "react-string-replace";
 
 const HomeStatus = ({
+	isLocalDict,
+	isUserDict,
+	userDicts,
 	dict: originalDict,
 	dictName,
 }: {
+	isLocalDict: boolean;
+	isUserDict: boolean;
+	userDicts: UserDicts;
 	dict: Dict;
 	dictName: Dicts;
 }) => {
@@ -129,19 +135,19 @@ const HomeStatus = ({
 		},
 	);
 
-	const setUserDict = useMemoizedFn((updateCurrentWord = false) => {
-		const userDict = getUserDict();
-		setDictAndDisableVoice(userDict, updateCurrentWord);
+	const setLocalDict = useMemoizedFn((updateCurrentWord = false) => {
+		const localDict = getLocalDict();
+		setDictAndDisableVoice(localDict, updateCurrentWord);
 	});
 
 	useEffect(() => {
 		const searchParams = new URLSearchParams(window.location.search);
-		if (searchParams.get("dict") === Dicts.user) {
-			setUserDict();
+		if (searchParams.get("dict") === Dicts.local) {
+			setLocalDict();
 			return;
 		}
 		setDictAndDisableVoice(originalDict);
-	}, [originalDict, setUserDict, setDictAndDisableVoice]);
+	}, [originalDict, setLocalDict, setDictAndDisableVoice]);
 
 	const shuffleDict = useMemoizedFn(() => {
 		setDictAndDisableVoice((prev) => shuffleArr(prev), true);
@@ -381,10 +387,6 @@ const HomeStatus = ({
 		));
 	};
 
-	if (dict.length === 0) {
-		return null;
-	}
-
 	if (isComplete) {
 		return (
 			<Wrapper>
@@ -404,23 +406,25 @@ const HomeStatus = ({
 				curWordIndex={curWordIndex}
 				hideMeaning={!setting.showMeaning}
 			/>
-			<div className={clsx(notoKR.className, "text-4xl font-bold relative")}>
-				{displayName}
-				<div
-					className="tooltip tooltip-top sm:tooltip-right absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-1/2"
-					data-tip={`${romanized} [${standardized}]`}
-				>
-					<SpeakerIcon
-						width={20}
-						height={20}
-						onMouseEnter={playWord}
-						className={clsx(
-							isWordPlaying ? "fill-current" : "text-base-content",
-							"cursor-pointer inline-block",
-						)}
-					/>
+			{displayName && (
+				<div className={clsx(notoKR.className, "text-4xl font-bold relative")}>
+					{displayName}
+					<div
+						className="tooltip tooltip-top sm:tooltip-right absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-1/2"
+						data-tip={`${romanized} [${standardized}]`}
+					>
+						<SpeakerIcon
+							width={20}
+							height={20}
+							onMouseEnter={playWord}
+							className={clsx(
+								isWordPlaying ? "fill-current" : "text-base-content",
+								"cursor-pointer inline-block",
+							)}
+						/>
+					</div>
 				</div>
-			</div>
+			)}
 			<div className="text-lg text-gray-500 mt-3 mb-2">
 				<HideText hide={!setting.showMeaning}>{translation}</HideText>
 			</div>
@@ -442,17 +446,19 @@ const HomeStatus = ({
 						{strItem}
 					</span>
 				))}
-				<div
-					className="tooltip tooltip-top sm:tooltip-right absolute -right-9 top-1/2 -translate-x-1/2 -translate-y-1/2"
-					data-tip={qwerty}
-				>
-					<InfoIcon
-						className="opacity-60"
-						width={20}
-						height={20}
-						viewBox="0 0 24 24"
-					/>
-				</div>
+				{qwerty && (
+					<div
+						className="tooltip tooltip-top sm:tooltip-right absolute -right-9 top-1/2 -translate-x-1/2 -translate-y-1/2"
+						data-tip={qwerty}
+					>
+						<InfoIcon
+							className="opacity-60"
+							width={20}
+							height={20}
+							viewBox="0 0 24 24"
+						/>
+					</div>
+				)}
 			</div>
 			<div className="hidden">
 				{showKeyboard ? (
@@ -548,19 +554,24 @@ const HomeStatus = ({
 					</span>
 				))}
 			</div>
-			<HomeInput
-				onFocusChange={setIsInputFocused}
-				onInput={setInputKeys}
-				position={inputPosition}
-				ref={inputRef}
-			/>
+			{qwerty && (
+				<HomeInput
+					onFocusChange={setIsInputFocused}
+					onInput={setInputKeys}
+					position={inputPosition}
+					ref={inputRef}
+				/>
+			)}
 			<HomeDrawer
+				isLocalDict={isLocalDict}
+				isUserDict={isUserDict}
+				userDicts={userDicts}
 				drawerRef={drawerRef}
 				dict={dict}
 				curWordIndex={curWordIndex}
 				onClick={skipToNextWord}
 				onShuffle={shuffleDict}
-				onUserDictUpdate={() => setUserDict(true)}
+				onLocalDictUpdate={() => setLocalDict(true)}
 				setting={setting}
 				onSettingChange={onSettingChange}
 			/>

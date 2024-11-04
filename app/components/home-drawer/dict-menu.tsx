@@ -1,35 +1,47 @@
 "use client";
 import { generateWordsAction } from "@/actions/generate-word-action";
+import { createDictAction } from "@/actions/user-dict-action";
 import DownloadIcon from "@/assets/svg/download.svg";
 import FileImportIcon from "@/assets/svg/file-import.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
 import ShuffleIcon from "@/assets/svg/shuffle.svg";
 import { createToast } from "@/hooks/use-toast";
+import { useUser } from "@/hooks/use-user";
 import type { HomeSetting } from "@/types";
-import { type DictItem, Dicts } from "@/types/dict";
-import { addUserDict, downLoadDict, importDict } from "@/utils/user-dict";
+import { Dicts, type UserDicts } from "@/types/dict";
+import { addLocalDict, downLoadDict, importDict } from "@/utils/local-dict";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const DictMenu = ({
+	userDicts,
 	onShuffle,
-	onUserDictUpdate,
+	onLocalDictUpdate,
 	onSettingChange,
 	setting,
+	isUserDict,
+	isLocalDict,
 }: {
+	userDicts: UserDicts;
 	onShuffle?: () => void;
-	onUserDictUpdate?: () => void;
+	onLocalDictUpdate?: () => void;
 	onSettingChange?: (val: Partial<HomeSetting>) => void;
 	setting: HomeSetting;
+	isUserDict: boolean;
+	isLocalDict: boolean;
 }) => {
+	const { isLogin } = useUser();
 	const tHome = useTranslations("Home");
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const tIndex = useTranslations("Dict");
 	const currentDict = searchParams.get("dict") || Dicts.popular;
-	const isUserDict = currentDict === Dicts.user;
 
 	const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		if (e.target.value === "_create") {
+			createDict();
+			return;
+		}
 		router.push(`/?dict=${e.target.value}`);
 	};
 
@@ -51,8 +63,11 @@ const DictMenu = ({
 				const result = await generateWordsAction(
 					word.split(/[,，、]+/).map((_) => _.trim()),
 				);
-				addUserDict(...result);
-				onUserDictUpdate?.();
+				if (isLocalDict) {
+					addLocalDict(...result);
+					onLocalDictUpdate?.();
+				} else {
+				}
 				createToast({
 					type: "success",
 					message: <span>{tHome("generated")}</span>,
@@ -67,7 +82,35 @@ const DictMenu = ({
 	};
 
 	const handleImport = async () => {
-		importDict(onUserDictUpdate);
+		importDict(onLocalDictUpdate);
+	};
+
+	const createDict = async () => {
+		// TODO: intl
+		if (!isLogin) {
+			router.push("/api/auth/signin");
+			return;
+		}
+		const dictName = prompt("name:");
+		if (dictName) {
+			createToast({
+				type: "info",
+				delay: 60 * 1000 * 5,
+				// TODO: intl
+				message: (
+					<div className="flex items-center">
+						<span className="loading loading-spinner loading-sm mr-2" />
+						{tHome("generating")}
+					</div>
+				),
+			});
+			await createDictAction(dictName);
+			createToast({
+				type: "success",
+				// TODO: intl
+				message: <span>success</span>,
+			});
+		}
 	};
 
 	return (
@@ -129,7 +172,7 @@ const DictMenu = ({
 						</div>
 					</div>
 				</div>
-				{isUserDict && (
+				{(isLocalDict || isUserDict) && (
 					<>
 						<span onClick={createWord} className="text-xl">
 							+
@@ -149,6 +192,13 @@ const DictMenu = ({
 						{tIndex(dict)}
 					</option>
 				))}
+				{userDicts.map((dict) => (
+					<option key={dict.id} value={dict.id}>
+						{dict.name}
+					</option>
+				))}
+				{/* // TODO: intl */}
+				<option value="_create">create</option>
 			</select>
 		</div>
 	);

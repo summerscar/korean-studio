@@ -6,12 +6,13 @@ import {
 	integer,
 	json,
 	password,
+	relationship,
 	select,
 	text,
 	timestamp,
 } from "@keystone-6/core/fields";
 import type { KeystoneContext } from "@keystone-6/core/types";
-import type { Session } from "next-auth";
+import type { Session as NextAuthSession } from "next-auth";
 import type { Lists, TypeInfo } from ".keystone/types";
 
 export const authConfig = {
@@ -27,15 +28,24 @@ export const authConfig = {
 	},
 } satisfies Parameters<typeof createAuth>[0];
 
+type KeyStoneSession = {
+	data: {
+		id: string;
+		isAdmin: boolean;
+	};
+};
+
+type Session = NextAuthSession | KeyStoneSession;
+
 const isFromNextAuth = (session: Session) => {
-	return session?.user?.id !== undefined;
+	return (session as NextAuthSession)?.user?.id !== undefined;
 };
 
 const getUserFromNextAuth = async (
 	ctx: KeystoneContext<TypeInfo>,
 	session: Session,
 ) => {
-	const id = session.user?.id;
+	const id = (session as NextAuthSession).user?.id;
 
 	const user = await ctx.sudo().query.User.findOne({
 		where: { id },
@@ -43,36 +53,45 @@ const getUserFromNextAuth = async (
 	});
 	return user;
 };
+const hasSession = async ({
+	session,
+	context,
+	listKey,
+	operation,
+}: {
+	session?: Session;
+	context: KeystoneContext<TypeInfo>;
+	listKey: string;
+	operation: string;
+}) => {
+	if (!session) {
+		console.log(
+			`[keystone][${operation}][${listKey}]: `,
+			"-----no session-----",
+		);
+		return false;
+	}
+	console.log(`[keystone][${operation}][${listKey}]: start...`, session);
+	if (isFromNextAuth(session)) {
+		const user = await getUserFromNextAuth(context, session);
+		console.log("[keystone][from next.js][query]", JSON.stringify(user));
+	}
+	console.log(`[keystone][${operation}][${listKey}]: end...`);
+	return true;
+};
+
+const isAdmin = ({ session }: { session?: Session }) =>
+	Boolean((session as KeyStoneSession)?.data?.isAdmin);
 
 export const lists = {
 	User: list({
 		access: {
 			operation: {
-				// TODO: add auth
-				...allOperations(allowAll),
 				// hint: unconditionally returning `true` is equivalent to using allowAll for this operation
-				query: async ({ session, context, listKey, operation }) => {
-					if (!session) {
-						console.log(
-							`[keystone][${operation}][${listKey}]: `,
-							"-----no session-----",
-						);
-						return false;
-					}
-					console.log(
-						`[keystone][${operation}][${listKey}]: start...`,
-						session,
-					);
-					if (isFromNextAuth(session)) {
-						const user = await getUserFromNextAuth(context, session);
-						console.log(
-							"[keystone][from next.js][query]",
-							JSON.stringify(user),
-						);
-					}
-					console.log(`[keystone][${operation}][${listKey}]: end...`);
-					return true;
-				},
+				query: hasSession,
+				create: isAdmin,
+				update: isAdmin,
+				delete: isAdmin,
 			},
 		},
 
@@ -145,6 +164,42 @@ export const lists = {
 				],
 			}),
 			explanation: text({ label: "解析" }),
+		},
+	}),
+	Dict: list({
+		access: allowAll,
+		fields: {
+			name: text({ validation: { isRequired: true } }),
+			public: checkbox({ defaultValue: false }),
+			createdAt: timestamp({ defaultValue: { kind: "now" } }),
+			createdBy: relationship({ ref: "User", many: false }),
+			list: relationship({ ref: "DictItem", many: true }),
+		},
+	}),
+	DictItem: list({
+		access: allowAll,
+		fields: {
+			name: text({ validation: { isRequired: true } }),
+			trans: json({
+				label: "翻译",
+				defaultValue: {
+					en: [""],
+					"zh-CN": [""],
+					"zh-TW": [""],
+					ja: [""],
+				},
+			}),
+			example: text({ label: "例句" }),
+			exTrans: json({
+				label: "例句翻译",
+				defaultValue: {
+					en: [""],
+					"zh-CN": [""],
+					"zh-TW": [""],
+					ja: [""],
+				},
+			}),
+			dict: relationship({ ref: "Dict", many: true }),
 		},
 	}),
 } satisfies Lists;

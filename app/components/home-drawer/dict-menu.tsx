@@ -153,7 +153,7 @@ const DictMenu = ({
 	};
 
 	return (
-		<div className="sticky top-2 z-10 bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1">
+		<div className="sticky top-2 z-10 bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1 max-w-full">
 			<div className="pl-3 flex items-center *:mx-1 *:inline-block *:cursor-pointer *:select-none">
 				<ShuffleIcon
 					width={20}
@@ -221,7 +221,7 @@ const DictMenu = ({
 				)}
 			</div>
 			<select
-				className="select select-bordered w-28 select-sm"
+				className="select select-bordered w-16 sm:w-32 select-sm"
 				value={dictId}
 				onChange={onChange}
 			>

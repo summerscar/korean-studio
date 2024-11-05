@@ -2,6 +2,8 @@ name: Generate doc
 run-name: Generate doc
 on:
   push:
+    branches:
+      - develop
   workflow_dispatch:
     inputs:
       docLevel:

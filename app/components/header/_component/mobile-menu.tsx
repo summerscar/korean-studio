@@ -1,6 +1,7 @@
 "use client";
 import CloseIcon from "@/assets/svg/close.svg";
 import MenuIcon from "@/assets/svg/menu.svg";
+import { isAdmin } from "@/hooks/use-user";
 import clsx from "clsx";
 import type { Session } from "next-auth";
 import Link from "next/link";
@@ -52,9 +53,13 @@ const MobileMenu = ({
 					</Link>
 				))}
 				{session ? (
-					<div className="p-2">
-						<span>{session.user?.name}</span>
-						<Link className="ml-4" href="/api/auth/signout">
+					<div className="p-2 flex flex-col">
+						<span
+							className={isAdmin(session) ? "text-yellow-200 font-bold" : ""}
+						>
+							{session.user?.name}
+						</span>
+						<Link className="py-3" href="/api/auth/signout">
 							Signout
 						</Link>
 					</div>

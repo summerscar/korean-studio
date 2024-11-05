@@ -1,12 +1,10 @@
+import { getAllDicts } from "@/actions/user-dict-action";
 import {
 	createCachedDictList,
-	getAllDicts,
-	getDictList,
-} from "@/actions/user-dict-action";
+	filterAndSortDictList,
+} from "@/actions/user-dict-utils";
 import { HomeStatus } from "@/components/home-status";
-import { type Dict, Dicts, type UserDicts, dictNameList } from "@/types/dict";
-
-import { fetchDict } from "@/utils/api";
+import { Dicts } from "@/types/dict";
 import { auth } from "auth";
 
 export default async function HomePage(props: {
@@ -15,9 +13,7 @@ export default async function HomePage(props: {
 	const session = await auth();
 	const { dict: searchParamsDict } = await props.searchParams;
 
-	const dictList = (await getAllDicts()).filter(
-		(dict) => dict.public || dict.createdBy.id === session?.user?.id,
-	);
+	const dictList = filterAndSortDictList(await getAllDicts(), session);
 
 	const isLocalDict = Dicts.local === searchParamsDict;
 
@@ -32,7 +28,7 @@ export default async function HomePage(props: {
 	const dict =
 		searchParamsDict === Dicts.local
 			? []
-			: await createCachedDictList(targetDictId!)(targetDictId!, session);
+			: await createCachedDictList(targetDictId!)();
 
 	const dictId = searchParamsDict === Dicts.local ? Dicts.local : targetDictId;
 

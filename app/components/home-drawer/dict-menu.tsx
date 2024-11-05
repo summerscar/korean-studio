@@ -4,11 +4,15 @@ import {
 	addWordsToUserDictAction,
 	createDictAction,
 	importDictItemToUserDict,
+	removeDictAction,
 } from "@/actions/user-dict-action";
+import AddIcon from "@/assets/svg/add.svg";
+import CloseIcon from "@/assets/svg/close.svg";
 import DownloadIcon from "@/assets/svg/download.svg";
 import FileImportIcon from "@/assets/svg/file-import.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
 import ShuffleIcon from "@/assets/svg/shuffle.svg";
+
 import {
 	createErrorToast,
 	createLoadingToast,
@@ -136,6 +140,18 @@ const DictMenu = ({
 		}
 	};
 
+	const handleRemoveDict = async () => {
+		const res = confirm();
+		if (!res) return;
+		// TODO: intl
+		const removeInfoToast = createLoadingToast("removing....");
+		await removeDictAction(dictId);
+		router.push("/");
+		await serverActionTimeOut();
+		removeInfoToast();
+		createSuccessToast("success");
+	};
+
 	return (
 		<div className="sticky top-2 z-10 bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1">
 			<div className="pl-3 flex items-center *:mx-1 *:inline-block *:cursor-pointer *:select-none">
@@ -195,14 +211,13 @@ const DictMenu = ({
 						</div>
 					</div>
 				</div>
+				{isUserDict && <AddIcon className="size-6" onClick={createWord} />}
+				<DownloadIcon className="size-6" onClick={handleDownload} />
 				{isUserDict && (
-					<span onClick={createWord} className="text-xl">
-						+
-					</span>
+					<FileImportIcon className="size-6" onClick={handleImport} />
 				)}
-				<DownloadIcon width={20} height={20} onClick={handleDownload} />
 				{isUserDict && (
-					<FileImportIcon width={20} height={20} onClick={handleImport} />
+					<CloseIcon className="size-6" onClick={handleRemoveDict} />
 				)}
 			</div>
 			<select

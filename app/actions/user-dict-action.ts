@@ -89,12 +89,20 @@ const getDictList = async (dictId: string) => {
 	const res = (await ctx.query.Dict.findOne({
 		where: { id: dictId },
 		query: "list { id name trans example exTrans }",
-	})) as { list: Dict };
-	return toPlainObject(res.list);
+	})) as { list: Dict } | null;
+	return toPlainObject(res?.list || []);
 };
 
 const importDictItemToUserDict = async (dictId: string, JSONString: string) => {
 	await addDictItemToDictAction(dictId, JSON.parse(JSONString));
+	revalidateTag(getDictRevalidateKey(dictId));
+};
+
+const removeDictAction = async (dictId: string) => {
+	const session = await auth();
+	const ctx = KSwithSession(session);
+	await ctx.query.Dict.deleteOne({ where: { id: dictId } });
+	revalidateTag(allDictsRevalidateKey);
 	revalidateTag(getDictRevalidateKey(dictId));
 };
 
@@ -104,5 +112,6 @@ export {
 	getDictList,
 	addWordsToUserDictAction,
 	removeDictItemAction,
+	removeDictAction,
 	importDictItemToUserDict,
 };

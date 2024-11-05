@@ -1,4 +1,6 @@
 import type { DictItem } from "@/types/dict";
+import { downloadFile } from "./download-file";
+import { importJSONFile } from "./import-json-file";
 const LOCAL_DICT_KEY = "localDict";
 
 const WORD_EXAMPLE = {
@@ -52,35 +54,16 @@ const initLocalDict = () => {
 	setLocalDict([WORD_EXAMPLE]);
 };
 
-const downLoadDict = () => {
+const downLoadLocalDict = () => {
 	const localDict = getLocalDict();
-	const blob = new Blob([JSON.stringify(localDict, null, 2)], {
-		type: "application/json",
-	});
-	const url = URL.createObjectURL(blob);
-	const link = document.createElement("a");
-	link.href = url;
-	link.download = `${LOCAL_DICT_KEY}.json`;
-	link.click();
-	URL.revokeObjectURL(url);
+	downloadFile(JSON.stringify(localDict, null, 2), `${LOCAL_DICT_KEY}.json`);
 };
 
-const importDict = (cb?: () => void) => {
-	const file = document.createElement("input");
-	file.type = "file";
-	file.accept = "application/json";
-	file.click();
-	file.onchange = (e) => {
-		const file = (e.target as HTMLInputElement).files?.[0];
-		if (!file) return;
-		const reader = new FileReader();
-		reader.onload = () => {
-			const localDict = JSON.parse(reader.result as string);
-			setLocalDict(localDict);
-			cb?.();
-		};
-		reader.readAsText(file);
-	};
+const importLocalDict = async (cb?: () => void) => {
+	const fileString = await importJSONFile();
+	const localDict = JSON.parse(fileString as string);
+	setLocalDict(localDict);
+	cb?.();
 };
 
 export {
@@ -88,8 +71,8 @@ export {
 	initLocalDict,
 	addLocalDict,
 	removeLocalDict,
-	importDict,
-	downLoadDict,
+	importLocalDict,
+	downLoadLocalDict,
 	LOCAL_DICT_KEY,
 	WORD_EXAMPLE,
 };

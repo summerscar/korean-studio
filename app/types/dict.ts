@@ -8,6 +8,7 @@ export interface Tran {
 }
 
 export interface DictItem {
+	id?: string;
 	name: string;
 	trans: Tran;
 	example?: string;
@@ -20,6 +21,7 @@ export enum Dicts {
 	adverb = "adverb",
 	family = "family",
 	onomatopoeia = "onomatopoeia",
+	adjective = "adjective",
 	local = "_local",
 }
 
@@ -28,7 +30,9 @@ export const dictNameList = Object.values(Dicts);
 export const DEFAULT_DICT = Dicts.popular;
 
 export type UserDicts = Array<
-	Lists.Dict.Item & { list: Lists.DictItem.Item[] }
+	Lists.Dict.Item & { createdBy: { id: string; name: string } }
 >;
+
+export type UserDictList = Lists.DictItem.Item[];
 
 export type Dict = DictItem[];

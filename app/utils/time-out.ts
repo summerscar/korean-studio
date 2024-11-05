@@ -1,4 +1,6 @@
 const timeOut = (ms: number) =>
 	new Promise((resolve) => setTimeout(resolve, ms));
 
-export { timeOut };
+const serverActionTimeOut = (ms = 500) => timeOut(ms);
+
+export { timeOut, serverActionTimeOut };

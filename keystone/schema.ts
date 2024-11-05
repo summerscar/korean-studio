@@ -171,9 +171,10 @@ export const lists = {
 		fields: {
 			name: text({ validation: { isRequired: true } }),
 			public: checkbox({ defaultValue: false }),
+			intlKey: text({ validation: { isRequired: false } }),
 			createdAt: timestamp({ defaultValue: { kind: "now" } }),
 			createdBy: relationship({ ref: "User", many: false }),
-			list: relationship({ ref: "DictItem", many: true }),
+			list: relationship({ ref: "DictItem.dict", many: true }),
 		},
 	}),
 	DictItem: list({
@@ -199,7 +200,9 @@ export const lists = {
 					ja: [""],
 				},
 			}),
-			dict: relationship({ ref: "Dict", many: true }),
+			createdAt: timestamp({ defaultValue: { kind: "now" } }),
+			createdBy: relationship({ ref: "User", many: false }),
+			dict: relationship({ ref: "Dict.list", many: true }),
 		},
 	}),
 } satisfies Lists;

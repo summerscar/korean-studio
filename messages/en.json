@@ -27,7 +27,8 @@
 		"adverb": "Adverb",
 		"family": "Family",
 		"onomatopoeia": "Onomatopoeia",
-		"_local": "My Words"
+		"adjective": "Adjective",
+		"_local": "My Local Words"
 	},
 	"Tools": {
 		"description": "Korean text tools: standardize pronunciation, romanize, assemble, disassemble",

@@ -1,16 +1,17 @@
+import { removeDictItemAction } from "@/actions/user-dict-action";
 import CloseIcon from "@/assets/svg/close.svg";
 import SearchIcon from "@/assets/svg/search.svg";
 import { ClientOnly } from "@/components/client-only";
+import { createLoadingToast, createSuccessToast } from "@/hooks/use-toast";
 import type { HomeSetting } from "@/types";
-import { type Dict, Dicts, type UserDicts } from "@/types/dict";
+import { type Dict, type DictItem, Dicts, type UserDicts } from "@/types/dict";
 import { getTranslation } from "@/utils/convert-input";
 import { isServer } from "@/utils/is-server";
 import { removeLocalDict } from "@/utils/local-dict";
-import { timeOut } from "@/utils/time-out";
+import { serverActionTimeOut, timeOut } from "@/utils/time-out";
 import { useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { useLocale } from "next-intl";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { DictMenu } from "./dict-menu";
@@ -19,19 +20,21 @@ const HomeDrawer = ({
 	isLocalDict,
 	isUserDict,
 	dict,
-	userDicts,
+	dictList,
 	curWordIndex,
 	onClick,
 	onShuffle,
 	onLocalDictUpdate,
 	drawerRef,
 	setting,
+	dictId,
 	onSettingChange,
 }: {
 	isLocalDict: boolean;
 	isUserDict: boolean;
 	dict: Dict;
-	userDicts: UserDicts;
+	dictId: string;
+	dictList: UserDicts;
 	curWordIndex: number;
 	onClick: (index: number) => void;
 	drawerRef: React.RefObject<{ open: () => void }>;
@@ -66,6 +69,23 @@ const HomeDrawer = ({
 		});
 	});
 
+	const handleRemove = async (e: React.MouseEvent, item: DictItem) => {
+		e.stopPropagation();
+		if (confirm()) {
+			if (isLocalDict) {
+				removeLocalDict(item.name);
+				onLocalDictUpdate();
+			} else {
+				// TODO: intl
+				const cancel = createLoadingToast(`【${item.name}】removing....`);
+				await removeDictItemAction(dictId, item.id!);
+				await serverActionTimeOut();
+				cancel();
+				createSuccessToast("success");
+			}
+		}
+	};
+
 	if (isServer) return null;
 	return (
 		<ClientOnly>
@@ -99,7 +119,9 @@ const HomeDrawer = ({
 							<DictMenu
 								isUserDict={isUserDict}
 								isLocalDict={isLocalDict}
-								userDicts={userDicts}
+								dictId={dictId}
+								dictList={dictList}
+								dict={dict}
 								setting={setting}
 								onSettingChange={onSettingChange}
 								onShuffle={onShuffle}
@@ -108,7 +130,7 @@ const HomeDrawer = ({
 							{/* Sidebar content here */}
 							{dict.map((item, index) => (
 								<li
-									key={item.name}
+									key={item.id || item.name}
 									className={clsx(
 										"cursor-pointer relative group mb-1 last:mb-0",
 									)}
@@ -130,16 +152,10 @@ const HomeDrawer = ({
 												{getTranslation(item, locale)}
 											</span>
 										</div>
-										{isLocalDict && dict.length > 1 && (
+										{(isLocalDict || isUserDict) && (
 											<div
 												className="absolute -top-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
-												onClick={(e) => {
-													e.stopPropagation();
-													if (confirm()) {
-														removeLocalDict(item.name);
-														onLocalDictUpdate();
-													}
-												}}
+												onClick={(e) => handleRemove(e, item)}
 											>
 												<CloseIcon className="w-4 h-4" />
 											</div>

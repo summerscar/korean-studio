@@ -51,7 +51,7 @@ const removeLocalDict = (dictName: string) => {
 };
 
 const initLocalDict = () => {
-	setLocalDict([WORD_EXAMPLE]);
+	setLocalDict([]);
 };
 
 const downLoadLocalDict = () => {

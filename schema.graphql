@@ -255,6 +255,7 @@ type Dict {
   id: ID!
   name: String
   public: Boolean
+  intlKey: String
   createdAt: DateTime
   createdBy: User
   list(where: DictItemWhereInput! = {}, orderBy: [DictItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictItemWhereUniqueInput): [DictItem!]
@@ -272,6 +273,7 @@ input DictWhereInput {
   id: IDFilter
   name: StringFilter
   public: BooleanFilter
+  intlKey: StringFilter
   createdAt: DateTimeNullableFilter
   createdBy: UserWhereInput
   list: DictItemManyRelationFilter
@@ -287,12 +289,14 @@ input DictOrderByInput {
   id: OrderDirection
   name: OrderDirection
   public: OrderDirection
+  intlKey: OrderDirection
   createdAt: OrderDirection
 }
 
 input DictUpdateInput {
   name: String
   public: Boolean
+  intlKey: String
   createdAt: DateTime
   createdBy: UserRelateToOneForUpdateInput
   list: DictItemRelateToManyForUpdateInput
@@ -319,6 +323,7 @@ input DictUpdateArgs {
 input DictCreateInput {
   name: String
   public: Boolean
+  intlKey: String
   createdAt: DateTime
   createdBy: UserRelateToOneForCreateInput
   list: DictItemRelateToManyForCreateInput
@@ -340,6 +345,8 @@ type DictItem {
   trans: JSON
   example: String
   exTrans: JSON
+  createdAt: DateTime
+  createdBy: User
   dict(where: DictWhereInput! = {}, orderBy: [DictOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictWhereUniqueInput): [Dict!]
   dictCount(where: DictWhereInput! = {}): Int
 }
@@ -355,6 +362,8 @@ input DictItemWhereInput {
   id: IDFilter
   name: StringFilter
   example: StringFilter
+  createdAt: DateTimeNullableFilter
+  createdBy: UserWhereInput
   dict: DictManyRelationFilter
 }
 
@@ -368,6 +377,7 @@ input DictItemOrderByInput {
   id: OrderDirection
   name: OrderDirection
   example: OrderDirection
+  createdAt: OrderDirection
 }
 
 input DictItemUpdateInput {
@@ -375,6 +385,8 @@ input DictItemUpdateInput {
   trans: JSON
   example: String
   exTrans: JSON
+  createdAt: DateTime
+  createdBy: UserRelateToOneForUpdateInput
   dict: DictRelateToManyForUpdateInput
 }
 
@@ -395,6 +407,8 @@ input DictItemCreateInput {
   trans: JSON
   example: String
   exTrans: JSON
+  createdAt: DateTime
+  createdBy: UserRelateToOneForCreateInput
   dict: DictRelateToManyForCreateInput
 }
 

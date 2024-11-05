@@ -13,13 +13,14 @@ generator client {
 }
 
 model User {
-  id                  String    @id @default(cuid())
-  name                String    @default("")
-  email               String    @unique @default("")
-  password            String?
-  isAdmin             Boolean   @default(false)
-  createdAt           DateTime? @default(now())
-  from_Dict_createdBy Dict[]    @relation("Dict_createdBy")
+  id                      String     @id @default(cuid())
+  name                    String     @default("")
+  email                   String     @unique @default("")
+  password                String?
+  isAdmin                 Boolean    @default(false)
+  createdAt               DateTime?  @default(now())
+  from_Dict_createdBy     Dict[]     @relation("Dict_createdBy")
+  from_DictItem_createdBy DictItem[] @relation("DictItem_createdBy")
 }
 
 model Topik {
@@ -38,26 +39,30 @@ model Topik {
 }
 
 model Dict {
-  id                 String     @id @default(cuid())
-  name               String     @default("")
-  public             Boolean    @default(false)
-  createdAt          DateTime?  @default(now())
-  createdBy          User?      @relation("Dict_createdBy", fields: [createdById], references: [id])
-  createdById        String?    @map("createdBy")
-  list               DictItem[] @relation("Dict_list")
-  from_DictItem_dict DictItem[] @relation("DictItem_dict")
+  id          String     @id @default(cuid())
+  name        String     @default("")
+  public      Boolean    @default(false)
+  intlKey     String     @default("")
+  createdAt   DateTime?  @default(now())
+  createdBy   User?      @relation("Dict_createdBy", fields: [createdById], references: [id])
+  createdById String?    @map("createdBy")
+  list        DictItem[] @relation("Dict_list")
 
   @@index([createdById])
 }
 
 model DictItem {
-  id             String @id @default(cuid())
-  name           String @default("")
-  trans          Json?  @default("{\"en\":[\"\"],\"zh-CN\":[\"\"],\"zh-TW\":[\"\"],\"ja\":[\"\"]}")
-  example        String @default("")
-  exTrans        Json?  @default("{\"en\":[\"\"],\"zh-CN\":[\"\"],\"zh-TW\":[\"\"],\"ja\":[\"\"]}")
-  dict           Dict[] @relation("DictItem_dict")
-  from_Dict_list Dict[] @relation("Dict_list")
+  id          String    @id @default(cuid())
+  name        String    @default("")
+  trans       Json?     @default("{\"en\":[\"\"],\"zh-CN\":[\"\"],\"zh-TW\":[\"\"],\"ja\":[\"\"]}")
+  example     String    @default("")
+  exTrans     Json?     @default("{\"en\":[\"\"],\"zh-CN\":[\"\"],\"zh-TW\":[\"\"],\"ja\":[\"\"]}")
+  createdAt   DateTime? @default(now())
+  createdBy   User?     @relation("DictItem_createdBy", fields: [createdById], references: [id])
+  createdById String?   @map("createdBy")
+  dict        Dict[]    @relation("Dict_list")
+
+  @@index([createdById])
 }
 
 enum TopikLevelType {

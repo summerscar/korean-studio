@@ -1,20 +1,37 @@
 "use client";
 import { generateWordsAction } from "@/actions/generate-word-action";
-import { createDictAction } from "@/actions/user-dict-action";
+import {
+	addWordsToUserDictAction,
+	createDictAction,
+	importDictItemToUserDict,
+} from "@/actions/user-dict-action";
 import DownloadIcon from "@/assets/svg/download.svg";
 import FileImportIcon from "@/assets/svg/file-import.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
 import ShuffleIcon from "@/assets/svg/shuffle.svg";
-import { createToast } from "@/hooks/use-toast";
+import {
+	createErrorToast,
+	createLoadingToast,
+	createSuccessToast,
+} from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
 import type { HomeSetting } from "@/types";
-import { Dicts, type UserDicts } from "@/types/dict";
-import { addLocalDict, downLoadDict, importDict } from "@/utils/local-dict";
+import { type Dict, Dicts, type UserDicts } from "@/types/dict";
+import { downloadFile } from "@/utils/download-file";
+import { importJSONFile } from "@/utils/import-json-file";
+import {
+	addLocalDict,
+	downLoadLocalDict,
+	importLocalDict,
+} from "@/utils/local-dict";
+import { serverActionTimeOut } from "@/utils/time-out";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const DictMenu = ({
-	userDicts,
+	dict,
+	dictId,
+	dictList,
 	onShuffle,
 	onLocalDictUpdate,
 	onSettingChange,
@@ -22,7 +39,9 @@ const DictMenu = ({
 	isUserDict,
 	isLocalDict,
 }: {
-	userDicts: UserDicts;
+	dict: Dict;
+	dictId: string;
+	dictList: UserDicts;
 	onShuffle?: () => void;
 	onLocalDictUpdate?: () => void;
 	onSettingChange?: (val: Partial<HomeSetting>) => void;
@@ -32,10 +51,8 @@ const DictMenu = ({
 }) => {
 	const { isLogin } = useUser();
 	const tHome = useTranslations("Home");
-	const searchParams = useSearchParams();
 	const router = useRouter();
-	const tIndex = useTranslations("Dict");
-	const currentDict = searchParams.get("dict") || Dicts.popular;
+	const tDict = useTranslations("Dict");
 
 	const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		if (e.target.value === "_create") {
@@ -48,33 +65,22 @@ const DictMenu = ({
 	const createWord = async () => {
 		const word = prompt(tHome("createWord"), tHome("exampleWord"));
 		if (word) {
-			const removeInfoToast = createToast({
-				type: "info",
-				delay: 60 * 1000 * 5,
-				message: (
-					<div className="flex items-center">
-						<span className="loading loading-spinner loading-sm mr-2" />
-						{tHome("generating")}
-					</div>
-				),
-			});
+			const removeInfoToast = createLoadingToast(tHome("generating"));
 
 			try {
-				const result = await generateWordsAction(
-					word.split(/[,，、]+/).map((_) => _.trim()),
-				);
+				const words = word.split(/[,，、]+/).map((_) => _.trim());
 				if (isLocalDict) {
+					const result = await generateWordsAction(words);
 					addLocalDict(...result);
 					onLocalDictUpdate?.();
 				} else {
+					await addWordsToUserDictAction(dictId, words);
+					await serverActionTimeOut();
 				}
-				createToast({
-					type: "success",
-					message: <span>{tHome("generated")}</span>,
-				});
+				createSuccessToast(tHome("generated"));
 			} catch (error) {
 				console.error("[createWord]:\n", error);
-				createToast({ type: "error", message: tHome("generateError") });
+				createErrorToast(tHome("generateError"));
 			} finally {
 				removeInfoToast();
 			}
@@ -82,7 +88,17 @@ const DictMenu = ({
 	};
 
 	const handleImport = async () => {
-		importDict(onLocalDictUpdate);
+		if (isLocalDict) {
+			importLocalDict(onLocalDictUpdate);
+		} else {
+			const fileString = await importJSONFile();
+			// TODO: intl
+			const cancel = createLoadingToast("importing....");
+			await importDictItemToUserDict(dictId, fileString as string);
+			await serverActionTimeOut();
+			cancel();
+			createSuccessToast("success");
+		}
 	};
 
 	const createDict = async () => {
@@ -93,23 +109,29 @@ const DictMenu = ({
 		}
 		const dictName = prompt("name:");
 		if (dictName) {
-			createToast({
-				type: "info",
-				delay: 60 * 1000 * 5,
-				// TODO: intl
-				message: (
-					<div className="flex items-center">
-						<span className="loading loading-spinner loading-sm mr-2" />
-						{tHome("generating")}
-					</div>
-				),
-			});
+			const removeInfoToast = createLoadingToast(tHome("generating"));
 			await createDictAction(dictName);
-			createToast({
-				type: "success",
-				// TODO: intl
-				message: <span>success</span>,
-			});
+			await serverActionTimeOut();
+			removeInfoToast();
+			// TODO: intl
+			createSuccessToast("success");
+		}
+	};
+
+	const handleDownload = async () => {
+		if (isLocalDict) {
+			downLoadLocalDict();
+		} else {
+			const currentUserDict = dictList.find((item) => item.id === dictId);
+			if (!currentUserDict) return;
+			downloadFile(
+				JSON.stringify(
+					dict.map(({ id, ...rest }) => ({ ...rest })),
+					null,
+					2,
+				),
+				`${currentUserDict.name || "dict"}.json`,
+			);
 		}
 	};
 
@@ -172,33 +194,29 @@ const DictMenu = ({
 						</div>
 					</div>
 				</div>
-				{(isLocalDict || isUserDict) && (
-					<>
-						<span onClick={createWord} className="text-xl">
-							+
-						</span>
-						<DownloadIcon width={20} height={20} onClick={downLoadDict} />
-						<FileImportIcon width={20} height={20} onClick={handleImport} />
-					</>
+				{isUserDict && (
+					<span onClick={createWord} className="text-xl">
+						+
+					</span>
+				)}
+				<DownloadIcon width={20} height={20} onClick={handleDownload} />
+				{isUserDict && (
+					<FileImportIcon width={20} height={20} onClick={handleImport} />
 				)}
 			</div>
 			<select
 				className="select select-bordered w-28 select-sm"
-				value={currentDict}
+				value={dictId}
 				onChange={onChange}
 			>
-				{Object.values(Dicts).map((dict) => (
-					<option key={dict} value={dict}>
-						{tIndex(dict)}
-					</option>
-				))}
-				{userDicts.map((dict) => (
+				{dictList.map((dict) => (
 					<option key={dict.id} value={dict.id}>
-						{dict.name}
+						{dict.intlKey ? tDict(dict.intlKey as Dicts) : dict.name}
 					</option>
 				))}
+				<option value="_local">{tDict(Dicts.local)}</option>
 				{/* // TODO: intl */}
-				<option value="_create">create</option>
+				<option value="_create">+ create new</option>
 			</select>
 		</div>
 	);

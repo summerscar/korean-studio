@@ -37,6 +37,33 @@ const createToast = ({
 	};
 };
 
+export const createLoadingToast = (info: string) => {
+	return createToast({
+		type: "info",
+		delay: 60 * 1000 * 5,
+		message: (
+			<div className="flex items-center">
+				<span className="loading loading-spinner loading-sm mr-2" />
+				{info}
+			</div>
+		),
+	});
+};
+
+export const createSuccessToast = (info: string) => {
+	return createToast({
+		type: "success",
+		message: <span>{info}</span>,
+	});
+};
+
+export const createErrorToast = (info: string) => {
+	return createToast({
+		type: "error",
+		message: <span>{info}</span>,
+	});
+};
+
 const useToast = () => {
 	const toast = useMemoizedFn(
 		(message: ReactNode, type: Parameters<typeof createToast>[0]["type"]) => {

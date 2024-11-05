@@ -1,39 +1,49 @@
-import { getUserDicts } from "@/actions/user-dict-action";
+import {
+	createCachedDictList,
+	getAllDicts,
+	getDictList,
+} from "@/actions/user-dict-action";
 import { HomeStatus } from "@/components/home-status";
 import { type Dict, Dicts, type UserDicts, dictNameList } from "@/types/dict";
 
 import { fetchDict } from "@/utils/api";
+import { auth } from "auth";
 
 export default async function HomePage(props: {
 	searchParams: Promise<{ dict?: string }>;
 }) {
-	const userDicts = await getUserDicts();
-	const searchParams = await props.searchParams;
-	const searchParamsDict = (searchParams.dict ||
-		Dicts.popular) as unknown as string;
+	const session = await auth();
+	const { dict: searchParamsDict } = await props.searchParams;
+
+	const dictList = (await getAllDicts()).filter(
+		(dict) => dict.public || dict.createdBy.id === session?.user?.id,
+	);
 
 	const isLocalDict = Dicts.local === searchParamsDict;
-	let dict: Dict;
-	let targetUserDict: UserDicts[0] | undefined;
-	if (
-		(targetUserDict = userDicts.find((item) => item.id === searchParamsDict))
-	) {
-		dict = targetUserDict.list as unknown as Dict;
-	} else {
-		const targetDict = dictNameList.includes(searchParamsDict as Dicts)
-			? (searchParamsDict as Dicts)
-			: Dicts.popular;
-		dict = isLocalDict ? [] : await fetchDict(targetDict);
-	}
+
+	const targetDictId = searchParamsDict
+		? searchParamsDict
+		: dictList.find((item) => item.intlKey === Dicts.popular)?.id;
+
+	const isUserDict = !!dictList
+		.filter((dict) => dict.createdBy.id === session?.user?.id)
+		.find((item) => item.id === targetDictId);
+
+	const dict =
+		searchParamsDict === Dicts.local
+			? []
+			: await createCachedDictList(targetDictId!)(targetDictId!, session);
+
+	const dictId = searchParamsDict === Dicts.local ? Dicts.local : targetDictId;
 
 	return (
 		<main className="w-full flex flex-col items-center justify-center">
 			<HomeStatus
 				isLocalDict={isLocalDict}
-				isUserDict={!!targetUserDict}
-				dictName={searchParamsDict as Dicts}
+				isUserDict={isUserDict}
+				dictId={dictId!}
 				dict={dict}
-				userDicts={userDicts}
+				dictList={dictList}
 			/>
 		</main>
 	);

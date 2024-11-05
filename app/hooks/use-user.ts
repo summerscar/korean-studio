@@ -6,6 +6,7 @@ const useUser = () => {
 	return {
 		isLogin: session.status === "authenticated",
 		user: session.data?.user,
+		session: session,
 		update: session.update,
 	};
 };

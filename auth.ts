@@ -79,28 +79,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			}
 			return true;
 		},
-		async jwt({ token, user, profile }) {
+		async jwt({ token, user }) {
 			// console.log("[jwt][user]", JSON.stringify(user));
 			// console.log("[jwt][token]", JSON.stringify(token));
 			// console.log("[jwt][profile]", JSON.stringify(profile));
 
+			const sudoContext = keystoneContext.sudo();
 			// OAuth 登录后首次生成 JWT 时
-			if (profile) {
-				const sudoContext = keystoneContext.sudo();
-				const targetUser = await sudoContext.query.User.findOne({
-					where: { email: user.email },
-					query: "id name email",
-				});
 
-				token.id = targetUser.id;
-				token.name = targetUser.name;
-				token.email = targetUser.email;
-			}
+			const targetUser = await sudoContext.query.User.findOne({
+				where: { email: user?.email || token?.email },
+				query: "id name email isAdmin",
+			});
+			token.isAdmin = targetUser.isAdmin;
+			token.id = targetUser.id;
+			token.name = targetUser.name;
+			token.email = targetUser.email;
+
 			return token;
 		},
 		session({ session, token }) {
 			// console.log("[session][session]", JSON.stringify(session));
 			// console.log("[session][token]", JSON.stringify(token));
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			(session.user as any).isAdmin = token.isAdmin as boolean;
 			session.user.id = token.id as string;
 			session.user.name = token.name;
 			session.user.email = token.email as string;

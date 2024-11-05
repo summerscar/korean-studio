@@ -61,15 +61,15 @@ import reactStringReplace from "react-string-replace";
 const HomeStatus = ({
 	isLocalDict,
 	isUserDict,
-	userDicts,
+	dictList,
 	dict: originalDict,
-	dictName,
+	dictId,
 }: {
 	isLocalDict: boolean;
 	isUserDict: boolean;
-	userDicts: UserDicts;
+	dictList: UserDicts;
 	dict: Dict;
-	dictName: Dicts;
+	dictId: string;
 }) => {
 	const [dict, setDict] = useState(originalDict);
 	const [curWordIndex, setCurWordIndex] = useState(0);
@@ -156,7 +156,7 @@ const HomeStatus = ({
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		resetWord();
-	}, [dictName]);
+	}, [dictId]);
 
 	useEventListener(
 		"keyup",
@@ -279,7 +279,7 @@ const HomeStatus = ({
 	}, [inputKeys, qwerty, addShakeAnimation, inputAE]);
 
 	const focusInput = useCallback(() => {
-		inputRef.current.handleInputFocus?.();
+		inputRef.current?.handleInputFocus?.();
 	}, []);
 
 	// biome-ignore lint/correctness/noUnusedVariables: <explanation>
@@ -565,7 +565,8 @@ const HomeStatus = ({
 			<HomeDrawer
 				isLocalDict={isLocalDict}
 				isUserDict={isUserDict}
-				userDicts={userDicts}
+				dictList={dictList}
+				dictId={dictId}
 				drawerRef={drawerRef}
 				dict={dict}
 				curWordIndex={curWordIndex}

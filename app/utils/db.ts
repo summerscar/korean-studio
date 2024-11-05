@@ -30,7 +30,7 @@ export const authenticateUserWithPassword = async (
 	if (userId) {
 		return await keystoneContext.sudo().query.User.findOne({
 			where: { id: userId },
-			query: "id name email",
+			query: "id name email isAdmin",
 		});
 	}
 	throw new Error(res.authenticate?.message);

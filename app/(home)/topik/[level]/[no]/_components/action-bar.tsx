@@ -2,7 +2,7 @@
 import { startTestAction } from "@/actions/topik-actions";
 import { cancelTestAction } from "@/actions/topik-actions";
 import { useServerActionState } from "@/hooks/use-server-action-state";
-import { timeOut } from "@/utils/time-out";
+import { serverActionTimeOut, timeOut } from "@/utils/time-out";
 import { TestCutDown } from "./count-down";
 import type { TopikLevelType } from ".keystone/types";
 
@@ -24,13 +24,13 @@ const ActionBar = ({
 	const [isHandleClickStartTestPending, handleClickStartTest] =
 		useServerActionState(async () => {
 			await startTestAction(level, no);
-			await timeOut(500);
+			await serverActionTimeOut();
 		});
 
 	const [isHandleClickCancelTestPending, handleClickCancelTest] =
 		useServerActionState(async () => {
 			await cancelTestAction(level, no);
-			await timeOut(500);
+			await serverActionTimeOut();
 		});
 
 	return (

@@ -3,13 +3,12 @@ import { KSwithSession, keystoneContext } from "@/../keystone/context";
 import type { Dict, DictItem, UserDicts } from "@/types/dict";
 import { toPlainObject } from "@/utils/to-plain-object";
 import { auth } from "auth";
-import type { Session } from "next-auth";
 import { revalidateTag, unstable_cache } from "next/cache";
 import { generateWordsAction } from "./generate-word-action";
+import { getDictRevalidateKey } from "./user-dict-utils";
 import type { DictItemCreateInput } from ".keystone/types";
 
 const allDictsRevalidateKey = "all-dicts";
-const getDictRevalidateKey = (dictId: string) => `dict-${dictId}`;
 
 const getAllDicts = unstable_cache(
 	async () => {
@@ -30,15 +29,17 @@ const createDictAction = async (dictName: string) => {
 	if (!session?.user) {
 		throw new Error("no session");
 	}
-	await sudoContext.query.Dict.createOne({
+	const res = (await sudoContext.query.Dict.createOne({
 		data: {
 			name: dictName,
 			createdBy: {
 				connect: { id: session.user.id },
 			},
 		},
-	});
+	})) as UserDicts[0];
 	revalidateTag(allDictsRevalidateKey);
+
+	return toPlainObject(res);
 };
 
 const removeDictItemAction = async (dictId: string, dictItemId: string) => {
@@ -82,24 +83,14 @@ const addWordsToUserDictAction = async (dictId: string, words: string[]) => {
 	revalidateTag(getDictRevalidateKey(dictId));
 };
 
-const getDictList = async (dictId: string, session: Session | null) => {
-	// TODO: 权限
-	const ctx = KSwithSession(session);
-
+const getDictList = async (dictId: string) => {
+	// TODO: 权限做 增删改
+	const ctx = keystoneContext.sudo();
 	const res = (await ctx.query.Dict.findOne({
 		where: { id: dictId },
 		query: "list { id name trans example exTrans }",
 	})) as { list: Dict };
 	return toPlainObject(res.list);
-};
-
-const createCachedDictList = (dictId: string) => {
-	return unstable_cache(
-		async (dictId: string, session: Session | null) =>
-			getDictList(dictId, session),
-		[`getDictList-${dictId}`],
-		{ revalidate: false, tags: [getDictRevalidateKey(dictId)] },
-	);
 };
 
 const importDictItemToUserDict = async (dictId: string, JSONString: string) => {
@@ -111,7 +102,6 @@ export {
 	createDictAction,
 	getAllDicts,
 	getDictList,
-	createCachedDictList,
 	addWordsToUserDictAction,
 	removeDictItemAction,
 	importDictItemToUserDict,

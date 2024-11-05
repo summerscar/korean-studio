@@ -1,4 +1,5 @@
 import HomeIcon from "@/assets/svg/home.svg";
+import { isAdmin } from "@/hooks/use-user";
 import { getServerI18n } from "@/utils/i18n";
 import { auth } from "auth";
 import Link from "next/link";
@@ -40,7 +41,13 @@ const Header = async () => {
 					<span>
 						{session ? (
 							<div>
-								<span>{session.user?.name}</span>
+								<span
+									className={
+										isAdmin(session) ? "text-yellow-200 font-bold" : ""
+									}
+								>
+									{session.user?.name}
+								</span>
 								<Link className="ml-4" href="/api/auth/signout">
 									Signout
 								</Link>

@@ -110,7 +110,8 @@ const DictMenu = ({
 		const dictName = prompt("name:");
 		if (dictName) {
 			const removeInfoToast = createLoadingToast(tHome("generating"));
-			await createDictAction(dictName);
+			const res = await createDictAction(dictName);
+			router.push(`/?dict=${res.id}`);
 			await serverActionTimeOut();
 			removeInfoToast();
 			// TODO: intl

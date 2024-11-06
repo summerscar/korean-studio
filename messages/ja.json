@@ -19,7 +19,21 @@
 		"generateError": "生成に失敗しました。もう一度お試しください。",
 		"autoVoice": "自動読み上げ",
 		"showMeaning": "意味を表示",
-		"enableAudio": "オーバイドエフェクト"
+		"enableAudio": "オーバイドエフェクト",
+		"deleting": "削除中...",
+		"deleted": "削除に成功しました!",
+		"deleteError": "削除に失敗しました。もう一度お試しください。",
+		"importing": "インポート中...",
+		"imported": "インポートに成功しました!",
+		"importError": "インポートに失敗しました。もう一度お試しください。",
+		"createWordList": "単語リストの名前を入力してください：",
+		"creating": "作成中...",
+		"created": "作成に成功しました!",
+		"createError": "作成に失敗しました。もう一度お試しください。",
+		"removing": "削除中...",
+		"removed": "削除に成功しました!",
+		"removeError": "削除に失敗しました。もう一度お試しください。",
+		"createNewDict": "新しい辞書を作成"
 	},
 	"Dict": {
 		"popular": "トレンド用語",

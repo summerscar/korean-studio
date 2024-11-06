@@ -46,6 +46,7 @@ export async function DefaultLayout({
 					</NextIntlClientProvider>
 				</SessionProvider>
 				<ToastRoot />
+				{/* {isDev && <CacheToolbar />} */}
 				{isProd && <SpeedInsights />}
 				{isProd && <Analytics />}
 				{isProd && <GoogleAnalytics gaId={GAId} />}

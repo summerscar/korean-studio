@@ -19,7 +19,21 @@
 		"generateError": "Failed to generate. Please try again.",
 		"autoVoice": "Auto read",
 		"showMeaning": "Show meaning",
-		"enableAudio": "Enable audio effect"
+		"enableAudio": "Enable audio effect",
+		"deleting": "Deleting...",
+		"deleted": "Deleted successfully!",
+		"deleteError": "Failed to delete. Please try again.",
+		"importing": "Importing...",
+		"imported": "Imported successfully!",
+		"importError": "Failed to import. Please try again.",
+		"createWordList": "Input Word List Name:",
+		"creating": "Creating...",
+		"created": "Created successfully!",
+		"createError": "Failed to create. Please try again.",
+		"removing": "Removing...",
+		"removed": "Removed successfully!",
+		"removeError": "Failed to remove. Please try again.",
+		"createNewDict": "Create new"
 	},
 	"Dict": {
 		"popular": "Popular Words",

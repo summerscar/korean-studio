@@ -11,7 +11,7 @@ import { removeLocalDict } from "@/utils/local-dict";
 import { serverActionTimeOut, timeOut } from "@/utils/time-out";
 import { useMemoizedFn } from "ahooks";
 import clsx from "clsx";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { DictMenu } from "./dict-menu";
@@ -45,6 +45,7 @@ const HomeDrawer = ({
 }) => {
 	const drawerListRef = useRef<HTMLUListElement>(null);
 	const locale = useLocale();
+	const tHome = useTranslations("Home");
 	const controllerRef = useRef<HTMLInputElement>(null);
 	const open = useMemoizedFn(() => {
 		if (controllerRef.current) {
@@ -78,12 +79,13 @@ const HomeDrawer = ({
 				removeLocalDict(item.name);
 				onLocalDictUpdate();
 			} else {
-				// TODO: intl
-				const cancel = createLoadingToast(`【${item.name}】removing....`);
+				const cancel = createLoadingToast(
+					`【${item.name}】${tHome("removing")}`,
+				);
 				await removeDictItemAction(dictId, item.id!);
 				await serverActionTimeOut();
 				cancel();
-				createSuccessToast("success");
+				createSuccessToast(tHome("removed"));
 			}
 		}
 	};

@@ -19,7 +19,21 @@
 		"generateError": "生成失败，请重试。",
 		"autoVoice": "自动朗读",
 		"showMeaning": "显示释义",
-		"enableAudio": "启用音效"
+		"enableAudio": "启用音效",
+		"deleting": "删除中...",
+		"deleted": "删除成功!",
+		"deleteError": "删除失败，请重试。",
+		"importing": "导入中...",
+		"imported": "导入成功!",
+		"importError": "导入失败，请重试。",
+		"createWordList": "输入词单名称：",
+		"creating": "创建中...",
+		"created": "创建成功!",
+		"createError": "创建失败，请重试。",
+		"removing": "删除中...",
+		"removed": "删除成功!",
+		"removeError": "删除失败，请重试。",
+		"createNewDict": "新建词单"
 	},
 	"Dict": {
 		"popular": "热门词汇",

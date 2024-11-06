@@ -319,7 +319,7 @@ const HomeStatus = ({
 
 	useEffect(() => {
 		if (!dict.length) setProgressCSSVar(0);
-		else setProgressCSSVar(Math.min(1, curWordIndex / dict.length));
+		else return setProgressCSSVar(Math.min(1, curWordIndex / dict.length));
 	}, [dict, curWordIndex]);
 
 	/** 完成输入，下一个单词 放在useEffect可能有点问题, 仅curInputIndex更新时触发 */

@@ -60,8 +60,10 @@ const HomeDrawer = ({
 		}
 	}, [drawerRef, open]);
 
-	const handleUserDictUpdate = useMemoizedFn(async () => {
-		onLocalDictUpdate();
+	const handleDictUpdate = useMemoizedFn(async () => {
+		if (isLocalDict) {
+			onLocalDictUpdate();
+		}
 		await timeOut(100);
 		drawerListRef.current?.parentElement?.scrollTo({
 			top: drawerListRef.current?.parentElement?.scrollHeight,
@@ -125,7 +127,7 @@ const HomeDrawer = ({
 								setting={setting}
 								onSettingChange={onSettingChange}
 								onShuffle={onShuffle}
-								onLocalDictUpdate={handleUserDictUpdate}
+								onDictUpdate={handleDictUpdate}
 							/>
 							{/* Sidebar content here */}
 							{dict.map((item, index) => (

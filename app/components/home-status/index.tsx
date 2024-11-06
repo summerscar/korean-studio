@@ -13,6 +13,7 @@ import { HomeDrawer } from "@/components/home-drawer";
 import { HomeInput } from "@/components/home-input";
 import { Pronunciation } from "@/components/pronunciation";
 import { usePronunciation } from "@/hooks/use-pronunciation";
+import { useScreen } from "@/hooks/use-screen";
 import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
 import type { Tran, UserDicts } from "@/types/dict";
@@ -37,18 +38,11 @@ import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
 import { getLocalDict } from "@/utils/local-dict";
 import { shuffleArr } from "@/utils/shuffle-array";
-import {
-	useEventListener,
-	useLatest,
-	useMemoizedFn,
-	useMount,
-	usePrevious,
-} from "ahooks";
+import { useEventListener, useLatest, useMemoizedFn, useMount } from "ahooks";
 import clsx from "clsx";
 import { disassemble, romanize, standardizePronunciation } from "es-hangul";
 import { useLocale, useTranslations } from "next-intl";
 import {
-	type PropsWithChildren,
 	type ReactNode,
 	useCallback,
 	useEffect,
@@ -78,7 +72,7 @@ const HomeStatus = ({
 	const [isInputError, setIsInputError] = useState(false);
 	const [isInputFocused, setIsInputFocused] = useState(false);
 	const [showKeyboard, setShowKeyboard] = useState(true);
-
+	const { isMobile } = useScreen();
 	const [setting, setSetting] = useState<HomeSetting>({
 		autoVoice: false,
 		showMeaning: true,
@@ -114,11 +108,8 @@ const HomeStatus = ({
 		handleInputFocus: () => {},
 	});
 
-	/**
-	 * updateCurrentWord - 重新排序或者仅增减了字典后，保证index仍在附近位置
-	 */
 	const setDictAndDisableVoice = useMemoizedFn(
-		(dict: Parameters<typeof setDict>[0], updateCurrentWord = false) => {
+		(dict: Parameters<typeof setDict>[0]) => {
 			// 切换字典时 autoVoice 置为 false
 			setSetting((prevSetting) => {
 				prevSetting.autoVoice &&
@@ -129,15 +120,15 @@ const HomeStatus = ({
 			});
 
 			setDict(dict);
-			if (updateCurrentWord && curWordIndex >= dict.length) {
+			if (curWordIndex >= dict.length) {
 				skipToNextWord(dict.length - 1);
 			}
 		},
 	);
 
-	const setLocalDict = useMemoizedFn((updateCurrentWord = false) => {
+	const setLocalDict = useMemoizedFn(() => {
 		const localDict = getLocalDict();
-		setDictAndDisableVoice(localDict, updateCurrentWord);
+		setDictAndDisableVoice(localDict);
 	});
 
 	useEffect(() => {
@@ -278,9 +269,10 @@ const HomeStatus = ({
 		});
 	}, [inputKeys, qwerty, addShakeAnimation, inputAE]);
 
-	const focusInput = useCallback(() => {
+	const focusInput = useMemoizedFn(() => {
+		if (isMobile) return;
 		inputRef.current?.handleInputFocus?.();
-	}, []);
+	});
 
 	// biome-ignore lint/correctness/noUnusedVariables: <explanation>
 	const blurInput = useCallback(() => {
@@ -572,7 +564,7 @@ const HomeStatus = ({
 				curWordIndex={curWordIndex}
 				onClick={skipToNextWord}
 				onShuffle={shuffleDict}
-				onLocalDictUpdate={() => setLocalDict(true)}
+				onLocalDictUpdate={setLocalDict}
 				setting={setting}
 				onSettingChange={onSettingChange}
 			/>

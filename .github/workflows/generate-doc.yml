@@ -25,8 +25,8 @@ jobs:
     env:
       DOC_LEVEL: ${{ inputs.docLevel }}
       DOC_TITLE: ${{ inputs.docTitle }}
-      AI: ${{ secrets.AI }}
-      GPT_MODEL: ${{ secrets.GPT_MODEL }}
+      AI: ${{ vars.AI }}
+      GPT_MODEL: ${{ vars.GPT_MODEL }}
       GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
       GPT_URL: ${{ secrets.GPT_URL }}
       GPT_KEY: ${{ secrets.GPT_KEY }}

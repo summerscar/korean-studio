@@ -1,29 +1,42 @@
 "use client";
-
+import clsx from "clsx";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+
+const HomeProgressCSSVar = "--home-progress";
 
 const Progress = () => {
 	const pathname = usePathname();
-	const [showProgress, setShowProgress] = useState(false);
 
-	useEffect(() => {
-		setShowProgress(pathname.includes("/learn"));
-
-		return () => {
-			setShowProgress(false);
-		};
-	}, [pathname]);
+	const isLearnPage = pathname.startsWith("/learn");
+	const isHome = pathname === "/";
+	const showProgress = isLearnPage || isHome;
 
 	return (
 		showProgress && (
 			<div
 				id="progress"
-				style={{ animationTimeline: "--page-scroll" }}
-				className="absolute left-0 bottom-0 w-full h-[2px] bg-base-content origin-[0%_50%] animate-[grow-progress_auto_linear]"
+				style={{
+					...(isLearnPage && { animationTimeline: "--page-scroll" }),
+					...(isHome && {
+						transform: `scaleX(var(${HomeProgressCSSVar}, 0))`,
+						transition: "transform 0.5s",
+					}),
+				}}
+				className={clsx(
+					"absolute left-0 bottom-0 w-full h-[2px] bg-base-content origin-[0%_50%]",
+					isLearnPage && "animate-[grow-progress_auto_linear]",
+				)}
 			/>
 		)
 	);
 };
 
-export { Progress };
+const setProgressCSSVar = (percent: number) => {
+	document.documentElement.style.setProperty(HomeProgressCSSVar, `${percent}`);
+
+	return () => {
+		document.documentElement.style.removeProperty(HomeProgressCSSVar);
+	};
+};
+
+export { Progress, setProgressCSSVar };

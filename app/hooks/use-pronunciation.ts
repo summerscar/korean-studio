@@ -59,7 +59,7 @@ const usePronunciation = (
 		}
 	});
 
-	const { run: debouncedPlay } = useDebounceFn(play, { wait: 600 });
+	const { run: debouncedPlay } = useDebounceFn(play, { wait: 800 });
 
 	return { isPlaying, play };
 };

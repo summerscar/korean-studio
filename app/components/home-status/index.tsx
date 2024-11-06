@@ -8,6 +8,7 @@ import ScoreIcon from "@/assets/svg/score.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
 import SpeakerIcon from "@/assets/svg/speaker.svg";
 import { DictNav } from "@/components/dict-nav";
+import { setProgressCSSVar } from "@/components/header/_component/progress";
 import { HideText } from "@/components/hide-text";
 import { HomeDrawer } from "@/components/home-drawer";
 import { HomeInput } from "@/components/home-input";
@@ -315,6 +316,11 @@ const HomeStatus = ({
 	const resetWord = useMemoizedFn(() => {
 		skipToNextWord(0);
 	});
+
+	useEffect(() => {
+		if (!dict.length) setProgressCSSVar(0);
+		else setProgressCSSVar(Math.min(1, curWordIndex / dict.length));
+	}, [dict, curWordIndex]);
 
 	/** 完成输入，下一个单词 放在useEffect可能有点问题, 仅curInputIndex更新时触发 */
 	useEffect(() => {

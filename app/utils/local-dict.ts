@@ -1,4 +1,4 @@
-import type { DictItem } from "@/types/dict";
+import type { Dict, DictItem } from "@/types/dict";
 import { downloadFile } from "./download-file";
 import { importJSONFile } from "./import-json-file";
 const LOCAL_DICT_KEY = "localDict";
@@ -60,9 +60,16 @@ const downLoadLocalDict = () => {
 };
 
 const importLocalDict = async (cb?: () => void) => {
+	const prevLocalDict = getLocalDict();
 	const fileString = await importJSONFile();
-	const localDict = JSON.parse(fileString as string);
-	setLocalDict(localDict);
+	const localDict = JSON.parse(fileString as string) as Dict;
+
+	setLocalDict([
+		...prevLocalDict.filter(
+			(item) => !localDict.find((i) => i.name === item.name),
+		),
+		...localDict,
+	]);
 	cb?.();
 };
 

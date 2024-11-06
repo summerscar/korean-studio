@@ -37,7 +37,7 @@ const DictMenu = ({
 	dictId,
 	dictList,
 	onShuffle,
-	onLocalDictUpdate,
+	onDictUpdate,
 	onSettingChange,
 	setting,
 	isUserDict,
@@ -47,7 +47,7 @@ const DictMenu = ({
 	dictId: string;
 	dictList: UserDicts;
 	onShuffle?: () => void;
-	onLocalDictUpdate?: () => void;
+	onDictUpdate?: () => void;
 	onSettingChange?: (val: Partial<HomeSetting>) => void;
 	setting: HomeSetting;
 	isUserDict: boolean;
@@ -76,11 +76,11 @@ const DictMenu = ({
 				if (isLocalDict) {
 					const result = await generateWordsAction(words);
 					addLocalDict(...result);
-					onLocalDictUpdate?.();
 				} else {
 					await addWordsToUserDictAction(dictId, words);
 					await serverActionTimeOut();
 				}
+				onDictUpdate?.();
 				createSuccessToast(tHome("generated"));
 			} catch (error) {
 				console.error("[createWord]:\n", error);
@@ -93,7 +93,7 @@ const DictMenu = ({
 
 	const handleImport = async () => {
 		if (isLocalDict) {
-			importLocalDict(onLocalDictUpdate);
+			importLocalDict(onDictUpdate);
 		} else {
 			const fileString = await importJSONFile();
 			// TODO: intl
@@ -151,7 +151,7 @@ const DictMenu = ({
 		removeInfoToast();
 		createSuccessToast("success");
 	};
-
+	const canEdit = isUserDict || dictId === Dicts.local;
 	return (
 		<div className="sticky top-2 z-10 bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1 max-w-full">
 			<div className="pl-3 flex items-center *:mx-1 *:inline-block *:cursor-pointer *:select-none">
@@ -211,9 +211,9 @@ const DictMenu = ({
 						</div>
 					</div>
 				</div>
-				{isUserDict && <AddIcon className="size-6" onClick={createWord} />}
+				{canEdit && <AddIcon className="size-6" onClick={createWord} />}
 				<DownloadIcon className="size-6" onClick={handleDownload} />
-				{isUserDict && (
+				{canEdit && (
 					<FileImportIcon className="size-6" onClick={handleImport} />
 				)}
 				{isUserDict && (

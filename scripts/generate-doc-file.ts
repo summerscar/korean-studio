@@ -32,7 +32,9 @@ const promptTemplate = (title: string) => `
 `;
 
 const generateDoc = async (title: string) => {
-	console.log(`[generate-doc-file][title]: 【${title}】 start...`);
+	console.log(
+		`---------- start -----------\n[generate-doc-file][title]: 【${title}】 start...`,
+	);
 	const docPath = resolve(
 		process.cwd(),
 		"mdx",
@@ -61,7 +63,7 @@ const generateDoc = async (title: string) => {
 	// console.log(`[generate-doc-file][content]: \n${content}`);
 	writeFileSync(docPath, content);
 	console.log(`[generate-doc-file][path]: ${docPath}`);
-	console.log("[generate-doc-file]: done");
+	console.log("[generate-doc-file]: done\n---------- end -----------");
 };
 
 export const generateDocs = async (docs: string[]) => {

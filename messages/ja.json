@@ -7,7 +7,9 @@
 	"Header": {
 		"beginner": "初級",
 		"intermediate": "中級",
-		"tools": "ツール"
+		"tools": "ツール",
+		"signIn": "サインイン",
+		"signOut": "サインアウト"
 	},
 	"Home": {
 		"viewList": "リストを見る",

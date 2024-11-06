@@ -7,7 +7,9 @@
 	"Header": {
 		"beginner": "Beginner",
 		"intermediate": "Intermediate",
-		"tools": "Tools"
+		"tools": "Tools",
+		"signIn": "Sign In",
+		"signOut": "Sign Out"
 	},
 	"Home": {
 		"viewList": "View list",

@@ -19,12 +19,16 @@ import { fetchChatCompletion, sequentialChatCompletion } from "./open-ai";
 	console.log(
 		docsNeedToGenerateDescription.map((doc) => `[${doc.title}]...`).join("\n"),
 	);
-	console.log("[generate-doc-desc][find]: ↑↑↑↑↑↑↑↑↑↑↑↑");
+
 	await sequentialChatCompletion(
 		docsNeedToGenerateDescription.map((doc) => async () => {
 			if (doc.content === undefined) return;
 
-			console.log("[generate-doc-desc][title][", doc.title, "]: generate...");
+			console.log(
+				"---------- start -----------\n[generate-doc-desc][title][",
+				doc.title,
+				"]: generate...",
+			);
 			const description = (
 				await fetchChatCompletion([
 					{
@@ -53,7 +57,11 @@ import { fetchChatCompletion, sequentialChatCompletion } from "./open-ai";
 				description,
 			);
 			writeFileSync(doc.path, newDocString, "utf-8");
-			console.log("[generate-doc-desc][title][", doc.title, "]: success!");
+			console.log(
+				"[generate-doc-desc][title][",
+				doc.title,
+				"]: success!\n---------- end -----------",
+			);
 		}),
 	);
 	console.log("[generate-doc-desc][all]: success!");

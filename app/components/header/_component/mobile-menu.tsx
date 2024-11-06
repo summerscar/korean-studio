@@ -4,6 +4,7 @@ import MenuIcon from "@/assets/svg/menu.svg";
 import { isAdmin } from "@/hooks/use-user";
 import clsx from "clsx";
 import type { Session } from "next-auth";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -16,6 +17,7 @@ const MobileMenu = ({
 	const pathname = usePathname();
 	const isActive = (href: string) => pathname.includes(href);
 	const [isOpen, setIsOpen] = useState(false);
+	const tHeader = useTranslations("Header");
 
 	const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setIsOpen(e.target.checked);
@@ -60,12 +62,12 @@ const MobileMenu = ({
 							{session.user?.name}
 						</span>
 						<Link className="py-3" href="/api/auth/signout">
-							Signout
+							{tHeader("signOut")}
 						</Link>
 					</div>
 				) : (
 					<Link className="p-2" href="/api/auth/signin">
-						Sign In
+						{tHeader("signIn")}
 					</Link>
 				)}
 			</div>

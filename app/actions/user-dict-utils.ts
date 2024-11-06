@@ -4,7 +4,8 @@ import type { Session } from "next-auth";
 import { unstable_cache } from "next/cache";
 import { getDictList } from "./user-dict-action";
 
-export const getDictRevalidateKey = (dictId: string) => `dict-${dictId}`;
+export const getDictRevalidateKey = (dictId: string) =>
+	`dict-${dictId}-${process.env.VERCEL_GIT_COMMIT_SHA || "dev"}`;
 
 const createCachedDictList = (dictId: string) => {
 	return unstable_cache(

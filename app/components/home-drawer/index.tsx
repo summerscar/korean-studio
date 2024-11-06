@@ -3,6 +3,7 @@ import CloseIcon from "@/assets/svg/close.svg";
 import SearchIcon from "@/assets/svg/search.svg";
 import { ClientOnly } from "@/components/client-only";
 import { createLoadingToast, createSuccessToast } from "@/hooks/use-toast";
+import { useUser } from "@/hooks/use-user";
 import type { HomeSetting } from "@/types";
 import { type Dict, type DictItem, Dicts, type UserDicts } from "@/types/dict";
 import { getTranslation } from "@/utils/convert-input";
@@ -43,6 +44,7 @@ const HomeDrawer = ({
 	setting: HomeSetting;
 	onSettingChange: (val: Partial<HomeSetting>) => void;
 }) => {
+	const { isAdmin } = useUser();
 	const drawerListRef = useRef<HTMLUListElement>(null);
 	const locale = useLocale();
 	const tHome = useTranslations("Home");
@@ -156,7 +158,7 @@ const HomeDrawer = ({
 												{getTranslation(item, locale)}
 											</span>
 										</div>
-										{(isLocalDict || isUserDict) && (
+										{(isAdmin || isLocalDict || isUserDict) && (
 											<div
 												className="absolute -top-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
 												onClick={(e) => handleRemove(e, item)}

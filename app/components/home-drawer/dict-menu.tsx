@@ -53,7 +53,7 @@ const DictMenu = ({
 	isUserDict: boolean;
 	isLocalDict: boolean;
 }) => {
-	const { isLogin } = useUser();
+	const { isLogin, isAdmin } = useUser();
 	const tHome = useTranslations("Home");
 	const router = useRouter();
 	const tDict = useTranslations("Dict");
@@ -67,7 +67,7 @@ const DictMenu = ({
 	};
 
 	const createWord = async () => {
-		const word = prompt(tHome("createWord"), tHome("exampleWord"));
+		const word = prompt(`✨ ${tHome("createWord")}`, tHome("exampleWord"));
 		if (word) {
 			const removeInfoToast = createLoadingToast(tHome("generating"));
 
@@ -147,7 +147,7 @@ const DictMenu = ({
 		removeInfoToast();
 		createSuccessToast("success");
 	};
-	const canEdit = isUserDict || dictId === Dicts.local;
+	const canEdit = isAdmin || isUserDict || dictId === Dicts.local;
 	return (
 		<div className="sticky top-2 z-10 bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1 max-w-full">
 			<div className="pl-3 flex items-center *:mx-1 *:inline-block *:cursor-pointer *:select-none">

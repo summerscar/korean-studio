@@ -86,11 +86,12 @@ const addWordsToUserDictAction = async (dictId: string, words: string[]) => {
 const getDictList = async (dictId: string) => {
 	// TODO: 权限做 增删改
 	const ctx = keystoneContext.sudo();
-	const res = (await ctx.query.Dict.findOne({
-		where: { id: dictId },
-		query: "list { id name trans example exTrans }",
-	})) as { list: Dict } | null;
-	return toPlainObject(res?.list || []);
+	const res = (await ctx.query.DictItem.findMany({
+		where: { dict: { some: { id: { equals: dictId } } } },
+		query: "id name trans example exTrans",
+		orderBy: { createdAt: "asc" },
+	})) as Dict;
+	return toPlainObject(res);
 };
 
 const importDictItemToUserDict = async (dictId: string, JSONString: string) => {

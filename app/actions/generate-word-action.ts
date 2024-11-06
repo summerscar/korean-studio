@@ -20,14 +20,23 @@ ${JSON.stringify(WORD_EXAMPLE)}
 
 export const generateWordAction = async (word: string) => {
 	const prompt = promptTemplate(word);
-	isDev && console.log("[generateWordAction][prompt]:", prompt);
+	isDev &&
+		console.log(
+			"---------- start -----------\n[generateWordAction][prompt]:",
+			prompt,
+		);
 	const result = await fetchChatCompletion([
 		{
 			role: "user",
 			content: prompt,
 		},
 	]);
-	isDev && console.log("[generateWordAction][result]:", result);
+	isDev &&
+		console.log(
+			"[generateWordAction][result]:",
+			result,
+			"\n---------- end -----------",
+		);
 	return result?.match(/([\[\{][\s\S]*[\}\]])/)?.[1];
 };
 

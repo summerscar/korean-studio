@@ -49,11 +49,11 @@ const Header = async () => {
 									{session.user?.name}
 								</span>
 								<Link className="ml-4" href="/api/auth/signout">
-									Signout
+									{t("signOut")}
 								</Link>
 							</div>
 						) : (
-							<Link href="/api/auth/signin">Sign In</Link>
+							<Link href="/api/auth/signin">{t("signIn")}</Link>
 						)}
 					</span>
 				</div>

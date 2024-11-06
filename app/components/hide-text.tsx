@@ -1,16 +1,20 @@
 import clsx from "clsx";
-import type { PropsWithChildren } from "react";
+import type { ComponentProps, PropsWithChildren } from "react";
 
 const HideText = ({
 	hide = false,
 	children,
-}: PropsWithChildren<{ hide?: boolean }>) => {
+	className,
+	...props
+}: PropsWithChildren<{ hide?: boolean } & ComponentProps<"span">>) => {
 	return (
 		<span
 			className={clsx(
 				"inline-block relative cursor-pointer hover:before:opacity-0 before:transition-opacity",
 				hide && "after-backdrop-shadow",
+				className,
 			)}
+			{...props}
 		>
 			{children}
 		</span>

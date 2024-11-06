@@ -54,10 +54,13 @@ const DictNav = ({
 						<p className={clsx("font-bold", notoKR.className)}>{item?.name}</p>
 						<p
 							title={getTranslation(item, locale)}
-							className="text-xs text-gray-500 max-w-40 overflow-hidden text-ellipsis text-nowrap"
+							className="text-xs text-gray-500 max-w-28 sm:max-w-40"
 						>
 							{
-								<HideText hide={hideMeaning}>
+								<HideText
+									hide={hideMeaning}
+									className="overflow-hidden text-ellipsis text-nowrap inline-block max-w-full"
+								>
 									{getTranslation(item, locale)}
 								</HideText>
 							}

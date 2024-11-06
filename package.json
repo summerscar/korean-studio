@@ -48,6 +48,7 @@
 		"js-cookie": "^3.0.5",
 		"next": "15.0.2",
 		"next-auth": "^5.0.0-beta.25",
+		"next-cache-toolbar": "^0.2.1",
 		"next-intl": "^3.22.0",
 		"next-mdx-remote": "^5.0.0",
 		"openai": "^4.68.4",

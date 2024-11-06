@@ -141,7 +141,7 @@ const HomeStatus = ({
 	}, [originalDict, setLocalDict, setDictAndDisableVoice]);
 
 	const shuffleDict = useMemoizedFn(() => {
-		setDictAndDisableVoice((prev) => shuffleArr(prev), true);
+		setDictAndDisableVoice((prev) => shuffleArr(prev));
 	});
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>

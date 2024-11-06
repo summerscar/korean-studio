@@ -96,30 +96,27 @@ const DictMenu = ({
 			importLocalDict(onDictUpdate);
 		} else {
 			const fileString = await importJSONFile();
-			// TODO: intl
-			const cancel = createLoadingToast("importing....");
+			const cancel = createLoadingToast(tHome("importing"));
 			await importDictItemToUserDict(dictId, fileString as string);
 			await serverActionTimeOut();
 			cancel();
-			createSuccessToast("success");
+			createSuccessToast(tHome("imported"));
 		}
 	};
 
 	const createDict = async () => {
-		// TODO: intl
 		if (!isLogin) {
 			router.push("/api/auth/signin");
 			return;
 		}
-		const dictName = prompt("name:");
+		const dictName = prompt(tHome("createWordList"));
 		if (dictName) {
-			const removeInfoToast = createLoadingToast(tHome("generating"));
+			const removeInfoToast = createLoadingToast(tHome("creating"));
 			const res = await createDictAction(dictName);
 			router.push(`/?dict=${res.id}`);
 			await serverActionTimeOut();
 			removeInfoToast();
-			// TODO: intl
-			createSuccessToast("success");
+			createSuccessToast(tHome("created"));
 		}
 	};
 
@@ -143,8 +140,7 @@ const DictMenu = ({
 	const handleRemoveDict = async () => {
 		const res = confirm();
 		if (!res) return;
-		// TODO: intl
-		const removeInfoToast = createLoadingToast("removing....");
+		const removeInfoToast = createLoadingToast(tHome("removing"));
 		await removeDictAction(dictId);
 		router.push("/");
 		await serverActionTimeOut();
@@ -231,8 +227,8 @@ const DictMenu = ({
 					</option>
 				))}
 				<option value="_local">{tDict(Dicts.local)}</option>
-				{/* // TODO: intl */}
-				<option value="_create">+ create new</option>
+
+				<option value="_create">✨ {tHome("createNewDict")}</option>
 			</select>
 		</div>
 	);

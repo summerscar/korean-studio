@@ -2,7 +2,7 @@
 import type { Levels } from "@/types";
 import { toPlainObject } from "@/utils/to-plain-object";
 import clsx from "clsx";
-import FlexSearch from "flexsearch";
+import type { Document } from "flexsearch";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { type ReactNode, useEffect, useState } from "react";
@@ -29,10 +29,11 @@ const Search = () => {
 	const [query, setQuery] = useState("");
 	const [results, setResults] = useState<SearchResult[]>([]);
 	const [searchIndex, setSearchIndex] =
-		useState<InstanceType<typeof FlexSearch.Document>>();
+		useState<InstanceType<typeof Document>>();
 
 	useEffect(() => {
 		const loadIndex = async () => {
+			const FlexSearch = (await import("flexsearch")).default;
 			const response = await fetch("/search-index.json", {
 				next: { revalidate: 24 * 60 * 60 },
 			});
@@ -97,7 +98,7 @@ const Search = () => {
 	};
 
 	return (
-		<div className="relative mr-0 sm:mr-4">
+		<div className="relative">
 			<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
 				<svg
 					aria-hidden="true"

@@ -9,10 +9,16 @@ export interface DirItem {
 }
 
 export interface FileItem extends DirItem {
+	/** filename.md */
 	file: string;
+	/** filename */
 	fileName: string;
+	/** /语法形态/filename */
 	relativePath: string;
+	/** /语法形态/filename.md */
 	relativeUrl: string;
+	/** /语法形态/titleName.md */
+	relativeReadablePath: string;
 }
 export interface SubDirItem extends DirItem {
 	children: (SubDirItem | FileItem)[];
@@ -50,19 +56,21 @@ const _listAllDocs = async (level: string) => {
 			lstatSync(resolve(dir, doc)).isDirectory(),
 		);
 
-		const data: FileItem[] = await Promise.all(
+		const data = await Promise.all(
 			files.map(async (file) => {
 				const filePath = path.join(dir, file);
 				const data = await readFile(filePath, { encoding: "utf-8" });
 				const fileName = file.replace(/\.mdx?/, "");
+				const title = data.match(/title: (.*)/)?.[1] || fileName;
 				return {
 					file: file,
 					fileName,
 					relativeUrl: path.join(...walkPath, fileName),
 					relativePath: path.join(...walkPath, file),
-					title: data.match(/title: (.*)/)?.[1] || fileName,
+					relativeReadablePath: path.join(...walkPath, title),
+					title,
 					date: data.match(/date: (.*)/)?.[1] || "0",
-				};
+				} as FileItem;
 			}),
 		);
 

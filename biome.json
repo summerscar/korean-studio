@@ -7,7 +7,8 @@
 		"ignore": [
 			"**/*.css",
 			"schema.prisma",
-			"schema.graphql"
+			"schema.graphql",
+			"public/search-index.json"
 		]
 	},
 	"linter": {

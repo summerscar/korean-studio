@@ -9,7 +9,8 @@
 		"intermediate": "中級",
 		"tools": "ツール",
 		"signIn": "サインイン",
-		"signOut": "サインアウト"
+		"signOut": "サインアウト",
+		"search": "検索"
 	},
 	"Home": {
 		"viewList": "リストを見る",

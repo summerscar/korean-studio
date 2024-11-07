@@ -5,10 +5,14 @@
 @layer base {
 	:root {
 		--keyboard-active-color: theme("colors.gray.300");
-		scroll-padding-top: var(--header-height);
 		scroll-behavior: smooth;
 	}
+	/* https://stackoverflow.com/questions/65929206/sticky-header-input-scrolls-on-input */
+	:target {
+		scroll-margin-top: var(--header-height);
+	}
 }
+
 
 @layer utilities {
 	.text-balance {

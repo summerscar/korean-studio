@@ -9,7 +9,8 @@
 		"intermediate": "进阶",
 		"tools": "工具",
 		"signIn": "登录",
-		"signOut": "退出"
+		"signOut": "退出",
+		"search": "搜索"
 	},
 	"Home": {
 		"viewList": "查看列表",

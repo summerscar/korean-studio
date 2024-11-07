@@ -19,7 +19,8 @@
 		"lint-staged": "lint-staged",
 		"script:docs-desc": "tsx scripts/generate-doc-desc.ts",
 		"script:docs-file": "tsx scripts/generate-doc-file.ts",
-		"script:docs-modified": "tsx scripts/generate-doc-last-modified.ts"
+		"script:docs-modified": "tsx scripts/generate-doc-last-modified.ts",
+		"script:generate-search-index": "tsx scripts/generate-search-index.ts"
 	},
 	"dependencies": {
 		"@google/generative-ai": "^0.21.0",
@@ -41,6 +42,7 @@
 		"clsx": "^2.1.1",
 		"dotenv": "^16.4.5",
 		"es-hangul": "^2.1.0",
+		"flexsearch": "^0.7.43",
 		"github-markdown-css": "^5.6.1",
 		"graphql-request": "^7.1.0",
 		"graphql-yoga": "^5.4.0",
@@ -123,7 +125,7 @@
 		"*": [
 			"biome check --no-errors-on-unmatched --files-ignore-unknown=true"
 		],
-		"*.{mdx,md}": [
+		"./mdx/**/*.{mdx,md}": [
 			"npm run script:docs-modified"
 		]
 	},

@@ -24,9 +24,15 @@ async function listAllDocsByLevel(level: string) {
 		})
 		.map((doc) => {
 			return {
-				title: doc.title,
+				...(doc as FileItem),
 				path: join(process.cwd(), "mdx", level, (doc as FileItem).relativePath),
-			} as { title: string; path: string; content?: string };
+				level,
+			} as {
+				title: string;
+				path: string;
+				level: Levels;
+				content?: string;
+			} & FileItem;
 		});
 	return flattenDocs;
 }

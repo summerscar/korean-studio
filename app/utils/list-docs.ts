@@ -17,8 +17,8 @@ export interface FileItem extends DirItem {
 	relativePath: string;
 	/** /语法形态/filename.md */
 	relativeUrl: string;
-	/** /语法形态/titleName.md */
-	relativeReadablePath: string;
+	/** [语法形态,titleName] */
+	relativeReadablePath: string[];
 }
 export interface SubDirItem extends DirItem {
 	children: (SubDirItem | FileItem)[];
@@ -67,7 +67,7 @@ const _listAllDocs = async (level: string) => {
 					fileName,
 					relativeUrl: path.join(...walkPath, fileName),
 					relativePath: path.join(...walkPath, file),
-					relativeReadablePath: path.join(...walkPath, title),
+					relativeReadablePath: [...walkPath, title],
 					title,
 					date: data.match(/date: (.*)/)?.[1] || "0",
 				} as FileItem;

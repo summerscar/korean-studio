@@ -1,4 +1,3 @@
-import { inter } from "@/utils/fonts";
 import "github-markdown-css";
 import "@/styles/globals.css";
 import { getThemeFromCookie } from "@/actions/check-theme";
@@ -30,15 +29,13 @@ export async function DefaultLayout({
 	if (isAdmin) {
 		return (
 			<html lang="zh-CN">
-				<body className={inter.className}>{children}</body>
+				<body>{children}</body>
 			</html>
 		);
 	}
 	return (
 		<html lang={locale} data-theme={themeFromCookie || Themes.Light}>
-			<body
-				className={clsx(inter.className, bodyClassName, "text-base-content")}
-			>
+			<body className={clsx(bodyClassName, "text-base-content")}>
 				<div id="bg" />
 				<SessionProvider>
 					<NextIntlClientProvider messages={messages}>

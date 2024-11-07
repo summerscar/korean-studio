@@ -37,7 +37,7 @@ const Header = async () => {
 				<Link href="/">
 					<HomeIcon width={32} height={32} viewBox="0 0 24 24" />
 				</Link>
-				<div className="mr-0 sm:mr-4 flex-none sm:flex-auto flex sm:justify-end">
+				<div className="mr-0 sm:mr-4 flex-auto flex justify-center sm:justify-end">
 					<Search />
 				</div>
 				<div className="flex items-center mobile:hidden">

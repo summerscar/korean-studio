@@ -14,7 +14,7 @@ type SearchResult = {
 	titleSnippet: string | null | ReactNode;
 	url: string;
 	level: Levels;
-	relativeReadablePath: string;
+	relativeReadablePath: string[];
 	doc: {
 		title: string;
 		content: string;
@@ -98,7 +98,7 @@ const Search = () => {
 	};
 
 	return (
-		<div className="relative">
+		<div className="relative w-5/6 sm:w-28 sm:focus-within:w-64 transition-[width] [transition-duration:300ms]">
 			<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
 				<svg
 					aria-hidden="true"
@@ -121,7 +121,7 @@ const Search = () => {
 				value={query}
 				onInput={handleSearch}
 				type="search"
-				className="input input-sm max-w-52 pl-10 bg-white/30 peer"
+				className="input input-sm w-full pl-10 bg-white/30 peer"
 				placeholder={tHeader("search")}
 				onFocus={() => setIsInputFocused(true)}
 				// TODO: animation lib
@@ -139,8 +139,8 @@ const Search = () => {
 						className="hover:bg-slate-400/40 rounded-md p-2"
 					>
 						<Link href={res.url}>
-							<div className="text-sm font-bold">
-								{tHeader(res.level)}/{res.relativeReadablePath}
+							<div className="text-sm font-bold text-nowrap overflow-hidden text-ellipsis">
+								{[tHeader(res.level), ...res.relativeReadablePath].join(" > ")}
 							</div>
 							{res.type === "content" && (
 								<div className="text-sm text-base-content/60 text-nowrap overflow-hidden text-ellipsis">
@@ -160,7 +160,7 @@ const Search = () => {
 	);
 };
 
-function extractSnippet(text: string, query: string, snippetLength = 20) {
+function extractSnippet(text: string, query: string, snippetLength = 30) {
 	const matchIndex = text.toLowerCase().indexOf(query.toLowerCase());
 
 	if (matchIndex === -1) return null; // 没找到匹配项

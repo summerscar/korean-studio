@@ -34,7 +34,7 @@ import {
 	parseSpaceStr,
 	spaceStr,
 } from "@/utils/convert-input";
-import { myeongjo, notoKR } from "@/utils/fonts";
+import { notoKR } from "@/utils/fonts";
 import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
 import { getLocalDict } from "@/utils/local-dict";
@@ -526,7 +526,7 @@ const HomeStatus = ({
 			{/* 例句 */}
 			{currentWord?.example && (
 				<div className="flex justify-center flex-col items-center">
-					<p className={clsx("relative", myeongjo.className)}>
+					<p className={clsx("relative", notoKR.className)}>
 						{highLightExample(currentWord.example)}
 						<Pronunciation
 							width={12}

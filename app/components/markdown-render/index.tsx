@@ -24,8 +24,10 @@ const header = (level: 1 | 2 | 3, props: PropsWithChildren<{ id: string }>) => {
 		</Header>
 	);
 };
-const Alink = (props: PropsWithChildren<{ href: string }>) => (
-	<Link {...props} prefetch />
+const Alink = ({ children, ...props }: PropsWithChildren<{ href: string }>) => (
+	<Link className="!text-base-content !underline" {...props} prefetch>
+		{children}
+	</Link>
 );
 const components = {
 	// h1: (props: PropsWithChildren<{ id: string }>) => header(1, props),

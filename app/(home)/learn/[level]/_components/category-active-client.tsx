@@ -40,7 +40,7 @@ const MobileCategoryHeader = ({ level }: { level: string }) => {
 		.split("/")
 		.filter(Boolean)
 		.slice(2);
-
+	curPath.pop();
 	curPath.unshift(level);
 
 	return curPath.join(" / ");

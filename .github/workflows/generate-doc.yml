@@ -43,6 +43,9 @@ jobs:
       - name: Run script:docs-desc
         run: npm run script:docs-desc
 
+      - name: Run script:generate-search-index
+        run: npm run script:generate-search-index
+
       - name: Commit docs-desc
         uses: stefanzweifel/git-auto-commit-action@v5
         with:

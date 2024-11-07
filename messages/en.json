@@ -9,7 +9,8 @@
 		"intermediate": "Intermediate",
 		"tools": "Tools",
 		"signIn": "Sign In",
-		"signOut": "Sign Out"
+		"signOut": "Sign Out",
+		"search": "Search"
 	},
 	"Home": {
 		"viewList": "View list",

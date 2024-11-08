@@ -8,7 +8,7 @@ import { generateWordsAction } from "./generate-word-action";
 import { getDictRevalidateKey } from "./user-dict-utils";
 import type { DictItemCreateInput } from ".keystone/types";
 
-const allDictsRevalidateKey = `all-dicts-${process.env.VERCEL_GIT_COMMIT_SHA || "dev"}`;
+const allDictsRevalidateKey = "all-dicts";
 
 const getAllDicts = unstable_cache(
 	async () => {

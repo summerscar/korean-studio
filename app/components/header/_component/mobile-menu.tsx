@@ -1,7 +1,7 @@
 "use client";
 import CloseIcon from "@/assets/svg/close.svg";
 import MenuIcon from "@/assets/svg/menu.svg";
-import { isAdmin } from "@/hooks/use-user";
+import { isAdminBySession } from "@/hooks/use-user";
 import clsx from "clsx";
 import type { Session } from "next-auth";
 import { useTranslations } from "next-intl";
@@ -57,7 +57,9 @@ const MobileMenu = ({
 				{session ? (
 					<div className="p-2 flex flex-col">
 						<span
-							className={isAdmin(session) ? "text-yellow-200 font-bold" : ""}
+							className={
+								isAdminBySession(session) ? "text-yellow-200 font-bold" : ""
+							}
 						>
 							{session.user?.name}
 						</span>

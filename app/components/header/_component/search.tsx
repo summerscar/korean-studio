@@ -48,7 +48,16 @@ const Search = () => {
 				// encode: (str) => str.replace(/[\x00-\x7F]/g, "").split(""),
 				document: {
 					id: "id",
-					index: ["title", "content"],
+					index: [
+						{
+							field: "title",
+							tokenize: "full",
+						},
+						{
+							field: "content",
+							tokenize: "full",
+						},
+					],
 					store: ["title", "content", "url", "level", "relativeReadablePath"],
 				},
 			});
@@ -160,15 +169,15 @@ const Search = () => {
 	);
 };
 
-function extractSnippet(text: string, query: string, snippetLength = 30) {
+function extractSnippet(text: string, query: string, snippetLength = 18) {
 	const matchIndex = text.toLowerCase().indexOf(query.toLowerCase());
 
 	if (matchIndex === -1) return null; // 没找到匹配项
 
-	const start = Math.max(0, matchIndex - snippetLength / 2);
+	const start = Math.max(0, matchIndex - (snippetLength / 5) * 1);
 	const end = Math.min(
 		text.length,
-		matchIndex + query.length + snippetLength / 2,
+		matchIndex + query.length + (snippetLength / 5) * 4,
 	);
 	const snippetString = text.slice(start, end) + (end < text.length ? "" : "");
 	return reactStringReplace(snippetString, query, (match, index) => (

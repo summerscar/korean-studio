@@ -6,7 +6,7 @@ export const useDevice = () => {
 	useEffect(() => {
 		const callback = () => {
 			const canHover = window.matchMedia("(hover: hover)").matches;
-			setIsTouchable(canHover);
+			setIsTouchable(!canHover);
 		};
 		callback();
 		window.addEventListener("resize", callback);

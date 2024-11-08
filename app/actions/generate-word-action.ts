@@ -1,6 +1,6 @@
 "use server";
 import type { DictItem } from "@/types/dict";
-import { isDev } from "@/utils/is-dev";
+import { isDev, isProd } from "@/utils/is-dev";
 import { WORD_EXAMPLE } from "@/utils/local-dict";
 import {
 	fetchChatCompletion,
@@ -44,9 +44,12 @@ export const generateWordsAction = async (words: string[]) => {
 	return await sequentialChatCompletion(
 		words
 			.map((w) => w.trim())
-			.map(
-				(w) => async () =>
-					JSON.parse((await generateWordAction(w)) || "{}") as DictItem,
-			),
+			.map((w) => async () => {
+				const res = JSON.parse(
+					(await generateWordAction(w)) || "{}",
+				) as DictItem;
+				isProd && console.log("[generateWordsAction][wordGenerated]:", w);
+				return res;
+			}),
 	);
 };

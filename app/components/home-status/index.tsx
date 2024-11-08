@@ -514,7 +514,7 @@ const HomeStatus = ({
 						<SettingIcon className="size-5" />
 						{tHome("viewList")}
 					</button>
-					{isTouchable && (
+					{!isTouchable && (
 						<div className="text-sm">
 							tips: Try <kbd className="kbd kbd-xs">[</kbd>
 							{" / "}

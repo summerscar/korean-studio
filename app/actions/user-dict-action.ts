@@ -16,6 +16,7 @@ const getAllDicts = unstable_cache(
 		const res = (await sudoContext.query.Dict.findMany({
 			where: {},
 			query: "id name public intlKey createdBy { id name }",
+			orderBy: { createdAt: "asc" },
 		})) as UserDicts;
 		return toPlainObject(res);
 	},
@@ -79,8 +80,14 @@ const addDictItemToDictAction = async (
 
 const addWordsToUserDictAction = async (dictId: string, words: string[]) => {
 	const dictItems = await generateWordsAction(words);
+	if (!dictItems.length) {
+		throw new Error("No words generated");
+	}
 	await addDictItemToDictAction(dictId, dictItems);
 	revalidateTag(getDictRevalidateKey(dictId));
+	if (dictItems.length !== words.length) {
+		throw new Error("Partially generated, not all words added");
+	}
 };
 
 const getDictList = async (dictId: string) => {

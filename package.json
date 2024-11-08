@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "npm-run-all --parallel keystone:dev next:dev",
 		"build": "npm run keystone:build && npm run next:build",
+		"postbuild": "next-sitemap",
 		"postinstall": "keystone postinstall",
 		"keystone:dev": "keystone dev",
 		"keystone:build": "keystone build --no-ui",
@@ -53,6 +54,7 @@
 		"next-cache-toolbar": "^0.2.1",
 		"next-intl": "^3.22.0",
 		"next-mdx-remote": "^5.0.0",
+		"next-sitemap": "^4.2.3",
 		"openai": "^4.68.4",
 		"react": "19.0.0-rc-65a56d0e-20241020",
 		"react-dom": "19.0.0-rc-65a56d0e-20241020",

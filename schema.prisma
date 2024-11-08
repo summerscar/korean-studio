@@ -24,18 +24,23 @@ model User {
 }
 
 model Topik {
-  id              String                @id @default(cuid())
-  no              Int
-  year            Int
-  level           TopikLevelType
-  questionNumber  Int
-  questionType    TopikQuestionTypeType
-  score           Int                   @default(0)
-  audioURL        String                @default("")
-  questionStem    String                @default("")
-  questionContent String                @default("")
-  options         Json?                 @default("[{\"content\":\"\",\"isCorrect\":true},{\"content\":\"\"},{\"content\":\"\"},{\"content\":\"\"}]")
-  explanation     String                @default("")
+  id                  String                @id @default(cuid())
+  no                  Int
+  year                Int
+  level               TopikLevelType
+  parentId            Topik?                @relation("Topik_parentId", fields: [parentIdId], references: [id])
+  parentIdId          String?               @map("parentId")
+  questionNumber      Int
+  questionType        TopikQuestionTypeType
+  score               Int                   @default(0)
+  audioURL            String                @default("")
+  questionStem        String                @default("")
+  questionContent     String                @default("")
+  options             Json?                 @default("[{\"content\":\"\",\"isCorrect\":true},{\"content\":\"\"},{\"content\":\"\"},{\"content\":\"\"}]")
+  explanation         String                @default("")
+  from_Topik_parentId Topik[]               @relation("Topik_parentId")
+
+  @@index([parentIdId])
 }
 
 model Dict {

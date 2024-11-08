@@ -148,7 +148,7 @@ const HomeDrawer = ({
 										onClick={() => onClick(index)}
 									>
 										<div className="grid grid-flow-col">
-											<span>
+											<span className="text-nowrap overflow-hidden text-ellipsis">
 												{index + 1}. {item.name}
 											</span>
 											<span

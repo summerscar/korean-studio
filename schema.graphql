@@ -137,6 +137,7 @@ type Topik {
   no: Int
   year: Int
   level: TopikLevelType
+  parentId: Topik
   questionNumber: Int
   questionType: TopikQuestionTypeType
   score: Int
@@ -170,6 +171,7 @@ input TopikWhereInput {
   no: IntFilter
   year: IntFilter
   level: TopikLevelTypeNullableFilter
+  parentId: TopikWhereInput
   questionNumber: IntFilter
   questionType: TopikQuestionTypeTypeNullableFilter
   score: IntFilter
@@ -222,6 +224,7 @@ input TopikUpdateInput {
   no: Int
   year: Int
   level: TopikLevelType
+  parentId: TopikRelateToOneForUpdateInput
   questionNumber: Int
   questionType: TopikQuestionTypeType
   score: Int
@@ -230,6 +233,12 @@ input TopikUpdateInput {
   questionContent: String
   options: JSON
   explanation: String
+}
+
+input TopikRelateToOneForUpdateInput {
+  create: TopikCreateInput
+  connect: TopikWhereUniqueInput
+  disconnect: Boolean
 }
 
 input TopikUpdateArgs {
@@ -241,6 +250,7 @@ input TopikCreateInput {
   no: Int
   year: Int
   level: TopikLevelType
+  parentId: TopikRelateToOneForCreateInput
   questionNumber: Int
   questionType: TopikQuestionTypeType
   score: Int
@@ -249,6 +259,11 @@ input TopikCreateInput {
   questionContent: String
   options: JSON
   explanation: String
+}
+
+input TopikRelateToOneForCreateInput {
+  create: TopikCreateInput
+  connect: TopikWhereUniqueInput
 }
 
 type Dict {

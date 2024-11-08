@@ -56,8 +56,8 @@ const getUserFromNextAuth = async (
 const hasSession = async ({
 	session,
 	context,
-	listKey,
-	operation,
+	// listKey,
+	// operation,
 }: {
 	session?: Session;
 	context: KeystoneContext<TypeInfo>;
@@ -65,18 +65,15 @@ const hasSession = async ({
 	operation: string;
 }) => {
 	if (!session) {
-		console.log(
-			`[keystone][${operation}][${listKey}]: `,
-			"-----no session-----",
-		);
+		// console.log(`[keystone][${operation}][${listKey}]: -----no session-----`);
 		return false;
 	}
-	console.log(`[keystone][${operation}][${listKey}]: start...`, session);
+	// console.log(`[keystone][${operation}][${listKey}]: start...`, session);
 	if (isFromNextAuth(session)) {
 		const user = await getUserFromNextAuth(context, session);
 		console.log("[keystone][from next.js][query]", JSON.stringify(user));
 	}
-	console.log(`[keystone][${operation}][${listKey}]: end...`);
+	// console.log(`[keystone][${operation}][${listKey}]: end...`);
 	return true;
 };
 
@@ -119,7 +116,7 @@ export const lists = {
 				validation: { isRequired: true },
 				label: "级别",
 			}),
-			// TODO: add parentId
+			parentId: relationship({ ref: "Topik", many: false }),
 			questionNumber: integer({
 				validation: { isRequired: true },
 				label: "题号",

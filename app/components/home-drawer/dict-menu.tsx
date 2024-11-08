@@ -82,9 +82,11 @@ const DictMenu = ({
 				}
 				onDictUpdate?.();
 				createSuccessToast(tHome("generated"));
-			} catch (error) {
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			} catch (error: any) {
 				console.error("[createWord]:\n", error);
 				createErrorToast(tHome("generateError"));
+				createErrorToast(error.message);
 			} finally {
 				removeInfoToast();
 			}

@@ -41,15 +41,22 @@ export const generateWordAction = async (word: string) => {
 };
 
 export const generateWordsAction = async (words: string[]) => {
-	return await sequentialChatCompletion(
-		words
-			.map((w) => w.trim())
-			.map((w) => async () => {
-				const res = JSON.parse(
-					(await generateWordAction(w)) || "{}",
-				) as DictItem;
-				isProd && console.log("[generateWordsAction][wordGenerated]:", w);
-				return res;
-			}),
-	);
+	return (
+		await sequentialChatCompletion(
+			words
+				.map((w) => w.trim())
+				.map((w) => async () => {
+					try {
+						const res = JSON.parse(
+							(await generateWordAction(w)) || "{}",
+						) as DictItem;
+						isProd && console.log("[generateWordsAction][wordGenerated]:", w);
+						return res;
+					} catch (e) {
+						console.error(`[generateWordsAction][error]: ${e}`);
+						return null;
+					}
+				}),
+		)
+	).filter((w) => w !== null);
 };

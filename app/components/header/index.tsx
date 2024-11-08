@@ -1,9 +1,11 @@
+import { clearCacheAction } from "@/actions/clear-cache-actions";
 import HomeIcon from "@/assets/svg/home.svg";
-import { isAdmin } from "@/hooks/use-user";
+import { isAdminBySession } from "@/hooks/use-user";
 import { getServerI18n } from "@/utils/i18n";
 import { auth } from "auth";
 import Link from "next/link";
 import { ActiveLinks } from "./_component/active-links";
+import { CleanCache } from "./_component/clean-cache";
 import { MobileMenu } from "./_component/mobile-menu";
 import { Progress } from "./_component/progress";
 import { Search } from "./_component/search";
@@ -37,7 +39,7 @@ const Header = async () => {
 				<Link href="/">
 					<HomeIcon width={32} height={32} viewBox="0 0 24 24" />
 				</Link>
-				<div className="mr-0 sm:mr-4 flex-auto flex justify-center sm:justify-end">
+				<div className="mr-0 sm:mr-4 flex-auto flex justify-center items-center sm:justify-end">
 					<Search />
 				</div>
 				<div className="flex items-center mobile:hidden">
@@ -47,10 +49,11 @@ const Header = async () => {
 							<div>
 								<span
 									className={
-										isAdmin(session) ? "text-yellow-200 font-bold" : ""
+										isAdminBySession(session) ? "text-yellow-200 font-bold" : ""
 									}
 								>
 									{session.user?.name}
+									<CleanCache session={session} />
 								</span>
 								<Link className="ml-4" href="/api/auth/signout">
 									{t("signOut")}

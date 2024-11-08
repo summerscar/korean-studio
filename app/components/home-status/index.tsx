@@ -13,8 +13,8 @@ import { HideText } from "@/components/hide-text";
 import { HomeDrawer } from "@/components/home-drawer";
 import { HomeInput } from "@/components/home-input";
 import { Pronunciation } from "@/components/pronunciation";
+import { useDevice } from "@/hooks/use-device";
 import { usePronunciation } from "@/hooks/use-pronunciation";
-import { useScreen } from "@/hooks/use-screen";
 import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
 import type { Tran, UserDicts } from "@/types/dict";
@@ -73,7 +73,7 @@ const HomeStatus = ({
 	const [isInputError, setIsInputError] = useState(false);
 	const [isInputFocused, setIsInputFocused] = useState(false);
 	const [showKeyboard, setShowKeyboard] = useState(true);
-	const { isMobile } = useScreen();
+	const { isTouchable } = useDevice();
 	const [setting, setSetting] = useState<HomeSetting>({
 		autoVoice: false,
 		showMeaning: true,
@@ -271,7 +271,7 @@ const HomeStatus = ({
 	}, [inputKeys, qwerty, addShakeAnimation, inputAE]);
 
 	const focusInput = useMemoizedFn(() => {
-		if (isMobile) return;
+		if (isTouchable) return;
 		inputRef.current?.handleInputFocus?.();
 	});
 
@@ -499,11 +499,13 @@ const HomeStatus = ({
 						isInputFocused ? "opacity-0 pointer-events-none" : "opacity-100",
 					)}
 				>
-					<div className="text-3xl flex items-center">
-						{tHome.rich("tipsEnter", {
-							enter: () => <kbd className="kbd kbd-md mx-2">Enter</kbd>,
-						})}
-					</div>
+					{!isTouchable && (
+						<div className="text-3xl flex items-center">
+							{tHome.rich("tipsEnter", {
+								enter: () => <kbd className="kbd kbd-md mx-2">Enter</kbd>,
+							})}
+						</div>
+					)}
 					<button
 						className="btn btn-outline btn-sm mt-5 mb-2"
 						type="button"
@@ -512,15 +514,17 @@ const HomeStatus = ({
 						<SettingIcon className="size-5" />
 						{tHome("viewList")}
 					</button>
-					<div className="text-sm">
-						tips: Try <kbd className="kbd kbd-xs">[</kbd>
-						{" / "}
-						<kbd className="kbd kbd-xs">]</kbd>
-						{" / "}
-						<kbd className="kbd kbd-xs">;</kbd>
-						{" / "}
-						<kbd className="kbd kbd-xs">'</kbd>.
-					</div>
+					{isTouchable && (
+						<div className="text-sm">
+							tips: Try <kbd className="kbd kbd-xs">[</kbd>
+							{" / "}
+							<kbd className="kbd kbd-xs">]</kbd>
+							{" / "}
+							<kbd className="kbd kbd-xs">;</kbd>
+							{" / "}
+							<kbd className="kbd kbd-xs">'</kbd>.
+						</div>
+					)}
 				</div>
 			</div>
 			{/* 例句 */}

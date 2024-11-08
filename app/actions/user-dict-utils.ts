@@ -1,11 +1,10 @@
-import { isAdmin } from "@/hooks/use-user";
+import { isAdminBySession } from "@/hooks/use-user";
 import type { UserDicts } from "@/types/dict";
 import type { Session } from "next-auth";
 import { unstable_cache } from "next/cache";
 import { getDictList } from "./user-dict-action";
 
-export const getDictRevalidateKey = (dictId: string) =>
-	`dict-${dictId}-${process.env.VERCEL_GIT_COMMIT_SHA || "dev"}`;
+export const getDictRevalidateKey = (dictId: string) => `dict-${dictId}`;
 
 const createCachedDictList = (dictId: string) => {
 	return unstable_cache(
@@ -22,7 +21,7 @@ const filterAndSortDictList = (
 	return dictList
 		.filter((dict) => {
 			return (
-				isAdmin(session) ||
+				isAdminBySession(session) ||
 				dict.public ||
 				dict.createdBy.id === session?.user?.id
 			);

@@ -84,7 +84,7 @@ const DictMenu = ({
 				createSuccessToast(tHome("generated"));
 				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			} catch (error: any) {
-				console.error("[createWord]:\n", error);
+				console.error(`[createWord][${word}]:\n`, error);
 				createErrorToast(tHome("generateError"));
 				createErrorToast(error.message);
 			} finally {

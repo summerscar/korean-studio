@@ -51,6 +51,7 @@ const Header = async () => {
 									className={
 										isAdminBySession(session) ? "text-yellow-200 font-bold" : ""
 									}
+									data-user-id={session.user?.id!}
 								>
 									{session.user?.name}
 									<CleanCache session={session} />

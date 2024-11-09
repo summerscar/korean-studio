@@ -4,7 +4,7 @@ import { signInSchema } from "@/utils/zod";
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
-
+import Google from "next-auth/providers/google";
 class InvalidLoginError extends CredentialsSignin {
 	code = "Invalid identifier or password";
 }
@@ -17,6 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 	},
 	providers: [
 		GitHub,
+		Google,
 		Credentials({
 			// You can specify which fields should be submitted, by adding keys to the `credentials` object.
 			// e.g. domain, username, password, 2FA token, etc.

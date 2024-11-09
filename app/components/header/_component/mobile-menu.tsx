@@ -56,14 +56,14 @@ const MobileMenu = ({
 				))}
 				{session ? (
 					<div className="p-2 flex flex-col">
-						<span
+						<Link
 							className={
 								isAdminBySession(session) ? "text-yellow-200 font-bold" : ""
 							}
-							data-user-id={session.user?.id!}
+							href="/account"
 						>
 							{session.user?.name}
-						</span>
+						</Link>
 						<Link className="py-3" href="/api/auth/signout">
 							{tHeader("signOut")}
 						</Link>

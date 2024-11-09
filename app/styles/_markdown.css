@@ -18,6 +18,9 @@
 		@apply overflow-x-auto
 	}
 	h1, h2, h3, h4, h5, h6 {
+		/* https://stackoverflow.com/questions/65929206/sticky-header-input-scrolls-on-input */
+		scroll-margin-top: var(--header-height);
+
 		position: relative;
 		a {
 			@apply absolute top-1/2 left-[-22px] flex w-5 h-5 m-auto rounded-md opacity-0 justify-center items-center -translate-y-2/4;
@@ -29,5 +32,8 @@
 				@apply opacity-100
 			}
 		}
+	}
+	.anchor {
+		@apply !ml-0;
 	}
 }

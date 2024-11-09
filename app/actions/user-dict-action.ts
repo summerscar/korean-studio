@@ -60,9 +60,11 @@ const removeDictItemAction = async (dictId: string, dictItemId: string) => {
 const addDictItemToDictAction = async (
 	dictId: string,
 	dictItems: DictItem[],
+	userId = "",
 ) => {
 	const session = await auth();
-	const ctx = KSwithSession(session);
+	const ctx = KSwithSession(session || { user: { id: userId }, expires: "" });
+
 	await ctx.query.DictItem.createMany({
 		data: dictItems.map(
 			(w) =>
@@ -72,18 +74,22 @@ const addDictItemToDictAction = async (
 					example: w.example,
 					exTrans: w.exTrans,
 					dict: { connect: { id: dictId } },
-					createdBy: { connect: { id: session?.user?.id } },
+					createdBy: { connect: { id: session?.user?.id || userId } },
 				}) as unknown as DictItemCreateInput,
 		),
 	});
 };
 
-const addWordsToUserDictAction = async (dictId: string, words: string[]) => {
+const addWordsToUserDictAction = async (
+	dictId: string,
+	words: string[],
+	userId = "",
+) => {
 	const dictItems = await generateWordsAction(words);
 	if (!dictItems.length) {
 		throw new Error("No words generated");
 	}
-	await addDictItemToDictAction(dictId, dictItems);
+	await addDictItemToDictAction(dictId, dictItems, userId);
 	revalidateTag(getDictRevalidateKey(dictId));
 	if (dictItems.length !== words.length) {
 		throw new Error("Partially generated, not all words added");

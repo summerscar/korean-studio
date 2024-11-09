@@ -6,7 +6,7 @@ import { auth } from "auth";
 import { revalidateTag, unstable_cache } from "next/cache";
 import { generateWordsAction } from "./generate-word-action";
 import { getDictRevalidateKey } from "./user-dict-utils";
-import type { DictItemCreateInput } from ".keystone/types";
+import type { DictItemCreateInput, DictUpdateInput } from ".keystone/types";
 
 const allDictsRevalidateKey = "all-dicts";
 
@@ -96,6 +96,36 @@ const addWordsToUserDictAction = async (
 	}
 };
 
+const updateDictItemAction = async (
+	dictId: string,
+	dictItemId: string,
+	data: DictItem,
+) => {
+	const session = await auth();
+	const ctx = KSwithSession(session);
+	await ctx.query.DictItem.updateOne({
+		where: { id: dictItemId },
+		data: {
+			name: data.name,
+			trans: data.trans,
+			example: data.example,
+			exTrans: data.exTrans,
+		} as unknown as DictItemCreateInput,
+	});
+	revalidateTag(getDictRevalidateKey(dictId));
+};
+
+const updateDictAction = async (dictId: string, data: DictUpdateInput) => {
+	const session = await auth();
+	const ctx = KSwithSession(session);
+	await ctx.query.Dict.updateOne({
+		where: { id: dictId },
+		data,
+	});
+	revalidateTag(allDictsRevalidateKey);
+	// revalidateTag(getDictRevalidateKey(dictId));
+};
+
 const getDictList = async (dictId: string) => {
 	// TODO: 权限做 增删改
 	const ctx = keystoneContext.sudo();
@@ -125,6 +155,8 @@ export {
 	getAllDicts,
 	getDictList,
 	addWordsToUserDictAction,
+	updateDictItemAction,
+	updateDictAction,
 	removeDictItemAction,
 	removeDictAction,
 	importDictItemToUserDict,

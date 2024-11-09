@@ -21,14 +21,14 @@ const WordsList = ({
 	dict,
 	dictInfo,
 	onUpdate,
-}: { dict: Dict; dictInfo: UserDicts[0]; onUpdate?: () => Promise<void> }) => {
+}: { dict: Dict; dictInfo?: UserDicts[0]; onUpdate?: () => Promise<void> }) => {
 	const tHome = useTranslations("Home");
 	const [editing, setEditing] = useState<DictItem>();
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		setEditing(undefined);
-	}, [dictInfo.id]);
+	}, [dictInfo?.id]);
 
 	const onEdit = (dictItemId: string) => {
 		const item = dict.find((item) => item.id === dictItemId);
@@ -42,7 +42,7 @@ const WordsList = ({
 			return;
 		}
 		const cancel = createLoadingToast("updating");
-		await updateDictItemAction(dictInfo.id, editing.id!, data);
+		await updateDictItemAction(dictInfo!.id, editing.id!, data);
 		cancel();
 		createSuccessToast("updated");
 		setEditing(undefined);
@@ -50,7 +50,7 @@ const WordsList = ({
 
 	const updateDict = async (data: DictUpdateInput) => {
 		const cancel = createLoadingToast("updating");
-		await updateDictAction(dictInfo.id, data);
+		await updateDictAction(dictInfo!.id, data);
 		cancel();
 		createSuccessToast("updated");
 	};
@@ -62,7 +62,7 @@ const WordsList = ({
 
 			try {
 				const words = word.split(/[,，、]+/).map((_) => _.trim());
-				await addWordsToUserDictAction(dictInfo.id, words);
+				await addWordsToUserDictAction(dictInfo!.id, words);
 				await onUpdate?.();
 				createSuccessToast(tHome("generated"));
 				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -75,7 +75,7 @@ const WordsList = ({
 			}
 		}
 	};
-
+	if (!dictInfo) return null;
 	return (
 		<div>
 			<div className="text-center text-sm">

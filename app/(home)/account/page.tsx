@@ -1,11 +1,13 @@
 import { getAllDicts } from "@/actions/user-dict-action";
+import { filterAndSortDictList } from "@/actions/user-dict-utils";
 import InfoIcon from "@/assets/svg/info.svg";
 import { auth } from "auth";
 import { WordLists } from "./_components/lists";
 
 const AccountPage = async () => {
 	const session = await auth();
-	const dicts = await getAllDicts();
+	const dicts = filterAndSortDictList(await getAllDicts(), session);
+
 	if (!session) {
 		return (
 			<div className="pt-32">

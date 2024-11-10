@@ -2,6 +2,7 @@ import { keystoneContext } from "@/../keystone/context";
 import { TopikLevels } from "@/types";
 import { getServerI18n } from "@/utils/i18n";
 import type { Metadata } from "next";
+import { unstable_cache } from "next/cache";
 import Link from "next/link";
 import type { TopikLevelType } from ".keystone/types";
 
@@ -12,32 +13,42 @@ export async function generateMetadata(): Promise<Metadata> {
 	};
 }
 
-// "id no year level questionNumber questionType score audioURL questionStem questionContent options explanation",
+const TopikLevelCategoriesKey = "TopikLevelCategories";
 
 export default async function Page() {
-	const levelCategories: {
-		label: string;
-		value: TopikLevelType;
-		items: number[];
-	}[] = [
-		{ label: TopikLevels.TOPIK_I, value: "TOPIK_I", items: [] },
-		{ label: TopikLevels.TOPIK_II, value: "TOPIK_II", items: [] },
-	];
+	const getLevelCategories = unstable_cache(
+		async () => {
+			const levelCategories: {
+				label: string;
+				value: TopikLevelType;
+				items: number[];
+			}[] = [
+				{ label: TopikLevels.TOPIK_I, value: "TOPIK_I", items: [] },
+				{ label: TopikLevels.TOPIK_II, value: "TOPIK_II", items: [] },
+			];
 
-	const topikList = await keystoneContext.query.Topik.findMany({
-		where: {},
-		query: "no level questionNumber",
-	});
+			const topikList = await keystoneContext.query.Topik.findMany({
+				where: {},
+				query: "no level",
+			});
 
-	levelCategories.forEach((category) => {
-		category.items = [
-			...new Set(
-				topikList
-					.filter((item) => item.level === category.value)
-					.map((item) => item.no),
-			),
-		];
-	});
+			levelCategories.forEach((category) => {
+				category.items = [
+					...new Set(
+						topikList
+							.filter((item) => item.level === category.value)
+							.map((item) => item.no),
+					),
+				].sort();
+			});
+
+			return levelCategories;
+		},
+		[TopikLevelCategoriesKey],
+		{ revalidate: false, tags: [TopikLevelCategoriesKey] },
+	);
+
+	const levelCategories = await getLevelCategories();
 
 	return (
 		<div className="flex flex-col">

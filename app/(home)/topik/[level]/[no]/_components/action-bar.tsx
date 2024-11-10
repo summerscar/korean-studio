@@ -13,6 +13,7 @@ const ActionBar = ({
 	timeLeft,
 	onSubmit,
 	onReset,
+	audioURL,
 }: {
 	level: TopikLevelType;
 	no: string;
@@ -20,6 +21,7 @@ const ActionBar = ({
 	timeLeft: number;
 	onSubmit: () => void;
 	onReset: () => void;
+	audioURL?: string;
 }) => {
 	const [isHandleClickStartTestPending, handleClickStartTest] =
 		useServerActionState(async () => {
@@ -33,8 +35,22 @@ const ActionBar = ({
 			await serverActionTimeOut();
 		});
 
-	return (
+	const audioEl = audioURL && (
 		<div>
+			<audio
+				autoPlay={false}
+				preload={"Metadata"}
+				controls
+				controlsList="nodownload"
+			>
+				<track kind="captions" />
+				<source src={audioURL} type="audio/mpeg" />
+			</audio>
+		</div>
+	);
+
+	return (
+		<div className="sticky top-[--header-height]">
 			{isTesting ? (
 				<div className="flex justify-between items-center">
 					<div className="flex gap-2">
@@ -64,20 +80,24 @@ const ActionBar = ({
 							取消测试
 						</button>
 					</div>
+					{audioEl}
 					<TestCutDown timeLeft={timeLeft} />
 				</div>
 			) : (
-				<button
-					type="button"
-					disabled={isHandleClickStartTestPending}
-					className="btn btn-sm btn-secondary"
-					onClick={handleClickStartTest}
-				>
-					{isHandleClickStartTestPending && (
-						<span className="loading loading-spinner" />
-					)}
-					开始测试
-				</button>
+				<div className="flex gap-8 items-center">
+					<button
+						type="button"
+						disabled={isHandleClickStartTestPending}
+						className="btn btn-sm btn-secondary"
+						onClick={handleClickStartTest}
+					>
+						{isHandleClickStartTestPending && (
+							<span className="loading loading-spinner" />
+						)}
+						开始测试
+					</button>
+					{audioEl}
+				</div>
 			)}
 		</div>
 	);

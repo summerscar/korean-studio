@@ -105,6 +105,7 @@ export const lists = {
 	Topik: list({
 		access: allowAll,
 		fields: {
+			// 届次
 			no: integer({ validation: { isRequired: true }, label: "届次" }),
 			year: integer({ validation: { isRequired: true }, label: "年份" }),
 			level: select({
@@ -116,7 +117,18 @@ export const lists = {
 				validation: { isRequired: true },
 				label: "级别",
 			}),
-			parentId: relationship({ ref: "Topik", many: false }),
+			// 属于某个大题
+			parentId: relationship({
+				ref: "Topik.childrenId",
+				many: false,
+				label: "父大题",
+			}),
+			// 其他小题
+			childrenId: relationship({
+				ref: "Topik.parentId",
+				many: true,
+				label: "子小题",
+			}),
 			questionNumber: integer({
 				validation: { isRequired: true },
 				label: "题号",
@@ -161,6 +173,7 @@ export const lists = {
 				],
 			}),
 			explanation: text({ label: "解析" }),
+			createdAt: timestamp({ defaultValue: { kind: "now" } }),
 		},
 	}),
 	Dict: list({

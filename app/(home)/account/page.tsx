@@ -1,4 +1,5 @@
 import { getAllDicts } from "@/actions/user-dict-action";
+import InfoIcon from "@/assets/svg/info.svg";
 import { auth } from "auth";
 import { WordLists } from "./_components/lists";
 
@@ -15,14 +16,23 @@ const AccountPage = async () => {
 
 	return (
 		<div className="w-full">
-			<h1 className="text-3xl">Account</h1>
 			<div className="py-4">
-				<div>ID: {session.user?.id}</div>
+				<h1 className="text-3xl">Account</h1>
+				<div>
+					ID: {session.user?.id}{" "}
+					<a
+						target="_blank"
+						href="https://github.com/summerscar/korean-studio/blob/main/scripts/tampermonkey-create-word-from-papago.js#L16-L32"
+						rel="noreferrer"
+					>
+						<InfoIcon className="inline-block" />
+					</a>
+				</div>
 				<div>Username: {session.user?.name}</div>
 				<div>Email: {session.user?.email}</div>
 			</div>
 			<div>
-				<h2 className="text-2xl">Word Lists</h2>
+				<h2 className="text-2xl">Word Lists </h2>
 				<WordLists dicts={dicts} />
 			</div>
 		</div>

@@ -18,7 +18,7 @@ export default async function Page(props: {
 					const text = index === 1 ? `제${i}회` : index === 2 ? `문제${i}` : i;
 
 					return (
-						<li key={i}>
+						<li key={text}>
 							{index === arr.length - 1 ? (
 								<>{text}</>
 							) : (

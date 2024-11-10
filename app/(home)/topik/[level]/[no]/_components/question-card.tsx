@@ -47,7 +47,7 @@ const QuestionCard = ({
 
 	return (
 		<div className="flex items-start">
-			<div className="flex-auto pr-3 pt-8">
+			<div className="flex-auto pr-3 pt-8 max-w-3xl">
 				<ActionBar
 					onSubmit={handleClickStartTest}
 					onReset={handleClickResetTest}
@@ -60,20 +60,24 @@ const QuestionCard = ({
 				<form ref={formRef}>
 					{topikQuestions.map((topikQuestion) => (
 						<div
-							className="flex flex-col my-4 [scroll-margin-top:var(--header-height)]"
+							className="flex flex-col py-4 [scroll-margin-top:var(--header-height)]"
 							id={topikQuestion.questionNumber.toString()}
 							key={topikQuestion.id}
 						>
-							{topikQuestion.questionType !== "LISTENING" && (
-								<p
-									className="whitespace-pre-line py-4"
-									// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-									dangerouslySetInnerHTML={{
-										__html: topikQuestion.questionStem.replace(/\\n/g, "&#10;"),
-									}}
-								/>
-							)}
-							<div>
+							{topikQuestion.questionType !== "LISTENING" &&
+								topikQuestion.questionStem && (
+									<p
+										className="whitespace-pre-line p-3 mb-2 rounded-sm border border-base-content"
+										// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+										dangerouslySetInnerHTML={{
+											__html: topikQuestion.questionStem.replace(
+												/\\n/g,
+												"&#10;",
+											),
+										}}
+									/>
+								)}
+							<div className="mb-2">
 								<Link
 									className="hover:underline font-bold"
 									href={`/topik/${level}/${no}/${topikQuestion.questionNumber}`}
@@ -83,7 +87,10 @@ const QuestionCard = ({
 								<span> </span>
 								{topikQuestion.questionContent}
 							</div>
-							<fieldset id={`no-${topikQuestion.questionNumber}`}>
+							<fieldset
+								id={`no-${topikQuestion.questionNumber}`}
+								className="grid gap-2 grid-cols-1 sm:grid-cols-2"
+							>
 								{topikQuestion.options.map((option, index) => {
 									const radioId = `${topikQuestion.questionNumber}`;
 									return (

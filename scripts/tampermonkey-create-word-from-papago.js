@@ -85,6 +85,7 @@ const style = {
 			}
 			const text = getWord(e.target);
 			e.target.textContent = "⏳";
+			e.target.disabled = true;
 			try {
 				const res = await fetch(`${SERVER}/api/dict-items/create`, {
 					method: "POST",
@@ -99,6 +100,7 @@ const style = {
 				console.error("[dict-items/create][error]:", error);
 			} finally {
 				setTimeout(() => {
+					e.target.disabled = false;
 					e.target.textContent = "➕";
 				}, 2000);
 			}

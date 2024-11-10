@@ -2,6 +2,7 @@ import { keystoneContext } from "@/../keystone/context";
 import QuestionForm from "@/components/question-form";
 import { TopikLevels, type TopikQuestion } from "@/types";
 import type { Metadata } from "next";
+import { unstable_cache } from "next/cache";
 import type { TopikLevelType } from ".keystone/types";
 
 export async function generateMetadata(props: {
@@ -13,22 +14,39 @@ export async function generateMetadata(props: {
 	};
 }
 
+const getTopikQuestionByLevelNoQuestionNumberKey = (
+	level: TopikLevelType,
+	no: string,
+	questionNumber: string,
+) => `TopikQuestionByLevelNoQuestionNumber-${level}-${no}-${questionNumber}`;
+
 const TopikQuestionPage = async (props: {
 	params: Promise<{ level: TopikLevelType; no: string; question: string }>;
 }) => {
 	const params = await props.params;
 	const { level, no, question: questionNumber } = params;
-	const topikQuestions = await keystoneContext.query.Topik.findMany({
-		where: {
-			level: { equals: level },
-			no: { equals: Number(no) },
-			questionNumber: { equals: Number(questionNumber) },
+	const getTopikQuestions = await unstable_cache(
+		async (level: TopikLevelType, no: string, questionNumber: string) => {
+			return await keystoneContext.query.Topik.findMany({
+				where: {
+					level: { equals: level },
+					no: { equals: Number(no) },
+					questionNumber: { equals: Number(questionNumber) },
+				},
+				query:
+					"id no year level questionNumber questionType score audioURL questionStem questionContent options explanation",
+				orderBy: { questionNumber: "asc" },
+			});
 		},
-		query:
-			"id no year level questionNumber questionType score audioURL questionStem questionContent options explanation",
-		orderBy: { questionNumber: "asc" },
-	});
-
+		[getTopikQuestionByLevelNoQuestionNumberKey(level, no, questionNumber)],
+		{
+			revalidate: false,
+			tags: [
+				getTopikQuestionByLevelNoQuestionNumberKey(level, no, questionNumber),
+			],
+		},
+	);
+	const topikQuestions = await getTopikQuestions(level, no, questionNumber);
 	if (topikQuestions.length === 0) {
 		return <div>Question not found</div>;
 	}

@@ -138,6 +138,8 @@ type Topik {
   year: Int
   level: TopikLevelType
   parentId: Topik
+  childrenId(where: TopikWhereInput! = {}, orderBy: [TopikOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopikWhereUniqueInput): [Topik!]
+  childrenIdCount(where: TopikWhereInput! = {}): Int
   questionNumber: Int
   questionType: TopikQuestionTypeType
   score: Int
@@ -146,6 +148,7 @@ type Topik {
   questionContent: String
   options: JSON
   explanation: String
+  createdAt: DateTime
 }
 
 enum TopikLevelType {
@@ -172,6 +175,7 @@ input TopikWhereInput {
   year: IntFilter
   level: TopikLevelTypeNullableFilter
   parentId: TopikWhereInput
+  childrenId: TopikManyRelationFilter
   questionNumber: IntFilter
   questionType: TopikQuestionTypeTypeNullableFilter
   score: IntFilter
@@ -179,6 +183,7 @@ input TopikWhereInput {
   questionStem: StringFilter
   questionContent: StringFilter
   explanation: StringFilter
+  createdAt: DateTimeNullableFilter
 }
 
 input IntFilter {
@@ -197,6 +202,12 @@ input TopikLevelTypeNullableFilter {
   in: [TopikLevelType!]
   notIn: [TopikLevelType!]
   not: TopikLevelTypeNullableFilter
+}
+
+input TopikManyRelationFilter {
+  every: TopikWhereInput
+  some: TopikWhereInput
+  none: TopikWhereInput
 }
 
 input TopikQuestionTypeTypeNullableFilter {
@@ -218,6 +229,7 @@ input TopikOrderByInput {
   questionStem: OrderDirection
   questionContent: OrderDirection
   explanation: OrderDirection
+  createdAt: OrderDirection
 }
 
 input TopikUpdateInput {
@@ -225,6 +237,7 @@ input TopikUpdateInput {
   year: Int
   level: TopikLevelType
   parentId: TopikRelateToOneForUpdateInput
+  childrenId: TopikRelateToManyForUpdateInput
   questionNumber: Int
   questionType: TopikQuestionTypeType
   score: Int
@@ -233,12 +246,20 @@ input TopikUpdateInput {
   questionContent: String
   options: JSON
   explanation: String
+  createdAt: DateTime
 }
 
 input TopikRelateToOneForUpdateInput {
   create: TopikCreateInput
   connect: TopikWhereUniqueInput
   disconnect: Boolean
+}
+
+input TopikRelateToManyForUpdateInput {
+  disconnect: [TopikWhereUniqueInput!]
+  set: [TopikWhereUniqueInput!]
+  create: [TopikCreateInput!]
+  connect: [TopikWhereUniqueInput!]
 }
 
 input TopikUpdateArgs {
@@ -251,6 +272,7 @@ input TopikCreateInput {
   year: Int
   level: TopikLevelType
   parentId: TopikRelateToOneForCreateInput
+  childrenId: TopikRelateToManyForCreateInput
   questionNumber: Int
   questionType: TopikQuestionTypeType
   score: Int
@@ -259,11 +281,17 @@ input TopikCreateInput {
   questionContent: String
   options: JSON
   explanation: String
+  createdAt: DateTime
 }
 
 input TopikRelateToOneForCreateInput {
   create: TopikCreateInput
   connect: TopikWhereUniqueInput
+}
+
+input TopikRelateToManyForCreateInput {
+  create: [TopikCreateInput!]
+  connect: [TopikWhereUniqueInput!]
 }
 
 type Dict {

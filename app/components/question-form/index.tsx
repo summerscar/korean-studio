@@ -28,7 +28,13 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 				{topikQuestion.year}년 제{topikQuestion.no}회 - 문제{" "}
 				{topikQuestion.questionNumber}
 			</div>
-			<h1 className="text-2xl font-bold">{topikQuestion.questionStem}</h1>
+			<h1
+				className="text-xl whitespace-pre-line"
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+				dangerouslySetInnerHTML={{
+					__html: topikQuestion.questionStem.replace(/\\n/g, "&#10;"),
+				}}
+			/>
 			<h2 className="text-xl">{topikQuestion.questionContent}</h2>
 			<form
 				action={async (formData) => {

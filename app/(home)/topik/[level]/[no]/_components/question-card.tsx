@@ -55,15 +55,24 @@ const QuestionCard = ({
 					no={no}
 					isTesting={isTesting}
 					timeLeft={timeLeft}
+					audioURL={topikQuestions[0].audioURL}
 				/>
 				<form ref={formRef}>
 					{topikQuestions.map((topikQuestion) => (
 						<div
-							className="flex flex-col my-4"
+							className="flex flex-col my-4 [scroll-margin-top:var(--header-height)]"
 							id={topikQuestion.questionNumber.toString()}
 							key={topikQuestion.id}
 						>
-							<h1>{topikQuestion.questionStem}</h1>
+							{topikQuestion.questionType !== "LISTENING" && (
+								<p
+									className="whitespace-pre-line py-4"
+									// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+									dangerouslySetInnerHTML={{
+										__html: topikQuestion.questionStem.replace(/\\n/g, "&#10;"),
+									}}
+								/>
+							)}
 							<div>
 								<Link
 									className="hover:underline font-bold"
@@ -74,26 +83,21 @@ const QuestionCard = ({
 								<span> </span>
 								{topikQuestion.questionContent}
 							</div>
-							<fieldset id={topikQuestion.questionNumber.toString()}>
+							<fieldset id={`no-${topikQuestion.questionNumber}`}>
 								{topikQuestion.options.map((option, index) => {
-									const radioId = topikQuestion.questionNumber.toString();
+									const radioId = `${topikQuestion.questionNumber}`;
 									return (
-										<div
-											key={
-												topikQuestion.questionNumber.toString() +
-												index.toString()
-											}
-										>
+										<div key={`no-${topikQuestion.questionNumber}-${index}`}>
 											<input
 												type="radio"
 												className="radio radio-xs radio-secondary"
 												disabled={!isTesting}
 												name={radioId}
 												value={index}
-												id={radioId}
+												id={`${radioId}-${index}`}
 											/>
 											<span> </span>
-											<label htmlFor={radioId}>
+											<label htmlFor={`${radioId}-${index}`}>
 												{index + 1}. {option.content}
 											</label>
 										</div>

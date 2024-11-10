@@ -2,9 +2,7 @@ import { keystoneContext } from "@/../keystone/context";
 import { isTestStart } from "@/actions/topik-actions";
 import { TopikLevels, type TopikQuestion } from "@/types";
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ActionBar } from "./_components/action-bar";
-import { AnswerPanel } from "./_components/answer-panel";
+import { unstable_cache } from "next/cache";
 import { QuestionCard } from "./_components/question-card";
 import type { TopikLevelType } from ".keystone/types";
 
@@ -17,6 +15,9 @@ export async function generateMetadata(props: {
 	};
 }
 
+const getTopikListByLevelAndNoKey = (level: TopikLevelType, no: string) =>
+	`TopikListByLevelAndNo-${level}-${no}`;
+
 export default async function NoPage(props: {
 	params: Promise<{ level: TopikLevelType; no: string }>;
 }) {
@@ -26,12 +27,23 @@ export default async function NoPage(props: {
 		params.no,
 	);
 	const { level, no } = params;
-	const topikListByLevelAndNo = await keystoneContext.query.Topik.findMany({
-		where: { level: { equals: level }, no: { equals: Number(no) } },
-		query:
-			"id no year level questionNumber questionType score audioURL questionStem questionContent options explanation",
-		orderBy: { questionNumber: "asc" },
-	});
+
+	const getTopikListByLevelAndNo = unstable_cache(
+		async (level: TopikLevelType, no: string) => {
+			const topikListByLevelAndNo = await keystoneContext.query.Topik.findMany({
+				where: { level: { equals: level }, no: { equals: Number(no) } },
+				query:
+					"id no year level questionNumber questionType score audioURL questionStem questionContent options explanation",
+				orderBy: { questionNumber: "asc" },
+			});
+			return topikListByLevelAndNo;
+		},
+		[getTopikListByLevelAndNoKey(level, no)],
+		{ revalidate: false, tags: [getTopikListByLevelAndNoKey(level, no)] },
+	);
+
+	const topikListByLevelAndNo = await getTopikListByLevelAndNo(level, no);
+
 	if (topikListByLevelAndNo.length === 0) {
 		return <div>Questions not found</div>;
 	}

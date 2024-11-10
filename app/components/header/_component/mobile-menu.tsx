@@ -38,6 +38,7 @@ const MobileMenu = ({
 			<div
 				className={clsx(
 					"absolute w-screen h-[calc(100dvh-var(--header-height))] left-0 top-[--header-height] flex flex-col backdrop-blur-xl p-2",
+					"*:p-2 *:rounded-md *:cursor-pointer hover:*:bg-slate-400/40",
 					!isOpen && "hidden",
 				)}
 			>
@@ -46,28 +47,25 @@ const MobileMenu = ({
 						key={href}
 						href={href}
 						onClick={() => setIsOpen(false)}
-						className={clsx(
-							isActive(href) && "bg-slate-400/40",
-							"p-2 rounded-md cursor-pointer hover:bg-slate-400/40",
-						)}
+						className={clsx(isActive(href) && "bg-slate-400/40")}
 					>
 						<span>{label}</span>
 					</Link>
 				))}
 				{session ? (
-					<div className="p-2 flex flex-col">
+					<>
 						<Link
-							className={
-								isAdminBySession(session) ? "text-yellow-200 font-bold" : ""
-							}
+							className={clsx(
+								isAdminBySession(session) && "text-yellow-200 font-bold",
+								isActive("/account") && "bg-slate-400/40",
+							)}
+							onClick={() => setIsOpen(false)}
 							href="/account"
 						>
 							{session.user?.name}
 						</Link>
-						<Link className="py-3" href="/api/auth/signout">
-							{tHeader("signOut")}
-						</Link>
-					</div>
+						<Link href="/api/auth/signout">{tHeader("signOut")}</Link>
+					</>
 				) : (
 					<Link className="p-2" href="/api/auth/signin">
 						{tHeader("signIn")}

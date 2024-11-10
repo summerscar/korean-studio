@@ -14,10 +14,7 @@ const ActiveLinks = ({ links }: { links: ReturnType<typeof headerConfig> }) => {
 				<Link
 					key={href}
 					href={href}
-					className={clsx(
-						isActive(href) && "bg-slate-400/40",
-						"mr-4 py-1 px-2 rounded-md cursor-pointer hover:bg-slate-400/40",
-					)}
+					className={clsx(isActive(href) && "bg-slate-400/40")}
 				>
 					<span>{label}</span>
 				</Link>

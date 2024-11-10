@@ -3,6 +3,7 @@ import HomeIcon from "@/assets/svg/home.svg";
 import { isAdminBySession } from "@/hooks/use-user";
 import { getServerI18n } from "@/utils/i18n";
 import { auth } from "auth";
+import clsx from "clsx";
 import Link from "next/link";
 import { ActiveLinks } from "./_component/active-links";
 import { CleanCache } from "./_component/clean-cache";
@@ -42,27 +43,24 @@ const Header = async () => {
 				<div className="mr-0 sm:mr-4 flex-auto flex justify-center items-center sm:justify-end">
 					<Search />
 				</div>
-				<div className="flex items-center mobile:hidden">
+				<div className="flex items-center mobile:hidden *:mr-4 *:py-1 *:px-2 *:rounded-md *:cursor-pointer hover:*:bg-slate-400/40">
 					{<ActiveLinks links={headerConfig(t)} />}
-					<span>
-						{session ? (
-							<div>
-								<span
-									className={
-										isAdminBySession(session) ? "text-yellow-200 font-bold" : ""
-									}
-								>
-									<Link href="/account">{session.user?.name}</Link>
-									<CleanCache session={session} />
-								</span>
-								<Link className="ml-4" href="/api/auth/signout">
-									{t("signOut")}
-								</Link>
-							</div>
-						) : (
-							<Link href="/api/auth/signin">{t("signIn")}</Link>
-						)}
-					</span>
+					{session ? (
+						<>
+							<Link
+								href="/account"
+								className={clsx(
+									isAdminBySession(session) ? "text-yellow-200 font-bold" : "",
+								)}
+							>
+								{session.user?.name}
+							</Link>
+							<CleanCache session={session} />
+							<Link href="/api/auth/signout">{t("signOut")}</Link>
+						</>
+					) : (
+						<Link href="/api/auth/signin">{t("signIn")}</Link>
+					)}
 				</div>
 				<div className="hidden mobile:block">
 					<MobileMenu links={headerConfig(t)} session={session} />

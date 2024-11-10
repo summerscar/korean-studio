@@ -16,7 +16,7 @@ const CleanCache = ({ session }: { session: Session | null }) => {
 	if (!isAdmin) return null;
 	return (
 		<button
-			className="btn btn-ghost btn-xs"
+			className="btn btn-ghost btn-xs -ml-4"
 			type="button"
 			onClick={handleOnClick}
 		>

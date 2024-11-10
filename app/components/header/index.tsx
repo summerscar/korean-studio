@@ -1,4 +1,3 @@
-import { clearCacheAction } from "@/actions/clear-cache-actions";
 import HomeIcon from "@/assets/svg/home.svg";
 import { isAdminBySession } from "@/hooks/use-user";
 import { getServerI18n } from "@/utils/i18n";

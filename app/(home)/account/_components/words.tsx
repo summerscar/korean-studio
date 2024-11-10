@@ -79,8 +79,10 @@ const WordsList = ({
 	return (
 		<div>
 			<div className="text-center text-sm">
-				Id: <Link href={`/?dict=${dictInfo.id}`}>🔗</Link>
-				{dictInfo.id} name:{" "}
+				<div>
+					Id: {dictInfo.id} <Link href={`/?dict=${dictInfo.id}`}>🔗</Link>
+				</div>
+				name:{" "}
 				<input
 					key={dictInfo.id}
 					onBlur={(e) => {

@@ -2,7 +2,7 @@
 // @name         Create word from papago
 // @namespace    http://tampermonkey.net/
 // @version      2024-11-09
-// @description  try to take over the world!
+// @description  Papago 查词结果快速创建单词到指定词单
 // @author       summerscar
 // @match        https://papago.naver.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=naver.com
@@ -31,7 +31,6 @@ const settings = {
 	},
 };
 
-// 初始化配置，从本地存储读取数据
 const initConfig = () => {
 	const config = {
 		id: "create-word-from-papago",

@@ -99,12 +99,11 @@ const WordsList = ({
 					ref={(el) => {
 						el?.focus();
 					}}
-					onChange={(e) => setEditing(JSON.parse(e.target.value))}
 					onBlur={(e) => {
 						updateDictItem(JSON.parse(e.target.value));
 					}}
 					className="w-full h-96 bg-white/20 rounded-lg shadow-inner"
-					value={JSON.stringify(editing, null, 12)}
+					defaultValue={JSON.stringify(editing, null, 12)}
 				/>
 			)}
 			<div className="max-h-96 overflow-y-auto">

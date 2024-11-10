@@ -1,5 +1,6 @@
 "use client";
 import { checkAnswer } from "@/actions/check-answer";
+import { createSuccessToast } from "@/hooks/use-toast";
 import type { TopikQuestion } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -43,6 +44,7 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 						setErrors(result.errors);
 					} else {
 						setErrors("");
+						createSuccessToast("Success! Next question.");
 						nextNextQuestion();
 					}
 				}}

@@ -17,12 +17,13 @@ const createCachedDictList = (dictId: string) => {
 const filterAndSortDictList = (
 	dictList: UserDicts,
 	session: Session | null,
+	includePublic = true,
 ) => {
 	return dictList
 		.filter((dict) => {
 			return (
 				isAdminBySession(session) ||
-				dict.public ||
+				(includePublic ? dict.public : false) ||
 				dict.createdBy.id === session?.user?.id
 			);
 		})

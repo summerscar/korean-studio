@@ -124,7 +124,14 @@ const WordsList = ({
 		);
 	};
 
-	if (!dictInfo) return null;
+	if (!dictInfo)
+		return (
+			<div>
+				<button className="btn btn-sm" type="button" onClick={handleAddDict}>
+					Create word list
+				</button>
+			</div>
+		);
 
 	const createActionBar = (item: DictItem) => {
 		return (
@@ -204,27 +211,27 @@ const WordsList = ({
 						<tfoot>
 							<tr className="bg-transparent backdrop-blur-lg">
 								<td colSpan={4}>
-									<div className="flex justify-center gap-4">
-										<button
-											className="btn btn-outline btn-xs"
-											type="button"
-											onClick={handleAdd}
-										>
-											Add Word
-										</button>
+									<div className="flex justify-center gap-2">
 										<button
 											className="btn btn-outline btn-xs"
 											type="button"
 											onClick={handleAddDict}
 										>
-											Add List
+											Add Word List
 										</button>
 										<button
 											className="btn btn-outline btn-xs"
 											type="button"
 											onClick={handleRemoveDict}
 										>
-											Remove List
+											Remove Word List
+										</button>
+										<button
+											className="btn btn-outline btn-xs"
+											type="button"
+											onClick={handleAdd}
+										>
+											Add Word
 										</button>
 									</div>
 								</td>

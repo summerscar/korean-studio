@@ -5,11 +5,7 @@ export const useDevice = () => {
 
 	useEffect(() => {
 		const callback = () => {
-			const touchable =
-				/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) &&
-				("ontouchstart" in window || navigator.maxTouchPoints > 0) &&
-				window.matchMedia("(pointer: coarse)").matches;
-			setIsTouchable(touchable);
+			setIsTouchable(checkIsTouchable());
 		};
 		callback();
 		window.addEventListener("resize", callback);
@@ -17,4 +13,12 @@ export const useDevice = () => {
 	}, []);
 
 	return { isTouchable } as const;
+};
+
+export const checkIsTouchable = () => {
+	const touchable = window.innerWidth < 640;
+	/* 		/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) &&
+		("ontouchstart" in window || navigator.maxTouchPoints > 0) &&
+		window.matchMedia("(pointer: coarse)").matches; */
+	return touchable;
 };

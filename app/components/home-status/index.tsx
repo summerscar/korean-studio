@@ -13,7 +13,7 @@ import { HideText } from "@/components/hide-text";
 import { HomeDrawer } from "@/components/home-drawer";
 import { HomeInput } from "@/components/home-input";
 import { Pronunciation } from "@/components/pronunciation";
-import { useDevice } from "@/hooks/use-device";
+import { checkIsTouchable, useDevice } from "@/hooks/use-device";
 import { usePronunciation } from "@/hooks/use-pronunciation";
 import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
@@ -271,7 +271,7 @@ const HomeStatus = ({
 	}, [inputKeys, qwerty, addShakeAnimation, inputAE]);
 
 	const focusInput = useMemoizedFn(() => {
-		if (isTouchable) return;
+		if (isTouchable || checkIsTouchable()) return;
 		inputRef.current?.handleInputFocus?.();
 	});
 
@@ -405,7 +405,12 @@ const HomeStatus = ({
 				hideMeaning={!setting.showMeaning}
 			/>
 			{displayName && (
-				<div className={clsx(notoKR.className, "text-4xl font-bold relative")}>
+				<div
+					className={clsx(
+						notoKR.className,
+						"text-4xl font-bold relative mobile:mt-8",
+					)}
+				>
 					{displayName}
 					<div
 						className="tooltip tooltip-top mobile:before:hidden absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-1/2"
@@ -499,11 +504,15 @@ const HomeStatus = ({
 						isInputFocused ? "opacity-0 pointer-events-none" : "opacity-100",
 					)}
 				>
-					{!isTouchable && (
+					{!isTouchable ? (
 						<div className="text-3xl flex items-center">
 							{tHome.rich("tipsEnter", {
 								enter: () => <kbd className="kbd kbd-md mx-2">Enter</kbd>,
 							})}
+						</div>
+					) : (
+						<div className="text-xl flex items-center">
+							{tHome("tipsForMobile")}
 						</div>
 					)}
 					<button

@@ -25,9 +25,10 @@ export async function generateMetadata(props: {
 		level,
 		params.doc_path.map(decodeURIComponent).join("/"),
 	);
-	const title =
+	const title = `${
 		(docData[0].frontmatter.title as string) ||
-		decodeURIComponent(params.doc_path.pop() || "");
+		decodeURIComponent(params.doc_path.pop() || "")
+	} - 韩语${level === "beginner" ? "入门" : "中级"}语法`;
 
 	return {
 		title,

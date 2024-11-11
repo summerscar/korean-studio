@@ -15,7 +15,7 @@ import {
 import type { DictUpdateInput } from ".keystone/types";
 
 import type { Dict, DictItem, UserDicts } from "@/types/dict";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -34,6 +34,7 @@ const WordsList = ({
 	const router = useRouter();
 	const tHome = useTranslations("Home");
 	const [editing, setEditing] = useState<DictItem>();
+	const locale = useLocale();
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
@@ -106,7 +107,35 @@ const WordsList = ({
 		}
 	};
 
+	const handleRemoveDictItem = async (dictItem: DictItem) => {
+		if (!confirm(`Remove: [${dictItem.name}] ?`)) return;
+		const cancel = createLoadingToast(tHome("removing"));
+		await removeDictItemAction(dictInfo?.id!, dictItem.id!);
+		await onUpdate?.();
+		cancel();
+		createSuccessToast(tHome("removed"));
+	};
+
+	const handleSearch = async (dictItem: DictItem) => {
+		window.open(
+			`https://papago.naver.com/?sk=ko&tk=${locale}&st=${dictItem.name}`,
+			"mini",
+			"left=150, top=150, width=400, height=600, toolbar=no, scrollbars=yes, status=no, resizable=yes",
+		);
+	};
+
 	if (!dictInfo) return null;
+
+	const createActionBar = (item: DictItem) => {
+		return (
+			<ActionBar
+				onSearch={() => handleSearch(item)}
+				onEdit={() => onEdit(item.id!)}
+				onRemove={() => handleRemoveDictItem(item)}
+			/>
+		);
+	};
+
 	return (
 		<div>
 			<div className="text-center text-sm mb-2">
@@ -159,30 +188,14 @@ const WordsList = ({
 										<td className="px-4 py-2">
 											{index + 1}. {item.name}
 										</td>
-										<td className="px-4 py-2">
-											<ActionBar
-												dictId={dictInfo.id}
-												id={item.id!}
-												onUpdate={onUpdate}
-												onEdit={onEdit}
-											/>
-										</td>
+										<td className="px-4 py-2">{createActionBar(item)}</td>
 										<td className="px-4 py-2">
 											{dict[index + 1]
 												? `${index + 2}. ${dict[index + 1].name}`
 												: ""}
 										</td>
 										<td className="px-4 py-2">
-											{dict[index + 1] ? (
-												<ActionBar
-													dictId={dictInfo.id}
-													id={dict[index + 1].id!}
-													onUpdate={onUpdate}
-													onEdit={onEdit}
-												/>
-											) : (
-												""
-											)}
+											{dict[index + 1] ? createActionBar(dict[index + 1]) : ""}
 										</td>
 									</tr>
 								) : null,
@@ -225,38 +238,15 @@ const WordsList = ({
 };
 
 const ActionBar = ({
-	dictId,
-	id,
-	onUpdate,
 	onEdit,
-}: {
-	id: string;
-	dictId: string;
-	onUpdate?: () => Promise<void>;
-	onEdit?: (id: string) => void;
-}) => {
-	const tHome = useTranslations("Home");
-	const handleRemove = async () => {
-		if (!confirm()) return;
-		const cancel = createLoadingToast(tHome("removing"));
-		await removeDictItemAction(dictId, id);
-		await onUpdate?.();
-		cancel();
-		createSuccessToast(tHome("removed"));
-	};
-
-	const handleEdit = () => {
-		onEdit?.(id);
-	};
-
+	onRemove,
+	onSearch,
+}: { onEdit?: () => void; onRemove?: () => void; onSearch?: () => void }) => {
 	return (
-		<div className="flex gap-3">
-			<span className="cursor-pointer" onClick={handleEdit}>
-				🖍
-			</span>
-			<span className="cursor-pointer" onClick={handleRemove}>
-				❌
-			</span>
+		<div className="flex gap-3 *:cursor-pointer mobile:w-8 mobile:overflow-auto">
+			<span onClick={onEdit}>🖍</span>
+			<span onClick={onSearch}>🔍</span>
+			<span onClick={onRemove}>❌</span>
 		</div>
 	);
 };

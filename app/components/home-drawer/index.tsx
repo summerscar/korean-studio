@@ -172,7 +172,8 @@ const HomeDrawer = ({
 												e.stopPropagation();
 												window.open(
 													`https://papago.naver.com/?sk=ko&tk=${locale}&st=${item.name}`,
-													"_blank",
+													"mini",
+													"left=150, top=150, width=400, height=600, toolbar=no, scrollbars=yes, status=no, resizable=yes",
 												);
 											}}
 										>

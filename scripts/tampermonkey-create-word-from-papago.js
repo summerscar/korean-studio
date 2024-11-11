@@ -84,6 +84,7 @@ const style = {
 				return;
 			}
 			const text = getWord(e.target);
+			toast("Word creating", "info");
 			e.target.textContent = "⏳";
 			e.target.disabled = true;
 			try {
@@ -95,8 +96,10 @@ const style = {
 					throw new Error((await res.text()) || res.statusText);
 				}
 				e.target.textContent = "✅";
+				toast("Word created", "success");
 			} catch (error) {
 				e.target.textContent = "❌";
+				toast(error.message, "error");
 				console.error("[dict-items/create][error]:", error);
 			} finally {
 				setTimeout(() => {
@@ -114,6 +117,7 @@ const style = {
 			console.log("Current text:", text);
 			navigator.clipboard.writeText(text);
 			e.target.textContent = "✅";
+			toast("Copied", "info");
 			setTimeout(() => {
 				e.target.textContent = "📋";
 			}, 2000);
@@ -139,3 +143,31 @@ const style = {
 		subtree: true,
 	});
 })();
+
+const toast = (message, type = "info") => {
+	const toast = document.createElement("div");
+	Object.assign(toast.style, {
+		position: "fixed",
+		bottom: "50px",
+		left: "50%",
+		transform: "translate(-120%, -50%)",
+		padding: "1rem",
+		borderRadius: "0.25rem",
+		boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+		zIndex: "9999",
+		backgroundColor:
+			type === "success"
+				? "green"
+				: type === "error"
+					? "red"
+					: type === "info"
+						? "white"
+						: "orange",
+		color: type === "info" ? "black" : "white",
+	});
+	toast.textContent = message;
+	document.body.appendChild(toast);
+	setTimeout(() => {
+		toast.remove();
+	}, 3000);
+};

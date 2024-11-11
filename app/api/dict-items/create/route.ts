@@ -7,6 +7,10 @@ const POST = async (request: Request) => {
 			return new Response("Body is invalid", { status: 500 });
 		}
 		await addWordsToUserDictAction(dictId, words, userId);
+		console.log(
+			"[POST][/api/dict-items/create]:",
+			`userId: ${userId} dictId: ${dictId} words: ${words}`,
+		);
 		return new Response("OK", { status: 200 });
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	} catch (error: any) {

@@ -8,7 +8,7 @@ import { useActionState, useEffect, useState } from "react";
 import { WordsList } from "./words";
 
 const WordLists = ({ dicts }: { dicts: UserDicts }) => {
-	const tabId = useSearchParams().get("dict") || dicts[0].id || "";
+	const tabId = useSearchParams().get("dict") || dicts[0]?.id || "";
 	const [dict, setDict] = useState<Dict>([]);
 	useActionState;
 	const [pending, fetchDicts] = useServerActionState(async (dictId: string) => {

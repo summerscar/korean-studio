@@ -62,7 +62,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 	],
 	callbacks: {
 		async signIn({ user, account }) {
-			if (account?.type === "oauth") {
+			if (["github", "google"].includes(account?.provider || "")) {
 				// console.log("[signIn][oauth][user]");
 				const sudoContext = keystoneContext.sudo();
 				const targetUser = await sudoContext.query.User.findOne({

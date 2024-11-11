@@ -13,6 +13,7 @@ const WordLists = ({ dicts }: { dicts: UserDicts }) => {
 	useActionState;
 	const [pending, fetchDicts] = useServerActionState(async (dictId: string) => {
 		if (!dictId) return;
+		setDict([]);
 		const data = await getDictList(dictId);
 		setDict(data);
 	});
@@ -22,12 +23,12 @@ const WordLists = ({ dicts }: { dicts: UserDicts }) => {
 	}, [fetchDicts, tabId]);
 
 	return (
-		<div>
-			<div role="tablist" className="tabs tabs-lifted overflow-auto my-4">
+		<div className="[--tab-active-bg:#ffffff40]">
+			<div role="tablist" className="tabs tabs-lifted overflow-auto mt-4">
 				{dicts.map((dict) => (
 					<div
 						className={clsx(
-							"tab text-nowrap [--tab-bg:#ffffff40]",
+							"tab text-nowrap [--tab-bg:var(--tab-active-bg)]",
 							tabId === dict.id && "tab-active",
 						)}
 						key={dict.id}

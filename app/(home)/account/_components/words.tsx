@@ -144,22 +144,24 @@ const WordsList = ({
 	};
 
 	return (
-		<div>
-			<div className="text-center text-sm mb-2">
+		<div className="bg-[--tab-active-bg]">
+			<div className="text-center text-sm mb-2 flex flex-wrap justify-center gap-4 pt-2 mobile:gap-1">
 				<div>
 					Id: {dictInfo.id} <Link href={`/?dict=${dictInfo.id}`}>🔗</Link>
 				</div>
-				name:{" "}
-				<input
-					key={dictInfo.id}
-					onBlur={(e) => {
-						if (e.target.value === dictInfo.name) return;
-						updateDict({ name: e.target.value });
-					}}
-					defaultValue={dictInfo.name}
-					type="text"
-					className="input input-bordered input-xs"
-				/>
+				<div>
+					name:{" "}
+					<input
+						key={dictInfo.id}
+						onBlur={(e) => {
+							if (e.target.value === dictInfo.name) return;
+							updateDict({ name: e.target.value });
+						}}
+						defaultValue={dictInfo.name}
+						type="text"
+						className="input input-bordered input-xs"
+					/>
+				</div>
 			</div>
 			{editing && (
 				<textarea
@@ -173,7 +175,7 @@ const WordsList = ({
 					defaultValue={JSON.stringify(editing, null, 12)}
 				/>
 			)}
-			{loading ? (
+			{loading && !dict.length ? (
 				<div className="text-center flex justify-center p-8">
 					<span className="loading loading-ring loading-lg" />
 				</div>

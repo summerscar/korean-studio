@@ -15,6 +15,7 @@
 	"Home": {
 		"viewList": "リストを見る",
 		"tipsEnter": "<enter></enter>を押してから入力してください",
+		"tipsForMobile": "パソコンを使って、より良い体験をお楽しみください。",
 		"createWord": "単語もしくわ単語の意味を入力してください、複数の単語はカンマで区切ってください。例：안녕,ありがとう",
 		"exampleWord": "안녕,ありがとう",
 		"generating": "生成中...",

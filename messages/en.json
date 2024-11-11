@@ -15,6 +15,7 @@
 	"Home": {
 		"viewList": "View list",
 		"tipsEnter": "Press<enter></enter>to type!",
+		"tipsForMobile": "Please use a computer to get a better experience.",
 		"createWord": "Please input words or meanings, multiple words are separated by commas. For example: 안녕,thank you",
 		"exampleWord": "안녕,thank you",
 		"generating": "Generating...",

@@ -5,8 +5,11 @@ export const useDevice = () => {
 
 	useEffect(() => {
 		const callback = () => {
-			const canHover = window.matchMedia("(hover: hover)").matches;
-			setIsTouchable(!canHover);
+			const touchable =
+				/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) &&
+				("ontouchstart" in window || navigator.maxTouchPoints > 0) &&
+				window.matchMedia("(pointer: coarse)").matches;
+			setIsTouchable(touchable);
 		};
 		callback();
 		window.addEventListener("resize", callback);

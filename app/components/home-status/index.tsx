@@ -408,7 +408,7 @@ const HomeStatus = ({
 				<div className={clsx(notoKR.className, "text-4xl font-bold relative")}>
 					{displayName}
 					<div
-						className="tooltip tooltip-top sm:tooltip-right absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-1/2"
+						className="tooltip tooltip-top mobile:before:hidden absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-1/2"
 						data-tip={`${romanized} [${standardized}]`}
 					>
 						<SpeakerIcon
@@ -446,7 +446,7 @@ const HomeStatus = ({
 				))}
 				{qwerty && (
 					<div
-						className="tooltip tooltip-top sm:tooltip-right absolute -right-9 top-1/2 -translate-x-1/2 -translate-y-1/2"
+						className="tooltip tooltip-top mobile:before:hidden absolute -right-9 top-1/2 -translate-x-1/2 -translate-y-1/2"
 						data-tip={qwerty}
 					>
 						<InfoIcon

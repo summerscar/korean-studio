@@ -120,7 +120,7 @@ const HomeDrawer = ({
 						/>
 						<ul
 							ref={drawerListRef}
-							className="menu bg-base-100 text-base-content min-h-full w-5/6 sm:w-96 p-4"
+							className="menu bg-base-100 text-base-content min-h-full w-5/6 sm:w-96 p-1 sm:p-4"
 						>
 							<DictMenu
 								isUserDict={isUserDict}

@@ -6,7 +6,7 @@ import { WordLists } from "./_components/lists";
 
 const AccountPage = async () => {
 	const session = await auth();
-	const dicts = filterAndSortDictList(await getAllDicts(), session);
+	const dicts = filterAndSortDictList(await getAllDicts(), session, false);
 
 	if (!session) {
 		return (

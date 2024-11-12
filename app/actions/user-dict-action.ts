@@ -1,11 +1,12 @@
 "use server";
 import { KSwithSession, keystoneContext } from "@/../keystone/context";
 import type { Dict, DictItem, UserDicts } from "@/types/dict";
+import { FAV_LIST_KEY } from "@/utils/config";
 import { toPlainObject } from "@/utils/to-plain-object";
 import { auth } from "auth";
 import { revalidateTag, unstable_cache } from "next/cache";
 import { generateWordsAction } from "./generate-word-action";
-import { getDictRevalidateKey } from "./user-dict-utils";
+import { createCachedDictList, getDictRevalidateKey } from "./user-dict-utils";
 import type { DictItemCreateInput, DictUpdateInput } from ".keystone/types";
 
 const allDictsRevalidateKey = "all-dicts";
@@ -41,6 +42,67 @@ const createDictAction = async (dictName: string) => {
 	revalidateTag(allDictsRevalidateKey);
 
 	return toPlainObject(res);
+};
+
+const createFavListAction = async (userName: string, userId: string) => {
+	const sudoContext = keystoneContext.sudo();
+	const res = (await sudoContext.query.Dict.createOne({
+		data: {
+			name: `${userName}'s ${FAV_LIST_KEY}`,
+			intlKey: FAV_LIST_KEY,
+			createdBy: {
+				connect: { id: userId },
+			},
+		},
+	})) as UserDicts[0];
+	revalidateTag(allDictsRevalidateKey);
+	return toPlainObject(res);
+};
+
+const _getFavListID = async (userId: string) => {
+	const sudoContext = keystoneContext.sudo();
+	const dictsRes = (await sudoContext.query.Dict.findMany({
+		where: {
+			intlKey: { equals: FAV_LIST_KEY },
+			createdBy: { id: { equals: userId } },
+		},
+		query: "id",
+	})) as UserDicts;
+	return dictsRes[0].id;
+};
+
+const getFavListAction = async () => {
+	const session = await auth();
+	if (!session?.user) {
+		return [];
+	}
+
+	const res = await createCachedDictList(
+		await _getFavListID(session.user.id!),
+	)();
+	return toPlainObject(res);
+};
+
+const toggleDictItemIdToFavListAction = async (
+	dictItemId: string,
+	isAdd: boolean,
+) => {
+	const session = await auth();
+	if (!session?.user) {
+		throw new Error("no session");
+	}
+	const dictId = await _getFavListID(session.user?.id!);
+
+	const ctx = KSwithSession(session);
+	await ctx.query.Dict.updateOne({
+		where: { id: dictId },
+		data: {
+			list: {
+				[isAdd ? "connect" : "disconnect"]: { id: dictItemId },
+			},
+		},
+	});
+	revalidateTag(getDictRevalidateKey(dictId));
 };
 
 const removeDictItemAction = async (dictId: string, dictItemId: string) => {
@@ -86,14 +148,8 @@ const addWordsToUserDictAction = async (
 	userId = "",
 ) => {
 	const dictItems = await generateWordsAction(words);
-	if (!dictItems.length) {
-		throw new Error("No words generated");
-	}
 	await addDictItemToDictAction(dictId, dictItems, userId);
 	revalidateTag(getDictRevalidateKey(dictId));
-	if (dictItems.length !== words.length) {
-		throw new Error("Partially generated, not all words added");
-	}
 };
 
 const updateDictItemAction = async (
@@ -152,9 +208,12 @@ const removeDictAction = async (dictId: string) => {
 
 export {
 	createDictAction,
+	createFavListAction,
 	getAllDicts,
 	getDictList,
+	getFavListAction,
 	addWordsToUserDictAction,
+	toggleDictItemIdToFavListAction,
 	updateDictItemAction,
 	updateDictAction,
 	removeDictItemAction,

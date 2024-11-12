@@ -52,6 +52,7 @@ import {
 	useState,
 } from "react";
 import reactStringReplace from "react-string-replace";
+import { Star } from "./star";
 
 const HomeStatus = ({
 	isLocalDict,
@@ -72,7 +73,6 @@ const HomeStatus = ({
 	const [isComplete, setIsComplete] = useState(false);
 	const [isInputError, setIsInputError] = useState(false);
 	const [isInputFocused, setIsInputFocused] = useState(false);
-	const [showKeyboard, setShowKeyboard] = useState(true);
 	const { isTouchable } = useDevice();
 	const [setting, setSetting] = useState<HomeSetting>({
 		autoVoice: false,
@@ -96,9 +96,7 @@ const HomeStatus = ({
 	};
 
 	const inputAE = useInputAudioEffect(setting.enableAudio);
-	const toggleShowKeyboard = useMemoizedFn(() =>
-		setShowKeyboard(!showKeyboard),
-	);
+
 	const drawerRef = useRef({ open: () => {} });
 	const locale = useLocale();
 	const tHome = useTranslations("Home");
@@ -413,7 +411,7 @@ const HomeStatus = ({
 				>
 					{displayName}
 					<div
-						className="tooltip tooltip-top mobile:before:hidden absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-1/2"
+						className="tooltip tooltip-top mobile:before:hidden absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%]"
 						data-tip={`${romanized} [${standardized}]`}
 					>
 						<SpeakerIcon
@@ -426,6 +424,7 @@ const HomeStatus = ({
 							)}
 						/>
 					</div>
+					<Star dictItem={currentWord} isLocalDict={isLocalDict} />
 				</div>
 			)}
 			<div className="text-lg text-gray-500 mt-3 mb-2">
@@ -463,32 +462,10 @@ const HomeStatus = ({
 					</div>
 				)}
 			</div>
-			<div className="hidden">
-				{showKeyboard ? (
-					<KeyboardIcon
-						onClick={toggleShowKeyboard}
-						className="cursor-pointer"
-						width={28}
-						height={28}
-						fill="currentColor"
-					/>
-				) : (
-					<ScoreIcon
-						onClick={toggleShowKeyboard}
-						className="cursor-pointer"
-						width={28}
-						height={28}
-						fill="currentColor"
-					/>
-				)}
-			</div>
 			{/* 键盘图案 */}
 			<div
 				className={clsx(
 					"drop-shadow-xl  w-[90vw] sm:w-[80vw] md:w-[70vw] my-3 rounded-md overflow-hidden relative",
-					{
-						invisible: !showKeyboard,
-					},
 				)}
 			>
 				<style>{inlineStyle}</style>
@@ -511,7 +488,7 @@ const HomeStatus = ({
 							})}
 						</div>
 					) : (
-						<div className="text-xl flex items-center">
+						<div className="text-xl flex items-center text-center">
 							{tHome("tipsForMobile")}
 						</div>
 					)}

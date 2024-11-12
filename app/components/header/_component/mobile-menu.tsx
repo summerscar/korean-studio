@@ -4,6 +4,7 @@ import MenuIcon from "@/assets/svg/menu.svg";
 import { isAdminBySession } from "@/hooks/use-user";
 import clsx from "clsx";
 import type { Session } from "next-auth";
+import { signIn, signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -64,12 +65,12 @@ const MobileMenu = ({
 						>
 							{session.user?.name}
 						</Link>
-						<Link href="/api/auth/signout">{tHeader("signOut")}</Link>
+						<div onClick={() => signOut()}>{tHeader("signOut")}</div>
 					</>
 				) : (
-					<Link className="p-2" href="/api/auth/signin">
+					<div className="p-2" onClick={() => signIn()}>
 						{tHeader("signIn")}
-					</Link>
+					</div>
 				)}
 			</div>
 		</>

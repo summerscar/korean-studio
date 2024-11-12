@@ -94,7 +94,10 @@ const HomeInput = forwardRef<
 	useEventListener(
 		"focus",
 		() => {
-			setIsInputFocused(true);
+			// 防止 transition-all 乱飘
+			setTimeout(() => {
+				setIsInputFocused(true);
+			}, 16);
 		},
 		{ target: inputRef },
 	);
@@ -110,7 +113,7 @@ const HomeInput = forwardRef<
 		<div
 			className={clsx(
 				isInputFocused
-					? "animate-[1s_ease_0s_infinite_normal_none_running_blink]"
+					? "animate-[1s_ease_0s_infinite_normal_none_running_blink] transition-all"
 					: "opacity-0",
 				"fixed top-0 left-0 w-[2px] h-[23px] overflow-hidden bg-base-content translate-y-1",
 			)}

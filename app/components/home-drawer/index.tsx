@@ -1,21 +1,18 @@
 import { removeDictItemAction } from "@/actions/user-dict-action";
-import CloseIcon from "@/assets/svg/close.svg";
-import SearchIcon from "@/assets/svg/search.svg";
 import { ClientOnly } from "@/components/client-only";
 import { createLoadingToast, createSuccessToast } from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
 import type { HomeSetting } from "@/types";
 import { type Dict, type DictItem, Dicts, type UserDicts } from "@/types/dict";
-import { getTranslation } from "@/utils/convert-input";
 import { isServer } from "@/utils/is-server";
 import { removeLocalDict } from "@/utils/local-dict";
 import { serverActionTimeOut, timeOut } from "@/utils/time-out";
 import { useMemoizedFn } from "ahooks";
-import clsx from "clsx";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { DictMenu } from "./dict-menu";
+import { DictMenuItem } from "./dict-menu-item";
 
 const HomeDrawer = ({
 	isLocalDict,
@@ -135,52 +132,18 @@ const HomeDrawer = ({
 							/>
 							{/* Sidebar content here */}
 							{dict.map((item, index) => (
-								<li
+								<DictMenuItem
 									key={item.id || item.name}
-									className={clsx(
-										"cursor-pointer relative group mb-1 last:mb-0",
-									)}
-								>
-									<div
-										className={clsx("block", {
-											active: index === curWordIndex,
-										})}
-										onClick={() => onClick(index)}
-									>
-										<div className="grid grid-flow-col">
-											<span className="text-nowrap overflow-hidden text-ellipsis">
-												{index + 1}. {item.name}
-											</span>
-											<span
-												className="text-right text-nowrap overflow-hidden text-ellipsis pl-12 text-gray-400"
-												title={getTranslation(item, locale)}
-											>
-												{getTranslation(item, locale)}
-											</span>
-										</div>
-										{(isAdmin || isLocalDict || isUserDict) && (
-											<div
-												className="absolute -top-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
-												onClick={(e) => handleRemove(e, item)}
-											>
-												<CloseIcon className="w-4 h-4" />
-											</div>
-										)}
-										<div
-											className="absolute -bottom-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
-											onClick={(e) => {
-												e.stopPropagation();
-												window.open(
-													`https://papago.naver.com/?sk=ko&tk=${locale}&st=${item.name}`,
-													"mini",
-													"left=150, top=150, width=400, height=600, toolbar=no, scrollbars=yes, status=no, resizable=yes",
-												);
-											}}
-										>
-											<SearchIcon className="w-4 h-4" />
-										</div>
-									</div>
-								</li>
+									item={item}
+									curWordIndex={curWordIndex}
+									index={index}
+									onClick={onClick}
+									handleRemove={handleRemove}
+									isAdmin={isAdmin}
+									isLocalDict={isLocalDict}
+									isUserDict={isUserDict}
+									locale={locale}
+								/>
 							))}
 						</ul>
 					</div>

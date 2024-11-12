@@ -1,9 +1,10 @@
 import "github-markdown-css";
 import "@/styles/globals.css";
 import { getThemeFromCookie } from "@/actions/check-theme";
+import { VConsole } from "@/components/vconsole";
 import { ToastRoot } from "@/hooks/use-toast";
 import { Themes } from "@/types";
-import { isProd } from "@/utils/is-dev";
+import { isDev, isProd } from "@/utils/is-dev";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -44,6 +45,7 @@ export async function DefaultLayout({
 				</SessionProvider>
 				<ToastRoot />
 				{/* {isDev && <CacheToolbar />} */}
+				{isDev && <VConsole />}
 				{isProd && <SpeedInsights />}
 				{isProd && <Analytics />}
 				{isProd && <GoogleAnalytics gaId={GAId} />}

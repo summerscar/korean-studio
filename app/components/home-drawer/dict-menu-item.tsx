@@ -1,5 +1,6 @@
 import CloseIcon from "@/assets/svg/close.svg";
 import SearchIcon from "@/assets/svg/search.svg";
+import StarIcon from "@/assets/svg/star.svg";
 import { useStarred } from "@/components/home-status/star";
 import type { DictItem } from "@/types/dict";
 import { getTranslation } from "@/utils/convert-input";
@@ -33,12 +34,15 @@ const DictMenuItem = ({
 			className={clsx("cursor-pointer relative group mb-1 last:mb-0")}
 		>
 			<div
-				className={clsx("block", isStarred && "bg-yellow-100", {
+				className={clsx("block", {
 					active: index === curWordIndex,
 				})}
 				onClick={() => onClick(index)}
 			>
-				<div className="grid grid-flow-col">
+				<div className="grid grid-flow-col relative">
+					{isStarred && (
+						<StarIcon className="size-4 fill-current absolute -left-4 sm:-left-4 top-0.5" />
+					)}
 					<span className="text-nowrap overflow-hidden text-ellipsis">
 						{index + 1}. {item.name}
 					</span>

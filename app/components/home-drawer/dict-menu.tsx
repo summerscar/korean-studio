@@ -22,6 +22,7 @@ import {
 import { useUser } from "@/hooks/use-user";
 import type { HomeSetting } from "@/types";
 import { type Dict, Dicts, type UserDicts } from "@/types/dict";
+import { FAV_LIST_KEY } from "@/utils/config";
 import { downloadFile } from "@/utils/download-file";
 import { importJSONFile } from "@/utils/import-json-file";
 import {
@@ -214,9 +215,10 @@ const DictMenu = ({
 				{canEdit && (
 					<FileImportIcon className="size-6" onClick={handleImport} />
 				)}
-				{isUserDict && (
-					<CloseIcon className="size-6" onClick={handleRemoveDict} />
-				)}
+				{isUserDict &&
+					dictList.find((_) => _.id === dictId)?.intlKey !== FAV_LIST_KEY && (
+						<CloseIcon className="size-6" onClick={handleRemoveDict} />
+					)}
 			</div>
 			<select
 				className="select select-bordered w-24 sm:w-32 select-sm"

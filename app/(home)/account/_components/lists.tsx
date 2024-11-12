@@ -16,12 +16,12 @@ const WordLists = ({ dicts }: { dicts: UserDicts }) => {
 	const { isAdmin } = useUser();
 	const [pending, fetchDicts] = useServerActionState(async (dictId: string) => {
 		if (!dictId) return;
-		setDict([]);
 		const data = await getDictList(dictId);
 		setDict(data);
 	});
 
 	useEffect(() => {
+		setDict([]);
 		fetchDicts(tabId);
 	}, [fetchDicts, tabId]);
 

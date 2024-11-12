@@ -12,6 +12,7 @@ import DownloadIcon from "@/assets/svg/download.svg";
 import FileImportIcon from "@/assets/svg/file-import.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
 import ShuffleIcon from "@/assets/svg/shuffle.svg";
+import { signIn } from "next-auth/react";
 
 import {
 	createErrorToast,
@@ -86,7 +87,6 @@ const DictMenu = ({
 			} catch (error: any) {
 				console.error(`[createWord][${word}]:\n`, error);
 				createErrorToast(tHome("generateError"));
-				createErrorToast(error.message);
 			} finally {
 				removeInfoToast();
 			}
@@ -108,7 +108,7 @@ const DictMenu = ({
 
 	const createDict = async () => {
 		if (!isLogin) {
-			router.push("/api/auth/signin");
+			signIn();
 			return;
 		}
 		const dictName = prompt(tHome("createWordList"));
@@ -225,7 +225,9 @@ const DictMenu = ({
 			>
 				{dictList.map((dict) => (
 					<option key={dict.id} value={dict.id}>
-						{dict.intlKey ? tDict(dict.intlKey as Dicts) : dict.name}
+						{dict.intlKey && !isAdmin
+							? tDict(dict.intlKey as Dicts)
+							: dict.name}
 					</option>
 				))}
 				<option value="_local">{tDict(Dicts.local)}</option>

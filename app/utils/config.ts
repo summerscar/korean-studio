@@ -18,6 +18,8 @@ const DEFAULT_COOKIE_CONFIG = {
 
 const HOME_SETTING_KEY = "home_setting";
 
+const FAV_LIST_KEY = "favList";
+
 /**
  * @param site 本站学习语言
  * @param language UI 语言
@@ -38,4 +40,5 @@ export {
 	LOCAL_KEY,
 	DEFAULT_COOKIE_CONFIG,
 	HOME_SETTING_KEY,
+	FAV_LIST_KEY,
 };

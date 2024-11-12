@@ -15,6 +15,7 @@ import {
 import type { DictUpdateInput } from ".keystone/types";
 
 import type { Dict, DictItem, UserDicts } from "@/types/dict";
+import { FAV_LIST_KEY } from "@/utils/config";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -80,7 +81,6 @@ const WordsList = ({
 			} catch (error: any) {
 				console.error(`[createWord][${word}]:\n`, error);
 				createErrorToast(tHome("generateError"));
-				createErrorToast(error.message);
 			} finally {
 				removeInfoToast();
 			}
@@ -221,13 +221,15 @@ const WordsList = ({
 										>
 											Add Word List
 										</button>
-										<button
-											className="btn btn-outline btn-xs"
-											type="button"
-											onClick={handleRemoveDict}
-										>
-											Remove Word List
-										</button>
+										{dictInfo.intlKey !== FAV_LIST_KEY && (
+											<button
+												className="btn btn-outline btn-xs"
+												type="button"
+												onClick={handleRemoveDict}
+											>
+												Remove Word List
+											</button>
+										)}
 										<button
 											className="btn btn-outline btn-xs"
 											type="button"

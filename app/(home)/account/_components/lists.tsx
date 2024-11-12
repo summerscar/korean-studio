@@ -1,16 +1,19 @@
 "use client";
 import { getDictList } from "@/actions/user-dict-action";
 import { useServerActionState } from "@/hooks/use-server-action-state";
-import type { Dict, UserDicts } from "@/types/dict";
+import { useUser } from "@/hooks/use-user";
+import type { Dict, Dicts, UserDicts } from "@/types/dict";
 import clsx from "clsx";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { WordsList } from "./words";
 
 const WordLists = ({ dicts }: { dicts: UserDicts }) => {
 	const tabId = useSearchParams().get("dict") || dicts[0]?.id || "";
 	const [dict, setDict] = useState<Dict>([]);
-	useActionState;
+	const tDict = useTranslations("Dict");
+	const { isAdmin } = useUser();
 	const [pending, fetchDicts] = useServerActionState(async (dictId: string) => {
 		if (!dictId) return;
 		setDict([]);
@@ -36,7 +39,9 @@ const WordLists = ({ dicts }: { dicts: UserDicts }) => {
 							window.history.pushState(null, "", `/account?dict=${dict.id}`);
 						}}
 					>
-						{dict.name}
+						{dict.intlKey && !isAdmin
+							? tDict(dict.intlKey as Dicts)
+							: dict.name}
 					</div>
 				))}
 			</div>

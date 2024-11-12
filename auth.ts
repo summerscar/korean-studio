@@ -1,4 +1,5 @@
 import { keystoneContext } from "@/../keystone/context";
+import { createFavListAction } from "@/actions/user-dict-action";
 import { authenticateUserWithPassword } from "@/utils/db";
 import { signInSchema } from "@/utils/zod";
 import NextAuth, { CredentialsSignin } from "next-auth";
@@ -69,12 +70,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					where: { email: user.email },
 				});
 				if (!targetUser) {
-					await sudoContext.query.User.createOne({
+					const res = await sudoContext.query.User.createOne({
 						data: {
 							name: user.name,
 							email: user.email,
 						},
 					});
+					// 创建用户默认创建 favList
+					await createFavListAction(user.name!, res.id);
 					console.log("[signIn][oauth][createdUser]:", `[${user.email}]`);
 				}
 			}

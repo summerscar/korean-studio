@@ -14,15 +14,9 @@ const createToast = ({
 	message: ReactNode;
 	delay?: number;
 }) => {
-	let toastWrapper = document.getElementById("toast");
-	if (!toastWrapper) {
-		toastWrapper = document.createElement("div");
-		toastWrapper.id = "toast";
-		toastWrapper.classList.add("toast", "toast-top", "toast-center", "z-50");
-		document.body.appendChild(toastWrapper);
-	}
+	const toastWrapper = getToastWrapper();
 	const toastEl = document.createElement("div");
-	toastEl.className = `alert alert-${type}`;
+	toastEl.className = `alert alert-${type} !text-white`;
 
 	toastEl.innerHTML = renderToString(message);
 	toastWrapper?.appendChild(toastEl);
@@ -35,6 +29,17 @@ const createToast = ({
 		clearTimeout(timeout);
 		unmount();
 	};
+};
+
+const getToastWrapper = () => {
+	let toastWrapper = document.getElementById("toast");
+	if (!toastWrapper) {
+		toastWrapper = document.createElement("div");
+		toastWrapper.id = "toast";
+		toastWrapper.classList.add("toast", "toast-top", "toast-center", "z-50");
+		document.body.appendChild(toastWrapper);
+	}
+	return toastWrapper;
 };
 
 export const createLoadingToast = (info: string) => {
@@ -95,19 +100,8 @@ const ToastForCallable = ({
 		}, 3000);
 	}, [call]);
 
-	const getToastWrapper = () => {
-		let toastWrapper = document.getElementById("toast");
-		if (!toastWrapper) {
-			toastWrapper = document.createElement("div");
-			toastWrapper.id = "toast";
-			toastWrapper.classList.add("toast", "toast-top", "toast-center", "z-50");
-			document.body.appendChild(toastWrapper);
-		}
-		return toastWrapper;
-	};
-
 	return createPortal(
-		<div className={`alert alert-${type}`}>{message}</div>,
+		<div className={`alert alert-${type} !text-white`}>{message}</div>,
 		getToastWrapper(),
 	);
 };

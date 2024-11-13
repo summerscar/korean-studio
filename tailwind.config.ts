@@ -55,6 +55,7 @@ const config: Config = {
 		"alert-warning",
 		"alert-info",
 		"z-50",
+		"text-white",
 	],
 };
 export default config;

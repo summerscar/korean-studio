@@ -69,7 +69,7 @@ const DictMenu = ({
 	};
 
 	const createWord = async () => {
-		const word = prompt(`✨ ${tHome("createWord")}`, tHome("exampleWord"));
+		const word = prompt(`✨ ${tHome("createWord")}`);
 		if (word) {
 			const removeInfoToast = createLoadingToast(tHome("generating"));
 

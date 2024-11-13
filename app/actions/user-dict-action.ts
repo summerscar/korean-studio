@@ -60,15 +60,10 @@ const createFavListAction = async (userName: string, userId: string) => {
 };
 
 const _getFavListID = async (userId: string) => {
-	const sudoContext = keystoneContext.sudo();
-	const dictsRes = (await sudoContext.query.Dict.findMany({
-		where: {
-			intlKey: { equals: FAV_LIST_KEY },
-			createdBy: { id: { equals: userId } },
-		},
-		query: "id",
-	})) as UserDicts;
-	return dictsRes[0].id;
+	const favDict = (await getAllDicts()).find(
+		(_) => _.createdBy.id === userId && _.intlKey === FAV_LIST_KEY,
+	) as UserDicts[0];
+	return favDict.id;
 };
 
 const getFavListAction = async () => {

@@ -81,34 +81,4 @@ const useToast = () => {
 	};
 };
 
-// -----
-// create callable toast
-// -----
-
-const ToastForCallable = ({
-	type,
-	message,
-	call,
-}: {
-	type: string;
-	message: ReactNode;
-	call: { end: (payload: string) => void };
-}) => {
-	useEffect(() => {
-		setTimeout(() => {
-			call.end("toast destroyed");
-		}, 3000);
-	}, [call]);
-
-	return createPortal(
-		<div className={`alert alert-${type} !text-white`}>{message}</div>,
-		getToastWrapper(),
-	);
-};
-
-const { call, Root } = createCallable<
-	{ type: "success" | "error" | "info" | "warning"; message: string },
-	string
->(ToastForCallable);
-
-export { useToast, createToast, call as callToast, Root as ToastRoot };
+export { useToast, createToast };

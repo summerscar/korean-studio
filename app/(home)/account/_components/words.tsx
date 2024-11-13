@@ -14,6 +14,7 @@ import {
 } from "@/hooks/use-toast";
 import type { DictUpdateInput } from ".keystone/types";
 
+import { callModal } from "@/components/modal";
 import type { Dict, DictItem, UserDicts } from "@/types/dict";
 import { FAV_LIST_KEY } from "@/utils/config";
 import { useLocale, useTranslations } from "next-intl";
@@ -76,7 +77,11 @@ const WordsList = ({
 	};
 
 	const handleAdd = async () => {
-		const word = prompt(`✨ ${tHome("createWord")}`);
+		const word = (await callModal({
+			type: "dialog",
+			title: `✨ ${tHome("generateWord")}`,
+			message: `${tHome("createWord")}`,
+		})) as string | undefined;
 		if (word) {
 			const removeInfoToast = createLoadingToast(tHome("generating"));
 
@@ -96,7 +101,13 @@ const WordsList = ({
 	};
 
 	const handleRemoveDict = async () => {
-		if (!confirm()) return;
+		if (
+			!(await callModal({
+				type: "confirm",
+				title: tHome("removeWordList"),
+			}))
+		)
+			return;
 		const removeInfoToast = createLoadingToast(tHome("removing"));
 		await removeDictAction(dictInfo!.id);
 		removeInfoToast();
@@ -105,7 +116,10 @@ const WordsList = ({
 	};
 
 	const handleAddDict = async () => {
-		const dictName = prompt(tHome("createWordList"));
+		const dictName = (await await callModal({
+			type: "dialog",
+			title: `${tHome("createWordList")}`,
+		})) as string | undefined;
 		if (dictName) {
 			const removeInfoToast = createLoadingToast(tHome("creating"));
 			const res = await createDictAction(dictName);
@@ -116,7 +130,14 @@ const WordsList = ({
 	};
 
 	const handleRemoveDictItem = async (dictItem: DictItem) => {
-		if (!confirm(`Remove: [${dictItem.name}] ?`)) return;
+		if (
+			!(await callModal({
+				type: "confirm",
+				title: tHome("removeWord"),
+				message: `${tHome("removeWord")} 「${dictItem.name}」 ?`,
+			}))
+		)
+			return;
 		const cancel = createLoadingToast(tHome("removing"));
 		await removeDictItemAction(dictInfo?.id!, dictItem.id!);
 		await onUpdate?.();
@@ -155,7 +176,7 @@ const WordsList = ({
 		<div className="bg-[--tab-active-bg]">
 			<div className="text-center text-sm mb-2 flex flex-wrap justify-center gap-4 pt-2 mobile:gap-1">
 				<div>
-					Id: {dictInfo.id} <Link href={`/?dict=${dictInfo.id}`}>🔗</Link>
+					ID: {dictInfo.id} <Link href={`/?dict=${dictInfo.id}`}>🔗</Link>
 				</div>
 				<div>
 					name:{" "}
@@ -227,7 +248,7 @@ const WordsList = ({
 											type="button"
 											onClick={handleAddDict}
 										>
-											Add Word List
+											{tHome("createNewDict")}
 										</button>
 										{dictInfo.intlKey !== FAV_LIST_KEY && (
 											<button
@@ -235,7 +256,7 @@ const WordsList = ({
 												type="button"
 												onClick={handleRemoveDict}
 											>
-												Remove Word List
+												{tHome("removeWordList")}
 											</button>
 										)}
 										<button
@@ -243,7 +264,7 @@ const WordsList = ({
 											type="button"
 											onClick={handleAdd}
 										>
-											Add Word
+											{tHome("generateWord")}
 										</button>
 									</div>
 								</td>

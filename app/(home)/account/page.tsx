@@ -1,12 +1,23 @@
 import { getAllDicts } from "@/actions/user-dict-action";
 import { filterAndSortDictList } from "@/actions/user-dict-utils";
 import InfoIcon from "@/assets/svg/info.svg";
+import { getServerI18n } from "@/utils/i18n";
 import { auth } from "auth";
+import Link from "next/link";
 import { WordLists } from "./_components/lists";
+
+export const generateMetadata = async () => {
+	const tAccount = await getServerI18n("Account");
+
+	return {
+		title: tAccount("profile"),
+	};
+};
 
 const AccountPage = async () => {
 	const session = await auth();
 	const dicts = filterAndSortDictList(await getAllDicts(), session, false);
+	const tAccount = await getServerI18n("Account");
 
 	if (!session) {
 		return (
@@ -19,22 +30,26 @@ const AccountPage = async () => {
 	return (
 		<div className="w-full">
 			<div className="py-4">
-				<h1 className="text-3xl">Account</h1>
+				<h1 className="text-3xl pb-4">{tAccount("profile")}</h1>
 				<div>
 					ID: {session.user?.id}{" "}
-					<a
+					<Link
 						target="_blank"
-						href="https://github.com/summerscar/korean-studio/blob/main/scripts/tampermonkey-create-word-from-papago.js#L16-L32"
+						href="/learn/beginner/papago#:~:text=用户ID"
 						rel="noreferrer"
 					>
 						<InfoIcon className="inline-block" />
-					</a>
+					</Link>
 				</div>
-				<div>Username: {session.user?.name}</div>
-				<div>Email: {session.user?.email}</div>
+				<div>
+					{tAccount("username")}: {session.user?.name}
+				</div>
+				<div>
+					{tAccount("email")}: {session.user?.email}
+				</div>
 			</div>
 			<div>
-				<h2 className="text-2xl">Word Lists </h2>
+				<h2 className="text-2xl">{tAccount("myWordList")}</h2>
 				<WordLists dicts={dicts} />
 			</div>
 		</div>

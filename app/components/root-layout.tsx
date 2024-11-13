@@ -1,8 +1,8 @@
 import "github-markdown-css";
 import "@/styles/globals.css";
 import { getThemeFromCookie } from "@/actions/check-theme";
+import { ModalRoot } from "@/components/modal";
 import { VConsole } from "@/components/vconsole";
-import { ToastRoot } from "@/hooks/use-toast";
 import { Themes } from "@/types";
 import { isDev, isProd } from "@/utils/is-dev";
 import { GoogleAnalytics } from "@next/third-parties/google";
@@ -41,9 +41,9 @@ export async function DefaultLayout({
 				<SessionProvider>
 					<NextIntlClientProvider messages={messages}>
 						<main className="flex min-h-dvh flex-col">{children}</main>
+						<ModalRoot />
 					</NextIntlClientProvider>
 				</SessionProvider>
-				<ToastRoot />
 				{/* {isDev && <CacheToolbar />} */}
 				{isDev && <VConsole />}
 				{isProd && <SpeedInsights />}

@@ -14,6 +14,7 @@ import SettingIcon from "@/assets/svg/setting.svg";
 import ShuffleIcon from "@/assets/svg/shuffle.svg";
 import { signIn } from "next-auth/react";
 
+import { callModal } from "@/components/modal";
 import {
 	createErrorToast,
 	createLoadingToast,
@@ -32,7 +33,7 @@ import {
 } from "@/utils/local-dict";
 import { serverActionTimeOut } from "@/utils/time-out";
 import { useTranslations } from "next-intl";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const DictMenu = ({
 	dict,
@@ -69,7 +70,11 @@ const DictMenu = ({
 	};
 
 	const createWord = async () => {
-		const word = prompt(`✨ ${tHome("createWord")}`);
+		const word = (await callModal({
+			type: "dialog",
+			title: `✨ ${tHome("generateWord")}`,
+			message: `${tHome("createWord")}`,
+		})) as string | undefined;
 		if (word) {
 			const removeInfoToast = createLoadingToast(tHome("generating"));
 
@@ -112,7 +117,10 @@ const DictMenu = ({
 			signIn();
 			return;
 		}
-		const dictName = prompt(tHome("createWordList"));
+		const dictName = (await await callModal({
+			type: "dialog",
+			title: `${tHome("createWordList")}`,
+		})) as string | undefined;
 		if (dictName) {
 			const removeInfoToast = createLoadingToast(tHome("creating"));
 			const res = await createDictAction(dictName);
@@ -141,8 +149,13 @@ const DictMenu = ({
 	};
 
 	const handleRemoveDict = async () => {
-		const res = confirm();
-		if (!res) return;
+		if (
+			!(await callModal({
+				type: "confirm",
+				title: tHome("removeWordList"),
+			}))
+		)
+			return;
 		const removeInfoToast = createLoadingToast(tHome("removing"));
 		await removeDictAction(dictId);
 		router.push("/");

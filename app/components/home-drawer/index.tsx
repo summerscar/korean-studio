@@ -1,5 +1,6 @@
 import { removeDictItemAction } from "@/actions/user-dict-action";
 import { ClientOnly } from "@/components/client-only";
+import { callModal } from "@/components/modal";
 import { createLoadingToast, createSuccessToast } from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
 import type { HomeSetting } from "@/types";
@@ -73,7 +74,13 @@ const HomeDrawer = ({
 
 	const handleRemove = async (e: React.MouseEvent, item: DictItem) => {
 		e.stopPropagation();
-		if (confirm()) {
+		if (
+			await callModal({
+				type: "confirm",
+				title: tHome("removeWord"),
+				message: `${tHome("removeWord")} 「${item.name}」 ?`,
+			})
+		) {
 			if (isLocalDict) {
 				removeLocalDict(item.name);
 				onLocalDictUpdate();

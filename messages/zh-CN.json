@@ -12,12 +12,22 @@
 		"signOut": "退出",
 		"search": "搜索"
 	},
+	"Account": {
+		"profile": "个人资料",
+		"myWordList": "我的词单",
+		"username": "用户名",
+		"password": "密码",
+		"confirmPassword": "确认密码",
+		"email": "邮箱",
+		"changePassword": "修改密码"
+	},
 	"Home": {
 		"viewList": "查看列表",
 		"tipsEnter": "按下<enter></enter>键输入",
 		"tipsForMobile": "请使用电脑获得更好体验",
 		"createWord": "请输入单词或单词解释，多个单词用逗号分隔 例如：안녕,谢谢",
 		"exampleWord": "안녕,谢谢",
+		"generateWord": "生成单词",
 		"generating": "生成中...",
 		"generated": "生成成功!",
 		"generateError": "生成失败，请重试。",
@@ -37,7 +47,9 @@
 		"removing": "删除中...",
 		"removed": "删除成功!",
 		"removeError": "删除失败，请重试。",
-		"createNewDict": "新建词单"
+		"createNewDict": "新建词单",
+		"removeWordList": "删除词单",
+		"removeWord": "删除单词"
 	},
 	"Dict": {
 		"popular": "热门词汇",
@@ -49,6 +61,13 @@
 		"verb": "动词",
 		"favList": "⭐ 收藏",
 		"_local": "🖥️ 本地词汇"
+	},
+	"Modal": {
+		"close": "关闭",
+		"cancel": "取消",
+		"confirm": "确认",
+		"success": "成功",
+		"error": "错误"
 	},
 	"Tools": {
 		"description": "韩语工具: 标准化发音、罗马音转换、字母组合、文字拆分",

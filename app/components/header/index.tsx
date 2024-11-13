@@ -5,6 +5,7 @@ import { auth } from "auth";
 import clsx from "clsx";
 import Link from "next/link";
 import { ActiveLinks } from "./_component/active-links";
+import { CheckClientSession } from "./_component/check-client-session";
 import { CleanCache } from "./_component/clean-cache";
 import { MobileMenu } from "./_component/mobile-menu";
 import { Progress } from "./_component/progress";
@@ -65,6 +66,7 @@ const Header = async () => {
 					<MobileMenu links={headerConfig(t)} session={session} />
 				</div>
 			</div>
+			<CheckClientSession serverSession={session} />
 			<Progress />
 		</header>
 	);

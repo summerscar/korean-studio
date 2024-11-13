@@ -1,10 +1,10 @@
 ---
 title: papago 插件
 author: summerscar
-description:
+description: 该教程介绍了如何使用Papago插件快速创建单词到指定词单。该插件需要安装Tampermonkey插件，并将脚本内容复制粘贴到脚本编辑器中。然后，用户需要在Papago查词页面设置用户ID和词单ID，即可快速创建单词到指定词单。
 date: 1
 tags: ['extension']
-last-modified: 1731498305771
+last-modified: 1731499873197
 ---
 
 # papago 插件

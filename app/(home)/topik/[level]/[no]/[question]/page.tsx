@@ -1,8 +1,8 @@
 import { keystoneContext } from "@/../keystone/context";
-import QuestionForm from "@/components/question-form";
 import { TopikLevels, type TopikQuestion } from "@/types";
 import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
+import QuestionForm from "./_components/question-form";
 import type { TopikLevelType } from ".keystone/types";
 
 export async function generateMetadata(props: {

@@ -22,6 +22,8 @@ export const currentModel = () =>
 async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
 	if (isOpenAi()) {
 		const model = currentModel();
+		// TODO:  response_format
+		// https://cookbook.openai.com/examples/structured_outputs_intro
 		const result = await openai.chat.completions.create({
 			model,
 			messages,

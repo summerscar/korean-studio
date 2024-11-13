@@ -1,6 +1,5 @@
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
-import { HomeBGIcon } from "@/components/home-bg-icon";
 import { DefaultLayout } from "@/components/root-layout";
 import { getServerI18n } from "@/utils/i18n";
 import type { Metadata } from "next";
@@ -39,7 +38,6 @@ export default function RootLayout({
 }>) {
 	return (
 		<DefaultLayout bodyClassName="relative z-0">
-			{/* <HomeBGIcon /> */}
 			<Header />
 			<section className="flex-auto flex items-stretch">{children}</section>
 			<Footer />

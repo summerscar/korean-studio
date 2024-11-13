@@ -1,9 +1,9 @@
 import { getI18nFromCookie } from "@/actions/check-i18n";
 import { getThemeFromCookie } from "@/actions/check-theme";
-import { I18nSwitcher } from "@/components/footer-i18n-switcher";
-import { ThemeSwitcher } from "@/components/footer-theme-switcher";
 import { Themes } from "@/types";
 import { DEFAULT_SITE_LANGUAGE } from "@/utils/config";
+import { I18nSwitcher } from "./i18n-switcher";
+import { ThemeSwitcher } from "./theme-switcher";
 
 const Footer = async () => {
 	const defaultLocale = (await getI18nFromCookie()) || DEFAULT_SITE_LANGUAGE;

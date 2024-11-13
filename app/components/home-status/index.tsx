@@ -1,17 +1,13 @@
 "use client";
 import CompleteSVG from "@/assets/svg/complete.svg";
 import InfoIcon from "@/assets/svg/info.svg";
-import KeyboardIcon from "@/assets/svg/keyboard.svg";
 import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
-import ScoreIcon from "@/assets/svg/score.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
 import SpeakerIcon from "@/assets/svg/speaker.svg";
-import { DictNav } from "@/components/dict-nav";
 import { setProgressCSSVar } from "@/components/header/_component/progress";
 import { HideText } from "@/components/hide-text";
 import { HomeDrawer } from "@/components/home-drawer";
-import { HomeInput } from "@/components/home-input";
 import { Pronunciation } from "@/components/pronunciation";
 import { checkIsTouchable, useDevice } from "@/hooks/use-device";
 import { usePronunciation } from "@/hooks/use-pronunciation";
@@ -52,6 +48,8 @@ import {
 	useState,
 } from "react";
 import reactStringReplace from "react-string-replace";
+import { DictNav } from "./dict-nav";
+import { HomeInput } from "./input";
 import { Star } from "./star";
 
 const HomeStatus = ({

@@ -47,17 +47,25 @@ const WordsList = ({
 		if (!item) return;
 		setEditing(item);
 	};
-	const updateDictItem = async (data: DictItem) => {
+	const updateDictItem = async (dataString: string) => {
 		if (!editing) return;
-		if (JSON.stringify(data) === JSON.stringify(editing)) {
+		let cancel: () => void = () => {};
+		try {
+			const data = JSON.parse(dataString);
+			if (JSON.stringify(data) === JSON.stringify(editing)) {
+				setEditing(undefined);
+				return;
+			}
+			cancel = createLoadingToast("updating");
+			await updateDictItemAction(dictInfo!.id, editing.id!, data);
+			createSuccessToast("updated");
+		} catch (error) {
+			console.error("[updateDictItem][error]:", error);
+			createErrorToast("updateError");
+		} finally {
+			cancel();
 			setEditing(undefined);
-			return;
 		}
-		const cancel = createLoadingToast("updating");
-		await updateDictItemAction(dictInfo!.id, editing.id!, data);
-		cancel();
-		createSuccessToast("updated");
-		setEditing(undefined);
 	};
 
 	const updateDict = async (data: DictUpdateInput) => {
@@ -68,7 +76,7 @@ const WordsList = ({
 	};
 
 	const handleAdd = async () => {
-		const word = prompt(`✨ ${tHome("createWord")}`, tHome("exampleWord"));
+		const word = prompt(`✨ ${tHome("createWord")}`);
 		if (word) {
 			const removeInfoToast = createLoadingToast(tHome("generating"));
 
@@ -169,7 +177,7 @@ const WordsList = ({
 						el?.focus();
 					}}
 					onBlur={(e) => {
-						updateDictItem(JSON.parse(e.target.value));
+						updateDictItem(e.target.value);
 					}}
 					className="w-full h-96 bg-white/20 rounded-lg shadow-inner"
 					defaultValue={JSON.stringify(editing, null, 12)}

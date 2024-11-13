@@ -1,4 +1,4 @@
-import { callToast } from "@/hooks/use-toast";
+import { createToast } from "@/hooks/use-toast";
 import { useDebounceFn, useLatest, useMemoizedFn, useThrottleFn } from "ahooks";
 import { useEffect, useRef, useState } from "react";
 
@@ -51,7 +51,7 @@ const usePronunciation = (
 				await audioRef.current.play();
 				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			} catch (e: any) {
-				callToast({
+				createToast({
 					type: "error",
 					message: e.message,
 				});

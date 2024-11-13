@@ -6,6 +6,11 @@
 	:root {
 		--keyboard-active-color: theme("colors.gray.300");
 		scroll-behavior: smooth;
+		/*
+			&:target-text {
+				@apply text-white bg-black
+			}
+		*/
 	}
 }
 

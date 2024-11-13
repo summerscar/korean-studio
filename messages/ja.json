@@ -12,12 +12,22 @@
 		"signOut": "サインアウト",
 		"search": "検索"
 	},
+	"Account": {
+		"profile": "プロファイル",
+		"myWordList": "マイ単語リスト",
+		"username": "ユーザー名",
+		"password": "パスワード",
+		"confirmPassword": "パスワードの確認",
+		"email": "メール",
+		"changePassword": "パスワードの変更"
+	},
 	"Home": {
 		"viewList": "リストを見る",
 		"tipsEnter": "<enter></enter>を押してから入力してください",
 		"tipsForMobile": "パソコンを使って、より良い体験をお楽しみください。",
 		"createWord": "単語もしくわ単語の意味を入力してください、複数の単語はカンマで区切ってください。例：안녕,ありがとう",
 		"exampleWord": "안녕,ありがとう",
+		"generateWord": "単語を生成",
 		"generating": "生成中...",
 		"generated": "生成に成功しました!",
 		"generateError": "生成に失敗しました。もう一度お試しください。",
@@ -37,7 +47,9 @@
 		"removing": "削除中...",
 		"removed": "削除に成功しました!",
 		"removeError": "削除に失敗しました。もう一度お試しください。",
-		"createNewDict": "新しい辞書を作成"
+		"createNewDict": "新しい単語リストを作成",
+		"removeWordList": "単語リストを削除",
+		"removeWord": "単語を削除"
 	},
 	"Dict": {
 		"popular": "トレンド用語",
@@ -49,6 +61,13 @@
 		"verb": "動詞",
 		"favList": "⭐ お気に入り",
 		"_local": "🖥️ ローカル词汇"
+	},
+	"Modal": {
+		"close": "閉じる",
+		"cancel": "キャンセル",
+		"confirm": "確認",
+		"success": "成功",
+		"error": "エラー"
 	},
 	"Tools": {
 		"description": "韓国語のツール: 発音の標準化、ローマ字に変換、文字組み立て、文字分解",

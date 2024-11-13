@@ -12,12 +12,22 @@
 		"signOut": "Sign Out",
 		"search": "Search"
 	},
+	"Account": {
+		"profile": "Profile",
+		"myWordList": "My word list",
+		"username": "Username",
+		"password": "Password",
+		"confirmPassword": "Confirm password",
+		"email": "Email",
+		"changePassword": "Change password"
+	},
 	"Home": {
 		"viewList": "View list",
 		"tipsEnter": "Press<enter></enter>to type!",
 		"tipsForMobile": "Please use a computer to get a better experience.",
 		"createWord": "Please input words or meanings, multiple words are separated by commas. For example: 안녕,thank you",
 		"exampleWord": "안녕,thank you",
+		"generateWord": "Generate words",
 		"generating": "Generating...",
 		"generated": "Generated successfully!",
 		"generateError": "Failed to generate. Please try again.",
@@ -37,7 +47,9 @@
 		"removing": "Removing...",
 		"removed": "Removed successfully!",
 		"removeError": "Failed to remove. Please try again.",
-		"createNewDict": "Create new"
+		"createNewDict": "Create new",
+		"removeWordList": "Remove Word List",
+		"removeWord": "Remove Word"
 	},
 	"Dict": {
 		"popular": "Popular Words",
@@ -49,6 +61,13 @@
 		"verb": "Verb",
 		"favList": "⭐ Favorite List",
 		"_local": "🖥️ Local Words"
+	},
+	"Modal": {
+		"close": "Close",
+		"cancel": "Cancel",
+		"confirm": "Confirm",
+		"success": "Success",
+		"error": "Error"
 	},
 	"Tools": {
 		"description": "Korean text tools: standardize pronunciation, romanize, assemble, disassemble",

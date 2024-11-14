@@ -29,7 +29,7 @@ const MobileMenu = ({
 			<label className="btn btn-circle btn-ghost swap swap-rotate">
 				<input
 					type="checkbox"
-					className="hidden"
+					className="hidden drawer-toggle"
 					onChange={handleOnChange}
 					checked={isOpen}
 				/>

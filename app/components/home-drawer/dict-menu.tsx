@@ -221,6 +221,25 @@ const DictMenu = ({
 								}
 							/>
 						</div>
+						<div className="flex justify-between items-center gap-2">
+							<label
+								htmlFor="additionalMeaning"
+								className="cursor-pointer flex-auto"
+							>
+								{tHome("additionalMeaning")}
+							</label>
+							<input
+								id="additionalMeaning"
+								type="checkbox"
+								className="toggle toggle-sm"
+								checked={setting.additionalMeaning}
+								onChange={(e) =>
+									onSettingChange?.({
+										additionalMeaning: e.target.checked,
+									})
+								}
+							/>
+						</div>
 					</div>
 				</div>
 				{canEdit && <AddIcon className="size-6" onClick={createWord} />}

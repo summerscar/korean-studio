@@ -409,13 +409,17 @@ const HomeStatus = ({
 				>
 					{displayName}
 					<div
-						className="tooltip tooltip-top mobile:before:hidden absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%]"
+						className={clsx(
+							"absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%]",
+							!isTouchable && "tooltip tooltip-top",
+						)}
 						data-tip={`${romanized} [${standardized}]`}
 					>
 						<SpeakerIcon
 							width={20}
 							height={20}
 							onMouseEnter={playWord}
+							onTouchEnd={playWord}
 							className={clsx(
 								isWordPlaying ? "fill-current" : "text-base-content",
 								"cursor-pointer inline-block",
@@ -448,7 +452,10 @@ const HomeStatus = ({
 				))}
 				{qwerty && (
 					<div
-						className="tooltip tooltip-top mobile:before:hidden absolute -right-9 top-1/2 -translate-x-1/2 -translate-y-1/2"
+						className={clsx(
+							"absolute -right-9 top-1/2 -translate-x-1/2 -translate-y-1/2",
+							!isTouchable && "tooltip tooltip-top",
+						)}
 						data-tip={qwerty}
 					>
 						<InfoIcon

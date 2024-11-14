@@ -29,6 +29,7 @@ const Pronunciation = ({
 			width={width}
 			height={height}
 			onMouseEnter={play}
+			onTouchEnd={play}
 			className={clsx(
 				className,
 				isPlaying ? "fill-current" : "text-base-content",

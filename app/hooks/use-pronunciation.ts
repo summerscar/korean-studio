@@ -60,8 +60,9 @@ const usePronunciation = (
 	});
 
 	const { run: debouncedPlay } = useDebounceFn(play, { wait: 800 });
+	const { run: throttledPlay } = useThrottleFn(play, { wait: 500 });
 
-	return { isPlaying, play };
+	return { isPlaying, play: throttledPlay };
 };
 
 export { usePronunciation };

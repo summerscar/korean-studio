@@ -1,11 +1,7 @@
+import type { SITES_LANGUAGE } from "./site";
 import type { Lists } from ".keystone/types";
 
-export interface Tran {
-	en: string[];
-	"zh-CN": string[];
-	"zh-TW": string[];
-	ja: string[];
-}
+export type Tran = Record<SITES_LANGUAGE, string[]>;
 
 export interface DictItem {
 	id?: string;

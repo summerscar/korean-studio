@@ -10,7 +10,7 @@ const HideText = ({
 	return (
 		<span
 			className={clsx(
-				"inline-block relative cursor-pointer hover:before:opacity-0 before:transition-opacity",
+				"inline-block relative cursor-pointer hover:before:opacity-0 before:transition-opacity px-0.5",
 				hide && "after-backdrop-shadow",
 				className,
 			)}

@@ -1,15 +1,15 @@
 "use client";
 import { getI18nFromCookie, setI18nToCookie } from "@/actions/check-i18n";
-import type { SITES_LANGUAGE } from "@/types/site";
+import { SITES_LANGUAGE } from "@/types/site";
 import { DEFAULT_SITE_LANGUAGE } from "@/utils/config";
 import { useMount } from "ahooks";
 import clsx from "clsx";
 import { useState } from "react";
 
 const mapForLocale: Record<string, string> = {
-	"zh-CN": "🇨🇳",
-	en: "🇺🇸",
-	ja: "🇯🇵",
+	[SITES_LANGUAGE.zhCN]: "🇨🇳",
+	[SITES_LANGUAGE.en]: "🇺🇸",
+	[SITES_LANGUAGE.ja]: "🇯🇵",
 };
 
 const I18nSwitcher = ({ defaultLocale }: { defaultLocale: SITES_LANGUAGE }) => {

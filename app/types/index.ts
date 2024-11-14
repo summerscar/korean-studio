@@ -40,4 +40,6 @@ export type HomeSetting = {
 	showMeaning: boolean;
 	/** 启用音效 */
 	enableAudio: boolean;
+	/** 外语释义 */
+	additionalMeaning: boolean;
 };

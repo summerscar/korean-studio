@@ -13,7 +13,8 @@ import { checkIsTouchable, useDevice } from "@/hooks/use-device";
 import { usePronunciation } from "@/hooks/use-pronunciation";
 import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
-import type { Tran, UserDicts } from "@/types/dict";
+import type { UserDicts } from "@/types/dict";
+import { SITES_LANGUAGE } from "@/types/site";
 import { useInputAudioEffect } from "@/utils/audio";
 import { playConfetti } from "@/utils/confetti";
 import { HOME_SETTING_KEY } from "@/utils/config";
@@ -76,6 +77,7 @@ const HomeStatus = ({
 		autoVoice: false,
 		showMeaning: true,
 		enableAudio: true,
+		additionalMeaning: false,
 	});
 	useMount(() => {
 		const settingStr = localStorage.getItem(HOME_SETTING_KEY);
@@ -96,7 +98,7 @@ const HomeStatus = ({
 	const inputAE = useInputAudioEffect(setting.enableAudio);
 
 	const drawerRef = useRef({ open: () => {} });
-	const locale = useLocale();
+	const locale = useLocale() as SITES_LANGUAGE;
 	const tHome = useTranslations("Home");
 	const hangulRef = useRef<HTMLDivElement>(null);
 	const [inputKeys, setInputKeys] = useState<Record<string, boolean>>({});
@@ -330,21 +332,25 @@ const HomeStatus = ({
 		}
 	}, [curInputIndex, lastedHangul, inputKeys, toNextWord]);
 
-	const translation = useMemo(() => {
+	const wordTranslations = useMemo(() => {
 		if (!currentWord) return null;
-		const trans =
-			currentWord.trans[locale as keyof Tran] || currentWord.trans.en;
-		return trans.join(", ");
-	}, [currentWord, locale]);
+		return Object.entries(currentWord.trans).reduce(
+			(prev, [key, tran]) => {
+				return Object.assign(prev, { [key]: tran.join(", ") });
+			},
+			{} as Record<SITES_LANGUAGE, string>,
+		);
+	}, [currentWord]);
 
-	const exTranslation = useMemo(() => {
+	const exTranslations = useMemo(() => {
 		if (!currentWord) return null;
-		const exTrans =
-			currentWord.exTrans?.[locale as keyof Tran] ||
-			currentWord.exTrans?.en ||
-			[];
-		return exTrans.join(", ");
-	}, [currentWord, locale]);
+		return Object.entries(currentWord.exTrans || {}).reduce(
+			(prev, [key, tran]) => {
+				return Object.assign(prev, { [key]: tran.join(", ") });
+			},
+			{} as Record<SITES_LANGUAGE, string>,
+		);
+	}, [currentWord]);
 
 	/** just for log */
 	useEffect(() => {
@@ -430,8 +436,28 @@ const HomeStatus = ({
 				</div>
 			)}
 			<div className="text-lg text-gray-500 mt-3 mb-2">
-				<HideText hide={!setting.showMeaning}>{translation}</HideText>
+				<HideText hide={!setting.showMeaning}>
+					{wordTranslations?.[locale] || wordTranslations?.en}
+				</HideText>
 			</div>
+			{/* 额外翻译 */}
+			{setting.additionalMeaning && (
+				<HideText hide={!setting.showMeaning} className="mb-3 -mt-1.5 block">
+					<div className="flex flex-row gap-3">
+						{Object.values(SITES_LANGUAGE)
+							.filter((lang) => lang !== locale)
+							.map((lang) => (
+								<span
+									key={lang}
+									data-lang={lang}
+									className="text-xs text-gray-500/80"
+								>
+									{wordTranslations?.[lang] || wordTranslations?.en}
+								</span>
+							))}
+					</div>
+				</HideText>
+			)}
 			{/* 韩语音节 */}
 			<div
 				className={clsx(
@@ -531,22 +557,30 @@ const HomeStatus = ({
 						/>
 					</p>
 					<p>
-						<HideText hide={!setting.showMeaning}>{exTranslation}</HideText>
+						<HideText hide={!setting.showMeaning}>
+							{exTranslations?.[locale] || exTranslations?.en}
+						</HideText>
 					</p>
+					{/* 额外例句翻译 */}
+					{setting.additionalMeaning && (
+						<div className="flex text-center flex-col gap-0.5 py-0.5">
+							{Object.values(SITES_LANGUAGE)
+								.filter((lang) => lang !== locale)
+								.map((lang) => (
+									<div
+										key={lang}
+										data-lang={lang}
+										className="text-xs text-base-content/80"
+									>
+										<HideText hide={!setting.showMeaning}>
+											{exTranslations?.[lang] || exTranslations?.en}
+										</HideText>
+									</div>
+								))}
+						</div>
+					)}
 				</div>
 			)}
-			{/* 键盘输入 */}
-			<div className="hidden text-[color:var(--font-color-inactive)]">
-				{[...qwerty].map((strItem, idx) => (
-					<span
-						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-						key={idx}
-						className={clsx(heightLightClass(idx))}
-					>
-						{strItem}
-					</span>
-				))}
-			</div>
 			{qwerty && (
 				<HomeInput
 					onFocusChange={setIsInputFocused}

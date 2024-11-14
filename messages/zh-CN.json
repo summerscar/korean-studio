@@ -33,6 +33,7 @@
 		"generateError": "生成失败，请重试。",
 		"autoVoice": "自动朗读",
 		"showMeaning": "显示释义",
+		"additionalMeaning": "外语释义",
 		"enableAudio": "启用音效",
 		"deleting": "删除中...",
 		"deleted": "删除成功!",

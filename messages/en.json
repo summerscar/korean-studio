@@ -33,6 +33,7 @@
 		"generateError": "Failed to generate. Please try again.",
 		"autoVoice": "Auto read",
 		"showMeaning": "Show meaning",
+		"additionalMeaning": "Foreign language meaning",
 		"enableAudio": "Enable audio effect",
 		"deleting": "Deleting...",
 		"deleted": "Deleted successfully!",

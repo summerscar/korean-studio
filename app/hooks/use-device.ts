@@ -16,7 +16,7 @@ export const useDevice = () => {
 };
 
 export const checkIsTouchable = () => {
-	const touchable = window.innerWidth < 640;
+	const touchable = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 	/* 		/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) &&
 		("ontouchstart" in window || navigator.maxTouchPoints > 0) &&
 		window.matchMedia("(pointer: coarse)").matches; */

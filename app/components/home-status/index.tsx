@@ -72,6 +72,7 @@ const HomeStatus = ({
 	const [isComplete, setIsComplete] = useState(false);
 	const [isInputError, setIsInputError] = useState(false);
 	const [isInputFocused, setIsInputFocused] = useState(false);
+	const playExampleRef = useRef(() => {});
 	const { isTouchable } = useDevice();
 	const [setting, setSetting] = useState<HomeSetting>({
 		autoVoice: false,
@@ -157,12 +158,16 @@ const HomeStatus = ({
 				focusInput();
 				return;
 			}
-			if (e.code === "Quote") {
+			if (e.code === "Backslash") {
 				onSettingChange({ showMeaning: !setting.showMeaning });
 				return;
 			}
 			if (e.code === "Semicolon") {
 				playWord();
+				return;
+			}
+			if (e.code === "Quote") {
+				playExampleRef.current();
 				return;
 			}
 			/** 单词导航 */
@@ -416,7 +421,7 @@ const HomeStatus = ({
 					{displayName}
 					<div
 						className={clsx(
-							"absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%]",
+							"absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%] z-[1]",
 							!isTouchable && "tooltip tooltip-top",
 						)}
 						data-tip={`${romanized} [${standardized}]`}
@@ -537,6 +542,8 @@ const HomeStatus = ({
 							{" / "}
 							<kbd className="kbd kbd-xs">]</kbd>
 							{" / "}
+							<kbd className="kbd kbd-xs">\</kbd>
+							{" / "}
 							<kbd className="kbd kbd-xs">;</kbd>
 							{" / "}
 							<kbd className="kbd kbd-xs">'</kbd>.
@@ -550,6 +557,7 @@ const HomeStatus = ({
 					<p className={clsx("relative", notoKR.className)}>
 						{highLightExample(currentWord.example)}
 						<Pronunciation
+							playRef={playExampleRef}
 							width={12}
 							height={12}
 							text={currentWord.example}

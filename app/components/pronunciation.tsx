@@ -3,17 +3,21 @@ import SpeakerSVG from "@/assets/svg/speaker.svg";
 import { usePronunciation } from "@/hooks/use-pronunciation";
 import clsx from "clsx";
 import { romanize } from "es-hangul";
-import type { ComponentProps } from "react";
+import type { ComponentProps, RefObject } from "react";
 
 const Pronunciation = ({
+	playRef,
 	preload = true,
 	text,
 	children,
 	tooltip = false,
 	...svgProps
-}: { text?: string; preload?: boolean; tooltip?: boolean } & ComponentProps<
-	typeof SpeakerSVG
->) => {
+}: {
+	text?: string;
+	preload?: boolean;
+	tooltip?: boolean;
+	playRef?: RefObject<() => void>;
+} & ComponentProps<typeof SpeakerSVG>) => {
 	const DEFAULT_SIZE = 16;
 	const {
 		width = DEFAULT_SIZE,
@@ -23,6 +27,8 @@ const Pronunciation = ({
 	} = svgProps;
 	const targetText = typeof children === "string" ? children : text || "";
 	const { isPlaying, play } = usePronunciation(targetText, { preload });
+
+	playRef && (playRef.current = play);
 
 	const speakerEl = (
 		<SpeakerSVG

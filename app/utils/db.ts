@@ -28,9 +28,8 @@ export const authenticateUserWithPassword = async (
 	});
 	const userId = res.authenticate?.item?.id;
 	if (userId) {
-		return await keystoneContext.sudo().query.User.findOne({
+		return await keystoneContext.sudo().db.User.findOne({
 			where: { id: userId },
-			query: "id name email isAdmin",
 		});
 	}
 	throw new Error(res.authenticate?.message);

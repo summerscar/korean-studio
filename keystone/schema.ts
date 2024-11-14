@@ -47,9 +47,8 @@ const getUserFromNextAuth = async (
 ) => {
 	const id = (session as NextAuthSession).user?.id;
 
-	const user = await ctx.sudo().query.User.findOne({
+	const user = await ctx.sudo().db.User.findOne({
 		where: { id },
-		query: "id name email isAdmin",
 	});
 	return user;
 };

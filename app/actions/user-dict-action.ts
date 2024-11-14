@@ -31,22 +31,22 @@ const createDictAction = async (dictName: string) => {
 	if (!session?.user) {
 		throw new Error("no session");
 	}
-	const res = (await sudoContext.query.Dict.createOne({
+	const res = await sudoContext.db.Dict.createOne({
 		data: {
 			name: dictName,
 			createdBy: {
 				connect: { id: session.user.id },
 			},
 		},
-	})) as UserDicts[0];
+	});
 	revalidateTag(allDictsRevalidateKey);
 
-	return toPlainObject(res);
+	return res;
 };
 
 const createFavListAction = async (userName: string, userId: string) => {
 	const sudoContext = keystoneContext.sudo();
-	const res = (await sudoContext.query.Dict.createOne({
+	const res = await sudoContext.db.Dict.createOne({
 		data: {
 			name: `${userName}'s ${FAV_LIST_KEY}`,
 			intlKey: FAV_LIST_KEY,
@@ -54,9 +54,9 @@ const createFavListAction = async (userName: string, userId: string) => {
 				connect: { id: userId },
 			},
 		},
-	})) as UserDicts[0];
+	});
 	revalidateTag(allDictsRevalidateKey);
-	return toPlainObject(res);
+	return res;
 };
 
 const _getFavListID = async (userId: string) => {
@@ -89,7 +89,7 @@ const toggleDictItemIdToFavListAction = async (
 	const dictId = await _getFavListID(session.user?.id!);
 
 	const ctx = KSwithSession(session);
-	await ctx.query.Dict.updateOne({
+	await ctx.db.Dict.updateOne({
 		where: { id: dictId },
 		data: {
 			list: {
@@ -103,7 +103,7 @@ const toggleDictItemIdToFavListAction = async (
 const removeDictItemAction = async (dictId: string, dictItemId: string) => {
 	const session = await auth();
 	const ctx = KSwithSession(session);
-	await ctx.query.Dict.updateOne({
+	await ctx.db.Dict.updateOne({
 		where: { id: dictId },
 		data: {
 			list: {
@@ -122,7 +122,7 @@ const addDictItemToDictAction = async (
 	const session = await auth();
 	const ctx = KSwithSession(session || { user: { id: userId }, expires: "" });
 
-	await ctx.query.DictItem.createMany({
+	await ctx.db.DictItem.createMany({
 		data: dictItems.map(
 			(w) =>
 				({
@@ -154,7 +154,7 @@ const updateDictItemAction = async (
 ) => {
 	const session = await auth();
 	const ctx = KSwithSession(session);
-	await ctx.query.DictItem.updateOne({
+	await ctx.db.DictItem.updateOne({
 		where: { id: dictItemId },
 		data: {
 			name: data.name,
@@ -169,7 +169,7 @@ const updateDictItemAction = async (
 const updateDictAction = async (dictId: string, data: DictUpdateInput) => {
 	const session = await auth();
 	const ctx = KSwithSession(session);
-	await ctx.query.Dict.updateOne({
+	await ctx.db.Dict.updateOne({
 		where: { id: dictId },
 		data,
 	});
@@ -196,7 +196,7 @@ const importDictItemToUserDict = async (dictId: string, JSONString: string) => {
 const removeDictAction = async (dictId: string) => {
 	const session = await auth();
 	const ctx = KSwithSession(session);
-	await ctx.query.Dict.deleteOne({ where: { id: dictId } });
+	await ctx.db.Dict.deleteOne({ where: { id: dictId } });
 	revalidateTag(allDictsRevalidateKey);
 	revalidateTag(getDictRevalidateKey(dictId));
 };

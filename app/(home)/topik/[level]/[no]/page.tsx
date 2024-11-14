@@ -30,10 +30,8 @@ export default async function NoPage(props: {
 
 	const getTopikListByLevelAndNo = unstable_cache(
 		async (level: TopikLevelType, no: string) => {
-			const topikListByLevelAndNo = await keystoneContext.query.Topik.findMany({
+			const topikListByLevelAndNo = await keystoneContext.db.Topik.findMany({
 				where: { level: { equals: level }, no: { equals: Number(no) } },
-				query:
-					"id no year level questionNumber questionType score audioURL questionStem questionContent options explanation",
 				orderBy: { questionNumber: "asc" },
 			});
 			return topikListByLevelAndNo;
@@ -48,9 +46,7 @@ export default async function NoPage(props: {
 		return <div>Questions not found</div>;
 	}
 
-	const topikQuestions = JSON.parse(
-		JSON.stringify(topikListByLevelAndNo),
-	) as TopikQuestion[];
+	const topikQuestions = topikListByLevelAndNo as TopikQuestion[];
 
 	return (
 		<div>

@@ -1,5 +1,5 @@
 import { keystoneContext } from "@/../keystone/context";
-import { TopikLevels, type TopikQuestion } from "@/types";
+import { TopikLevels } from "@/types";
 import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
 import QuestionForm from "./_components/question-form";
@@ -27,14 +27,12 @@ const TopikQuestionPage = async (props: {
 	const { level, no, question: questionNumber } = params;
 	const getTopikQuestions = await unstable_cache(
 		async (level: TopikLevelType, no: string, questionNumber: string) => {
-			return await keystoneContext.query.Topik.findMany({
+			return await keystoneContext.db.Topik.findMany({
 				where: {
 					level: { equals: level },
 					no: { equals: Number(no) },
 					questionNumber: { equals: Number(questionNumber) },
 				},
-				query:
-					"id no year level questionNumber questionType score audioURL questionStem questionContent options explanation",
 				orderBy: { questionNumber: "asc" },
 			});
 		},
@@ -50,7 +48,7 @@ const TopikQuestionPage = async (props: {
 	if (topikQuestions.length === 0) {
 		return <div>Question not found</div>;
 	}
-	const topikQuestion = topikQuestions[0] as TopikQuestion;
+	const topikQuestion = topikQuestions[0];
 
 	const normalizedTopikQuestion = JSON.parse(JSON.stringify(topikQuestion));
 

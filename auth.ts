@@ -66,11 +66,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			if (["github", "google"].includes(account?.provider || "")) {
 				// console.log("[signIn][oauth][user]");
 				const sudoContext = keystoneContext.sudo();
-				const targetUser = await sudoContext.query.User.findOne({
+				const targetUser = await sudoContext.db.User.findOne({
 					where: { email: user.email },
 				});
 				if (!targetUser) {
-					const res = await sudoContext.query.User.createOne({
+					const res = await sudoContext.db.User.createOne({
 						data: {
 							name: user.name,
 							email: user.email,
@@ -91,10 +91,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			const sudoContext = keystoneContext.sudo();
 			// OAuth 登录后首次生成 JWT 时
 
-			const targetUser = await sudoContext.query.User.findOne({
+			const targetUser = await sudoContext.db.User.findOne({
 				where: { email: user?.email || token?.email },
-				query: "id name email isAdmin",
 			});
+			if (!targetUser) {
+				throw new InvalidLoginError();
+			}
 			token.isAdmin = targetUser.isAdmin;
 			token.id = targetUser.id;
 			token.name = targetUser.name;

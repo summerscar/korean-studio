@@ -7,20 +7,20 @@ import {
 	updateDictAction,
 	updateDictItemAction,
 } from "@/actions/user-dict-action";
+import SearchIcon from "@/assets/svg/search.svg";
+import { callModal } from "@/components/modal";
 import {
 	createErrorToast,
 	createLoadingToast,
 	createSuccessToast,
 } from "@/hooks/use-toast";
-import type { DictUpdateInput } from ".keystone/types";
-
-import { callModal } from "@/components/modal";
 import type { Dict, DictItem, UserDicts } from "@/types/dict";
 import { FAV_LIST_KEY } from "@/utils/config";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import type { DictUpdateInput } from ".keystone/types";
 
 const WordsList = ({
 	dict,
@@ -37,7 +37,7 @@ const WordsList = ({
 	const tHome = useTranslations("Home");
 	const [editing, setEditing] = useState<DictItem>();
 	const locale = useLocale();
-
+	const [searchQuery, setSearchQuery] = useState("");
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		setEditing(undefined);
@@ -215,29 +215,44 @@ const WordsList = ({
 							<tr className="*:bg-transparent bg-transparent backdrop-blur-lg">
 								<th className="px-4 py-2">Name</th>
 								<th className="px-4 py-2">Action</th>
-								<th className="px-4 py-2">Name</th>
-								<th className="px-4 py-2">Action</th>
+								<th className="px-4 py-2" colSpan={2}>
+									<div className="flex justify-end">
+										<label className="input input-bordered input-xs flex items-center gap-2 w-full sm:w-1/2">
+											<SearchIcon className="size-4" />
+											<input
+												type="search"
+												className="grow w-[inherit]"
+												value={searchQuery}
+												onChange={(e) => setSearchQuery(e.target.value)}
+											/>
+										</label>
+									</div>
+								</th>
 							</tr>
 						</thead>
 						<tbody>
-							{dict.map((item, index) =>
-								index % 2 === 0 ? (
-									<tr key={item.id}>
-										<td className="px-4 py-2">
-											{index + 1}. {item.name}
-										</td>
-										<td className="px-4 py-2">{createActionBar(item)}</td>
-										<td className="px-4 py-2">
-											{dict[index + 1]
-												? `${index + 2}. ${dict[index + 1].name}`
-												: ""}
-										</td>
-										<td className="px-4 py-2">
-											{dict[index + 1] ? createActionBar(dict[index + 1]) : ""}
-										</td>
-									</tr>
-								) : null,
-							)}
+							{dict
+								.filter((item) => item.name.includes(searchQuery))
+								.map((item, index) =>
+									index % 2 === 0 ? (
+										<tr key={item.id}>
+											<td className="px-4 py-2">
+												{index + 1}. {item.name}
+											</td>
+											<td className="px-4 py-2">{createActionBar(item)}</td>
+											<td className="px-4 py-2">
+												{dict[index + 1]
+													? `${index + 2}. ${dict[index + 1].name}`
+													: ""}
+											</td>
+											<td className="px-4 py-2">
+												{dict[index + 1]
+													? createActionBar(dict[index + 1])
+													: ""}
+											</td>
+										</tr>
+									) : null,
+								)}
 						</tbody>
 						<tfoot>
 							<tr className="bg-transparent backdrop-blur-lg">

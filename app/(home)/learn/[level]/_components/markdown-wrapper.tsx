@@ -1,23 +1,42 @@
 "use client";
+import { selectToSearch } from "@/utils/select-to-search";
+import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import type { TocItem } from "remark-flexible-toc";
 
 const MDContentWrapper = ({
 	children,
 	lastModified,
 	bottomNav,
-}: { children: ReactNode; lastModified?: string; bottomNav?: ReactNode }) => (
-	<article
-		data-last-modified={lastModified}
-		className="p-8 border-r-2 border-slate-900/10 flex-auto"
-	>
-		{/* TODO: https://github.com/parcel-bundler/lightningcss 不支持 */}
-		<style>{".markdown-body ::target-text { background-color: gold; }"}</style>
-		<div className="markdown-body">{children}</div>
-		{bottomNav}
-	</article>
-);
+}: { children: ReactNode; lastModified?: string; bottomNav?: ReactNode }) => {
+	const markdownBodyRef = useRef<HTMLDivElement>(null);
+	const locale = useLocale();
+
+	useEffect(() => {
+		if (markdownBodyRef.current) {
+			const cancel = selectToSearch(markdownBodyRef.current, locale);
+			return () => {
+				cancel?.();
+			};
+		}
+	}, [locale]);
+
+	return (
+		<article
+			data-last-modified={lastModified}
+			className="p-8 border-r-2 border-slate-900/10 flex-auto"
+		>
+			<style>
+				{".markdown-body ::target-text { background-color: gold; }"}
+			</style>
+			<div className="markdown-body" ref={markdownBodyRef}>
+				{children}
+			</div>
+			{bottomNav}
+		</article>
+	);
+};
 
 const TOCWrapper = ({
 	children,

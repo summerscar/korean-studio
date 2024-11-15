@@ -14,6 +14,7 @@ const ActionBar = ({
 	onSubmit,
 	onReset,
 	audioURL,
+	isEnd,
 }: {
 	level: TopikLevelType;
 	no: string;
@@ -22,6 +23,7 @@ const ActionBar = ({
 	onSubmit: () => void;
 	onReset: () => void;
 	audioURL?: string;
+	isEnd?: boolean;
 }) => {
 	const [isHandleClickStartTestPending, handleClickStartTest] =
 		useServerActionState(async () => {
@@ -34,6 +36,21 @@ const ActionBar = ({
 			await cancelTestAction(level, no);
 			await serverActionTimeOut();
 		});
+
+	const handleSubmit = async () => {
+		await handleClickCancelTest();
+		await onSubmit();
+	};
+
+	const handleStart = async () => {
+		await onReset();
+		await handleClickStartTest();
+	};
+
+	const handleCancel = async () => {
+		await handleClickCancelTest();
+		await onReset();
+	};
 
 	const audioEl = audioURL && (
 		<div>
@@ -50,17 +67,20 @@ const ActionBar = ({
 	);
 
 	return (
-		<div className="sticky top-[--header-height]">
+		<div className="w-full py-3">
 			{isTesting ? (
-				<div className="flex justify-between items-center">
-					<div className="flex gap-2">
-						<button
-							className="btn btn-sm btn-primary"
-							type="button"
-							onClick={onSubmit}
-						>
-							submit
-						</button>
+				<div className="flex justify-between items-center flex-col gap-2">
+					<TestCutDown timeLeft={timeLeft} onEnd={handleSubmit} />
+					<div className="flex gap-2 flex-wrap">
+						{!isEnd && (
+							<button
+								className="btn btn-sm btn-primary"
+								type="button"
+								onClick={handleSubmit}
+							>
+								submit
+							</button>
+						)}
 						<button
 							className="btn btn-sm btn-primary"
 							type="button"
@@ -72,7 +92,7 @@ const ActionBar = ({
 							type="button"
 							className="btn btn-sm btn-warning"
 							disabled={isHandleClickCancelTestPending}
-							onClick={handleClickCancelTest}
+							onClick={handleCancel}
 						>
 							{isHandleClickCancelTestPending && (
 								<span className="loading loading-spinner" />
@@ -81,20 +101,26 @@ const ActionBar = ({
 						</button>
 					</div>
 					{audioEl}
-					<TestCutDown timeLeft={timeLeft} />
 				</div>
 			) : (
-				<div className="flex gap-8 items-center">
+				<div className="flex gap-2 items-center justify-center flex-wrap">
 					<button
 						type="button"
 						disabled={isHandleClickStartTestPending}
 						className="btn btn-sm btn-secondary"
-						onClick={handleClickStartTest}
+						onClick={handleStart}
 					>
 						{isHandleClickStartTestPending && (
 							<span className="loading loading-spinner" />
 						)}
 						开始测试
+					</button>
+					<button
+						className="btn btn-sm btn-primary"
+						type="button"
+						onClick={onReset}
+					>
+						reset
 					</button>
 					{audioEl}
 				</div>

@@ -84,7 +84,7 @@ export default async function Layout({
 					<Link
 						key={href}
 						href={href}
-						className={clsx("tab", {
+						className={clsx("tab mobile:h-auto mobile:py-6", {
 							"tab-active": tool === title,
 						})}
 					>

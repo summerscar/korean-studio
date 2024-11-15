@@ -1,5 +1,5 @@
 import { keystoneContext } from "@/../keystone/context";
-import { isTestStart } from "@/actions/topik-actions";
+import { isTestStart, updateTopikItemAction } from "@/actions/topik-actions";
 import { TopikLevels, type TopikQuestion } from "@/types";
 import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
@@ -56,6 +56,10 @@ export default async function NoPage(props: {
 			<QuestionCard
 				topikQuestions={topikQuestions}
 				level={level}
+				onUpdateQuestionItem={updateTopikItemAction.bind(
+					null,
+					getTopikListByLevelAndNoKey(level, no),
+				)}
 				no={no}
 				timeLeft={timeLeft}
 				isTesting={isTesting}

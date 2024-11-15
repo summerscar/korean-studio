@@ -16,13 +16,7 @@ const I18nSwitcher = ({ defaultLocale }: { defaultLocale: SITES_LANGUAGE }) => {
 	const [locale, setLocale] = useState<string>(defaultLocale);
 
 	useMount(async () => {
-		const acceptLanguage = window.navigator.languages.find(
-			(locale) => locale in mapForLocale,
-		);
-		const newLocale =
-			(await getI18nFromCookie()) || acceptLanguage || DEFAULT_SITE_LANGUAGE;
-		setLocale(newLocale);
-		await setI18nToCookie(newLocale);
+		await setI18nToCookie(locale);
 	});
 
 	const handleChangeLocale = (newLocale: string) => async () => {

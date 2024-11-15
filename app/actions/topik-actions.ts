@@ -1,7 +1,10 @@
 "use server";
+import { KSwithSession, keystoneContext } from "@/../keystone/context";
 import { DEFAULT_COOKIE_CONFIG } from "@/utils/config";
+import { auth } from "auth";
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
-import type { TopikLevelType } from ".keystone/types";
+import type { TopikLevelType, TopikUpdateInput } from ".keystone/types";
 
 const TopikTestStatusKey = "topik-test-status";
 
@@ -43,4 +46,23 @@ const isTestStart = async (level: TopikLevelType, no: string) => {
 	return { isStart: false, timeLeft: 0 };
 };
 
-export { startTestAction, cancelTestAction, isTestStart };
+const updateTopikItemAction = async (
+	refreshKey: string,
+	id: string,
+	data: TopikUpdateInput,
+) => {
+	const session = await auth();
+	const ctx = KSwithSession(session);
+	await ctx.db.Topik.updateOne({
+		where: { id },
+		data,
+	});
+	revalidateTag(refreshKey);
+};
+
+export {
+	startTestAction,
+	cancelTestAction,
+	isTestStart,
+	updateTopikItemAction,
+};

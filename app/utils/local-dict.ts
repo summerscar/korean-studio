@@ -3,23 +3,6 @@ import { downloadFile } from "./download-file";
 import { importJSONFile } from "./import-json-file";
 const LOCAL_DICT_KEY = "localDict";
 
-const WORD_EXAMPLE = {
-	name: "하늘",
-	trans: {
-		en: ["Sky", "Heaven", "God"],
-		"zh-CN": ["天空", "天堂", "上帝"],
-		"zh-TW": ["天空", "天堂", "上帝"],
-		ja: ["空", "天", "上帝"],
-	},
-	example: "하늘을 바라보세요.",
-	exTrans: {
-		en: ["Look at the sky."],
-		"zh-CN": ["仰望天空。"],
-		"zh-TW": ["仰望天空。"],
-		ja: ["空を見てください。"],
-	},
-};
-
 const setLocalDict = (dictItem: DictItem[]) => {
 	localStorage.setItem(LOCAL_DICT_KEY, JSON.stringify(dictItem));
 };
@@ -81,5 +64,4 @@ export {
 	importLocalDict,
 	downLoadLocalDict,
 	LOCAL_DICT_KEY,
-	WORD_EXAMPLE,
 };

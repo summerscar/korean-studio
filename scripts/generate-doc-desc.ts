@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { _listAllDocs as _listAllDocsByLevel } from "@/utils/list-docs";
+import { generateDocDescription } from "@/utils/prompts";
 import { flattenAllDocs, insertOrUpdateFrontmatterKey } from "./list-all-docs";
 import { fetchChatCompletion, sequentialChatCompletion } from "./open-ai";
 
@@ -33,8 +34,7 @@ import { fetchChatCompletion, sequentialChatCompletion } from "./open-ai";
 				await fetchChatCompletion([
 					{
 						role: "user",
-						content:
-							"我将发你一份韩语学习相关教程，你将总结这份教程，生成的描述，控制在20-100个字。",
+						content: generateDocDescription(),
 					},
 					{
 						role: "user",

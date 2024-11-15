@@ -1,6 +1,7 @@
 import { write, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Levels } from "@/types";
+import { generateDocPrompt } from "@/utils/prompts";
 import { fetchChatCompletion, sequentialChatCompletion } from "./open-ai";
 
 const frontmatterTemplate = (title: string) => `---
@@ -10,26 +11,6 @@ description:
 date: ${new Date().toISOString()}
 tags:
 ---\n`;
-
-const promptTemplate = (title: string) => `
-我要编写韩文语法的说明文档，现有语法 【${title}】,参照以下规则。
-例句给出含义注释即可，不需要标出发音。
-辅音、元音的说法请用子音、母音代替。
-句型 部分的说明尽量简洁。
-例子部分 给出的韩文句子请使用 <Speak></Speak> 标签包裹。
-参考如下的 Markdown 格式文本，请以 Markdown 格式给出该韩文语法的说明文档。
-# ${title}
-## 句型
-[根据所接续的不同词性，如何接续？如何活用？分别列出。]
-## 含义
-[该语法的含义，尽可能多的列出不同情况下的含义]
-## 例子
-[对应所列出的不同含义，分别给出3个例子，每个例子都有对应的注释]
-## 注意
-[该语法使用时的注意事项，与其他类似语法的区别，尽可能多的列出]
-## 类似语法
-[该语法与其他类似语法的区别，尽可能多的列出]
-`;
 
 const generateDoc = async (title: string) => {
 	console.log(
@@ -54,7 +35,7 @@ const generateDoc = async (title: string) => {
 	const gptContent = await fetchChatCompletion([
 		{
 			role: "user",
-			content: promptTemplate(title),
+			content: generateDocPrompt(title),
 		},
 	]);
 

@@ -175,8 +175,18 @@ const DictMenu = ({
 					onClick={onShuffle}
 				/>
 				<div className="dropdown dropdown-hover">
-					<SettingIcon width={20} height={20} viewBox="0 0 24 24" />
-					<div className="dropdown-content !cursor-auto bg-base-100 rounded-box z-[1] w-44 p-4 shadow flex flex-col gap-3">
+					<SettingIcon
+						tabIndex={0}
+						role="button"
+						width={20}
+						height={20}
+						viewBox="0 0 24 24"
+					/>
+					<div
+						/* biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation> */
+						tabIndex={0}
+						className="dropdown-content !cursor-auto bg-base-100 rounded-box z-[1] w-44 p-4 shadow flex flex-col gap-3"
+					>
 						<div className="flex justify-between items-center gap-2">
 							<label htmlFor="muteAudio" className="cursor-pointer flex-auto">
 								{tHome("enableAudio")}

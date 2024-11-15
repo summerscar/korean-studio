@@ -33,10 +33,19 @@ const I18nSwitcher = ({ defaultLocale }: { defaultLocale: SITES_LANGUAGE }) => {
 
 	return (
 		<div className="dropdown dropdown-hover dropdown-top">
-			<div className="btn btn-ghost btn-xs text-lg leading-4">
+			<div
+				tabIndex={0}
+				/* biome-ignore lint/a11y/useSemanticElements: <explanation> */
+				role="button"
+				className="btn btn-ghost btn-xs text-lg leading-4"
+			>
 				{mapForLocale[locale]}
 			</div>
-			<ul className="dropdown-content menu bg-base-100 rounded-box z-[1] p-2 shadow">
+			<ul
+				/* biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation> */
+				tabIndex={0}
+				className="dropdown-content menu bg-base-100 rounded-box z-[1] p-2 shadow"
+			>
 				{Object.keys(mapForLocale).map((key) => (
 					<li key={key}>
 						<a

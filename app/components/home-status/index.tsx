@@ -447,7 +447,10 @@ const HomeStatus = ({
 			</div>
 			{/* 额外翻译 */}
 			{setting.additionalMeaning && (
-				<HideText hide={!setting.showMeaning} className="mb-3 -mt-1.5 block">
+				<HideText
+					hide={!setting.showMeaning}
+					className="mb-3 -mt-1.5 block mobile:max-w-[90vw]"
+				>
 					<div className="flex flex-row gap-3">
 						{Object.values(SITES_LANGUAGE)
 							.filter((lang) => lang !== locale)
@@ -455,7 +458,7 @@ const HomeStatus = ({
 								<span
 									key={lang}
 									data-lang={lang}
-									className="text-xs text-gray-500/80"
+									className="text-xs text-gray-500/80 text-center"
 								>
 									{wordTranslations?.[lang] || wordTranslations?.en}
 								</span>

@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import type { headerConfig } from "..";
+import { CleanCache } from "./clean-cache";
 
 const MobileMenu = ({
 	links,
@@ -72,6 +73,7 @@ const MobileMenu = ({
 						{tHeader("signIn")}
 					</div>
 				)}
+				<CleanCache session={session} />
 			</div>
 		</>
 	);

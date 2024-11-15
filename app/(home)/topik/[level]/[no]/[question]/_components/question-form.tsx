@@ -1,5 +1,4 @@
 "use client";
-import { checkAnswer } from "@/actions/check-answer";
 import { createSuccessToast } from "@/hooks/use-toast";
 import type { TopikQuestion } from "@/types";
 import { useRouter } from "next/navigation";
@@ -14,7 +13,23 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 	const [errors, setErrors] = useState("");
 	const [showExplanation, setShowExplanation] = useState(false);
 
-	const handleSubmit = checkAnswer.bind(null, topikQuestion);
+	const handleSubmit = async (formData: FormData) => {
+		const selectedOption = formData.get("options") as string;
+		const correctOptionIndex = topikQuestion.options.findIndex(
+			(option) => option.isCorrect,
+		);
+		if (!selectedOption) {
+			return {
+				errors: "Please select an option",
+			};
+		}
+		if (correctOptionIndex !== Number(selectedOption)) {
+			return {
+				errors: "Incorrect",
+			};
+		}
+	};
+
 	const nextNextQuestion = () => {
 		router.push(
 			`/topik/${topikQuestion.level}/${topikQuestion.no}/${Number(topikQuestion.questionNumber) + 1}`,

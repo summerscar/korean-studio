@@ -1,13 +1,14 @@
-import { getI18nFromCookie } from "@/actions/check-i18n";
 import { getThemeFromCookie } from "@/actions/check-theme";
 import { Themes } from "@/types";
-import { DEFAULT_SITE_LANGUAGE } from "@/utils/config";
+import type { SITES_LANGUAGE } from "@/types/site";
+import { getLocale } from "next-intl/server";
 import { I18nSwitcher } from "./i18n-switcher";
 import { ThemeSwitcher } from "./theme-switcher";
 
 const Footer = async () => {
-	const defaultLocale = (await getI18nFromCookie()) || DEFAULT_SITE_LANGUAGE;
 	const defaultTheme = (await getThemeFromCookie()) || Themes.Light;
+	const locale = await getLocale();
+
 	return (
 		<footer className="footer backdrop-blur-lg bg-slate-300/10 text-base-content items-center border-t border-slate-900/10 p-4">
 			<aside className="grid-flow-col items-center">
@@ -26,7 +27,7 @@ const Footer = async () => {
 				<p>Copyright © {new Date().getFullYear()} - All right reserved</p>
 			</aside>
 			<nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-				<I18nSwitcher defaultLocale={defaultLocale} />
+				<I18nSwitcher defaultLocale={locale as SITES_LANGUAGE} />
 				<ThemeSwitcher defaultTheme={defaultTheme} />
 				<a href="mailto:summerscar1996@gmail.com">
 					{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}

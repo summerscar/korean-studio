@@ -81,11 +81,7 @@ const ActionBar = ({
 								submit
 							</button>
 						)}
-						<button
-							className="btn btn-sm btn-primary"
-							type="button"
-							onClick={onReset}
-						>
+						<button className="btn btn-sm" type="button" onClick={onReset}>
 							reset
 						</button>
 						<button
@@ -115,11 +111,7 @@ const ActionBar = ({
 						)}
 						开始测试
 					</button>
-					<button
-						className="btn btn-sm btn-primary"
-						type="button"
-						onClick={onReset}
-					>
+					<button className="btn btn-sm" type="button" onClick={onReset}>
 						reset
 					</button>
 					{audioEl}

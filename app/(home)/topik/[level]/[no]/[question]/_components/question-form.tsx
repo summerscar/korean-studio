@@ -1,6 +1,7 @@
 "use client";
 import { createSuccessToast } from "@/hooks/use-toast";
 import type { TopikQuestion } from "@/types";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
@@ -16,6 +17,7 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 	const router = useRouter();
 	const [errors, setErrors] = useState("");
 	const [showExplanation, setShowExplanation] = useState(false);
+	const tTopik = useTranslations("Topik");
 
 	const handleSubmit = async (formData: FormData) => {
 		const selectedOption = formData.get("options") as string;
@@ -24,12 +26,12 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 		);
 		if (!selectedOption) {
 			return {
-				errors: "Please select an option",
+				errors: tTopik("unSelectedTips"),
 			};
 		}
 		if (correctOptionIndex !== Number(selectedOption)) {
 			return {
-				errors: "Incorrect",
+				errors: tTopik("incorrect"),
 			};
 		}
 	};
@@ -54,7 +56,7 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 				{topikQuestion.questionNumber}
 			</div>
 			{getQuestionStem(topikQuestion.questionStem)}
-			<h2 className="text-xl">{topikQuestion.questionContent}</h2>
+			<h2>{topikQuestion.questionContent}</h2>
 			<form
 				action={async (formData) => {
 					const result = await handleSubmit(formData);
@@ -62,7 +64,7 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 						setErrors(result.errors);
 					} else {
 						setErrors("");
-						createSuccessToast("Next question.");
+						createSuccessToast(`🎉 ${tTopik("next")}!`);
 						nextQuestion();
 					}
 				}}
@@ -84,36 +86,40 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 				))}
 				<div className="flex gap-2">
 					<button className="btn btn-sm mt-4" type="submit">
-						提交
+						{tTopik("submit")}
 					</button>
 					<button
 						className="btn btn-sm mt-4"
 						type="button"
 						onClick={handleShowExplanation}
 					>
-						解析
+						{tTopik("explain")}
 					</button>
 					<button
 						className="btn btn-sm mt-4"
 						type="button"
 						onClick={prevQuestion}
 					>
-						上一题
+						{tTopik("prev")}
 					</button>
 					<button
 						className="btn btn-sm mt-4"
 						type="button"
 						onClick={nextQuestion}
 					>
-						下一题
+						{tTopik("next")}
 					</button>
 				</div>
 			</form>
 			{errors && <div className="text-red-500">{errors}</div>}
 			{showExplanation && (
 				<div>
-					<p>答案： {getAnswerOptions(topikQuestion)}.</p>
-					<p>解析：{topikQuestion.explanation}</p>
+					<p>
+						{tTopik("answer")}: {getAnswerOptions(topikQuestion)}.
+					</p>
+					<p>
+						{tTopik("explain")}: {topikQuestion.explanation}
+					</p>
 				</div>
 			)}
 		</>

@@ -3,6 +3,10 @@ import { createSuccessToast } from "@/hooks/use-toast";
 import type { TopikQuestion } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {
+	getOptionContent,
+	getQuestionStem,
+} from "../../_components/question-card";
 
 export const getAnswerOptions = (topikQuestion: TopikQuestion) => {
 	return topikQuestion.options.findIndex((option) => option.isCorrect) + 1;
@@ -30,7 +34,12 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 		}
 	};
 
-	const nextNextQuestion = () => {
+	const prevQuestion = () => {
+		router.push(
+			`/topik/${topikQuestion.level}/${topikQuestion.no}/${Number(topikQuestion.questionNumber) - 1}`,
+		);
+	};
+	const nextQuestion = () => {
 		router.push(
 			`/topik/${topikQuestion.level}/${topikQuestion.no}/${Number(topikQuestion.questionNumber) + 1}`,
 		);
@@ -44,13 +53,7 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 				{topikQuestion.year}년 제{topikQuestion.no}회 - 문제{" "}
 				{topikQuestion.questionNumber}
 			</div>
-			<h1
-				className="text-xl whitespace-pre-line"
-				// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-				dangerouslySetInnerHTML={{
-					__html: topikQuestion.questionStem.replace(/\\n/g, "&#10;"),
-				}}
-			/>
+			{getQuestionStem(topikQuestion.questionStem)}
 			<h2 className="text-xl">{topikQuestion.questionContent}</h2>
 			<form
 				action={async (formData) => {
@@ -59,8 +62,8 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 						setErrors(result.errors);
 					} else {
 						setErrors("");
-						createSuccessToast("Success! Next question.");
-						nextNextQuestion();
+						createSuccessToast("Next question.");
+						nextQuestion();
 					}
 				}}
 			>
@@ -75,7 +78,7 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 						/>
 						<span> </span>
 						<label htmlFor={index.toString()}>
-							{index + 1}. {option.content}
+							{index + 1}. {getOptionContent(option.content)}
 						</label>
 					</div>
 				))}
@@ -93,7 +96,14 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 					<button
 						className="btn btn-sm mt-4"
 						type="button"
-						onClick={nextNextQuestion}
+						onClick={prevQuestion}
+					>
+						上一题
+					</button>
+					<button
+						className="btn btn-sm mt-4"
+						type="button"
+						onClick={nextQuestion}
 					>
 						下一题
 					</button>

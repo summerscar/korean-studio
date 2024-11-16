@@ -20,6 +20,41 @@ export type FormResult = {
 	score: number;
 }[];
 
+export const getOptionContent = (content: string) => {
+	if (content.match(/\.(jpg|jpeg|png|gif|bmp|svg)$/i)) {
+		return (
+			<img
+				src={`${process.env.NEXT_PUBLIC_BLOB_BASE_URL}${content}`}
+				className="w-52 object-contain"
+				alt="option"
+			/>
+		);
+	}
+	return content;
+};
+
+export const getQuestionStem = (questionStem: string) => {
+	if (!questionStem) return;
+	if (questionStem.match(/\.(jpg|jpeg|png|gif|bmp|svg)$/i)) {
+		return (
+			<img
+				src={`${process.env.NEXT_PUBLIC_BLOB_BASE_URL}${questionStem}`}
+				className="h-80 object-contain"
+				alt="option"
+			/>
+		);
+	}
+	return (
+		<p
+			className="whitespace-pre-line p-3 mb-2 rounded-sm border border-base-content"
+			// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+			dangerouslySetInnerHTML={{
+				__html: questionStem.replace(/\\n/g, "&#10;"),
+			}}
+		/>
+	);
+};
+
 const QuestionCard = ({
 	topikQuestions,
 	level,
@@ -108,18 +143,8 @@ const QuestionCard = ({
 								/>
 							)}
 							{topikQuestion.questionType !== "LISTENING" &&
-								topikQuestion.questionStem && (
-									<p
-										className="whitespace-pre-line p-3 mb-2 rounded-sm border border-base-content"
-										// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-										dangerouslySetInnerHTML={{
-											__html: topikQuestion.questionStem.replace(
-												/\\n/g,
-												"&#10;",
-											),
-										}}
-									/>
-								)}
+								topikQuestion.questionStem &&
+								getQuestionStem(topikQuestion.questionStem)}
 							<div className="mb-2 relative">
 								{isAdmin && (
 									<div className="absolute -left-8 top-0">
@@ -133,6 +158,9 @@ const QuestionCard = ({
 													explanation: topikQuestion.explanation,
 													questionStem: topikQuestion.questionStem,
 													options: topikQuestion.options,
+													audioURL: topikQuestion.audioURL,
+													score: topikQuestion.score,
+													questionType: topikQuestion.questionType,
 												});
 											}}
 										>
@@ -141,6 +169,7 @@ const QuestionCard = ({
 									</div>
 								)}
 								<Link
+									target="_blank"
 									className="hover:underline font-bold"
 									href={`/topik/${level}/${no}/${topikQuestion.questionNumber}`}
 								>
@@ -180,10 +209,12 @@ const QuestionCard = ({
 											/>
 											<span> </span>
 											<label
-												className="cursor-pointer"
+												className={clsx(
+													isTesting && !isEnd && "cursor-pointer",
+												)}
 												htmlFor={`${radioId}-${index}`}
 											>
-												{index + 1}. {option.content}
+												{index + 1}. {getOptionContent(option.content)}
 											</label>
 										</div>
 									);
@@ -206,7 +237,7 @@ const QuestionCard = ({
 					no={no}
 					isTesting={isTesting}
 					timeLeft={timeLeft}
-					audioURL={topikQuestions[0].audioURL}
+					audioURL={`${process.env.NEXT_PUBLIC_BLOB_BASE_URL}${topikQuestions[0].audioURL}`}
 					isEnd={isEnd}
 				/>
 			</AnswerPanel>

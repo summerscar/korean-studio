@@ -421,7 +421,7 @@ const HomeStatus = ({
 					{displayName}
 					<div
 						className={clsx(
-							"absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%] z-[1]",
+							"flex absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%] z-[1]",
 							!isTouchable && "tooltip tooltip-top",
 						)}
 						data-tip={`${romanized} [${standardized}]`}
@@ -487,7 +487,7 @@ const HomeStatus = ({
 				{qwerty && (
 					<div
 						className={clsx(
-							"absolute -right-9 top-1/2 -translate-x-1/2 -translate-y-1/2",
+							"absolute -right-9 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[1]",
 							!isTouchable && "tooltip tooltip-top",
 						)}
 						data-tip={qwerty}

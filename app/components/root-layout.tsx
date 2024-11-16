@@ -2,6 +2,7 @@ import "github-markdown-css";
 import "@/styles/globals.css";
 import { getThemeFromCookie } from "@/actions/check-theme";
 import { ModalRoot } from "@/components/modal";
+import { NotificationProvider } from "@/components/notification-provider";
 import { VConsole } from "@/components/vconsole";
 import { Themes } from "@/types";
 import { isDev, isProd } from "@/utils/is-dev";
@@ -40,11 +41,12 @@ export async function DefaultLayout({
 				<div id="bg" />
 				<SessionProvider>
 					<NextIntlClientProvider messages={messages}>
-						<main className="flex min-h-dvh flex-col">{children}</main>
-						<ModalRoot />
+						<NotificationProvider>
+							<main className="flex min-h-dvh flex-col">{children}</main>
+							<ModalRoot />
+						</NotificationProvider>
 					</NextIntlClientProvider>
 				</SessionProvider>
-				{/* {isDev && <CacheToolbar />} */}
 				{isDev && <VConsole />}
 				{isProd && <SpeedInsights />}
 				{isProd && <Analytics />}

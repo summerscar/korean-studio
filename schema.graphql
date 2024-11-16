@@ -132,6 +132,75 @@ input UserCreateInput {
   createdAt: DateTime
 }
 
+type PushSubscription {
+  id: ID!
+  endpoint: String
+  expirationTime: DateTime
+  keys: JSON
+  user: User
+  createdAt: DateTime
+  lastUsed: DateTime
+}
+
+input PushSubscriptionWhereUniqueInput {
+  id: ID
+  endpoint: String
+}
+
+input PushSubscriptionWhereInput {
+  AND: [PushSubscriptionWhereInput!]
+  OR: [PushSubscriptionWhereInput!]
+  NOT: [PushSubscriptionWhereInput!]
+  id: IDFilter
+  endpoint: StringFilter
+  expirationTime: DateTimeNullableFilter
+  user: UserWhereInput
+  createdAt: DateTimeNullableFilter
+  lastUsed: DateTimeNullableFilter
+}
+
+input PushSubscriptionOrderByInput {
+  id: OrderDirection
+  endpoint: OrderDirection
+  expirationTime: OrderDirection
+  createdAt: OrderDirection
+  lastUsed: OrderDirection
+}
+
+input PushSubscriptionUpdateInput {
+  endpoint: String
+  expirationTime: DateTime
+  keys: JSON
+  user: UserRelateToOneForUpdateInput
+  createdAt: DateTime
+  lastUsed: DateTime
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input PushSubscriptionUpdateArgs {
+  where: PushSubscriptionWhereUniqueInput!
+  data: PushSubscriptionUpdateInput!
+}
+
+input PushSubscriptionCreateInput {
+  endpoint: String
+  expirationTime: DateTime
+  keys: JSON
+  user: UserRelateToOneForCreateInput
+  createdAt: DateTime
+  lastUsed: DateTime
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
 type Topik {
   id: ID!
   no: Int
@@ -345,12 +414,6 @@ input DictUpdateInput {
   list: DictItemRelateToManyForUpdateInput
 }
 
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
 input DictItemRelateToManyForUpdateInput {
   disconnect: [DictItemWhereUniqueInput!]
   set: [DictItemWhereUniqueInput!]
@@ -370,11 +433,6 @@ input DictCreateInput {
   createdAt: DateTime
   createdBy: UserRelateToOneForCreateInput
   list: DictItemRelateToManyForCreateInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 input DictItemRelateToManyForCreateInput {
@@ -472,6 +530,12 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
+  createPushSubscription(data: PushSubscriptionCreateInput!): PushSubscription
+  createPushSubscriptions(data: [PushSubscriptionCreateInput!]!): [PushSubscription]
+  updatePushSubscription(where: PushSubscriptionWhereUniqueInput!, data: PushSubscriptionUpdateInput!): PushSubscription
+  updatePushSubscriptions(data: [PushSubscriptionUpdateArgs!]!): [PushSubscription]
+  deletePushSubscription(where: PushSubscriptionWhereUniqueInput!): PushSubscription
+  deletePushSubscriptions(where: [PushSubscriptionWhereUniqueInput!]!): [PushSubscription]
   createTopik(data: TopikCreateInput!): Topik
   createTopiks(data: [TopikCreateInput!]!): [Topik]
   updateTopik(where: TopikWhereUniqueInput!, data: TopikUpdateInput!): Topik
@@ -516,6 +580,9 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int
+  pushSubscription(where: PushSubscriptionWhereUniqueInput!): PushSubscription
+  pushSubscriptions(where: PushSubscriptionWhereInput! = {}, orderBy: [PushSubscriptionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PushSubscriptionWhereUniqueInput): [PushSubscription!]
+  pushSubscriptionsCount(where: PushSubscriptionWhereInput! = {}): Int
   topik(where: TopikWhereUniqueInput!): Topik
   topiks(where: TopikWhereInput! = {}, orderBy: [TopikOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopikWhereUniqueInput): [Topik!]
   topiksCount(where: TopikWhereInput! = {}): Int

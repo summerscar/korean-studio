@@ -13,14 +13,28 @@ generator client {
 }
 
 model User {
-  id                      String     @id @default(cuid())
-  name                    String     @default("")
-  email                   String     @unique @default("")
-  password                String?
-  isAdmin                 Boolean    @default(false)
-  createdAt               DateTime?  @default(now())
-  from_Dict_createdBy     Dict[]     @relation("Dict_createdBy")
-  from_DictItem_createdBy DictItem[] @relation("DictItem_createdBy")
+  id                         String             @id @default(cuid())
+  name                       String             @default("")
+  email                      String             @unique @default("")
+  password                   String?
+  isAdmin                    Boolean            @default(false)
+  createdAt                  DateTime?          @default(now())
+  from_PushSubscription_user PushSubscription[] @relation("PushSubscription_user")
+  from_Dict_createdBy        Dict[]             @relation("Dict_createdBy")
+  from_DictItem_createdBy    DictItem[]         @relation("DictItem_createdBy")
+}
+
+model PushSubscription {
+  id             String    @id @default(cuid())
+  endpoint       String    @unique @default("")
+  expirationTime DateTime?
+  keys           Json?     @default("{\"p256dh\":\"\",\"auth\":\"\"}")
+  user           User?     @relation("PushSubscription_user", fields: [userId], references: [id])
+  userId         String?   @map("user")
+  createdAt      DateTime? @default(now())
+  lastUsed       DateTime? @default(now())
+
+  @@index([userId])
 }
 
 model Topik {

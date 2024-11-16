@@ -101,6 +101,22 @@ export const lists = {
 			}),
 		},
 	}),
+	PushSubscription: list({
+		access: allowAll,
+		fields: {
+			endpoint: text({ validation: { isRequired: true }, isIndexed: "unique" }),
+			expirationTime: timestamp({ validation: { isRequired: false } }),
+			keys: json({
+				defaultValue: {
+					p256dh: "",
+					auth: "",
+				},
+			}),
+			user: relationship({ ref: "User", many: false }),
+			createdAt: timestamp({ defaultValue: { kind: "now" } }),
+			lastUsed: timestamp({ defaultValue: { kind: "now" } }),
+		},
+	}),
 	Topik: list({
 		access: allowAll,
 		fields: {

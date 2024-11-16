@@ -58,7 +58,6 @@ const DocsCategory = async ({ level }: Pick<DocPathParams, "level">) => {
 			<ul className="menu peer-checked:mobile:h-[calc(65vh-var(--header-height))] peer-checked:py-2 peer-checked:overflow-auto mobile:py-0 mobile:h-0 mobile:flex-nowrap mobile:transition-all mobile:duration-500 mobile:overflow-hidden">
 				<li>
 					<CategoryActiveClient className="flex" href={`/learn/${level}`}>
-						{/* TODO: i18n */}
 						介绍
 					</CategoryActiveClient>
 				</li>

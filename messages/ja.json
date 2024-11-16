@@ -50,7 +50,10 @@
 		"removeError": "削除に失敗しました。もう一度お試しください。",
 		"createNewDict": "新しい単語リストを作成",
 		"removeWordList": "単語リストを削除",
-		"removeWord": "単語を削除"
+		"removeWord": "単語を削除",
+		"updating": "更新中...",
+		"updated": "更新に成功しました!",
+		"updateError": "更新に失敗しました。もう一度お試しください。"
 	},
 	"Dict": {
 		"popular": "トレンド用語",
@@ -80,5 +83,19 @@
 		"assembleDescription": "韓文字列を韓文字母と文字の組み合わせに変換する",
 		"disassemble": "韓文字分解",
 		"disassembleDescription": "韓文字列を韓文字母と文字の分解に変換する"
+	},
+	"Topik": {
+		"startTest": "テスト開始",
+		"cancelTest": "テストをキャンセル",
+		"reset": "リセット",
+		"submit": "提出",
+		"answer": "答え",
+		"explain": "解説",
+		"next": "次へ",
+		"prev": "前へ",
+		"score": "点数",
+		"correct": "正解",
+		"incorrect": "不正解",
+		"unSelectedTips": "選択してください"
 	}
 }

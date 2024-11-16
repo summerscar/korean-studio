@@ -50,7 +50,10 @@
 		"removeError": "删除失败，请重试。",
 		"createNewDict": "新建词单",
 		"removeWordList": "删除词单",
-		"removeWord": "删除单词"
+		"removeWord": "删除单词",
+		"updating": "更新中...",
+		"updated": "更新成功!",
+		"updateError": "更新失败，请重试。"
 	},
 	"Dict": {
 		"popular": "热门词汇",
@@ -80,5 +83,19 @@
 		"assembleDescription": "将韩文字母和文字按照韩文规则合成",
 		"disassemble": "文字拆分",
 		"disassembleDescription": "将韩文字符串拆分为韩文字母"
+	},
+	"Topik": {
+		"startTest": "开始测试",
+		"cancelTest": "取消测试",
+		"reset": "重置",
+		"submit": "提交",
+		"answer": "答案",
+		"explain": "解释",
+		"next": "下一题",
+		"prev": "上一题",
+		"score": "得分",
+		"correct": "正确",
+		"incorrect": "错误",
+		"unSelectedTips": "请选择一个选项"
 	}
 }

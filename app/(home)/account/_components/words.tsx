@@ -53,16 +53,13 @@ const WordsList = ({
 		if (!editing) return;
 		let cancel: () => void = () => {};
 		try {
-			// TODO: intl
-			cancel = createLoadingToast("updating");
+			cancel = createLoadingToast(tHome("updating"));
 			await updateDictItemAction(dictInfo!.id, editing.id!, data);
 			await onUpdate?.();
-			// TODO: intl
-			createSuccessToast("updated");
+			createSuccessToast(tHome("updated"));
 		} catch (error) {
 			console.error("[updateDictItem][error]:", error);
-			// TODO: intl
-			createErrorToast("updateError");
+			createErrorToast(tHome("updateError"));
 		} finally {
 			cancel();
 			setEditing(undefined);
@@ -70,12 +67,10 @@ const WordsList = ({
 	};
 
 	const updateDict = async (data: DictUpdateInput) => {
-		// TODO: intl
-		const cancel = createLoadingToast("updating");
+		const cancel = createLoadingToast(tHome("updating"));
 		await updateDictAction(dictInfo!.id, data);
 		cancel();
-		// TODO: intl
-		createSuccessToast("updated");
+		createSuccessToast(tHome("updated"));
 	};
 
 	const handleAdd = async () => {

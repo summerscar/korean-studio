@@ -3,6 +3,7 @@ import { startTestAction } from "@/actions/topik-actions";
 import { cancelTestAction } from "@/actions/topik-actions";
 import { useServerActionState } from "@/hooks/use-server-action-state";
 import { serverActionTimeOut, timeOut } from "@/utils/time-out";
+import { useTranslations } from "next-intl";
 import { TestCutDown } from "./count-down";
 import type { TopikLevelType } from ".keystone/types";
 
@@ -25,6 +26,7 @@ const ActionBar = ({
 	audioURL?: string;
 	isEnd?: boolean;
 }) => {
+	const tTopik = useTranslations("Topik");
 	const [isHandleClickStartTestPending, handleClickStartTest] =
 		useServerActionState(async () => {
 			await startTestAction(level, no);
@@ -78,11 +80,11 @@ const ActionBar = ({
 								type="button"
 								onClick={handleSubmit}
 							>
-								submit
+								{tTopik("submit")}
 							</button>
 						)}
 						<button className="btn btn-sm" type="button" onClick={onReset}>
-							reset
+							{tTopik("reset")}
 						</button>
 						<button
 							type="button"
@@ -93,7 +95,7 @@ const ActionBar = ({
 							{isHandleClickCancelTestPending && (
 								<span className="loading loading-spinner" />
 							)}
-							取消测试
+							{tTopik("cancelTest")}
 						</button>
 					</div>
 					{audioEl}
@@ -109,10 +111,10 @@ const ActionBar = ({
 						{isHandleClickStartTestPending && (
 							<span className="loading loading-spinner" />
 						)}
-						开始测试
+						{tTopik("startTest")}
 					</button>
 					<button className="btn btn-sm" type="button" onClick={onReset}>
-						reset
+						{tTopik("reset")}
 					</button>
 					{audioEl}
 				</div>

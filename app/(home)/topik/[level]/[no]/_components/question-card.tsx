@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ActionBar } from "./action-bar";
 import { AnswerPanel } from "./answer-panel";
+import { guide } from "./question-guide";
 import type { TopikLevelType, TopikUpdateInput } from ".keystone/types";
 
 export type FormResult = {
@@ -39,7 +40,7 @@ export const getQuestionStem = (questionStem: string) => {
 		return (
 			<img
 				src={`${process.env.NEXT_PUBLIC_BLOB_BASE_URL}${questionStem}`}
-				className="h-80 object-contain"
+				className="w-full sm:h-80 object-contain"
 				alt="option"
 			/>
 		);
@@ -115,112 +116,125 @@ const QuestionCard = ({
 		<div className="flex items-start mobile:flex-col-reverse">
 			<div className="flex-auto pr-3 pt-8 max-w-3xl">
 				<form ref={formRef}>
-					{topikQuestions.map((topikQuestion) => (
-						<div
-							className="flex flex-col py-4 [scroll-margin-top:var(--header-height)]"
-							id={topikQuestion.questionNumber.toString()}
-							key={topikQuestion.id}
-						>
-							{editing?.questionNumber === topikQuestion.questionNumber && (
-								<JSONEditor
-									editingJSON={editing}
-									onUpdate={async (data: TopikUpdateInput) => {
-										let cancel = () => {};
-										try {
-											cancel = createLoadingToast("updating");
-											await onUpdateQuestionItem(topikQuestion.id, data);
-											createSuccessToast("updated");
-											// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-										} catch (error: any) {
-											createErrorToast(error.message);
-											console.error(error);
-										} finally {
-											cancel();
-											setEditing(null);
-										}
-									}}
-									onCancel={() => setEditing(null)}
-								/>
-							)}
-							{topikQuestion.questionType !== "LISTENING" &&
-								topikQuestion.questionStem &&
-								getQuestionStem(topikQuestion.questionStem)}
-							<div className="mb-2 relative">
-								{isAdmin && (
-									<div className="absolute -left-8 top-0">
-										<button
-											type="button"
-											className="btn btn-circle btn-xs btn-warning"
-											onClick={() => {
-												setEditing({
-													questionNumber: topikQuestion.questionNumber,
-													questionContent: topikQuestion.questionContent,
-													explanation: topikQuestion.explanation,
-													questionStem: topikQuestion.questionStem,
-													options: topikQuestion.options,
-													audioURL: topikQuestion.audioURL,
-													score: topikQuestion.score,
-													questionType: topikQuestion.questionType,
-												});
-											}}
-										>
-											🖋
-										</button>
-									</div>
-								)}
-								<Link
-									target="_blank"
-									className="hover:underline font-bold"
-									href={`/topik/${level}/${no}/${topikQuestion.questionNumber}`}
-								>
-									{topikQuestion.questionNumber}.
-								</Link>
-								<span> </span>
-								{topikQuestion.questionContent}
-							</div>
-							<fieldset
-								id={`no-${topikQuestion.questionNumber}`}
-								className="grid gap-2 grid-cols-1 sm:grid-cols-2"
+					{topikQuestions.map((topikQuestion, questionIndex) => (
+						<div key={topikQuestion.id}>
+							{guide[questionIndex]}
+							<div
+								className="flex flex-col py-4 [scroll-margin-top:var(--header-height)]"
+								id={topikQuestion.questionNumber.toString()}
 							>
-								{topikQuestion.options.map((option, index) => {
-									const radioId = `${topikQuestion.questionNumber - 1}`;
-									return (
-										<div
-											key={`no-${topikQuestion.questionNumber}-${index}`}
-											className={clsx(
-												"rounded-sm",
-												option.isCorrect &&
-													(isAdmin || isEnd) &&
-													"bg-success/50",
-												isEnd &&
-													!option.isCorrect &&
-													formResult?.[topikQuestion.questionNumber - 1]
-														?.answer === index &&
-													"bg-error/50",
-											)}
-										>
-											<input
-												type="radio"
-												className="radio radio-xs radio-secondary"
-												disabled={!isTesting || isEnd}
-												name={radioId}
-												value={index}
-												id={`${radioId}-${index}`}
-											/>
-											<span> </span>
-											<label
-												className={clsx(
-													isTesting && !isEnd && "cursor-pointer",
-												)}
-												htmlFor={`${radioId}-${index}`}
+								{editing?.questionNumber === topikQuestion.questionNumber && (
+									<JSONEditor
+										editingJSON={editing}
+										onUpdate={async (data: TopikUpdateInput) => {
+											let cancel = () => {};
+											try {
+												cancel = createLoadingToast("updating");
+												await onUpdateQuestionItem(topikQuestion.id, data);
+												createSuccessToast("updated");
+												// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+											} catch (error: any) {
+												createErrorToast(error.message);
+												console.error(error);
+											} finally {
+												cancel();
+												setEditing(null);
+											}
+										}}
+										onCancel={() => setEditing(null)}
+									/>
+								)}
+								{topikQuestion.questionType !== "LISTENING" &&
+									topikQuestion.questionStem &&
+									getQuestionStem(topikQuestion.questionStem)}
+								<div className="mb-2 relative">
+									{isAdmin && (
+										<div className="absolute -left-8 top-0">
+											<button
+												type="button"
+												className="btn btn-circle btn-xs btn-warning"
+												onClick={() => {
+													const {
+														questionNumber,
+														questionContent,
+														explanation,
+														questionStem,
+														options,
+														audioURL,
+														score,
+														questionType,
+													} = topikQuestion;
+
+													setEditing({
+														questionNumber,
+														questionContent,
+														explanation,
+														questionStem,
+														options,
+														audioURL,
+														score,
+														questionType,
+													});
+												}}
 											>
-												{index + 1}. {getOptionContent(option.content)}
-											</label>
+												🖋
+											</button>
 										</div>
-									);
-								})}
-							</fieldset>
-							<h4>{topikQuestion.explanation}</h4>
+									)}
+									<Link
+										target="_blank"
+										className="underline font-bold"
+										href={`/topik/${level}/${no}/${topikQuestion.questionNumber}`}
+									>
+										{topikQuestion.questionNumber}.
+									</Link>
+									<span> </span>
+									{topikQuestion.questionContent}
+								</div>
+								<fieldset
+									id={`no-${topikQuestion.questionNumber}`}
+									className="grid gap-2 grid-cols-1 sm:grid-cols-2"
+								>
+									{topikQuestion.options.map((option, index) => {
+										const radioId = `${topikQuestion.questionNumber - 1}`;
+										return (
+											<div
+												key={`no-${topikQuestion.questionNumber}-${index}`}
+												className={clsx(
+													"rounded-sm",
+													option.isCorrect &&
+														(isAdmin || isEnd) &&
+														"bg-success/50",
+													isEnd &&
+														!option.isCorrect &&
+														formResult?.[topikQuestion.questionNumber - 1]
+															?.answer === index &&
+														"bg-error/50",
+												)}
+											>
+												<input
+													type="radio"
+													className="radio radio-xs radio-secondary"
+													disabled={!isTesting || isEnd}
+													name={radioId}
+													value={index}
+													id={`${radioId}-${index}`}
+												/>
+												<span> </span>
+												<label
+													className={clsx(
+														isTesting && !isEnd && "cursor-pointer",
+													)}
+													htmlFor={`${radioId}-${index}`}
+												>
+													{index + 1}. {getOptionContent(option.content)}
+												</label>
+											</div>
+										);
+									})}
+								</fieldset>
+								<h4>{topikQuestion.explanation}</h4>
+							</div>
 						</div>
 					))}
 				</form>

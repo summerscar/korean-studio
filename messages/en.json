@@ -50,7 +50,10 @@
 		"removeError": "Failed to remove. Please try again.",
 		"createNewDict": "Create new",
 		"removeWordList": "Remove Word List",
-		"removeWord": "Remove Word"
+		"removeWord": "Remove Word",
+		"updating": "Updating...",
+		"updated": "Updated successfully!",
+		"updateError": "Failed to update. Please try again."
 	},
 	"Dict": {
 		"popular": "Popular Words",
@@ -80,5 +83,19 @@
 		"assembleDescription": "Assemble Korean text",
 		"disassemble": "Disassemble text",
 		"disassembleDescription": "Disassemble Korean text"
+	},
+	"Topik": {
+		"startTest": "Start Test",
+		"cancelTest": "Cancel Test",
+		"reset": "Reset",
+		"submit": "Submit",
+		"answer": "Answer",
+		"explain": "Explain",
+		"next": "Next",
+		"prev": "Prev",
+		"score": "Score",
+		"correct": "Correct",
+		"incorrect": "Incorrect",
+		"unSelectedTips": "Please select an answer"
 	}
 }

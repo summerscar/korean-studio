@@ -15,13 +15,16 @@ const POST = async (request: Request) => {
 		);
 
 		// 发送通知
-		const notificationResult = await sendNotificationToUser(userId, {
-			title: "单词已添加到生词本",
-			body: `成功添加了 ${words.length} 个单词`,
-			data: {
-				url: `/?dict=${dictId}`,
+		const notificationResult = await sendNotificationToUser(
+			{
+				title: "单词已添加到词单",
+				body: `成功添加了【${words.join(", ")}】单词`,
+				data: {
+					url: `/?dict=${dictId}`,
+				},
 			},
-		});
+			[userId],
+		);
 
 		return new Response(
 			JSON.stringify({

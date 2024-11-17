@@ -12,20 +12,22 @@ export type NotificationPayload = {
 };
 
 export async function sendNotificationToUser(
-	userId: string,
 	payload: NotificationPayload,
+	userIds?: string[],
 ) {
 	try {
 		// 查找用户的推送订阅
 		const subscriptions = await keystoneContext.db.PushSubscription.findMany({
-			where: {
-				user: {
-					id: { equals: userId },
-				},
-				lastUsed: {
-					gt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7天内活跃的订阅
-				},
-			},
+			where: !userIds
+				? {}
+				: {
+						user: {
+							id: { in: userIds },
+						},
+						lastUsed: {
+							gt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7天内活跃的订阅
+						},
+					},
 		});
 
 		if (subscriptions.length === 0) {
@@ -36,7 +38,7 @@ export async function sendNotificationToUser(
 		const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY!;
 
 		webpush.setVapidDetails(
-			"mailto:test@example.com", // 替换为你的联系邮箱
+			"mailto:summerscar1996@gmail.com",
 			vapidPublicKey,
 			vapidPrivateKey,
 		);

@@ -9,7 +9,7 @@ const useNewNotification = (dictId: string) => {
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	const refreshCurrentDict = useMemoizedFn(async (payload: any) => {
 		console.log("[useNewNotification]:", payload);
-		if (payload.data.dictId === dictId) {
+		if (payload?.data?.dictId === dictId) {
 			createToast({ type: "info", message: tHome("newWordDetected") });
 			await refreshDictAction(dictId);
 		}

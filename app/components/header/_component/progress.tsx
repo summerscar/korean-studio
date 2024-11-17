@@ -1,7 +1,8 @@
 "use client";
+import { useUnmount } from "ahooks";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
-
+import { useEffect } from "react";
 const HomeProgressCSSVar = "--home-progress";
 
 const Progress = () => {
@@ -33,10 +34,19 @@ const Progress = () => {
 
 const setProgressCSSVar = (percent: number) => {
 	document.documentElement.style.setProperty(HomeProgressCSSVar, `${percent}`);
-
-	return () => {
-		document.documentElement.style.removeProperty(HomeProgressCSSVar);
-	};
 };
 
-export { Progress, setProgressCSSVar };
+const removeProgressCSSVar = () => {
+	document.documentElement.style.removeProperty(HomeProgressCSSVar);
+};
+
+const useHomeProgress = (percent: number) => {
+	useEffect(() => {
+		setProgressCSSVar(percent);
+	}, [percent]);
+	useUnmount(() => {
+		removeProgressCSSVar();
+	});
+};
+
+export { Progress, useHomeProgress };

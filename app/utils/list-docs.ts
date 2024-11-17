@@ -13,9 +13,9 @@ export interface FileItem extends DirItem {
 	file: string;
 	/** filename */
 	fileName: string;
-	/** /语法形态/filename */
-	relativePath: string;
 	/** /语法形态/filename.md */
+	relativePath: string;
+	/** /语法形态/filename */
 	relativeUrl: string;
 	/** [语法形态,titleName] */
 	relativeReadablePath: string[];

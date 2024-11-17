@@ -21,6 +21,7 @@ const POST = async (request: Request) => {
 				body: `成功添加了【${words.join(", ")}】单词`,
 				data: {
 					url: `/?dict=${dictId}`,
+					dictId,
 				},
 			},
 			[userId],

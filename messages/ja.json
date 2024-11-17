@@ -53,7 +53,8 @@
 		"removeWord": "単語を削除",
 		"updating": "更新中...",
 		"updated": "更新に成功しました!",
-		"updateError": "更新に失敗しました。もう一度お試しください。"
+		"updateError": "更新に失敗しました。もう一度お試しください。",
+		"newWordDetected": "新単語が追加されました。更新中..."
 	},
 	"Dict": {
 		"popular": "トレンド用語",

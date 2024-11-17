@@ -6,10 +6,12 @@ import { toPlainObject } from "@/utils/to-plain-object";
 import { auth } from "auth";
 import { revalidateTag, unstable_cache } from "next/cache";
 import { generateWordsAction } from "./generate-word-action";
-import { createCachedDictList, getDictRevalidateKey } from "./user-dict-utils";
+import {
+	allDictsRevalidateKey,
+	createCachedDictList,
+	getDictRevalidateKey,
+} from "./user-dict-utils";
 import type { DictItemCreateInput, DictUpdateInput } from ".keystone/types";
-
-const allDictsRevalidateKey = "all-dicts";
 
 const getAllDicts = unstable_cache(
 	async () => {
@@ -201,6 +203,10 @@ const removeDictAction = async (dictId: string) => {
 	revalidateTag(getDictRevalidateKey(dictId));
 };
 
+const refreshDictAction = async (dictId: string) => {
+	revalidateTag(getDictRevalidateKey(dictId));
+};
+
 export {
 	createDictAction,
 	createFavListAction,
@@ -214,4 +220,5 @@ export {
 	removeDictItemAction,
 	removeDictAction,
 	importDictItemToUserDict,
+	refreshDictAction,
 };

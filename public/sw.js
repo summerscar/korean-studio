@@ -1,5 +1,14 @@
+// 创建广播频道
+const broadcastChannel = new BroadcastChannel("push-notifications");
+
 self.addEventListener("push", (event) => {
 	const options = event.data.json();
+	// 广播通知数据到所有打开的窗口
+	broadcastChannel.postMessage({
+		type: "PUSH_RECEIVED",
+		payload: options,
+	});
+
 	event.waitUntil(
 		self.registration.showNotification(options.title, {
 			body: options.body,
@@ -14,6 +23,12 @@ self.addEventListener("push", (event) => {
 self.addEventListener("notificationclick", (event) => {
 	event.notification.close();
 	const data = event.notification.data;
+
+	// 广播通知点击事件
+	broadcastChannel.postMessage({
+		type: "NOTIFICATION_CLICKED",
+		payload: data,
+	});
 
 	event.waitUntil(
 		clients.matchAll({ type: "window" }).then((clientList) => {

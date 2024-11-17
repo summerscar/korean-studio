@@ -53,7 +53,8 @@
 		"removeWord": "Remove Word",
 		"updating": "Updating...",
 		"updated": "Updated successfully!",
-		"updateError": "Failed to update. Please try again."
+		"updateError": "Failed to update. Please try again.",
+		"newWordDetected": "New word added. Updating..."
 	},
 	"Dict": {
 		"popular": "Popular Words",

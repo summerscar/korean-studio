@@ -52,6 +52,7 @@ import reactStringReplace from "react-string-replace";
 import { DictNav } from "./dict-nav";
 import { HomeInput } from "./input";
 import { Star } from "./star";
+import { useNewNotification } from "./use-new-notification";
 
 const HomeStatus = ({
 	isLocalDict,
@@ -74,6 +75,7 @@ const HomeStatus = ({
 	const [isInputFocused, setIsInputFocused] = useState(false);
 	const playExampleRef = useRef(() => {});
 	const { isTouchable } = useDevice();
+	useNewNotification(dictId);
 	const [setting, setSetting] = useState<HomeSetting>({
 		autoVoice: false,
 		showMeaning: true,

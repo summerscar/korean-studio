@@ -53,7 +53,8 @@
 		"removeWord": "删除单词",
 		"updating": "更新中...",
 		"updated": "更新成功!",
-		"updateError": "更新失败，请重试。"
+		"updateError": "更新失败，请重试。",
+		"newWordDetected": "新单词已添加，更新中..."
 	},
 	"Dict": {
 		"popular": "热门词汇",

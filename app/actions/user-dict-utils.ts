@@ -5,6 +5,7 @@ import { unstable_cache } from "next/cache";
 import { getDictList } from "./user-dict-action";
 
 export const getDictRevalidateKey = (dictId: string) => `dict-${dictId}`;
+export const allDictsRevalidateKey = "all-dicts";
 
 const createCachedDictList = (dictId: string) => {
 	return unstable_cache(

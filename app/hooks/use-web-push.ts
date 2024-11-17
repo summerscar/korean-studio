@@ -8,14 +8,24 @@ export function useWebPush() {
 	const subscribeUserToPush = useCallback(
 		async (registration: ServiceWorkerRegistration) => {
 			try {
-				// 先取消现有的订阅
+				// 检查现有订阅
 				const existingSubscription =
 					await registration.pushManager.getSubscription();
+
+				// 如果已经有有效的订阅，直接使用
 				if (existingSubscription) {
-					await existingSubscription.unsubscribe();
+					// 发送订阅信息到服务器（服务器会处理重复订阅）
+					await fetch("/api/push/subscribe", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(existingSubscription),
+					});
+					return existingSubscription;
 				}
 
-				// 创建新的订阅
+				// 如果没有订阅，创建新的订阅
 				const subscription = await registration.pushManager.subscribe({
 					userVisibleOnly: true,
 					applicationServerKey: urlBase64ToUint8Array(publicVapidKey),

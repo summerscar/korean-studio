@@ -34,7 +34,6 @@ export async function POST(request: Request) {
 						{ endpoint: { equals: subscription.endpoint } },
 						{
 							AND: [
-								{ user: { id: { equals: user.id } } },
 								{
 									lastUsed: {
 										gt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 24小时内

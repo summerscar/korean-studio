@@ -5,7 +5,7 @@ import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
 import SpeakerIcon from "@/assets/svg/speaker.svg";
-import { setProgressCSSVar } from "@/components/header/_component/progress";
+import { useHomeProgress } from "@/components/header/_component/progress";
 import { HideText } from "@/components/hide-text";
 import { HomeDrawer } from "@/components/home-drawer";
 import { Pronunciation } from "@/components/pronunciation";
@@ -322,10 +322,7 @@ const HomeStatus = ({
 		skipToNextWord(0);
 	});
 
-	useEffect(() => {
-		if (!dict.length) setProgressCSSVar(0);
-		else return setProgressCSSVar(Math.min(1, curWordIndex / dict.length));
-	}, [dict, curWordIndex]);
+	useHomeProgress(!dict.length ? 0 : Math.min(1, curWordIndex / dict.length));
 
 	/** 完成输入，下一个单词 放在useEffect可能有点问题, 仅curInputIndex更新时触发 */
 	useEffect(() => {

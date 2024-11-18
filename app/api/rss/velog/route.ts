@@ -68,9 +68,12 @@ const GET = async () => {
 			id: post.id,
 			link: `https://velog.io/@${post.user.username}/${post.url_slug}`,
 			description: sanitizedDesc || "",
+			content: `<img src="${post.thumbnail}" alt="${sanitizedTitle}" style="max-width:100%;height:auto;margin-bottom:20px;" /> <p>${sanitizedDesc}</p><p>作者：<a href="https://velog.io/@${post.user.username}">${sanitizedAuthor}</a></p>`,
 			author: [
 				{
 					name: sanitizedAuthor || "",
+					email: `${post.user.username}@velog.io`,
+					link: `https://velog.io/@${post.user.username}`,
 				},
 			],
 			date: new Date(post.released_at),

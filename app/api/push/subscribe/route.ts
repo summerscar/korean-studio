@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 		const existingSubscription = (
 			await keystoneContext.sudo().db.PushSubscription.findMany({
 				where: {
-					endpoint: subscription.endpoint,
+					endpoint: { equals: subscription.endpoint },
 				},
 			})
 		)[0];

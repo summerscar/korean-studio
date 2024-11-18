@@ -30,18 +30,7 @@ export async function POST(request: Request) {
 		const existingSubscription = (
 			await keystoneContext.sudo().db.PushSubscription.findMany({
 				where: {
-					OR: [
-						{ endpoint: { equals: subscription.endpoint } },
-						{
-							AND: [
-								{
-									lastUsed: {
-										gt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 24小时内
-									},
-								},
-							],
-						},
-					],
+					endpoint: subscription.endpoint,
 				},
 			})
 		)[0];

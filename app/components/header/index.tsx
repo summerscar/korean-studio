@@ -14,7 +14,7 @@ import { Search } from "./_component/search";
 export const headerConfig = (t: Awaited<ReturnType<typeof getServerI18n>>) => [
 	{
 		href: "/learn/beginner",
-		label: `🔨${t("beginner")}`,
+		label: `${t("beginner")}`,
 	},
 	{
 		href: "/learn/intermediate",

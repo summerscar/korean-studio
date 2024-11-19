@@ -620,7 +620,9 @@ const HomeStatus = ({
 
 const Wrapper = ({ children }: { children: ReactNode }) => {
 	const elRef = useRef<HTMLDivElement>(null);
-	useSelectToSearch(elRef.current);
+	useSelectToSearch({
+		container: elRef.current,
+	});
 	return (
 		<div
 			className={clsx("flex", "flex-col", "items-center", "justify-center")}

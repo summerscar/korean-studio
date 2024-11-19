@@ -57,7 +57,7 @@ ${JSON.stringify(WORD_EXAMPLE)}
 现在输入单词: [${word}]`;
 };
 
-const generateDocDescription = () => {
+const generateDocDescriptionPrompt = () => {
 	return "我将发你一份韩语学习相关教程，你将总结这份教程，生成的描述，控制在20-100个字。";
 };
 
@@ -121,4 +121,13 @@ const generateDocPrompt = (title: string) => `
 
 请给出语法 [${title}] 的说明文档：`;
 
-export { generateWordPrompt, generateDocDescription, generateDocPrompt };
+const generateWordSuggestionPrompt = (word: string, locale: string) => {
+	return `现有韩语单词【${word}】，请告诉我该单词含义，以及如何拆解并背诵该单词。请使用 ${locale} 语言告诉我。`;
+};
+
+export {
+	generateWordPrompt,
+	generateDocDescriptionPrompt,
+	generateDocPrompt,
+	generateWordSuggestionPrompt,
+};

@@ -115,6 +115,11 @@ export const lists = {
 			user: relationship({ ref: "User", many: false }),
 			createdAt: timestamp({ defaultValue: { kind: "now" } }),
 			lastUsed: timestamp({ defaultValue: { kind: "now" } }),
+			// Device information fields
+			userAgent: text({ validation: { isRequired: false } }),
+			deviceType: text({ validation: { isRequired: false } }),
+			os: text({ validation: { isRequired: false } }),
+			browser: text({ validation: { isRequired: false } }),
 		},
 	}),
 	Topik: list({

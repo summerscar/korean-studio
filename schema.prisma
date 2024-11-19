@@ -33,6 +33,10 @@ model PushSubscription {
   userId         String?   @map("user")
   createdAt      DateTime? @default(now())
   lastUsed       DateTime? @default(now())
+  userAgent      String    @default("")
+  deviceType     String    @default("")
+  os             String    @default("")
+  browser        String    @default("")
 
   @@index([userId])
 }

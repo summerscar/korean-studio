@@ -140,6 +140,10 @@ type PushSubscription {
   user: User
   createdAt: DateTime
   lastUsed: DateTime
+  userAgent: String
+  deviceType: String
+  os: String
+  browser: String
 }
 
 input PushSubscriptionWhereUniqueInput {
@@ -157,6 +161,10 @@ input PushSubscriptionWhereInput {
   user: UserWhereInput
   createdAt: DateTimeNullableFilter
   lastUsed: DateTimeNullableFilter
+  userAgent: StringFilter
+  deviceType: StringFilter
+  os: StringFilter
+  browser: StringFilter
 }
 
 input PushSubscriptionOrderByInput {
@@ -165,6 +173,10 @@ input PushSubscriptionOrderByInput {
   expirationTime: OrderDirection
   createdAt: OrderDirection
   lastUsed: OrderDirection
+  userAgent: OrderDirection
+  deviceType: OrderDirection
+  os: OrderDirection
+  browser: OrderDirection
 }
 
 input PushSubscriptionUpdateInput {
@@ -174,6 +186,10 @@ input PushSubscriptionUpdateInput {
   user: UserRelateToOneForUpdateInput
   createdAt: DateTime
   lastUsed: DateTime
+  userAgent: String
+  deviceType: String
+  os: String
+  browser: String
 }
 
 input UserRelateToOneForUpdateInput {
@@ -194,6 +210,10 @@ input PushSubscriptionCreateInput {
   user: UserRelateToOneForCreateInput
   createdAt: DateTime
   lastUsed: DateTime
+  userAgent: String
+  deviceType: String
+  os: String
+  browser: String
 }
 
 input UserRelateToOneForCreateInput {

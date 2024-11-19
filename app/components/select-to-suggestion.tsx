@@ -29,7 +29,7 @@ const TypeEffectString = ({ promise }: { promise: Promise<string> }) => {
 	}, [displayText]);
 
 	return (
-		<div className="w-full markdown-body">
+		<div className="w-full markdown-body h-fit">
 			{mdContent && <MDXRemote {...mdContent} />}
 		</div>
 	);

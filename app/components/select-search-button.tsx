@@ -1,6 +1,7 @@
 "use client";
 import CopyIcon from "@/assets/svg/copy.svg";
 import SearchIcon from "@/assets/svg/search.svg";
+import SparklesIcon from "@/assets/svg/sparkles.svg";
 import type { CSSProperties, ComponentProps } from "react";
 
 interface SearchButtonProps {
@@ -10,13 +11,10 @@ interface SearchButtonProps {
 	title: string;
 }
 
-function Sparkles({ ...props }: ComponentProps<"span">) {
-	return <span {...props}>✨</span>;
-}
 const IconMap = {
 	search: SearchIcon,
 	copy: CopyIcon,
-	sparkles: Sparkles,
+	sparkles: SparklesIcon,
 };
 
 export const SearchButton = ({

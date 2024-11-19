@@ -1,5 +1,5 @@
 "use client";
-import { selectToSearch } from "@/utils/select-to-search";
+import { useSelectToSearch } from "@/hooks/use-select-to-search";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState } from "react";
@@ -11,16 +11,7 @@ const MDContentWrapper = ({
 	bottomNav,
 }: { children: ReactNode; lastModified?: string; bottomNav?: ReactNode }) => {
 	const markdownBodyRef = useRef<HTMLDivElement>(null);
-	const locale = useLocale();
-
-	useEffect(() => {
-		if (markdownBodyRef.current) {
-			const cancel = selectToSearch(markdownBodyRef.current, locale);
-			return () => {
-				cancel?.();
-			};
-		}
-	}, [locale]);
+	useSelectToSearch(markdownBodyRef.current);
 
 	return (
 		<article

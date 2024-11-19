@@ -1,9 +1,11 @@
 import { SearchButton } from "@/components/select-search-button";
 import { debounce } from "lodash";
+import { useLocale } from "next-intl";
+import { useEffect } from "react";
 import { type Root, createRoot } from "react-dom/client";
 
-const selectToSearch = (container: HTMLElement, locale: string) => {
-	if (!container) return;
+const selectToSearch = (locale: string, container?: HTMLElement | null) => {
+	const detectElement = container || document.body;
 
 	let root: Root | null = null;
 	const buttonContainer = document.createElement("div");
@@ -55,10 +57,10 @@ const selectToSearch = (container: HTMLElement, locale: string) => {
 		}
 	}, 300);
 
-	container.addEventListener("mouseup", showSearchButton);
+	detectElement.addEventListener("mouseup", showSearchButton);
 
 	return () => {
-		container.removeEventListener("mouseup", showSearchButton);
+		detectElement.removeEventListener("mouseup", showSearchButton);
 		if (root) {
 			// Use requestAnimationFrame to ensure unmounting happens after the current render cycle
 			requestAnimationFrame(() => {
@@ -70,4 +72,15 @@ const selectToSearch = (container: HTMLElement, locale: string) => {
 	};
 };
 
-export { selectToSearch };
+const useSelectToSearch = (container?: HTMLElement | null) => {
+	const locale = useLocale();
+
+	useEffect(() => {
+		const cancel = selectToSearch(locale, container);
+		return () => {
+			cancel?.();
+		};
+	}, [locale, container]);
+};
+
+export { selectToSearch, useSelectToSearch };

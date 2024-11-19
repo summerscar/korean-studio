@@ -11,6 +11,7 @@ import { HomeDrawer } from "@/components/home-drawer";
 import { Pronunciation } from "@/components/pronunciation";
 import { checkIsTouchable, useDevice } from "@/hooks/use-device";
 import { usePronunciation } from "@/hooks/use-pronunciation";
+import { useSelectToSearch } from "@/hooks/use-select-to-search";
 import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
 import type { UserDicts } from "@/types/dict";
@@ -617,10 +618,17 @@ const HomeStatus = ({
 	);
 };
 
-const Wrapper = ({ children }: { children: ReactNode }) => (
-	<div className={clsx("flex", "flex-col", "items-center", "justify-center")}>
-		{children}
-	</div>
-);
+const Wrapper = ({ children }: { children: ReactNode }) => {
+	const elRef = useRef<HTMLDivElement>(null);
+	useSelectToSearch(elRef.current);
+	return (
+		<div
+			className={clsx("flex", "flex-col", "items-center", "justify-center")}
+			ref={elRef}
+		>
+			{children}
+		</div>
+	);
+};
 
 export { HomeStatus };

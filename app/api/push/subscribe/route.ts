@@ -52,6 +52,25 @@ export async function POST(request: Request) {
 		}
 
 		// 创建新的订阅
+		const userAgent = request.headers.get("user-agent") || "unknown";
+
+		// 简单解析设备信息
+		const isMobile = /mobile/i.test(userAgent);
+		const isTablet = /tablet|ipad/i.test(userAgent);
+		const deviceType = isTablet ? "tablet" : isMobile ? "mobile" : "desktop";
+
+		// 获取操作系统信息
+		const osMatch = userAgent.match(
+			/(Windows|Mac|Linux|Android|iOS)[^;)]*/,
+		) || ["unknown"];
+		const os = osMatch[0];
+
+		// 获取浏览器信息
+		const browserMatch = userAgent.match(
+			/(Chrome|Firefox|Safari|Edge|Opera)[\/\s](\d+)/,
+		) || ["unknown"];
+		const browser = browserMatch[0];
+
 		await keystoneContext.sudo().db.PushSubscription.createOne({
 			data: {
 				endpoint: subscription.endpoint,
@@ -63,6 +82,10 @@ export async function POST(request: Request) {
 					},
 				},
 				lastUsed: new Date(),
+				userAgent,
+				deviceType,
+				os,
+				browser,
 			},
 		});
 

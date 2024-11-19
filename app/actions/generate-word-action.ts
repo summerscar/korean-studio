@@ -1,7 +1,10 @@
 "use server";
 import type { DictItem } from "@/types/dict";
 import { isDev, isProd } from "@/utils/is-dev";
-import { generateWordPrompt } from "@/utils/prompts";
+import {
+	generateWordPrompt,
+	generateWordSuggestionPrompt,
+} from "@/utils/prompts";
 import {
 	fetchChatCompletion,
 	sequentialChatCompletion,
@@ -38,4 +41,25 @@ export const generateWordsAction = async (words: string[]) => {
 	return (
 		await sequentialChatCompletion(words.map((w) => w.trim()).map(task))
 	).filter((w) => w !== null);
+};
+
+export const generateWordSuggestionAction = async (
+	word: string,
+	locale: string,
+) => {
+	isDev && console.log(`[generateWordSuggestionAction][start]: ${word}`);
+	const prompt = generateWordSuggestionPrompt(word, locale);
+	const result = await fetchChatCompletion([
+		{
+			role: "user",
+			content: prompt,
+		},
+	]);
+	isDev &&
+		console.log(
+			"[generateWordSuggestionAction][result]:",
+			result,
+			"\n---------- end -----------",
+		);
+	return result;
 };

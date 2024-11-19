@@ -11,7 +11,10 @@ const MDContentWrapper = ({
 	bottomNav,
 }: { children: ReactNode; lastModified?: string; bottomNav?: ReactNode }) => {
 	const markdownBodyRef = useRef<HTMLDivElement>(null);
-	useSelectToSearch(markdownBodyRef.current);
+	useSelectToSearch({
+		container: markdownBodyRef.current,
+		showAI: false,
+	});
 
 	return (
 		<article

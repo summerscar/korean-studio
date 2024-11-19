@@ -1,10 +1,32 @@
+import { generateWordSuggestionAction } from "@/actions/generate-word-action";
 import { SearchButton } from "@/components/select-search-button";
+import { ErrorFallback } from "@/components/suspend-error-fallback";
 import { debounce } from "lodash";
 import { useLocale } from "next-intl";
-import { useEffect } from "react";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import dynamic from "next/dynamic";
+import { Suspense, useEffect } from "react";
 import { type Root, createRoot } from "react-dom/client";
 
-const selectToSearch = (locale: string, container?: HTMLElement | null) => {
+const SuggestionPanel = dynamic(
+	() =>
+		import("@/components/select-to-suggestion").then(
+			(mod) => mod.SuggestionPanel,
+		),
+	{
+		ssr: false,
+	},
+);
+
+const selectToSearch = (
+	locale: string,
+	{
+		container = null,
+		showAI = true,
+		showCopy = true,
+		showSearch = true,
+	}: Config = {},
+) => {
 	const detectElement = container || document.body;
 
 	let root: Root | null = null;
@@ -16,8 +38,44 @@ const selectToSearch = (locale: string, container?: HTMLElement | null) => {
 			text,
 		);
 
-	const openPapagoSearch = () => {
-		const selectedText = window.getSelection()?.toString().trim();
+	const copyToClipboard = async (text: string) => {
+		try {
+			await navigator.clipboard.writeText(text);
+		} catch (err) {
+			console.error("Failed to copy text: ", err);
+		}
+	};
+
+	const openAISuggestion = async (text: string) => {
+		const selection = window.getSelection();
+		const range = selection?.getRangeAt(0);
+		const rect = range?.getBoundingClientRect();
+		if (!root || !rect) return;
+		root.render(null);
+		const promise = generateWordSuggestionAction(text, locale);
+		root.render(
+			<div
+				style={{
+					top: `${rect.bottom + window.scrollY}px`,
+					left: 0,
+					right: 0,
+				}}
+				className="z-[1] absolute flex justify-center pointer-events-none"
+			>
+				<div className="flex backdrop-blur-md rounded w-4/5 sm:w-[600px] min-h-40 max-h-96 sm:max-h-[65vh] p-2 sm:p-4 justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto">
+					<ErrorBoundary errorComponent={ErrorFallback}>
+						<Suspense
+							fallback={<span className="loading loading-ring loading-lg" />}
+						>
+							<SuggestionPanel promise={promise} />
+						</Suspense>
+					</ErrorBoundary>
+				</div>
+			</div>,
+		);
+	};
+
+	const openPapagoSearch = (selectedText: string) => {
 		if (selectedText) {
 			const papagoUrl = `https://papago.naver.com/?sk=ko&tk=${locale}&st=${encodeURIComponent(selectedText)}`;
 			window.open(
@@ -42,20 +100,44 @@ const selectToSearch = (locale: string, container?: HTMLElement | null) => {
 				}
 
 				root.render(
-					<SearchButton
+					<div
 						style={{
-							display: "flex",
 							top: `${rect.bottom + window.scrollY}px`,
 							left: `${rect.right + window.scrollX}px`,
 						}}
-						onClick={openPapagoSearch}
-					/>,
+						className="z-[1] border border-base-content/10 bg-white/10 shadow backdrop-blur-md flex absolute rounded overflow-hidden"
+					>
+						{showSearch && (
+							<SearchButton
+								onClick={() => openPapagoSearch(selectedText)}
+								icon="search"
+								title="search"
+							/>
+						)}
+						{showCopy && (
+							<SearchButton
+								onClick={() => {
+									copyToClipboard(selectedText);
+									root?.render(null);
+								}}
+								icon="copy"
+								title="copy"
+							/>
+						)}
+						{showAI && (
+							<SearchButton
+								onClick={() => openAISuggestion(selectedText)}
+								icon="sparkles"
+								title="AI"
+							/>
+						)}
+					</div>,
 				);
 			}
 		} else if (root) {
 			root.render(null);
 		}
-	}, 300);
+	}, 150);
 
 	detectElement.addEventListener("mouseup", showSearchButton);
 
@@ -72,15 +154,32 @@ const selectToSearch = (locale: string, container?: HTMLElement | null) => {
 	};
 };
 
-const useSelectToSearch = (container?: HTMLElement | null) => {
+type Config = {
+	container?: HTMLElement | null;
+	showCopy?: boolean;
+	showSearch?: boolean;
+	showAI?: boolean;
+};
+
+const useSelectToSearch = ({
+	container = null,
+	showCopy = true,
+	showSearch = true,
+	showAI = true,
+}: Config = {}) => {
 	const locale = useLocale();
 
 	useEffect(() => {
-		const cancel = selectToSearch(locale, container);
+		const cancel = selectToSearch(locale, {
+			container,
+			showCopy,
+			showSearch,
+			showAI,
+		});
 		return () => {
 			cancel?.();
 		};
-	}, [locale, container]);
+	}, [locale, container, showCopy, showSearch, showAI]);
 };
 
 export { selectToSearch, useSelectToSearch };

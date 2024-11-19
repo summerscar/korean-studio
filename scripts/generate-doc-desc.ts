@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { _listAllDocs as _listAllDocsByLevel } from "@/utils/list-docs";
-import { generateDocDescription } from "@/utils/prompts";
+import { generateDocDescriptionPrompt } from "@/utils/prompts";
 import { flattenAllDocs, insertOrUpdateFrontmatterKey } from "./list-all-docs";
 import { fetchChatCompletion, sequentialChatCompletion } from "./open-ai";
 
@@ -34,7 +34,7 @@ import { fetchChatCompletion, sequentialChatCompletion } from "./open-ai";
 				await fetchChatCompletion([
 					{
 						role: "user",
-						content: generateDocDescription(),
+						content: generateDocDescriptionPrompt(),
 					},
 					{
 						role: "user",

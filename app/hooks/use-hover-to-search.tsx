@@ -31,16 +31,20 @@ const useHoverToSearch = (text?: string) => {
 		const root =
 			rootRef.current ||
 			(rootRef.current = createRoot(buttonContainer.current));
+		const cancel = autoClose();
 		root.render(
 			<FloatButtonsPanel
+				position="top"
 				locale={locale}
 				rect={targetRef.current.getBoundingClientRect()}
 				selectedText={text}
 				root={root}
-				onClose={cleanRoot}
+				onClose={() => {
+					cancel?.();
+					cleanRoot();
+				}}
 			/>,
 		);
-		autoClose();
 	});
 
 	const cleanRoot = useMemoizedFn(() => {
@@ -59,16 +63,27 @@ const useHoverToSearch = (text?: string) => {
 	const autoClose = useMemoizedFn(() => {
 		if (buttonContainer.current) {
 			let timer: ReturnType<typeof setTimeout>;
+			const cleanup = () => {
+				clearTimeout(timer);
+			};
+
+			const cancel = () => {
+				cleanup();
+				buttonContainer.current?.removeEventListener("mouseenter", cleanup);
+				buttonContainer.current?.removeEventListener("mouseleave", callback);
+			};
 			const callback = () => {
 				clearTimeout(timer);
 				timer = setTimeout(() => {
 					cleanRoot();
-					clearTimeout(timer);
-					buttonContainer.current?.removeEventListener("mouseover", callback);
+					cancel();
 				}, 2000);
 			};
+
 			callback();
-			buttonContainer.current.addEventListener("mouseover", callback);
+			buttonContainer.current.addEventListener("mouseenter", cleanup);
+			buttonContainer.current.addEventListener("mouseleave", callback);
+			return cancel;
 		}
 	});
 

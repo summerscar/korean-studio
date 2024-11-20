@@ -63,30 +63,44 @@ model Topik {
 }
 
 model Dict {
-  id          String     @id @default(cuid())
-  name        String     @default("")
-  public      Boolean    @default(false)
-  intlKey     String     @default("")
-  createdAt   DateTime?  @default(now())
-  createdBy   User?      @relation("Dict_createdBy", fields: [createdById], references: [id])
-  createdById String?    @map("createdBy")
-  list        DictItem[] @relation("Dict_list")
+  id          String             @id @default(cuid())
+  name        String             @default("")
+  public      Boolean            @default(false)
+  intlKey     String             @default("")
+  createdAt   DateTime?          @default(now())
+  createdBy   User?              @relation("Dict_createdBy", fields: [createdById], references: [id])
+  createdById String?            @map("createdBy")
+  list        DictItem[]         @relation("Dict_list")
+  favorites   DictItemFavorite[] @relation("DictItemFavorite_dict")
 
   @@index([createdById])
 }
 
 model DictItem {
-  id          String    @id @default(cuid())
-  name        String    @default("")
-  trans       Json?     @default("{\"en\":[\"\"],\"zh-CN\":[\"\"],\"zh-TW\":[\"\"],\"ja\":[\"\"]}")
-  example     String    @default("")
-  exTrans     Json?     @default("{\"en\":[\"\"],\"zh-CN\":[\"\"],\"zh-TW\":[\"\"],\"ja\":[\"\"]}")
-  createdAt   DateTime? @default(now())
-  createdBy   User?     @relation("DictItem_createdBy", fields: [createdById], references: [id])
-  createdById String?   @map("createdBy")
-  dict        Dict[]    @relation("Dict_list")
+  id          String             @id @default(cuid())
+  name        String             @default("")
+  trans       Json?              @default("{\"en\":[\"\"],\"zh-CN\":[\"\"],\"zh-TW\":[\"\"],\"ja\":[\"\"]}")
+  example     String             @default("")
+  exTrans     Json?              @default("{\"en\":[\"\"],\"zh-CN\":[\"\"],\"zh-TW\":[\"\"],\"ja\":[\"\"]}")
+  createdAt   DateTime?          @default(now())
+  createdBy   User?              @relation("DictItem_createdBy", fields: [createdById], references: [id])
+  createdById String?            @map("createdBy")
+  dict        Dict[]             @relation("Dict_list")
+  favoriteIn  DictItemFavorite[] @relation("DictItemFavorite_item")
 
   @@index([createdById])
+}
+
+model DictItemFavorite {
+  id          String    @id @default(cuid())
+  dict        Dict?     @relation("DictItemFavorite_dict", fields: [dictId], references: [id])
+  dictId      String?   @map("dict")
+  item        DictItem? @relation("DictItemFavorite_item", fields: [itemId], references: [id])
+  itemId      String?   @map("item")
+  favoritedAt DateTime? @default(now())
+
+  @@index([dictId])
+  @@index([itemId])
 }
 
 enum TopikLevelType {

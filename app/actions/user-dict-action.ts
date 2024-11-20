@@ -8,8 +8,8 @@ import { revalidateTag, unstable_cache } from "next/cache";
 import { generateWordsAction } from "./generate-word-action";
 import {
 	allDictsRevalidateKey,
-	createCachedDictList,
 	getDictRevalidateKey,
+	getFavDictRevalidateKey,
 } from "./user-dict-utils";
 import type { DictItemCreateInput, DictUpdateInput } from ".keystone/types";
 
@@ -73,9 +73,18 @@ const getFavListAction = async () => {
 	if (!session?.user) {
 		return [];
 	}
-
-	const res = await createCachedDictList(
-		await _getFavListID(session.user.id!),
+	const dictId = await _getFavListID(session.user?.id!);
+	const res = await unstable_cache(
+		async () => {
+			const res = await KSwithSession(session).query.DictItemFavorite.findMany({
+				where: { dict: { id: { equals: dictId } } },
+				query: "item { id name trans example exTrans }",
+				orderBy: { favoritedAt: "asc" },
+			});
+			return res.map((_) => _.item) as Dict;
+		},
+		[getFavDictRevalidateKey(dictId)],
+		{ revalidate: false, tags: [getFavDictRevalidateKey(dictId)] },
 	)();
 	return toPlainObject(res);
 };
@@ -99,7 +108,32 @@ const toggleDictItemIdToFavListAction = async (
 			},
 		},
 	});
-	revalidateTag(getDictRevalidateKey(dictId));
+	if (isAdd) {
+		// 添加到收藏，会自动记录时间戳
+		await ctx.db.DictItemFavorite.createOne({
+			data: {
+				dict: { connect: { id: dictId } },
+				item: { connect: { id: dictItemId } },
+			},
+		});
+	} else {
+		// 从收藏中移除
+		const dictItemFavorite = (
+			await ctx.db.DictItemFavorite.findMany({
+				where: {
+					AND: [
+						{ dict: { id: { equals: dictId } } },
+						{ item: { id: { equals: dictItemId } } },
+					],
+				},
+			})
+		)[0];
+		dictItemFavorite &&
+			(await ctx.db.DictItemFavorite.deleteOne({
+				where: { id: dictItemFavorite.id },
+			}));
+	}
+	revalidateTag(getFavDictRevalidateKey(dictId));
 };
 
 const removeDictItemAction = async (dictId: string, dictItemId: string) => {
@@ -190,6 +224,23 @@ const getDictList = async (dictId: string) => {
 	return toPlainObject(res);
 };
 
+const getCachedDictList = (dictId: string) => {
+	return unstable_cache(
+		async () => getDictList(dictId),
+		[`getDictList-${dictId}`],
+		{ revalidate: false, tags: [getDictRevalidateKey(dictId)] },
+	)();
+};
+
+const getFavOrDictList = async (dictId: string) => {
+	const dicts = await getAllDicts();
+	const dict = dicts.find((_) => _.id === dictId);
+	if (dict?.intlKey === FAV_LIST_KEY) {
+		return getFavListAction();
+	}
+	return getCachedDictList(dictId);
+};
+
 const importDictItemToUserDict = async (dictId: string, JSONString: string) => {
 	await addDictItemToDictAction(dictId, JSON.parse(JSONString));
 	revalidateTag(getDictRevalidateKey(dictId));
@@ -211,6 +262,8 @@ export {
 	createDictAction,
 	createFavListAction,
 	getAllDicts,
+	getCachedDictList,
+	getFavOrDictList,
 	getDictList,
 	getFavListAction,
 	addWordsToUserDictAction,

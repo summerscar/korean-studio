@@ -392,6 +392,8 @@ type Dict {
   createdBy: User
   list(where: DictItemWhereInput! = {}, orderBy: [DictItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictItemWhereUniqueInput): [DictItem!]
   listCount(where: DictItemWhereInput! = {}): Int
+  favorites(where: DictItemFavoriteWhereInput! = {}, orderBy: [DictItemFavoriteOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictItemFavoriteWhereUniqueInput): [DictItemFavorite!]
+  favoritesCount(where: DictItemFavoriteWhereInput! = {}): Int
 }
 
 input DictWhereUniqueInput {
@@ -409,12 +411,19 @@ input DictWhereInput {
   createdAt: DateTimeNullableFilter
   createdBy: UserWhereInput
   list: DictItemManyRelationFilter
+  favorites: DictItemFavoriteManyRelationFilter
 }
 
 input DictItemManyRelationFilter {
   every: DictItemWhereInput
   some: DictItemWhereInput
   none: DictItemWhereInput
+}
+
+input DictItemFavoriteManyRelationFilter {
+  every: DictItemFavoriteWhereInput
+  some: DictItemFavoriteWhereInput
+  none: DictItemFavoriteWhereInput
 }
 
 input DictOrderByInput {
@@ -432,6 +441,7 @@ input DictUpdateInput {
   createdAt: DateTime
   createdBy: UserRelateToOneForUpdateInput
   list: DictItemRelateToManyForUpdateInput
+  favorites: DictItemFavoriteRelateToManyForUpdateInput
 }
 
 input DictItemRelateToManyForUpdateInput {
@@ -439,6 +449,13 @@ input DictItemRelateToManyForUpdateInput {
   set: [DictItemWhereUniqueInput!]
   create: [DictItemCreateInput!]
   connect: [DictItemWhereUniqueInput!]
+}
+
+input DictItemFavoriteRelateToManyForUpdateInput {
+  disconnect: [DictItemFavoriteWhereUniqueInput!]
+  set: [DictItemFavoriteWhereUniqueInput!]
+  create: [DictItemFavoriteCreateInput!]
+  connect: [DictItemFavoriteWhereUniqueInput!]
 }
 
 input DictUpdateArgs {
@@ -453,11 +470,17 @@ input DictCreateInput {
   createdAt: DateTime
   createdBy: UserRelateToOneForCreateInput
   list: DictItemRelateToManyForCreateInput
+  favorites: DictItemFavoriteRelateToManyForCreateInput
 }
 
 input DictItemRelateToManyForCreateInput {
   create: [DictItemCreateInput!]
   connect: [DictItemWhereUniqueInput!]
+}
+
+input DictItemFavoriteRelateToManyForCreateInput {
+  create: [DictItemFavoriteCreateInput!]
+  connect: [DictItemFavoriteWhereUniqueInput!]
 }
 
 type DictItem {
@@ -470,6 +493,8 @@ type DictItem {
   createdBy: User
   dict(where: DictWhereInput! = {}, orderBy: [DictOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictWhereUniqueInput): [Dict!]
   dictCount(where: DictWhereInput! = {}): Int
+  favoriteIn(where: DictItemFavoriteWhereInput! = {}, orderBy: [DictItemFavoriteOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictItemFavoriteWhereUniqueInput): [DictItemFavorite!]
+  favoriteInCount(where: DictItemFavoriteWhereInput! = {}): Int
 }
 
 input DictItemWhereUniqueInput {
@@ -486,6 +511,7 @@ input DictItemWhereInput {
   createdAt: DateTimeNullableFilter
   createdBy: UserWhereInput
   dict: DictManyRelationFilter
+  favoriteIn: DictItemFavoriteManyRelationFilter
 }
 
 input DictManyRelationFilter {
@@ -509,6 +535,7 @@ input DictItemUpdateInput {
   createdAt: DateTime
   createdBy: UserRelateToOneForUpdateInput
   dict: DictRelateToManyForUpdateInput
+  favoriteIn: DictItemFavoriteRelateToManyForUpdateInput
 }
 
 input DictRelateToManyForUpdateInput {
@@ -531,11 +558,77 @@ input DictItemCreateInput {
   createdAt: DateTime
   createdBy: UserRelateToOneForCreateInput
   dict: DictRelateToManyForCreateInput
+  favoriteIn: DictItemFavoriteRelateToManyForCreateInput
 }
 
 input DictRelateToManyForCreateInput {
   create: [DictCreateInput!]
   connect: [DictWhereUniqueInput!]
+}
+
+type DictItemFavorite {
+  id: ID!
+  dict: Dict
+  item: DictItem
+  favoritedAt: DateTime
+}
+
+input DictItemFavoriteWhereUniqueInput {
+  id: ID
+}
+
+input DictItemFavoriteWhereInput {
+  AND: [DictItemFavoriteWhereInput!]
+  OR: [DictItemFavoriteWhereInput!]
+  NOT: [DictItemFavoriteWhereInput!]
+  id: IDFilter
+  dict: DictWhereInput
+  item: DictItemWhereInput
+  favoritedAt: DateTimeNullableFilter
+}
+
+input DictItemFavoriteOrderByInput {
+  id: OrderDirection
+  favoritedAt: OrderDirection
+}
+
+input DictItemFavoriteUpdateInput {
+  dict: DictRelateToOneForUpdateInput
+  item: DictItemRelateToOneForUpdateInput
+  favoritedAt: DateTime
+}
+
+input DictRelateToOneForUpdateInput {
+  create: DictCreateInput
+  connect: DictWhereUniqueInput
+  disconnect: Boolean
+}
+
+input DictItemRelateToOneForUpdateInput {
+  create: DictItemCreateInput
+  connect: DictItemWhereUniqueInput
+  disconnect: Boolean
+}
+
+input DictItemFavoriteUpdateArgs {
+  where: DictItemFavoriteWhereUniqueInput!
+  data: DictItemFavoriteUpdateInput!
+}
+
+input DictItemFavoriteCreateInput {
+  dict: DictRelateToOneForCreateInput
+  item: DictItemRelateToOneForCreateInput
+  favoritedAt: DateTime
+}
+
+input DictRelateToOneForCreateInput {
+  create: DictCreateInput
+  connect: DictWhereUniqueInput
+}
+
+input DictItemRelateToOneForCreateInput {
+  create: DictItemCreateInput
+  connect: DictItemWhereUniqueInput
 }
 
 """
@@ -574,6 +667,12 @@ type Mutation {
   updateDictItems(data: [DictItemUpdateArgs!]!): [DictItem]
   deleteDictItem(where: DictItemWhereUniqueInput!): DictItem
   deleteDictItems(where: [DictItemWhereUniqueInput!]!): [DictItem]
+  createDictItemFavorite(data: DictItemFavoriteCreateInput!): DictItemFavorite
+  createDictItemFavorites(data: [DictItemFavoriteCreateInput!]!): [DictItemFavorite]
+  updateDictItemFavorite(where: DictItemFavoriteWhereUniqueInput!, data: DictItemFavoriteUpdateInput!): DictItemFavorite
+  updateDictItemFavorites(data: [DictItemFavoriteUpdateArgs!]!): [DictItemFavorite]
+  deleteDictItemFavorite(where: DictItemFavoriteWhereUniqueInput!): DictItemFavorite
+  deleteDictItemFavorites(where: [DictItemFavoriteWhereUniqueInput!]!): [DictItemFavorite]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -612,6 +711,9 @@ type Query {
   dictItem(where: DictItemWhereUniqueInput!): DictItem
   dictItems(where: DictItemWhereInput! = {}, orderBy: [DictItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictItemWhereUniqueInput): [DictItem!]
   dictItemsCount(where: DictItemWhereInput! = {}): Int
+  dictItemFavorite(where: DictItemFavoriteWhereUniqueInput!): DictItemFavorite
+  dictItemFavorites(where: DictItemFavoriteWhereInput! = {}, orderBy: [DictItemFavoriteOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictItemFavoriteWhereUniqueInput): [DictItemFavorite!]
+  dictItemFavoritesCount(where: DictItemFavoriteWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

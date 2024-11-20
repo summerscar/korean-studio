@@ -1,5 +1,5 @@
 "use client";
-import { getDictList } from "@/actions/user-dict-action";
+import { getFavOrDictList } from "@/actions/user-dict-action";
 import { useServerActionState } from "@/hooks/use-server-action-state";
 import { useUser } from "@/hooks/use-user";
 import type { Dict, Dicts, UserDicts } from "@/types/dict";
@@ -16,7 +16,7 @@ const WordLists = ({ dicts }: { dicts: UserDicts }) => {
 	const { isAdmin } = useUser();
 	const [pending, fetchDicts] = useServerActionState(async (dictId: string) => {
 		if (!dictId) return;
-		const data = await getDictList(dictId);
+		const data = await getFavOrDictList(dictId);
 		setDict(data);
 	});
 

@@ -1,8 +1,13 @@
 "use server";
 
+import { FAV_LIST_KEY } from "@/utils/config";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { getAllDicts } from "./user-dict-action";
-import { allDictsRevalidateKey, getDictRevalidateKey } from "./user-dict-utils";
+import {
+	allDictsRevalidateKey,
+	getDictRevalidateKey,
+	getFavDictRevalidateKey,
+} from "./user-dict-utils";
 
 const clearCacheAction = async (path: string) => {
 	const targetPath = path || "/";
@@ -18,6 +23,9 @@ const clearCacheAction = async (path: string) => {
 	const dictList = await getAllDicts();
 	for (const dict of dictList) {
 		revalidateTag(getDictRevalidateKey(dict.id));
+		if (dict.intlKey === FAV_LIST_KEY) {
+			revalidateTag(getFavDictRevalidateKey(dict.id));
+		}
 	}
 };
 

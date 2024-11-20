@@ -188,7 +188,7 @@ const QuestionCard = ({
 									>
 										{topikQuestion.questionNumber}.
 									</Link>
-									<span> </span>
+									<span>{isAdmin ? `(${topikQuestion.score}점)` : " "}</span>
 									{topikQuestion.questionContent}
 								</div>
 								<fieldset

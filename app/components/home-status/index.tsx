@@ -10,8 +10,8 @@ import { HideText } from "@/components/hide-text";
 import { HomeDrawer } from "@/components/home-drawer";
 import { Pronunciation } from "@/components/pronunciation";
 import { checkIsTouchable, useDevice } from "@/hooks/use-device";
+import { useHoverToSearch } from "@/hooks/use-hover-to-search";
 import { usePronunciation } from "@/hooks/use-pronunciation";
-import { useSelectToSearch } from "@/hooks/use-select-to-search";
 import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
 import type { UserDicts } from "@/types/dict";
@@ -210,6 +210,10 @@ const HomeStatus = ({
 		}
 		return null;
 	}, [curWordIndex, dict]);
+
+	const displayNameRef = useHoverToSearch(currentWord?.name);
+	const exampleRef = useHoverToSearch(currentWord?.example);
+
 	const { isPlaying: isWordPlaying, play: playWord } = usePronunciation(
 		currentWord?.name,
 		{ autoPlay: setting.autoVoice },
@@ -418,7 +422,7 @@ const HomeStatus = ({
 						"text-4xl font-bold relative mobile:mt-8",
 					)}
 				>
-					{displayName}
+					<span ref={displayNameRef}>{displayName}</span>
 					<div
 						className={clsx(
 							"flex absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%] z-[1]",
@@ -558,7 +562,9 @@ const HomeStatus = ({
 			{currentWord?.example && (
 				<div className="flex justify-center flex-col items-center">
 					<p className={clsx("relative", notoKR.className)}>
-						{highLightExample(currentWord.example)}
+						<span ref={exampleRef}>
+							{highLightExample(currentWord.example)}
+						</span>
 						<Pronunciation
 							playRef={playExampleRef}
 							width={12}
@@ -619,15 +625,8 @@ const HomeStatus = ({
 };
 
 const Wrapper = ({ children }: { children: ReactNode }) => {
-	const elRef = useRef<HTMLDivElement>(null);
-	useSelectToSearch({
-		container: elRef.current,
-	});
 	return (
-		<div
-			className={clsx("flex", "flex-col", "items-center", "justify-center")}
-			ref={elRef}
-		>
+		<div className={clsx("flex", "flex-col", "items-center", "justify-center")}>
 			{children}
 		</div>
 	);

@@ -2,7 +2,14 @@
 import { useSelectToSearch } from "@/hooks/use-select-to-search";
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import {
+	type ReactNode,
+	Ref,
+	type RefObject,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import type { TocItem } from "remark-flexible-toc";
 
 const MDContentWrapper = ({
@@ -10,9 +17,7 @@ const MDContentWrapper = ({
 	lastModified,
 	bottomNav,
 }: { children: ReactNode; lastModified?: string; bottomNav?: ReactNode }) => {
-	const markdownBodyRef = useRef<HTMLDivElement>(null);
-	useSelectToSearch({
-		container: markdownBodyRef.current,
+	const containerRef = useSelectToSearch({
 		showAI: false,
 	});
 
@@ -24,7 +29,10 @@ const MDContentWrapper = ({
 			<style>
 				{".markdown-body ::target-text { background-color: gold; }"}
 			</style>
-			<div className="markdown-body" ref={markdownBodyRef}>
+			<div
+				className="markdown-body"
+				ref={containerRef as RefObject<HTMLDivElement>}
+			>
 				{children}
 			</div>
 			{bottomNav}

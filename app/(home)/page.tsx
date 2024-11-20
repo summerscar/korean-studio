@@ -1,8 +1,5 @@
-import { getAllDicts } from "@/actions/user-dict-action";
-import {
-	createCachedDictList,
-	filterAndSortDictList,
-} from "@/actions/user-dict-utils";
+import { getAllDicts, getFavOrDictList } from "@/actions/user-dict-action";
+import { filterAndSortDictList } from "@/actions/user-dict-utils";
 import { HomeStatus } from "@/components/home-status";
 import { Dicts } from "@/types/dict";
 import { auth } from "auth";
@@ -28,7 +25,7 @@ export default async function HomePage(props: {
 	const dict =
 		searchParamsDict === Dicts.local
 			? []
-			: await createCachedDictList(targetDictId!)();
+			: await getFavOrDictList(targetDictId!);
 
 	const dictId = searchParamsDict === Dicts.local ? Dicts.local : targetDictId;
 

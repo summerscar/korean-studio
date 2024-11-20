@@ -205,6 +205,7 @@ export const lists = {
 			createdAt: timestamp({ defaultValue: { kind: "now" } }),
 			createdBy: relationship({ ref: "User", many: false }),
 			list: relationship({ ref: "DictItem.dict", many: true }),
+			favorites: relationship({ ref: "DictItemFavorite.dict", many: true }),
 		},
 	}),
 	DictItem: list({
@@ -233,6 +234,16 @@ export const lists = {
 			createdAt: timestamp({ defaultValue: { kind: "now" } }),
 			createdBy: relationship({ ref: "User", many: false }),
 			dict: relationship({ ref: "Dict.list", many: true }),
+			favoriteIn: relationship({ ref: "DictItemFavorite.item", many: true }),
 		},
+	}),
+	DictItemFavorite: list({
+		access: allowAll,
+		fields: {
+			dict: relationship({ ref: "Dict.favorites", many: false }),
+			item: relationship({ ref: "DictItem.favoriteIn", many: false }),
+			favoritedAt: timestamp({ defaultValue: { kind: "now" } }),
+		},
+		hooks: {},
 	}),
 } satisfies Lists;

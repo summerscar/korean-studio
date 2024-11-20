@@ -53,16 +53,25 @@ const selectToSearch = (
 		if (!root || !rect) return;
 		root.render(null);
 		const promise = generateWordSuggestionAction(text, locale);
+		// const promise = Promise.resolve("12324");
+		const windowHeight = window.innerHeight;
+		const spaceBelow = windowHeight - rect.bottom;
+		const spaceAbove = rect.top;
+		const showAbove = spaceBelow < 200 && spaceAbove > spaceBelow;
+
 		root.render(
 			<div
 				style={{
-					top: `${rect.bottom + window.scrollY}px`,
+					[showAbove ? "bottom" : "top"]:
+						`${showAbove ? windowHeight - rect.top + window.scrollY : rect.bottom + window.scrollY}px`,
 					left: 0,
 					right: 0,
 				}}
 				className="z-[1] absolute flex justify-center pointer-events-none"
 			>
-				<div className="flex backdrop-blur-md rounded w-4/5 sm:w-[600px] min-h-40 max-h-96 sm:max-h-[65vh] p-2 sm:p-4 justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto">
+				<div
+					className={`flex backdrop-blur-md rounded w-4/5 sm:w-[600px] min-h-40 max-h-96 sm:max-h-[65vh] p-2 sm:p-4 justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
+				>
 					<ErrorBoundary errorComponent={ErrorFallback}>
 						<Suspense
 							fallback={<span className="loading loading-ring loading-lg" />}

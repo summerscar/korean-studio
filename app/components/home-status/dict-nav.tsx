@@ -6,6 +6,7 @@ import type { Dict, DictItem, Tran } from "@/types/dict";
 import { getTranslation } from "@/utils/convert-input";
 import { notoKR } from "@/utils/fonts";
 import clsx from "clsx";
+import { AnimatePresence, motion } from "framer-motion";
 import { useLocale } from "next-intl";
 
 const DictNav = ({
@@ -51,20 +52,32 @@ const DictNav = ({
 						);
 					})()}
 					<div className="flex-none px-1 select-none">
-						<p className={clsx("font-bold", notoKR.className)}>{item?.name}</p>
-						<p
-							title={getTranslation(item, locale)}
-							className="text-xs text-gray-500 max-w-28 sm:max-w-40"
-						>
-							{
-								<HideText
-									hide={hideMeaning}
-									className="overflow-hidden text-ellipsis text-nowrap inline-block max-w-full px-0.5"
+						<AnimatePresence mode="popLayout">
+							<motion.div
+								key={curWordIndex}
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								exit={{ opacity: 0 }}
+								transition={{ duration: 0.3, ease: "easeInOut" }}
+							>
+								<p className={clsx("font-bold text-nowrap", notoKR.className)}>
+									{item?.name}
+								</p>
+								<p
+									title={getTranslation(item, locale)}
+									className="text-xs text-gray-500 max-w-28 sm:max-w-40"
 								>
-									{getTranslation(item, locale)}
-								</HideText>
-							}
-						</p>
+									{
+										<HideText
+											hide={hideMeaning}
+											className="overflow-hidden text-ellipsis text-nowrap inline-block max-w-full px-0.5"
+										>
+											{getTranslation(item, locale)}
+										</HideText>
+									}
+								</p>
+							</motion.div>
+						</AnimatePresence>
 					</div>
 				</div>
 			))}

@@ -40,6 +40,7 @@ import { shuffleArr } from "@/utils/shuffle-array";
 import { useEventListener, useLatest, useMemoizedFn, useMount } from "ahooks";
 import clsx from "clsx";
 import { disassemble, romanize, standardizePronunciation } from "es-hangul";
+import { AnimatePresence, motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import {
 	type ReactNode,
@@ -70,6 +71,8 @@ const HomeStatus = ({
 }) => {
 	const [dict, setDict] = useState(originalDict);
 	const [curWordIndex, setCurWordIndex] = useState(0);
+	const [direction, setDirection] = useState(1);
+	const [targetIndex, setTargetIndex] = useState<number | null>(null);
 	const [curInputIndex, setCurInputIndex] = useState(0);
 	const [isComplete, setIsComplete] = useState(false);
 	const [isInputError, setIsInputError] = useState(false);
@@ -151,6 +154,16 @@ const HomeStatus = ({
 	useEffect(() => {
 		resetWord();
 	}, [dictId]);
+
+	/** 动画需要，先更新direction，后更新curWordIndex */
+	useEffect(() => {
+		if (targetIndex !== null) {
+			requestAnimationFrame(() => {
+				setCurWordIndex(targetIndex);
+				setTargetIndex(null);
+			});
+		}
+	}, [targetIndex]);
 
 	useEventListener(
 		"keyup",
@@ -295,7 +308,7 @@ const HomeStatus = ({
 			setTimeout(focusInput);
 		}
 		const targetIndex = Math.max(0, nextWordIndex);
-		setCurWordIndex(targetIndex);
+		setTargetIndex(targetIndex);
 		setCurInputIndex(0);
 		setIsInputError(false);
 
@@ -306,10 +319,12 @@ const HomeStatus = ({
 	});
 
 	const toPrevWord = useMemoizedFn(() => {
+		setDirection(-1);
 		skipToNextWord(curWordIndex - 1);
 	});
 
 	const toNextWord = useMemoizedFn(() => {
+		setDirection(1);
 		skipToNextWord(curWordIndex + 1);
 	});
 	const toNextWordWithCheck = useMemoizedFn(() => {
@@ -412,33 +427,43 @@ const HomeStatus = ({
 				hideMeaning={!setting.showMeaning}
 			/>
 			{displayName && (
-				<div
-					className={clsx(
-						notoKR.className,
-						"text-4xl font-bold relative mobile:mt-8",
-					)}
-				>
-					{displayName}
-					<div
-						className={clsx(
-							"flex absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%] z-[1]",
-							!isTouchable && "tooltip tooltip-top",
-						)}
-						data-tip={`${romanized} [${standardized}]`}
+				<AnimatePresence mode="wait">
+					<motion.div
+						key={curWordIndex}
+						initial={{ opacity: 0, x: direction * 50 }}
+						animate={{ opacity: 1, x: 0 }}
+						exit={{ opacity: 0, x: direction * -50 }}
+						transition={{ duration: 0.3, ease: "easeOut" }}
 					>
-						<SpeakerIcon
-							width={20}
-							height={20}
-							onMouseEnter={playWord}
-							onTouchEnd={playWord}
+						<div
 							className={clsx(
-								isWordPlaying ? "fill-current" : "text-base-content",
-								"cursor-pointer inline-block",
+								notoKR.className,
+								"text-4xl font-bold relative mobile:mt-8",
 							)}
-						/>
-					</div>
-					<Star dictItem={currentWord} isLocalDict={isLocalDict} />
-				</div>
+						>
+							{displayName}
+							<div
+								className={clsx(
+									"flex absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%] z-[1]",
+									!isTouchable && "tooltip tooltip-top",
+								)}
+								data-tip={`${romanized} [${standardized}]`}
+							>
+								<SpeakerIcon
+									width={20}
+									height={20}
+									onMouseEnter={playWord}
+									onTouchEnd={playWord}
+									className={clsx(
+										isWordPlaying ? "fill-current" : "text-base-content",
+										"cursor-pointer inline-block",
+									)}
+								/>
+							</div>
+							<Star dictItem={currentWord} isLocalDict={isLocalDict} />
+						</div>
+					</motion.div>
+				</AnimatePresence>
 			)}
 			<div className="text-lg text-gray-500 mt-3 mb-2">
 				<HideText hide={!setting.showMeaning}>

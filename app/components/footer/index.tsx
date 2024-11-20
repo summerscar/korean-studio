@@ -10,7 +10,7 @@ const Footer = async () => {
 	const locale = await getLocale();
 
 	return (
-		<footer className="footer backdrop-blur-lg bg-slate-300/10 text-base-content items-center border-t border-slate-900/10 p-4">
+		<footer className="footer bg-slate-300/10 text-base-content items-center border-t border-slate-900/10 p-4">
 			<aside className="grid-flow-col items-center">
 				{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 				<svg

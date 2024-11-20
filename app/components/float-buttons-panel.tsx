@@ -25,6 +25,7 @@ interface FloatButtonsPanelProps {
 	showAI?: boolean;
 	root: Root | null;
 	locale: string;
+	position?: "top" | "bottom";
 	onClose?: () => void;
 }
 
@@ -37,6 +38,7 @@ export function FloatButtonsPanel({
 	onClose,
 	root,
 	locale,
+	position = "bottom",
 }: FloatButtonsPanelProps) {
 	const onCopy = async () => {
 		try {
@@ -70,7 +72,8 @@ export function FloatButtonsPanel({
 		const windowHeight = window.innerHeight;
 		const spaceBelow = windowHeight - rect.bottom;
 		const spaceAbove = rect.top;
-		const showAbove = spaceBelow < 200 && spaceAbove > spaceBelow;
+		const showAbove = spaceBelow < 300 && spaceAbove > spaceBelow;
+
 		root.render(
 			<div
 				style={{
@@ -99,7 +102,9 @@ export function FloatButtonsPanel({
 	return (
 		<div
 			style={{
-				top: `${rect.bottom + window.scrollY}px`,
+				...(position === "top"
+					? { top: `${rect.top - 35 + window.scrollY}px` }
+					: { top: `${rect.bottom + window.scrollY}px` }),
 				left: `${rect.right - rect.width / 2 + window.scrollX}px`,
 			}}
 			className="z-[1] border border-base-content/10 bg-white/10 shadow backdrop-blur-md flex absolute rounded overflow-hidden"

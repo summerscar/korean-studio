@@ -3,10 +3,8 @@ import clsx from "clsx";
 
 export default function Layout({
 	children,
-	breadcrumbs,
 }: Readonly<{
 	children: React.ReactNode;
-	breadcrumbs: React.ReactNode;
 }>) {
 	return (
 		<div
@@ -15,7 +13,6 @@ export default function Layout({
 				notoKR.className,
 			)}
 		>
-			{breadcrumbs}
 			{children}
 		</div>
 	);

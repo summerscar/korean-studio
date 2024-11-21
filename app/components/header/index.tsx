@@ -52,6 +52,7 @@ const Header = async () => {
 								className={clsx(
 									isAdminBySession(session) ? "text-yellow-200 font-bold" : "",
 								)}
+								prefetch
 							>
 								{session.user?.name}
 							</Link>

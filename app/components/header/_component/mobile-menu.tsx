@@ -46,6 +46,7 @@ const MobileMenu = ({
 			>
 				{links.map(({ href, label }) => (
 					<Link
+						prefetch
 						key={href}
 						href={href}
 						onClick={() => setIsOpen(false)}
@@ -57,6 +58,7 @@ const MobileMenu = ({
 				{session ? (
 					<>
 						<Link
+							prefetch
 							className={clsx(
 								isAdminBySession(session) && "text-yellow-200 font-bold",
 								isActive("/account") && "bg-slate-400/40",

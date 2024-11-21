@@ -12,6 +12,7 @@ const ActiveLinks = ({ links }: { links: ReturnType<typeof headerConfig> }) => {
 		<>
 			{links.map(({ href, label }) => (
 				<Link
+					prefetch
 					key={href}
 					href={href}
 					className={clsx(isActive(href) && "bg-slate-400/40")}

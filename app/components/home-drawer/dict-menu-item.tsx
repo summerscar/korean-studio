@@ -1,6 +1,6 @@
-import CloseIcon from "@/assets/svg/close.svg";
 import SearchIcon from "@/assets/svg/search.svg";
 import StarIcon from "@/assets/svg/star.svg";
+import TrashIcon from "@/assets/svg/trash.svg";
 import { useStarred } from "@/components/home-status/star";
 import type { DictItem } from "@/types/dict";
 import { getTranslation } from "@/utils/convert-input";
@@ -55,14 +55,14 @@ const DictMenuItem = ({
 				</div>
 				{(isAdmin || isLocalDict || isUserDict) && (
 					<div
-						className="absolute -top-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
+						className="absolute -top-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity shadow"
 						onClick={(e) => handleRemove(e, item)}
 					>
-						<CloseIcon className="w-4 h-4" />
+						<TrashIcon className="w-4 h-4" />
 					</div>
 				)}
 				<div
-					className="absolute -bottom-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
+					className="absolute -bottom-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity shadow-md"
 					onClick={(e) => {
 						e.stopPropagation();
 						window.open(

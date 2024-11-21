@@ -1,4 +1,5 @@
 const importJSONFile = async () => {
+	// CanIuse: https://caniuse.com/?search=withResolvers
 	const { promise, resolve } = Promise.withResolvers();
 	const file = document.createElement("input");
 	file.type = "file";

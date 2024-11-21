@@ -1,9 +1,8 @@
 "use client";
-import { createCallable } from "@/utils/callable";
 import { useMemoizedFn } from "ahooks";
-import { type ReactNode, useEffect } from "react";
-import { createPortal } from "react-dom";
-import { renderToString } from "react-dom/server";
+import clsx from "clsx";
+import type { ReactNode } from "react";
+import { createRoot } from "react-dom/client";
 
 const createToast = ({
 	type,
@@ -15,13 +14,22 @@ const createToast = ({
 	delay?: number;
 }) => {
 	const toastWrapper = getToastWrapper();
-	const toastEl = document.createElement("div");
-	toastEl.className = `alert alert-${type} !text-white`;
-
-	toastEl.innerHTML = renderToString(message);
-	toastWrapper?.appendChild(toastEl);
+	const root = createRoot(toastWrapper);
+	root.render(
+		<div
+			className={clsx("alert !text-white", {
+				"alert-success": type === "success",
+				"alert-error": type === "error",
+				"alert-info": type === "info",
+				"alert-warning": type === "warning",
+			})}
+		>
+			{message}
+		</div>,
+	);
 	let unmount = () => {
-		toastWrapper?.removeChild(toastEl);
+		root.render(null);
+		root.unmount();
 		unmount = () => {};
 	};
 	const timeout = setTimeout(() => unmount(), delay);

@@ -508,7 +508,7 @@ const HomeStatus = ({
 			{/* 键盘图案 */}
 			<div
 				className={clsx(
-					"drop-shadow-xl  w-[90vw] sm:w-[80vw] md:w-[70vw] my-3 rounded-xl overflow-hidden relative",
+					"drop-shadow-xl w-[90vw] sm:w-[80vw] md:w-[70vw] my-3 rounded-md sm:rounded-xl overflow-hidden relative",
 				)}
 			>
 				<style>{inlineStyle}</style>

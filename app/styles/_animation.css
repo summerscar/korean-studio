@@ -96,6 +96,7 @@ body #bg{--y-0:80%;--x-0:85%;--c-0:hsla(150.8823529411765,52%,83%,1);--x-1:60%;-
 }
 
 /* learn progress animation */
+/* CanIuse: https://caniuse.com/?search=scroll-timeline */
 html {
 	scroll-timeline: --page-scroll block;
 }

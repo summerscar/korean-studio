@@ -293,7 +293,7 @@ const ActionBar = ({
 		<div className="flex gap-3 *:cursor-pointer mobile:w-8 mobile:overflow-auto">
 			<span onClick={onEdit}>🖍</span>
 			<span onClick={onSearch}>🔍</span>
-			<span onClick={onRemove}>❌</span>
+			<span onClick={onRemove}>🗑</span>
 		</div>
 	);
 };

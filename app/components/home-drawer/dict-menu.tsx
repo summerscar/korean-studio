@@ -7,11 +7,11 @@ import {
 	removeDictAction,
 } from "@/actions/user-dict-action";
 import AddIcon from "@/assets/svg/add.svg";
-import CloseIcon from "@/assets/svg/close.svg";
 import DownloadIcon from "@/assets/svg/download.svg";
 import FileImportIcon from "@/assets/svg/file-import.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
 import ShuffleIcon from "@/assets/svg/shuffle.svg";
+import TrashIcon from "@/assets/svg/trash.svg";
 import { signIn } from "next-auth/react";
 
 import { callModal } from "@/components/modal";
@@ -34,6 +34,7 @@ import {
 import { serverActionTimeOut } from "@/utils/time-out";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 const DictMenu = ({
 	dict,
@@ -60,13 +61,16 @@ const DictMenu = ({
 	const tHome = useTranslations("Home");
 	const router = useRouter();
 	const tDict = useTranslations("Dict");
+	const [isPending, startTransition] = useTransition();
 
 	const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		if (e.target.value === "_create") {
 			createDict();
 			return;
 		}
-		router.push(`/?dict=${e.target.value}`);
+		startTransition(() => {
+			router.push(`/?dict=${e.target.value}`);
+		});
 	};
 
 	const createWord = async () => {
@@ -259,13 +263,14 @@ const DictMenu = ({
 				)}
 				{isUserDict &&
 					dictList.find((_) => _.id === dictId)?.intlKey !== FAV_LIST_KEY && (
-						<CloseIcon className="size-6" onClick={handleRemoveDict} />
+						<TrashIcon className="size-6" onClick={handleRemoveDict} />
 					)}
 			</div>
 			<select
-				className="select select-bordered w-24 sm:w-32 select-sm"
+				className={`select select-bordered w-24 sm:w-32 select-sm ${isPending ? "opacity-50" : ""}`}
 				value={dictId}
 				onChange={onChange}
+				disabled={isPending}
 			>
 				{dictList.map((dict) => (
 					<option key={dict.id} value={dict.id}>
@@ -275,9 +280,13 @@ const DictMenu = ({
 					</option>
 				))}
 				<option value="_local">{tDict(Dicts.local)}</option>
-
 				<option value="_create">✨ {tHome("createNewDict")}</option>
 			</select>
+			{isPending && (
+				<div className="absolute right-2 top-1/2 -translate-y-1/2 flex">
+					<div className="loading loading-spinner loading-xs" />
+				</div>
+			)}
 		</div>
 	);
 };

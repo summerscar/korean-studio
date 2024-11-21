@@ -7,6 +7,7 @@
 		--keyboard-active-color: theme("colors.gray.300");
 		scroll-behavior: smooth;
 		/*
+	    CanIuse: https://caniuse.com/?search=target-text
 			&:target-text {
 				@apply text-white bg-black
 			}

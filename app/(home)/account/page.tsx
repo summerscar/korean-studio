@@ -33,6 +33,7 @@ const AccountPage = async () => {
 				<h1 className="text-3xl pb-4">{tAccount("profile")}</h1>
 				<div>
 					ID: {session.user?.id}{" "}
+					{/* CanIuse: https://caniuse.com/?search=Scroll-To-Text%20Fragment */}
 					<Link
 						target="_blank"
 						href="/learn/beginner/papago#:~:text=用户ID"

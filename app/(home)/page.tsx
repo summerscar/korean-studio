@@ -3,6 +3,7 @@ import { filterAndSortDictList } from "@/actions/user-dict-utils";
 import { HomeStatus } from "@/components/home-status";
 import { Dicts } from "@/types/dict";
 import { auth } from "auth";
+import { getPrismaClient } from "keystone/context";
 
 export default async function HomePage(props: {
 	searchParams: Promise<{ dict?: string }>;
@@ -28,7 +29,12 @@ export default async function HomePage(props: {
 			: await getFavOrDictList(targetDictId!);
 
 	const dictId = searchParamsDict === Dicts.local ? Dicts.local : targetDictId;
+	const prisma = getPrismaClient();
 
+	const pushSubscriptionsCount = await prisma.pushSubscription.count({
+		where: {},
+	});
+	console.log("pushSubscriptions count", pushSubscriptionsCount);
 	return (
 		<main className="w-full flex flex-col items-center justify-center">
 			<HomeStatus

@@ -13,3 +13,13 @@ export const KSwithSession = (session: Session | null) =>
 
 if (process.env.NODE_ENV !== "production")
 	globalThis.keystoneContext = keystoneContext;
+
+export function getPrismaClient(): Context["prisma"] {
+	if (process.env.NODE_ENV === "production") {
+		// 在生产环境中，确保正确初始化 Prisma 客户端
+		const context = getContext(config, PrismaModule);
+		return context.prisma;
+	}
+	// 在开发环境中，使用已存在的 context
+	return keystoneContext.prisma;
+}

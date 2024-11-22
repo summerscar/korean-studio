@@ -56,6 +56,19 @@ export const getQuestionStem = (questionStem: string) => {
 	);
 };
 
+export const getQuestionContent = (questionContent: string) => {
+	if (!questionContent) return;
+	return (
+		<p
+			className="whitespace-pre-line inline-block"
+			// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+			dangerouslySetInnerHTML={{
+				__html: questionContent.replace(/\\n/g, "&#10;"),
+			}}
+		/>
+	);
+};
+
 const QuestionCard = ({
 	topikQuestions,
 	level,
@@ -189,7 +202,7 @@ const QuestionCard = ({
 										{topikQuestion.questionNumber}.
 									</Link>
 									<span>{isAdmin ? `(${topikQuestion.score}점)` : " "}</span>
-									{topikQuestion.questionContent}
+									{getQuestionContent(topikQuestion.questionContent)}
 								</div>
 								<fieldset
 									id={`no-${topikQuestion.questionNumber}`}

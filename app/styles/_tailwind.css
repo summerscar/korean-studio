@@ -6,6 +6,7 @@
 	:root {
 		--keyboard-active-color: theme("colors.gray.300");
 		scroll-behavior: smooth;
+		scrollbar-gutter: stable;
 		/*
 	    CanIuse: https://caniuse.com/?search=target-text
 			&:target-text {

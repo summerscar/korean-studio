@@ -45,6 +45,17 @@ const config: Config = {
 		themeRoot: ":root", // The element that receives theme color CSS variables
 	},
 	// https://medium.com/@achronus/solving-a-niche-frontend-problem-dynamic-tailwind-css-classes-in-react-da5f513ecf6a
-	safelist: ["toast", "toast-top", "toast-center", "z-50"],
+	safelist: [
+		"toast",
+		"toast-top",
+		"toast-center",
+		"alert",
+		"alert-error",
+		"alert-success",
+		"alert-warning",
+		"alert-info",
+		"z-50",
+		"text-white",
+	],
 };
 export default config;

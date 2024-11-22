@@ -29,6 +29,11 @@ const settings = {
 		type: "text",
 		defaultValue: "",
 	},
+	notification: {
+		description: "Notification",
+		type: "checkbox",
+		defaultValue: true,
+	},
 };
 
 const initConfig = () => {
@@ -78,6 +83,7 @@ const style = {
 			const SERVER = GM_config.get("SERVER");
 			const dictId = GM_config.get("dictId");
 			const userId = GM_config.get("userId");
+			const notification = GM_config.get("notification");
 
 			if (!SERVER || !dictId || !userId) {
 				GM_config.open();
@@ -90,7 +96,7 @@ const style = {
 			try {
 				const res = await fetch(`${SERVER}/api/dict-items/create`, {
 					method: "POST",
-					body: JSON.stringify({ dictId, words: [text], userId }),
+					body: JSON.stringify({ dictId, words: [text], userId, notification }),
 				});
 				if (res.status !== 200) {
 					throw new Error((await res.text()) || res.statusText);

@@ -8,7 +8,7 @@ self.addEventListener("push", (event) => {
 		type: "PUSH_RECEIVED",
 		payload: options,
 	});
-
+	if (!options?.data?.notification) return;
 	event.waitUntil(
 		self.registration.showNotification(options.title, {
 			body: options.body,

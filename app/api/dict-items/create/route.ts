@@ -3,7 +3,7 @@ import { sendNotificationToUser } from "@/utils/push-notification";
 
 const POST = async (request: Request) => {
 	try {
-		const { userId, dictId, words } = await request.json();
+		const { userId, dictId, words, notification } = await request.json();
 		if (!dictId || !Array.isArray(words) || !userId) {
 			return new Response("Body is invalid", { status: 500 });
 		}
@@ -22,6 +22,7 @@ const POST = async (request: Request) => {
 				data: {
 					url: `/?dict=${dictId}`,
 					dictId,
+					notification,
 				},
 			},
 			[userId],

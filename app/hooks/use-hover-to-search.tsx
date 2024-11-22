@@ -97,7 +97,7 @@ const useHoverToSearch = (text?: string) => {
 
 	useClickAway(() => {
 		cleanup();
-	}, buttonContainer.current);
+	}, buttonContainer);
 
 	return targetRef;
 };

@@ -1,7 +1,7 @@
 # Korean Studio
 
 <div align="center">
-  <em>"Korean Studio: Your Ultimate Korean Learning Companion"</em>
+  <em>⚡让我们说韩文! ⚡한국어로 말합시다!</em>
   <br><br>
   <img src="https://img.shields.io/github/last-commit/summerscar/korean-studio?style=flat-square&logo=git&logoColor=white&color=0080ff" alt="last-commit">
   <img src="https://img.shields.io/github/languages/top/summerscar/korean-studio?style=flat-square&color=0080ff" alt="repo-top-language">
@@ -15,11 +15,11 @@ Korean Studio 是一个现代化的韩语学习平台，基于 Next.js 和 Keyst
 
 | 特性 | 描述 |
 |------|------|
-| 📚 **系统化学习** | • 从基础到高级的完整韩语课程<br>• 科学的学习进度追踪<br>• 个性化的学习路径规划 |
-| 🎯 **TOPIK 备考** | • 真题练习与解析<br>• 模拟测试系统<br>• 考点重点讲解 |
-| ⌨️ **智能输入** | • 韩语键盘练习系统<br>• 智能输入联想<br>• 发音规则指导 |
+| 📚 **系统化学习** | • 从基础到高级的完整韩语课程<br>• ~~科学的学习进度追踪~~<br>• ~~个性化的学习路径规划~~ |
+| 🎯 **TOPIK 备考** | • 真题练习与解析<br>• 模拟测试系统<br>• ~~考点重点讲解~~ |
+| ⌨️ **智能输入** | • 韩语键盘练习系统<br>• ~~智能输入联想~~<br>• ~~发音规则指导~~ |
 | 🌐 **多语言支持** | • 中文/英文/日文界面<br>• 术语多语言对照<br>• 智能翻译辅助 |
-| 🎮 **互动学习** | • 情境对话练习<br>• 词汇记忆游戏<br>• 发音评测系统 |
+| 🎮 **互动学习** | • ~~情境对话练习~~<br>• ~~词汇记忆游戏~~<br>• ~~发音评测系统~~ |
 
 ## 🔧 技术栈
 
@@ -74,3 +74,5 @@ korean-studio/
 - `keystone/`: 包含 CMS 配置和模型定义
 - `mdx/`: 存放所有的学习内容，按主题和难度分类
 - `messages/`: 多语言翻译文件
+
+> 部分内容由 AI 生成仅供参考

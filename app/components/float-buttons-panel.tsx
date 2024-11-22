@@ -109,13 +109,9 @@ export function FloatButtonsPanel({
 			}}
 			className="z-[1] border border-base-content/10 bg-white/10 shadow backdrop-blur-md flex absolute rounded overflow-hidden"
 		>
-			{showSearch && (
-				<SearchButton onClick={onPapagoSearch} icon="search" title="search" />
-			)}
-			{showCopy && <SearchButton onClick={onCopy} icon="copy" title="copy" />}
-			{showAI && (
-				<SearchButton onClick={openAISuggestion} icon="sparkles" title="AI" />
-			)}
+			{showSearch && <SearchButton onClick={onPapagoSearch} icon="search" />}
+			{showCopy && <SearchButton onClick={onCopy} icon="copy" />}
+			{showAI && <SearchButton onClick={openAISuggestion} icon="sparkles" />}
 		</div>
 	);
 }

@@ -8,6 +8,7 @@ import {
 	getOptionContent,
 	getQuestionContent,
 	getQuestionStem,
+	getQuestionSubContent,
 } from "../../_components/question-card";
 
 export const getAnswerOptions = (topikQuestion: TopikQuestion) => {
@@ -58,6 +59,7 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 			</div>
 			{getQuestionStem(topikQuestion.questionStem)}
 			{getQuestionContent(topikQuestion.questionContent)}
+			{getQuestionSubContent(topikQuestion.questionContent)}
 			<form
 				action={async (formData) => {
 					const result = await handleSubmit(formData);

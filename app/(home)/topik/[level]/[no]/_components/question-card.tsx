@@ -63,7 +63,24 @@ export const getQuestionContent = (questionContent: string) => {
 			className="whitespace-pre-line inline-block"
 			// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 			dangerouslySetInnerHTML={{
-				__html: questionContent.replace(/\\n/g, "&#10;"),
+				__html: questionContent.split("\n")[0].replace(/\\n/g, "&#10;"),
+			}}
+		/>
+	);
+};
+
+export const getQuestionSubContent = (questionSubContent: string) => {
+	if (!questionSubContent) return;
+	const subContent = questionSubContent
+		.split("\n")[1]
+		?.replace(/\\n/g, "&#10;");
+	if (!subContent) return;
+	return (
+		<p
+			className="whitespace-pre-line p-3 mb-2 rounded-sm border border-base-content"
+			// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+			dangerouslySetInnerHTML={{
+				__html: subContent,
 			}}
 		/>
 	);
@@ -160,7 +177,7 @@ const QuestionCard = ({
 								{topikQuestion.questionType !== "LISTENING" &&
 									topikQuestion.questionStem &&
 									getQuestionStem(topikQuestion.questionStem)}
-								<div className="mb-2 relative">
+								<div className="mb-2 relative flex">
 									{isAdmin && (
 										<div className="absolute -left-8 top-0">
 											<button
@@ -196,14 +213,17 @@ const QuestionCard = ({
 									)}
 									<Link
 										target="_blank"
-										className="underline font-bold"
+										className="underline font-bold flex-none"
 										href={`/topik/${level}/${no}/${topikQuestion.questionNumber}`}
 									>
 										{topikQuestion.questionNumber}.
 									</Link>
-									<span>{isAdmin ? `(${topikQuestion.score}점)` : " "}</span>
+									<span className="flex-none">
+										{isAdmin ? `(${topikQuestion.score}점)` : " "}
+									</span>
 									{getQuestionContent(topikQuestion.questionContent)}
 								</div>
+								{getQuestionSubContent(topikQuestion.questionContent)}
 								<fieldset
 									id={`no-${topikQuestion.questionNumber}`}
 									className="grid gap-2 grid-cols-1 sm:grid-cols-2"

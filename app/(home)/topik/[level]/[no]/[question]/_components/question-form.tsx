@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
 	getOptionContent,
+	getQuestionContent,
 	getQuestionStem,
 } from "../../_components/question-card";
 
@@ -56,7 +57,7 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 				{topikQuestion.questionNumber}
 			</div>
 			{getQuestionStem(topikQuestion.questionStem)}
-			<h2>{topikQuestion.questionContent}</h2>
+			{getQuestionContent(topikQuestion.questionContent)}
 			<form
 				action={async (formData) => {
 					const result = await handleSubmit(formData);

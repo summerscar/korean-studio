@@ -162,8 +162,8 @@ const toast = (message, type = "info") => {
 	Object.assign(toast.style, {
 		position: "fixed",
 		bottom: "50px",
-		left: "50%",
-		transform: "translate(-120%, -50%)",
+		left: "calc(50% - 40px)",
+		transform: "translate(-50%, -50%)",
 		padding: "1rem",
 		borderRadius: "0.25rem",
 		boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
@@ -182,5 +182,5 @@ const toast = (message, type = "info") => {
 	document.body.appendChild(toast);
 	setTimeout(() => {
 		toast.remove();
-	}, 3000);
+	}, 5000);
 };

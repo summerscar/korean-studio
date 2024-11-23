@@ -33,6 +33,7 @@ ${JSON.stringify(WORD_EXAMPLE)}
 3. 输出要求:
    - 严格按照参考格式生成 JSON
    - 包含完整的 name/trans/example/exTrans 字段
+	 - exTrans 中各种语言的释义只需要一个
    - 仅返回 JSON 字符串,不要包含其他内容
 
 示例输入: 你好

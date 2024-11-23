@@ -1,11 +1,11 @@
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { DefaultLayout } from "@/components/root-layout";
-import { getServerI18n } from "@/utils/i18n";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
-	const t = await getServerI18n("Index");
+	const t = await getTranslations("Index");
 	return {
 		title: t("title"),
 		description: t("description"),

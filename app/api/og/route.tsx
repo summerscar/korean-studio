@@ -1,4 +1,4 @@
-import { getServerI18n } from "@/utils/i18n";
+import { getTranslations } from "next-intl/server";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 
@@ -7,7 +7,7 @@ export const runtime = "edge";
 // TODO: og-image
 export async function GET(req: NextRequest): Promise<Response | ImageResponse> {
 	try {
-		const t = await getServerI18n("Index");
+		const t = await getTranslations("Index");
 
 		const { searchParams } = new URL(req.url);
 		// TODO: 设备主题设置

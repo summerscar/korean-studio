@@ -91,7 +91,7 @@ const style = {
 				return;
 			}
 			const text = getWord(e.target);
-			toast("Word creating", "info");
+			toast("⏳ Word creating", "info");
 			e.target.textContent = "⏳";
 			e.target.disabled = true;
 			try {
@@ -109,10 +109,10 @@ const style = {
 					throw new Error((await res.text()) || res.statusText);
 				}
 				e.target.textContent = "✅";
-				toast("Word created", "success");
+				toast("✨ Word created", "success");
 			} catch (error) {
 				e.target.textContent = "❌";
-				toast(error.message, "error");
+				toast(`⚠️ ${error.message}`, "error");
 				console.error("[dict-items/create][error]:", error);
 			} finally {
 				setTimeout(() => {
@@ -170,7 +170,7 @@ const toast = (message, type = "info") => {
 		zIndex: "9999",
 		backgroundColor:
 			type === "success"
-				? "green"
+				? "#21dc6d"
 				: type === "error"
 					? "red"
 					: type === "info"

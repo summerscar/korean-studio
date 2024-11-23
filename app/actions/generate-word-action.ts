@@ -1,6 +1,6 @@
 "use server";
 import type { DictItem } from "@/types/dict";
-import { isDev, isProd } from "@/utils/is-dev";
+import { isDev } from "@/utils/is-dev";
 import {
 	generateWordPrompt,
 	generateWordSuggestionPrompt,
@@ -35,7 +35,7 @@ export const generateWordsAction = async (words: string[]) => {
 			return res;
 		} catch (e) {
 			console.error(`[generateWordsAction][error]: ${e}`);
-			return null;
+			throw e;
 		}
 	};
 	return (

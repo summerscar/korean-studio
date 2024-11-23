@@ -98,5 +98,9 @@
 		"correct": "正解",
 		"incorrect": "不正解",
 		"unSelectedTips": "選択してください"
+	},
+	"Notification": {
+		"addWordSuccess": "新しい単語を追加しました!",
+		"addWordContent": "単語「{word}」がリストに追加されました!"
 	}
 }

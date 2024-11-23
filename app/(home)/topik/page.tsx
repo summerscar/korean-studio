@@ -1,13 +1,13 @@
 import { keystoneContext } from "@/../keystone/context";
 import { TopikLevels } from "@/types";
-import { getServerI18n } from "@/utils/i18n";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { unstable_cache } from "next/cache";
 import Link from "next/link";
 import type { TopikLevelType } from ".keystone/types";
 
 export async function generateMetadata(): Promise<Metadata> {
-	const tIndex = await getServerI18n("Index");
+	const tIndex = await getTranslations("Index");
 	return {
 		title: `${tIndex("title")}-TOPIK`,
 	};

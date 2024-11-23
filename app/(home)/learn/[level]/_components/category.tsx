@@ -1,7 +1,7 @@
 import MenuIcon from "@/assets/svg/menu.svg";
 import type { DocPathParams } from "@/types";
-import { getServerI18n } from "@/utils/i18n";
 import { type FileItem, type SubDirItem, listAllDocs } from "@/utils/list-docs";
+import { getTranslations } from "next-intl/server";
 import {
 	CategoryActiveClient,
 	MobileCategoryHeader,
@@ -10,7 +10,7 @@ import { CategoryParentClient } from "./category-parent-client";
 
 const DocsCategory = async ({ level }: Pick<DocPathParams, "level">) => {
 	const docs = await listAllDocs(level);
-	const t = await getServerI18n("Header");
+	const t = await getTranslations("Header");
 
 	const buildTree = (docs: (FileItem | SubDirItem)[], path: string[] = []) => {
 		return docs.map((doc) => {

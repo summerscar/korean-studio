@@ -1,8 +1,8 @@
 import HomeIcon from "@/assets/svg/home.svg";
 import { isAdminBySession } from "@/hooks/use-user";
-import { getServerI18n } from "@/utils/i18n";
 import { auth } from "auth";
 import clsx from "clsx";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { ActiveLinks } from "./_component/active-links";
 import { CheckClientSession } from "./_component/check-client-session";
@@ -11,7 +11,9 @@ import { MobileMenu } from "./_component/mobile-menu";
 import { Progress } from "./_component/progress";
 import { Search } from "./_component/search";
 
-export const headerConfig = (t: Awaited<ReturnType<typeof getServerI18n>>) => [
+export const headerConfig = (
+	t: Awaited<ReturnType<typeof getTranslations<"Header">>>,
+) => [
 	{
 		href: "/learn/beginner",
 		label: `${t("beginner")}`,
@@ -32,7 +34,7 @@ export const headerConfig = (t: Awaited<ReturnType<typeof getServerI18n>>) => [
 
 const Header = async () => {
 	const session = await auth();
-	const t = await getServerI18n("Header");
+	const t = await getTranslations("Header");
 
 	return (
 		<header className="before-backdrop-shadow sticky top-0 h-[--header-height] flex border-b border-slate-900/10 w-full select-none bg-slate-300/10 text-base-content z-20 before:">

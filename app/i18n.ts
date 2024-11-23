@@ -4,8 +4,14 @@ import { getI18nFromCookie } from "./actions/check-i18n";
 import { SITES_LANGUAGE } from "./types/site";
 import { DEFAULT_SITE_LANGUAGE } from "./utils/config";
 
-export default getRequestConfig(async () => {
+export default getRequestConfig(async (request) => {
+	const requestLocale = await request.requestLocale;
+	const isRequestedLocaleSupported =
+		requestLocale &&
+		Object.values(SITES_LANGUAGE).includes(requestLocale as SITES_LANGUAGE);
+
 	const locale =
+		(isRequestedLocaleSupported && requestLocale) ||
 		(await getI18nFromCookie()) ||
 		(await getLanguageFromHeader()) ||
 		DEFAULT_SITE_LANGUAGE;

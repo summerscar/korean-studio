@@ -1,12 +1,12 @@
 import NextIcon from "@/assets/svg/next.svg";
 import PrevIcon from "@/assets/svg/prev.svg";
 import { type DocPathParams, Levels } from "@/types";
-import { getServerI18n } from "@/utils/i18n";
 import { isDev } from "@/utils/is-dev";
 import { type FileItem, listAllDocs } from "@/utils/list-docs";
 import { loadMDX } from "@/utils/load-mdx";
 import { timeOut } from "@/utils/time-out";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { MDContentWrapper } from "../_components/markdown-wrapper";
@@ -16,7 +16,7 @@ export async function generateMetadata(props: {
 	params: Promise<DocPathParams>;
 }): Promise<Metadata> {
 	const params = await props.params;
-	const t = await getServerI18n("Header");
+	const t = await getTranslations("Header");
 	const level = params.level;
 
 	if (!params.doc_path.length) return { title: t(level) };

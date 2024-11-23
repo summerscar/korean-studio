@@ -1,6 +1,6 @@
 import { type ToolName, toolsNames } from "@/types/tools";
-import { getServerI18n } from "@/utils/i18n";
 import clsx from "clsx";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
 const list: {
@@ -38,8 +38,8 @@ const list: {
 export async function generateMetadata(props: {
 	params: Promise<{ tool: string[] }>;
 }) {
-	const tHeader = await getServerI18n("Header");
-	const tTools = await getServerI18n("Tools");
+	const tHeader = await getTranslations("Header");
+	const tTools = await getTranslations("Tools");
 	const tool = ((await props.params).tool || [])[0] as ToolName;
 	return {
 		title: tool
@@ -74,7 +74,7 @@ export default async function Layout({
 	children,
 	params,
 }: { children: React.ReactNode; params: Promise<{ tool: string[] }> }) {
-	const tTools = await getServerI18n("Tools");
+	const tTools = await getTranslations("Tools");
 	const tool = ((await params).tool || [])[0] as ToolName;
 
 	return (

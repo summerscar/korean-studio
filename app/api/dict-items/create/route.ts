@@ -1,16 +1,7 @@
 import { addWordsToUserDictAction } from "@/actions/user-dict-action";
 import { DEFAULT_SITE_LANGUAGE } from "@/utils/config";
 import { sendNotificationToUser } from "@/utils/push-notification";
-
-const getMessages = async (locale: string) => {
-	try {
-		return (await import(`../../../../messages/${locale}.json`)).default;
-	} catch (e) {
-		console.warn(`[getMessages] Fallback to ${DEFAULT_SITE_LANGUAGE}:`, e);
-		return (await import(`../../../../messages/${DEFAULT_SITE_LANGUAGE}.json`))
-			.default;
-	}
-};
+import { getTranslations } from "next-intl/server";
 
 const POST = async (request: Request) => {
 	try {
@@ -25,9 +16,10 @@ const POST = async (request: Request) => {
 		if (!dictId || !Array.isArray(words) || !userId) {
 			return new Response("Body is invalid", { status: 500 });
 		}
-
-		const messages = await getMessages(locale);
-
+		const tNotification = await getTranslations({
+			locale,
+			namespace: "Notification",
+		});
 		await addWordsToUserDictAction(dictId, words, userId);
 		console.log(
 			"[POST][/api/dict-items/create]:",
@@ -37,11 +29,8 @@ const POST = async (request: Request) => {
 		// 发送通知
 		const notificationResult = await sendNotificationToUser(
 			{
-				title: messages.Notification.addWordSuccess,
-				body: messages.Notification.addWordContent.replace(
-					"{word}",
-					words.join(", "),
-				),
+				title: tNotification("addWordSuccess"),
+				body: tNotification("addWordContent", { word: words.join(", ") }),
 				data: {
 					url: `/?dict=${dictId}`,
 					dictId,

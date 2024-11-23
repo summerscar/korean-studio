@@ -1,6 +1,5 @@
 "use client";
 import { useSelectToSearch } from "@/hooks/use-select-to-search";
-import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
 import {
 	type ReactNode,

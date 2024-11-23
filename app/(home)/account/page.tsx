@@ -1,13 +1,13 @@
 import { getAllDicts } from "@/actions/user-dict-action";
 import { filterAndSortDictList } from "@/actions/user-dict-utils";
 import InfoIcon from "@/assets/svg/info.svg";
-import { getServerI18n } from "@/utils/i18n";
 import { auth } from "auth";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { WordLists } from "./_components/lists";
 
 export const generateMetadata = async () => {
-	const tAccount = await getServerI18n("Account");
+	const tAccount = await getTranslations("Account");
 
 	return {
 		title: tAccount("profile"),
@@ -17,7 +17,7 @@ export const generateMetadata = async () => {
 const AccountPage = async () => {
 	const session = await auth();
 	const dicts = filterAndSortDictList(await getAllDicts(), session, false);
-	const tAccount = await getServerI18n("Account");
+	const tAccount = await getTranslations("Account");
 
 	if (!session) {
 		return (

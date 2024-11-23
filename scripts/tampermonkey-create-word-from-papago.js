@@ -84,6 +84,7 @@ const style = {
 			const dictId = GM_config.get("dictId");
 			const userId = GM_config.get("userId");
 			const notification = GM_config.get("notification");
+			const locale = new URLSearchParams(location.search).get("tk");
 
 			if (!SERVER || !dictId || !userId) {
 				GM_config.open();
@@ -96,7 +97,13 @@ const style = {
 			try {
 				const res = await fetch(`${SERVER}/api/dict-items/create`, {
 					method: "POST",
-					body: JSON.stringify({ dictId, words: [text], userId, notification }),
+					body: JSON.stringify({
+						dictId,
+						words: [text],
+						userId,
+						notification,
+						locale,
+					}),
 				});
 				if (res.status !== 200) {
 					throw new Error((await res.text()) || res.statusText);

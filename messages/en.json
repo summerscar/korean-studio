@@ -98,5 +98,9 @@
 		"correct": "Correct",
 		"incorrect": "Incorrect",
 		"unSelectedTips": "Please select an answer"
+	},
+	"Notification": {
+		"addWordSuccess": "New word added to list!",
+		"addWordContent": "Word「{word}」has been added to list successfully!"
 	}
 }

@@ -98,5 +98,9 @@
 		"correct": "正确",
 		"incorrect": "错误",
 		"unSelectedTips": "请选择一个选项"
+	},
+	"Notification": {
+		"addWordSuccess": "新单词已添加到词单",
+		"addWordContent": "单词「{word}」已成功添加到列表!"
 	}
 }

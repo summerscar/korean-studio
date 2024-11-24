@@ -11,7 +11,6 @@ import DownloadIcon from "@/assets/svg/download.svg";
 import FileImportIcon from "@/assets/svg/file-import.svg";
 import SettingIcon from "@/assets/svg/setting.svg";
 import ShuffleIcon from "@/assets/svg/shuffle.svg";
-import TrashIcon from "@/assets/svg/trash.svg";
 import { signIn } from "next-auth/react";
 
 import { callModal } from "@/components/modal";
@@ -152,21 +151,6 @@ const DictMenu = ({
 		}
 	};
 
-	const handleRemoveDict = async () => {
-		if (
-			!(await callModal({
-				type: "confirm",
-				title: tHome("removeWordList"),
-			}))
-		)
-			return;
-		const removeInfoToast = createLoadingToast(tHome("removing"));
-		await removeDictAction(dictId);
-		router.push("/");
-		await serverActionTimeOut();
-		removeInfoToast();
-		createSuccessToast("success");
-	};
 	const canEdit = isAdmin || isUserDict || dictId === Dicts.local;
 	return (
 		<div className="sticky top-2 z-10 bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1 max-w-full">
@@ -256,15 +240,11 @@ const DictMenu = ({
 						</div>
 					</div>
 				</div>
-				{canEdit && <AddIcon className="size-6" onClick={createWord} />}
 				<DownloadIcon className="size-6" onClick={handleDownload} />
 				{canEdit && (
 					<FileImportIcon className="size-6" onClick={handleImport} />
 				)}
-				{isUserDict &&
-					dictList.find((_) => _.id === dictId)?.intlKey !== FAV_LIST_KEY && (
-						<TrashIcon className="size-6" onClick={handleRemoveDict} />
-					)}
+				{canEdit && <AddIcon className="size-6" onClick={createWord} />}
 			</div>
 			<select
 				className={`select select-bordered w-24 sm:w-32 select-sm ${isPending ? "opacity-50" : ""}`}

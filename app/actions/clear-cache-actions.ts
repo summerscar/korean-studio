@@ -7,6 +7,7 @@ import {
 	allDictsRevalidateKey,
 	getDictRevalidateKey,
 	getFavDictRevalidateKey,
+	isFavDict,
 } from "./user-dict-utils";
 
 const clearCacheAction = async (path: string) => {
@@ -23,7 +24,7 @@ const clearCacheAction = async (path: string) => {
 	const dictList = await getAllDicts();
 	for (const dict of dictList) {
 		revalidateTag(getDictRevalidateKey(dict.id));
-		if (dict.intlKey === FAV_LIST_KEY) {
+		if (isFavDict(dict)) {
 			revalidateTag(getFavDictRevalidateKey(dict.id));
 		}
 	}

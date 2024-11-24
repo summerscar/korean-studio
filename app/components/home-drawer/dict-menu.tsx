@@ -45,6 +45,7 @@ const DictMenu = ({
 	setting,
 	isUserDict,
 	isLocalDict,
+	isFavDict,
 }: {
 	dict: Dict;
 	dictId: string;
@@ -55,6 +56,7 @@ const DictMenu = ({
 	setting: HomeSetting;
 	isUserDict: boolean;
 	isLocalDict: boolean;
+	isFavDict: boolean;
 }) => {
 	const { isLogin, isAdmin } = useUser();
 	const tHome = useTranslations("Home");
@@ -151,7 +153,8 @@ const DictMenu = ({
 		}
 	};
 
-	const canEdit = isAdmin || isUserDict || dictId === Dicts.local;
+	const canEdit =
+		(isAdmin || isUserDict || dictId === Dicts.local) && !isFavDict;
 	return (
 		<div className="sticky top-2 z-10 bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1 max-w-full">
 			<div className="pl-1 sm:pl-3 flex items-center *:mx-1 *:inline-block *:cursor-pointer *:select-none">
@@ -242,9 +245,11 @@ const DictMenu = ({
 				</div>
 				<DownloadIcon className="size-6" onClick={handleDownload} />
 				{canEdit && (
-					<FileImportIcon className="size-6" onClick={handleImport} />
+					<>
+						<FileImportIcon className="size-6" onClick={handleImport} />
+						<AddIcon className="size-6" onClick={createWord} />
+					</>
 				)}
-				{canEdit && <AddIcon className="size-6" onClick={createWord} />}
 			</div>
 			<select
 				className={`select select-bordered w-24 sm:w-32 select-sm ${isPending ? "opacity-50" : ""}`}

@@ -1,10 +1,15 @@
-import { removeDictItemAction } from "@/actions/user-dict-action";
+import {
+	removeDictItemAction,
+	toggleDictItemIdToFavListAction,
+} from "@/actions/user-dict-action";
+import { isFavDict } from "@/actions/user-dict-utils";
 import { ClientOnly } from "@/components/client-only";
 import { callModal } from "@/components/modal";
 import { createLoadingToast, createSuccessToast } from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
 import type { HomeSetting } from "@/types";
 import { type Dict, type DictItem, Dicts, type UserDicts } from "@/types/dict";
+import { FAV_LIST_KEY } from "@/utils/config";
 import { isServer } from "@/utils/is-server";
 import { removeLocalDict } from "@/utils/local-dict";
 import { serverActionTimeOut, timeOut } from "@/utils/time-out";
@@ -42,6 +47,7 @@ const HomeDrawer = ({
 	setting: HomeSetting;
 	onSettingChange: (val: Partial<HomeSetting>) => void;
 }) => {
+	const isFavList = isFavDict(dictList.find((dict) => dict.id === dictId));
 	const { isAdmin } = useUser();
 	const drawerListRef = useRef<HTMLUListElement>(null);
 	const locale = useLocale();
@@ -54,7 +60,6 @@ const HomeDrawer = ({
 		}
 		throw new Error("controllerRef.current is null");
 	});
-
 	useEffect(() => {
 		if (drawerRef.current) {
 			drawerRef.current.open = open;
@@ -88,7 +93,11 @@ const HomeDrawer = ({
 				const cancel = createLoadingToast(
 					`【${item.name}】${tHome("removing")}`,
 				);
-				await removeDictItemAction(dictId, item.id!);
+				if (isFavList) {
+					await toggleDictItemIdToFavListAction(item.id!, false, dictId);
+				} else {
+					await removeDictItemAction(dictId, item.id!);
+				}
 				await serverActionTimeOut();
 				cancel();
 				createSuccessToast(tHome("removed"));
@@ -136,6 +145,7 @@ const HomeDrawer = ({
 								onSettingChange={onSettingChange}
 								onShuffle={onShuffle}
 								onDictUpdate={handleDictUpdate}
+								isFavDict={isFavList}
 							/>
 							{/* Sidebar content here */}
 							{dict.map((item, index) => (

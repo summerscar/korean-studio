@@ -10,6 +10,7 @@ import {
 	allDictsRevalidateKey,
 	getDictRevalidateKey,
 	getFavDictRevalidateKey,
+	isFavDict,
 } from "./user-dict-utils";
 import type { DictItemCreateInput, DictUpdateInput } from ".keystone/types";
 
@@ -63,17 +64,22 @@ const createFavListAction = async (userName: string, userId: string) => {
 
 const _getFavListID = async (userId: string) => {
 	const favDict = (await getAllDicts()).find(
-		(_) => _.createdBy.id === userId && _.intlKey === FAV_LIST_KEY,
+		(_) => _.createdBy.id === userId && isFavDict(_),
 	) as UserDicts[0];
 	return favDict.id;
 };
 
-const getFavListAction = async () => {
+/**
+ * 获取收藏列表
+ * @param targetDictId 用于非本人获取
+ * @returns
+ */
+const getFavListAction = async (targetDictId?: string) => {
 	const session = await auth();
 	if (!session?.user) {
 		return [];
 	}
-	const dictId = await _getFavListID(session.user?.id!);
+	const dictId = targetDictId || (await _getFavListID(session.user?.id!));
 	const res = await unstable_cache(
 		async () => {
 			const res = await KSwithSession(session).query.DictItemFavorite.findMany({
@@ -89,15 +95,22 @@ const getFavListAction = async () => {
 	return toPlainObject(res);
 };
 
+/**
+ * 管理收藏
+ * @param dictItemId
+ * @param isAdd
+ * @param targetDictId 用于非本人操作时，指定目标收藏夹
+ */
 const toggleDictItemIdToFavListAction = async (
 	dictItemId: string,
 	isAdd: boolean,
+	targetDictId?: string,
 ) => {
 	const session = await auth();
 	if (!session?.user) {
 		throw new Error("no session");
 	}
-	const dictId = await _getFavListID(session.user?.id!);
+	const dictId = targetDictId || (await _getFavListID(session.user?.id!));
 
 	const ctx = KSwithSession(session);
 	await ctx.db.Dict.updateOne({
@@ -235,8 +248,8 @@ const getCachedDictList = (dictId: string) => {
 const getFavOrDictList = async (dictId: string) => {
 	const dicts = await getAllDicts();
 	const dict = dicts.find((_) => _.id === dictId);
-	if (dict?.intlKey === FAV_LIST_KEY) {
-		return getFavListAction();
+	if (isFavDict(dict)) {
+		return getFavListAction(dictId);
 	}
 	return getCachedDictList(dictId);
 };

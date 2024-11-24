@@ -4,6 +4,7 @@ import {
 	createDictAction,
 	removeDictAction,
 	removeDictItemAction,
+	toggleDictItemIdToFavListAction,
 	updateDictAction,
 	updateDictItemAction,
 } from "@/actions/user-dict-action";
@@ -28,11 +29,13 @@ const WordsList = ({
 	dictInfo,
 	onUpdate,
 	loading,
+	isFavDict,
 }: {
 	dict: Dict;
 	dictInfo?: UserDicts[0];
 	onUpdate?: () => Promise<void>;
 	loading?: boolean;
+	isFavDict?: boolean;
 }) => {
 	const router = useRouter();
 	const tHome = useTranslations("Home");
@@ -136,7 +139,11 @@ const WordsList = ({
 		)
 			return;
 		const cancel = createLoadingToast(tHome("removing"));
-		await removeDictItemAction(dictInfo?.id!, dictItem.id!);
+		if (isFavDict) {
+			await toggleDictItemIdToFavListAction(dictItem.id!, false, dictInfo?.id!);
+		} else {
+			await removeDictItemAction(dictInfo?.id!, dictItem.id!);
+		}
 		await onUpdate?.();
 		cancel();
 		createSuccessToast(tHome("removed"));
@@ -258,21 +265,23 @@ const WordsList = ({
 											{tHome("createNewDict")}
 										</button>
 										{dictInfo.intlKey !== FAV_LIST_KEY && (
-											<button
-												className="btn btn-outline btn-xs"
-												type="button"
-												onClick={handleRemoveDict}
-											>
-												{tHome("removeWordList")}
-											</button>
+											<>
+												<button
+													className="btn btn-outline btn-xs"
+													type="button"
+													onClick={handleRemoveDict}
+												>
+													{tHome("removeWordList")}
+												</button>
+												<button
+													className="btn btn-outline btn-xs"
+													type="button"
+													onClick={handleAdd}
+												>
+													{tHome("generateWord")}
+												</button>
+											</>
 										)}
-										<button
-											className="btn btn-outline btn-xs"
-											type="button"
-											onClick={handleAdd}
-										>
-											{tHome("generateWord")}
-										</button>
 									</div>
 								</td>
 							</tr>

@@ -1,5 +1,6 @@
 "use client";
 import { getFavOrDictList } from "@/actions/user-dict-action";
+import { isFavDict } from "@/actions/user-dict-utils";
 import { useServerActionState } from "@/hooks/use-server-action-state";
 import { useUser } from "@/hooks/use-user";
 import type { Dict, Dicts, UserDicts } from "@/types/dict";
@@ -13,6 +14,7 @@ const WordLists = ({ dicts }: { dicts: UserDicts }) => {
 	const tabId = useSearchParams().get("dict") || dicts[0]?.id || "";
 	const [dict, setDict] = useState<Dict>([]);
 	const tDict = useTranslations("Dict");
+	const isFavList = isFavDict(dicts.find((dict) => dict.id === tabId));
 	const { isAdmin } = useUser();
 	const [pending, fetchDicts] = useServerActionState(async (dictId: string) => {
 		if (!dictId) return;
@@ -46,6 +48,7 @@ const WordLists = ({ dicts }: { dicts: UserDicts }) => {
 				))}
 			</div>
 			<WordsList
+				isFavDict={isFavList}
 				loading={pending}
 				dict={dict}
 				dictInfo={dicts.find((dict) => dict.id === tabId)}

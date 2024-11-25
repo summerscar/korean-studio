@@ -302,6 +302,7 @@ const HomeStatus = ({
 		setCurWordIndex(targetIndex);
 		setCurInputIndex(0);
 		setIsInputError(false);
+		setInputKeys({});
 
 		console.log(
 			`skip to next word! ${targetIndex + 1}/${dict.length}  \n`,

@@ -36,7 +36,13 @@ const getToastWrapper = () => {
 	if (!toastWrapper) {
 		toastWrapper = document.createElement("div");
 		toastWrapper.id = "toast";
-		toastWrapper.classList.add("toast", "toast-top", "toast-center", "z-50");
+		toastWrapper.classList.add(
+			"toast",
+			"toast-top",
+			"toast-center",
+			"z-50",
+			"pointer-events-none",
+		);
 		document.body.appendChild(toastWrapper);
 	}
 	return toastWrapper;

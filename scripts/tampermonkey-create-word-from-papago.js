@@ -109,7 +109,7 @@ const style = {
 					throw new Error((await res.text()) || res.statusText);
 				}
 				e.target.textContent = "✅";
-				toast("✨ Word created", "success");
+				toast("🎉 Word created", "success");
 			} catch (error) {
 				e.target.textContent = "❌";
 				toast(`⚠️ ${error.message}`, "error");

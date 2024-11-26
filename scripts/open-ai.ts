@@ -11,7 +11,29 @@ const openai = new OpenAI({
 	baseURL: process.env.GPT_URL,
 });
 
-const gemini_AI = new GoogleGenerativeAI(process.env.GEMINI_KEY || "");
+// Store multiple Gemini API keys
+const GEMINI_KEYS = (process.env.GEMINI_KEY || "").split(",");
+console.log(`[AI][Gemini]: Using ${GEMINI_KEYS.length} keys`);
+let currentKeyIndex = 0;
+let geminiInstance: GoogleGenerativeAI | null = null;
+
+// Get or create Gemini instance with current key
+function getGeminiInstance() {
+	if (!geminiInstance || currentKeyIndex >= GEMINI_KEYS.length) {
+		currentKeyIndex = 0;
+	}
+	if (!geminiInstance) {
+		geminiInstance = new GoogleGenerativeAI(GEMINI_KEYS[currentKeyIndex]);
+	}
+	return geminiInstance;
+}
+
+// Switch to next key
+function rotateGeminiKey() {
+	currentKeyIndex++;
+	geminiInstance = null; // Force recreation with new key
+	return getGeminiInstance();
+}
 
 export const isOpenAi = () => !process.env.AI || process.env.AI === "openai";
 export const isGemini = () => process.env.AI === "gemini";
@@ -36,16 +58,39 @@ async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
 
 	if (isGemini()) {
 		const model = currentModel();
-		const geminiModel = gemini_AI.getGenerativeModel({
-			model,
-		});
-		const result = await geminiModel.generateContent(
-			messages.map((message) => message.content as string),
-		);
-		console.log(
-			`[AI][Gemini][${model}]: use ${result.response.usageMetadata?.totalTokenCount} tokens.`,
-		);
-		return result.response.text();
+		let retryCount = 0;
+		const maxRetries = GEMINI_KEYS.length;
+
+		while (retryCount < maxRetries) {
+			try {
+				const geminiAI = getGeminiInstance();
+				const geminiModel = geminiAI.getGenerativeModel({
+					model,
+				});
+				const result = await geminiModel.generateContent(
+					messages.map((message) => message.content as string),
+				);
+				console.log(
+					`[AI][Gemini][${model}]: use ${result.response.usageMetadata?.totalTokenCount} tokens.`,
+				);
+				return result.response.text();
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			} catch (error: any) {
+				if (
+					error?.message?.includes("quota") ||
+					error?.message?.includes("rate limit")
+				) {
+					console.warn(
+						`Gemini API key ${currentKeyIndex + 1} quota exceeded, trying next key...`,
+					);
+					rotateGeminiKey();
+					retryCount++;
+					continue;
+				}
+				throw error; // Re-throw if it's not a quota error
+			}
+		}
+		throw new Error("All Gemini API keys have exceeded their quota");
 	}
 
 	return "";

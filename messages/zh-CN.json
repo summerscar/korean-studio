@@ -19,7 +19,9 @@
 		"password": "密码",
 		"confirmPassword": "确认密码",
 		"email": "邮箱",
-		"changePassword": "修改密码"
+		"changePassword": "修改密码",
+		"dictName": "词单名",
+		"public": "公开"
 	},
 	"Home": {
 		"viewList": "查看列表",

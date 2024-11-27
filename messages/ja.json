@@ -19,13 +19,15 @@
 		"password": "パスワード",
 		"confirmPassword": "パスワードの確認",
 		"email": "メール",
-		"changePassword": "パスワードの変更"
+		"changePassword": "パスワードの変更",
+		"dictName": "単語リスト名",
+		"public": "公開"
 	},
 	"Home": {
 		"viewList": "リストを見る",
 		"tipsEnter": "<enter></enter>を押して入力してください",
 		"tipsForMobile": "パソコンを使って、より良い体験をお楽しみください。",
-		"createWord": "単語もしくわ単語の意味を入力してください、複数の単語はカンマで区切ってください。例：안녕,ありがとう",
+		"createWord": "単語もしくわ単語の意味を入力してください、複数の単語はカンマで区切ってください。例：安心,ありがとう",
 		"exampleWord": "안녕,ありがとう",
 		"generateWord": "単語を生成",
 		"generating": "生成中...",

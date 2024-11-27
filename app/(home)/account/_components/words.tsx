@@ -17,7 +17,6 @@ import {
 	createSuccessToast,
 } from "@/hooks/use-toast";
 import type { Dict, DictItem, UserDicts } from "@/types/dict";
-import { FAV_LIST_KEY } from "@/utils/config";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -39,6 +38,7 @@ const WordsList = ({
 }) => {
 	const router = useRouter();
 	const tHome = useTranslations("Home");
+	const tAccount = useTranslations("Account");
 	const [editing, setEditing] = useState<DictItem>();
 	const locale = useLocale();
 	const [searchQuery, setSearchQuery] = useState("");
@@ -182,19 +182,32 @@ const WordsList = ({
 				<div>
 					ID: {dictInfo.id} <Link href={`/?dict=${dictInfo.id}`}>🔗</Link>
 				</div>
-				<div>
-					name:{" "}
-					<input
-						key={dictInfo.id}
-						onBlur={(e) => {
-							if (e.target.value === dictInfo.name) return;
-							updateDict({ name: e.target.value });
-						}}
-						defaultValue={dictInfo.name}
-						type="text"
-						className="input input-bordered input-xs"
-					/>
-				</div>
+				{!isFavDict && (
+					<div className="flex gap-2">
+						<label>
+							{tAccount("dictName")}：
+							<input
+								key={dictInfo.id}
+								onBlur={(e) => {
+									if (e.target.value === dictInfo.name) return;
+									updateDict({ name: e.target.value });
+								}}
+								defaultValue={dictInfo.name}
+								type="text"
+								className="input input-bordered input-xs"
+							/>
+						</label>
+						<label className="flex items-center">
+							{tAccount("public")}：
+							<input
+								type="checkbox"
+								className="toggle toggle-xs"
+								checked={dictInfo.public}
+								onChange={(e) => updateDict({ public: e.target.checked })}
+							/>
+						</label>
+					</div>
+				)}
 			</div>
 			{editing && (
 				<JSONEditor
@@ -264,7 +277,7 @@ const WordsList = ({
 										>
 											{tHome("createNewDict")}
 										</button>
-										{dictInfo.intlKey !== FAV_LIST_KEY && (
+										{!isFavDict && (
 											<>
 												<button
 													className="btn btn-outline btn-xs"

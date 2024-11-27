@@ -19,7 +19,9 @@
 		"password": "Password",
 		"confirmPassword": "Confirm password",
 		"email": "Email",
-		"changePassword": "Change password"
+		"changePassword": "Change password",
+		"dictName": "Word List Name",
+		"public": "Public"
 	},
 	"Home": {
 		"viewList": "View list",

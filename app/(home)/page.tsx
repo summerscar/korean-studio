@@ -18,6 +18,8 @@ export default async function HomePage(props: {
 		? searchParamsDict
 		: dictList.find((item) => item.intlKey === Dicts.popular)?.id;
 
+	if (!targetDictId) throw new Error("Can't find content");
+
 	const isUserDict = !!dictList
 		.filter((dict) => dict.createdBy.id === session?.user?.id)
 		.find((item) => item.id === targetDictId);
@@ -25,7 +27,7 @@ export default async function HomePage(props: {
 	const dict =
 		searchParamsDict === Dicts.local
 			? []
-			: await getFavOrDictList(targetDictId!);
+			: await getFavOrDictList(targetDictId);
 
 	const dictId = searchParamsDict === Dicts.local ? Dicts.local : targetDictId;
 
@@ -34,7 +36,7 @@ export default async function HomePage(props: {
 			<HomeStatus
 				isLocalDict={isLocalDict}
 				isUserDict={isUserDict}
-				dictId={dictId!}
+				dictId={dictId}
 				dict={dict}
 				dictList={dictList}
 			/>

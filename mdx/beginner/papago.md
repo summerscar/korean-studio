@@ -1,21 +1,44 @@
 ---
-title: Papago 插件
+title: Papago 插件 / 快捷指令
 author: summerscar
-description: 该教程介绍了如何使用Papago插件快速创建单词到指定词单。该插件需要安装Tampermonkey插件，并将脚本内容复制粘贴到脚本编辑器中。然后，用户需要在Papago查词页面设置用户ID和词单ID，即可快速创建单词到指定词单。
+description: 本教程介绍了利用Papago插件和MacOS快捷指令高效添加生词到指定词单的方法。插件需安装Tampermonkey并运行自定义脚本，快捷指令则需在Safari中添加并配置服务器地址、词单ID和用户ID。两者均需预先设置用户ID和词单ID。
 date: 1
 tags: ['extension']
-last-modified: 1732095155565
+last-modified: 1732727426700
 ---
 
-# Papago 插件
+# Papago 插件 / 快捷指令
+
+## Papago 插件
 
 [Papago](https://papago.naver.com/) 查词插件，快速创建单词到指定词单。
 
-## 使用
+### 使用
 
-1. 安装 tampermonkey 插件
+1. 浏览器安装 [Tampermonkey](https://www.tampermonkey.net/) 插件
 2. 创建新脚本，复制[脚本内容](https://raw.githubusercontent.com/summerscar/korean-studio/refs/heads/main/scripts/tampermonkey-create-word-from-papago.js)后粘贴到脚本编辑器并保存脚本
 3. 打开 [Papago](https://papago.naver.com/) 查词页面，输入单词
-4. 查词结果处会出现 创建➕ 复制📋 设置⚙️ 按钮
-5. 点击设置按钮，设置 [用户ID](/account) 和 [词单ID](/account)
+4. 查词结果处会显示 创建➕ 复制📋 设置⚙️ 按钮
+5. 点击设置按钮，设置 <a target="_blank" className="!text-base-content !underline underline-offset-4" href="/account#:~:text=ID%3A">用户ID</a> 和 <a target="_blank" className="!text-base-content !underline underline-offset-4" href="/account#:~:text=dictID%3A">词单ID</a>
 6. 点击创建按钮，即可快速创建单词到指定词单
+
+## MacOS 快捷指令
+
+快速添加选中文本或剪贴板文本到指定词单。
+
+### 使用
+
+1. Safari 打开并添加 [快捷指令](https://www.icloud.com/shortcuts/fa01089cfba54bd0b7ca79d69318452c)
+2. 修改 Shell 配置
+	```
+	SERVER_URL="https://korean.app.summerscar.me"
+	DICT_ID=""
+	USER_ID=""
+	/* 通知推送语言 */
+	LOCALE="zh-CN"
+	/* 是否推送浏览器通知 */
+	NOTIFICATION=false
+	```
+3. 执行
+	- 复制文本后点击菜单栏快捷指令
+	- 选中文本后，右击 - 服务 - 创建单词

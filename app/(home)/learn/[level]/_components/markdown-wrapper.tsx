@@ -25,9 +25,6 @@ const MDContentWrapper = ({
 			data-last-modified={lastModified}
 			className="p-8 border-r-2 border-slate-900/10 flex-auto"
 		>
-			<style>
-				{".markdown-body ::target-text { background-color: gold; }"}
-			</style>
 			<div
 				className="markdown-body"
 				ref={containerRef as RefObject<HTMLDivElement>}

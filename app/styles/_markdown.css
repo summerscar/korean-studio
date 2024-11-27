@@ -36,4 +36,6 @@
 	.anchor {
 		@apply !ml-0;
 	}
+
+	--bgColor-muted: rgba(246, 248, 250, 0.3)!important;
 }

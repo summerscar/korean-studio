@@ -180,7 +180,7 @@ const WordsList = ({
 		<div className="bg-[--tab-active-bg]">
 			<div className="text-center text-sm mb-2 flex flex-wrap justify-center gap-4 pt-2 mobile:gap-1">
 				<div>
-					ID: {dictInfo.id} <Link href={`/?dict=${dictInfo.id}`}>🔗</Link>
+					dictID: {dictInfo.id} <Link href={`/?dict=${dictInfo.id}`}>↗️</Link>
 				</div>
 				{!isFavDict && (
 					<div className="flex gap-2">

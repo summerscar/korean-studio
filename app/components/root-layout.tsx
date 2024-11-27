@@ -39,6 +39,7 @@ export async function DefaultLayout({
 		<html lang={locale} data-theme={themeFromCookie || Themes.Light}>
 			<body className={clsx(bodyClassName, "text-base-content")}>
 				<div id="bg" />
+				<style>{"::target-text { background-color: gold; }"}</style>
 				<SessionProvider>
 					<NextIntlClientProvider messages={messages}>
 						<NotificationProvider>

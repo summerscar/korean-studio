@@ -148,11 +148,11 @@ const Search = () => {
 						className="hover:bg-slate-400/40 rounded-md p-2"
 					>
 						<Link href={res.url}>
-							<div className="text-sm font-bold text-nowrap overflow-hidden text-ellipsis">
+							<div className="text-sm font-bold truncate">
 								{[tHeader(res.level), ...res.relativeReadablePath].join(" > ")}
 							</div>
 							{res.type === "content" && (
-								<div className="text-sm text-base-content/60 text-nowrap overflow-hidden text-ellipsis">
+								<div className="text-sm text-base-content/60 truncate">
 									{res.contentSnippet}
 								</div>
 							)}

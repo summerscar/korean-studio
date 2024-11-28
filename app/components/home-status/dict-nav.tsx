@@ -59,7 +59,7 @@ const DictNav = ({
 							{
 								<HideText
 									hide={hideMeaning}
-									className="overflow-hidden text-ellipsis text-nowrap inline-block max-w-full px-0.5"
+									className="truncate inline-block max-w-full px-0.5"
 								>
 									{getTranslation(item, locale)}
 								</HideText>

@@ -43,11 +43,11 @@ const DictMenuItem = ({
 					{isStarred && (
 						<StarIcon className="size-4 fill-current absolute -left-4 sm:-left-4 top-0.5" />
 					)}
-					<span className="text-nowrap overflow-hidden text-ellipsis">
+					<span className="truncate">
 						{index + 1}. {item.name}
 					</span>
 					<span
-						className="text-right text-nowrap overflow-hidden text-ellipsis pl-12 text-gray-400"
+						className="text-right truncate pl-12 text-gray-400"
 						title={getTranslation(item, locale)}
 					>
 						{getTranslation(item, locale)}

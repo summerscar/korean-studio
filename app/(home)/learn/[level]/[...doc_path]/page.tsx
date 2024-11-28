@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import type { ReactNode } from "react";
 import { MDContentWrapper } from "../_components/markdown-wrapper";
 import { Toc } from "../_components/toc";
 
@@ -88,35 +89,40 @@ export default async function Page(props: { params: Promise<DocPathParams> }) {
 
 	isDev && (await timeOut(500));
 
+	const NavButton = ({
+		children,
+		href,
+	}: { children: ReactNode; href: string }) => (
+		<Link
+			prefetch
+			href={href}
+			className="btn glass btn-md gap-2 w-full flex items-center flex-nowrap min-w-0 px-2 sm:px-3 sm:gap-3"
+		>
+			{children}
+		</Link>
+	);
+
+	// 使用方式：
 	const bottomNav = (
-		<div className="flex justify-between pt-2">
-			<div>
+		<div className="flex justify-between pt-2 min-w-0">
+			<div className="max-w-[50%] min-w-0">
 				{prevDoc && (
-					<Link
-						prefetch
-						href={`/learn/${level}/${prevDoc.relativeUrl}`}
-						className="btn glass btn-md gap-3"
-					>
-						<PrevIcon className="w-4 h-4" />
-						{prevDoc.title}
-					</Link>
+					<NavButton href={`/learn/${level}/${prevDoc.relativeUrl}`}>
+						<PrevIcon className="w-4 h-4 shrink-0" />
+						<span className="truncate">{prevDoc.title}</span>
+					</NavButton>
 				)}
 			</div>
-			<div>
+			<div className="max-w-[50%] min-w-0">
 				{nextDoc && (
-					<Link
-						prefetch
-						href={`/learn/${level}/${nextDoc.relativeUrl}`}
-						className="btn glass btn-md gap-3"
-					>
-						{nextDoc.title}
-						<NextIcon className="w-4 h-4" />
-					</Link>
+					<NavButton href={`/learn/${level}/${nextDoc.relativeUrl}`}>
+						<span className="truncate">{nextDoc.title}</span>
+						<NextIcon className="w-4 h-4 shrink-0" />
+					</NavButton>
 				)}
 			</div>
 		</div>
 	);
-
 	return (
 		<>
 			<MDContentWrapper lastModified={lastModified} bottomNav={bottomNav}>

@@ -38,4 +38,18 @@
 	}
 
 	--bgColor-muted: rgba(246, 248, 250, 0.3)!important;
+
+	pre {
+    @apply mobile:max-w-[calc(100vw-5rem)];
+    @apply overflow-x-auto;
+    @apply p-4;
+    code {
+      @apply whitespace-pre;
+      @apply inline-block;
+      @apply min-w-full;
+    }
+  }
+	li > pre {
+		@apply mobile:max-w-[calc(100vw-7rem)];
+	}
 }

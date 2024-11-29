@@ -4,7 +4,6 @@ import {
 	addWordsToUserDictAction,
 	createDictAction,
 	importDictItemToUserDict,
-	removeDictAction,
 } from "@/actions/user-dict-action";
 import AddIcon from "@/assets/svg/add.svg";
 import DownloadIcon from "@/assets/svg/download.svg";
@@ -22,7 +21,6 @@ import {
 import { useUser } from "@/hooks/use-user";
 import type { HomeSetting } from "@/types";
 import { type Dict, Dicts, type UserDicts } from "@/types/dict";
-import { FAV_LIST_KEY } from "@/utils/config";
 import { downloadFile } from "@/utils/download-file";
 import { importJSONFile } from "@/utils/import-json-file";
 import {

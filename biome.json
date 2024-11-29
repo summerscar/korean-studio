@@ -17,7 +17,8 @@
 			"recommended": true,
 			"correctness": {
 				"noUnusedVariables": "error",
-				"noUnknownFunction": "off"
+				"noUnknownFunction": "off",
+				"noUnusedImports": "error"
 			},
 			"suspicious": {
 				"noAssignInExpressions": "off"

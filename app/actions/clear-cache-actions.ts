@@ -1,6 +1,4 @@
 "use server";
-
-import { FAV_LIST_KEY } from "@/utils/config";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { getAllDicts } from "./user-dict-action";
 import {

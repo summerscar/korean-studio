@@ -1,7 +1,6 @@
 "use client";
-import { getI18nFromCookie, setI18nToCookie } from "@/actions/check-i18n";
+import { setI18nToCookie } from "@/actions/check-i18n";
 import { SITES_LANGUAGE } from "@/types/site";
-import { DEFAULT_SITE_LANGUAGE } from "@/utils/config";
 import { useMount } from "ahooks";
 import clsx from "clsx";
 import { useState } from "react";

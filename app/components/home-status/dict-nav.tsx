@@ -2,7 +2,7 @@ import NextIcon from "@/assets/svg/next.svg";
 import PrevIcon from "@/assets/svg/prev.svg";
 
 import { HideText } from "@/components/hide-text";
-import type { Dict, DictItem, Tran } from "@/types/dict";
+import type { Dict } from "@/types/dict";
 import { getTranslation } from "@/utils/convert-input";
 import { notoKR } from "@/utils/fonts";
 import clsx from "clsx";

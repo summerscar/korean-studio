@@ -2,7 +2,7 @@
 import CopyIcon from "@/assets/svg/copy.svg";
 import SearchIcon from "@/assets/svg/search.svg";
 import SparklesIcon from "@/assets/svg/sparkles.svg";
-import type { CSSProperties, ComponentProps } from "react";
+import type { CSSProperties } from "react";
 
 interface SearchButtonProps {
 	style?: CSSProperties;

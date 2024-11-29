@@ -1,5 +1,5 @@
 import { isAdminBySession } from "@/hooks/use-user";
-import type { Dict, UserDicts } from "@/types/dict";
+import type { UserDicts } from "@/types/dict";
 import { FAV_LIST_KEY } from "@/utils/config";
 import type { Session } from "next-auth";
 

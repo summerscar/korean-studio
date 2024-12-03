@@ -212,12 +212,13 @@ const QuestionCard = ({
 										</div>
 									)}
 									<Link
-										target="_blank"
 										className="underline font-bold flex-none"
 										href={`/topik/${level}/${no}/${topikQuestion.questionNumber}`}
+										scroll={false}
 									>
-										{topikQuestion.questionNumber}.
+										{topikQuestion.questionNumber}
 									</Link>
+									.
 									<span className="flex-none">
 										{isAdmin ? `(${topikQuestion.score}점)` : " "}
 									</span>

@@ -33,11 +33,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({
 	children,
+	modal,
 }: Readonly<{
 	children: React.ReactNode;
+	modal: React.ReactNode;
 }>) {
 	return (
 		<DefaultLayout bodyClassName="relative z-0">
+			{modal}
 			<Header />
 			<section className="flex-auto flex items-stretch">{children}</section>
 			<Footer />

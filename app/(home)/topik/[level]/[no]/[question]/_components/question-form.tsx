@@ -2,7 +2,8 @@
 import { createSuccessToast } from "@/hooks/use-toast";
 import type { TopikQuestion } from "@/types";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
 	getOptionContent,
@@ -15,11 +16,18 @@ export const getAnswerOptions = (topikQuestion: TopikQuestion) => {
 	return topikQuestion.options.findIndex((option) => option.isCorrect) + 1;
 };
 
-const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
+const QuestionForm = ({
+	topikQuestion,
+	isModal,
+}: {
+	topikQuestion: TopikQuestion;
+	isModal?: boolean;
+}) => {
 	const router = useRouter();
 	const [errors, setErrors] = useState("");
 	const [showExplanation, setShowExplanation] = useState(false);
 	const tTopik = useTranslations("Topik");
+	const pathname = usePathname();
 
 	const handleSubmit = async (formData: FormData) => {
 		const selectedOption = formData.get("options") as string;
@@ -87,6 +95,7 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 						</label>
 					</div>
 				))}
+
 				<div className="flex gap-2">
 					<button className="btn btn-sm mt-4" type="submit">
 						{tTopik("submit")}
@@ -98,20 +107,35 @@ const QuestionForm = ({ topikQuestion }: { topikQuestion: TopikQuestion }) => {
 					>
 						{tTopik("explain")}
 					</button>
-					<button
-						className="btn btn-sm mt-4"
-						type="button"
-						onClick={prevQuestion}
-					>
-						{tTopik("prev")}
-					</button>
-					<button
-						className="btn btn-sm mt-4"
-						type="button"
-						onClick={nextQuestion}
-					>
-						{tTopik("next")}
-					</button>
+					{!isModal && (
+						<>
+							<button
+								className="btn btn-sm mt-4"
+								type="button"
+								onClick={prevQuestion}
+							>
+								{tTopik("prev")}
+							</button>
+							<button
+								className="btn btn-sm mt-4"
+								type="button"
+								onClick={nextQuestion}
+							>
+								{tTopik("next")}
+							</button>
+						</>
+					)}
+					{isModal && (
+						<button
+							className="btn btn-sm mt-4"
+							type="button"
+							onClick={() => router.back()}
+						>
+							<Link href={pathname} target="_blank">
+								↗️
+							</Link>
+						</button>
+					)}
 				</div>
 			</form>
 			{errors && <div className="text-red-500">{errors}</div>}

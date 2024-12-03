@@ -154,7 +154,7 @@ const DictMenu = ({
 	const canEdit =
 		(isAdmin || isUserDict || dictId === Dicts.local) && !isFavDict;
 	return (
-		<div className="sticky top-2 z-10 bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1 max-w-full">
+		<div className="sticky bottom-4 sm:top-2 mobile:order-last z-10 bg-base-200 rounded-xl mb-3 shadow-md flex justify-between items-center p-1 max-w-full">
 			<div className="pl-1 sm:pl-3 flex items-center *:mx-1 *:inline-block *:cursor-pointer *:select-none">
 				<ShuffleIcon
 					width={20}
@@ -163,7 +163,7 @@ const DictMenu = ({
 					className="cursor-pointer inline-block"
 					onClick={onShuffle}
 				/>
-				<div className="dropdown dropdown-hover">
+				<div className="dropdown dropdown-hover mobile:dropdown-top">
 					<SettingIcon
 						tabIndex={0}
 						role="button"

@@ -26,7 +26,7 @@ const DictNav = ({
 	const locale = useLocale();
 
 	return (
-		<div className="w-[80vw] flex justify-between mobile:mb-8">
+		<div className="w-full sm:w-[80vw] flex justify-between mobile:mb-8">
 			{[prev, next].map((item, index) => (
 				<div
 					className={clsx(

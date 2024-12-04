@@ -32,6 +32,7 @@ const DictMenuItem = ({
 		<li
 			key={item.id || item.name}
 			className={clsx("cursor-pointer relative group mb-1 last:mb-0")}
+			data-active={index === curWordIndex}
 		>
 			<div
 				className={clsx("block", {

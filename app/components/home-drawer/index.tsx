@@ -55,6 +55,15 @@ const HomeDrawer = ({
 	const open = useMemoizedFn(() => {
 		if (controllerRef.current) {
 			controllerRef.current.checked = true;
+			setTimeout(() => {
+				drawerListRef.current
+					?.querySelector(`li[data-active="true"]`)
+					?.scrollIntoView({
+						block: "center",
+						inline: "center",
+						behavior: "smooth",
+					});
+			}, 350);
 			return;
 		}
 		throw new Error("controllerRef.current is null");

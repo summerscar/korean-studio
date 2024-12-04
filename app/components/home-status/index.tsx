@@ -44,7 +44,7 @@ import { DisplayName } from "./display-name";
 import { Hangul } from "./hangul";
 import { HomeInput } from "./input";
 import { KeyBoard } from "./keyboard";
-import { StatusToggle } from "./status-toggle";
+import { ModeToggle } from "./mode-toggle";
 import { useNewNotification } from "./use-new-notification";
 import { WordExample } from "./word-example";
 import { WordMeaning } from "./word-meaning";
@@ -54,6 +54,11 @@ const WordCards = dynamic(
 		import("@/components/home-status/word-cards").then((mod) => mod.WordCards),
 	{
 		ssr: false,
+		loading: () => (
+			<div className="animate-pulse w-60 h-80 bg-gray-200 rounded-2xl flex items-center justify-center">
+				<span className="loading loading-ring loading-lg" />
+			</div>
+		),
 	},
 );
 
@@ -71,7 +76,7 @@ const HomeStatus = ({
 	dictId: string;
 }) => {
 	const [dict, setDict] = useState(originalDict);
-	const [isInputStatus, setIsInputStatus] = useState(true);
+	const [isInputMode, setIsInputMode] = useState(true);
 	const [curWordIndex, setCurWordIndex] = useState(0);
 	const [curInputIndex, setCurInputIndex] = useState(0);
 	const [isComplete, setIsComplete] = useState(false);
@@ -354,8 +359,8 @@ const HomeStatus = ({
 	}
 
 	return (
-		<Wrapper>
-			{isInputStatus ? (
+		<Wrapper className={clsx(isInputMode && "mobile:px-[8vw]")}>
+			{isInputMode ? (
 				<>
 					<DictNav
 						onNext={toNextWord}
@@ -407,6 +412,20 @@ const HomeStatus = ({
 							ref={inputRef}
 						/>
 					)}
+					<HomeDrawer
+						isLocalDict={isLocalDict}
+						isUserDict={isUserDict}
+						dictList={dictList}
+						dictId={dictId}
+						drawerRef={drawerRef}
+						dict={dict}
+						curWordIndex={curWordIndex}
+						onClick={skipToNextWord}
+						onShuffle={shuffleDict}
+						onLocalDictUpdate={setLocalDict}
+						setting={setting}
+						onSettingChange={onSettingChange}
+					/>
 				</>
 			) : (
 				<WordCards
@@ -423,28 +442,19 @@ const HomeStatus = ({
 					slideToIndexRef={slideToIndexRef}
 				/>
 			)}
-			<StatusToggle isInputStatus={isInputStatus} onChange={setIsInputStatus} />
-			<HomeDrawer
-				isLocalDict={isLocalDict}
-				isUserDict={isUserDict}
-				dictList={dictList}
-				dictId={dictId}
-				drawerRef={drawerRef}
-				dict={dict}
-				curWordIndex={curWordIndex}
-				onClick={skipToNextWord}
-				onShuffle={shuffleDict}
-				onLocalDictUpdate={setLocalDict}
-				setting={setting}
-				onSettingChange={onSettingChange}
-			/>
+			<ModeToggle isInputMode={isInputMode} onChange={setIsInputMode} />
 		</Wrapper>
 	);
 };
 
-const Wrapper = ({ children }: { children: ReactNode }) => {
+const Wrapper = ({
+	children,
+	className,
+}: { children: ReactNode; className?: string }) => {
 	return (
-		<div className={clsx("flex flex-col items-center justify-center")}>
+		<div
+			className={clsx("flex flex-col items-center justify-center", className)}
+		>
 			{children}
 		</div>
 	);

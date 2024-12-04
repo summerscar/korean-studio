@@ -1,5 +1,6 @@
 "use server";
 import type { DictItem } from "@/types/dict";
+import type { SITES_LANGUAGE } from "@/types/site";
 import { isDev } from "@/utils/is-dev";
 import {
 	generateWordPrompt,
@@ -45,7 +46,7 @@ export const generateWordsAction = async (words: string[]) => {
 
 export const generateWordSuggestionAction = async (
 	word: string,
-	locale: string,
+	locale: SITES_LANGUAGE,
 ) => {
 	isDev && console.log(`[generateWordSuggestionAction][start]: ${word}`);
 	const prompt = generateWordSuggestionPrompt(word, locale);

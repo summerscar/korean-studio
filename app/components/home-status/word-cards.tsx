@@ -3,13 +3,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/effect-cards";
+import "swiper/css/virtual";
 
 import type { Dict } from "@/types/dict";
 import type { SITES_LANGUAGE } from "@/types/site";
 import clsx from "clsx";
 import { useRef } from "react";
-// import required modules
-import { EffectCards } from "swiper/modules";
+
+import { EffectCards, Virtual } from "swiper/modules";
 import type { Swiper as TSwiper } from "swiper/types";
 import { DisplayName } from "./display-name";
 import { WordExample } from "./word-example";
@@ -70,9 +71,16 @@ const WordCards = ({
 			<Swiper
 				effect={"cards"}
 				grabCursor={true}
-				modules={[EffectCards]}
+				modules={[EffectCards, Virtual]}
 				className="w-60 h-80"
 				initialSlide={curWordIndex}
+				virtual={{
+					slides: dict,
+					enabled: true,
+					addSlidesAfter: 3,
+					addSlidesBefore: 3,
+					cache: true,
+				}}
 				onInit={(swiper) => {
 					swiperRef.current = swiper;
 				}}
@@ -83,6 +91,7 @@ const WordCards = ({
 				{dict.map((word, i) => (
 					<SwiperSlide
 						key={word.id || word.name}
+						virtualIndex={i}
 						className={clsx(
 							"w-full h-full flex items-center justify-center rounded-2xl",
 							pastelColors[i % pastelColors.length],

@@ -11,7 +11,6 @@ import clsx from "clsx";
 import { useRef } from "react";
 
 import { EffectCards, Virtual } from "swiper/modules";
-import type { Swiper as TSwiper } from "swiper/types";
 import { DisplayName } from "./display-name";
 import { WordExample } from "./word-example";
 import { WordMeaning } from "./word-meaning";
@@ -52,17 +51,10 @@ const WordCards = ({
 	playExampleRef: React.RefObject<() => void>;
 	slideToIndexRef: React.RefObject<(index: number) => void>;
 }) => {
-	const swiperRef = useRef<TSwiper>(null);
 	const noopRef = useRef<() => void>(noop);
 	const getIsActive = (index: number) => {
 		return index === curWordIndex;
 	};
-
-	if (swiperRef.current) {
-		slideToIndexRef.current = (val: number) => {
-			swiperRef.current?.slideTo(val);
-		};
-	}
 
 	if (!dict.length) return null;
 
@@ -82,7 +74,9 @@ const WordCards = ({
 					cache: true,
 				}}
 				onInit={(swiper) => {
-					swiperRef.current = swiper;
+					slideToIndexRef.current = (val: number) => {
+						swiper.slideTo(val);
+					};
 				}}
 				onSlideChange={(e) => {
 					onChange(e.activeIndex);

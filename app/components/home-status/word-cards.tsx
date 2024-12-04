@@ -12,6 +12,7 @@ import { useRef } from "react";
 
 import { EffectCards, Virtual } from "swiper/modules";
 import { DisplayName } from "./display-name";
+import { Star } from "./star";
 import { WordExample } from "./word-example";
 import { WordMeaning } from "./word-meaning";
 
@@ -66,6 +67,10 @@ const WordCards = ({
 				modules={[EffectCards, Virtual]}
 				className="w-60 h-80"
 				initialSlide={curWordIndex}
+				cardsEffect={{
+					perSlideRotate: 3,
+					perSlideOffset: 9,
+				}}
 				virtual={{
 					slides: dict,
 					enabled: true,
@@ -93,7 +98,13 @@ const WordCards = ({
 					>
 						<div className="flex flex-col items-center justify-around p-2 px-5 h-full">
 							<div className="flex flex-col items-center justify-between">
+								<Star
+									dictItem={word}
+									isLocalDict={isLocalDict}
+									className="absolute top-4 right-4 size-6"
+								/>
 								<DisplayName
+									showStar={false}
 									className="scale-75"
 									currentWord={word}
 									playWord={playWord}

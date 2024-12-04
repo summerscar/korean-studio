@@ -1,14 +1,7 @@
 "use client";
 import { useSelectToSearch } from "@/hooks/use-select-to-search";
 import { usePathname } from "next/navigation";
-import {
-	type ReactNode,
-	Ref,
-	type RefObject,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
+import { type ReactNode, type RefObject, useEffect, useState } from "react";
 import type { TocItem } from "remark-flexible-toc";
 
 const MDContentWrapper = ({

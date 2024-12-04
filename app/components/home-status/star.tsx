@@ -15,7 +15,12 @@ import useSWRImmutable from "swr/immutable";
 const Star = ({
 	dictItem,
 	isLocalDict,
-}: { dictItem: DictItem | null; isLocalDict: boolean }) => {
+	className,
+}: {
+	dictItem: DictItem | null;
+	isLocalDict: boolean;
+	className?: string;
+}) => {
 	const isStarred = useStarred(dictItem);
 	const { isLogin } = useUser();
 	const [pending, toggle] = useServerActionState(
@@ -55,7 +60,8 @@ const Star = ({
 		<StarIcon
 			className={clsx(
 				isStarred ? "fill-current" : "",
-				"cursor-pointer absolute top-1/2 -right-7 size-5 translate-y-[20%] transition-all",
+				"cursor-pointer size-5 transition-all",
+				className,
 			)}
 			onClick={toggleFavorite}
 		/>

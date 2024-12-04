@@ -55,7 +55,7 @@ const Star = ({
 		<StarIcon
 			className={clsx(
 				isStarred ? "fill-current" : "",
-				"cursor-pointer absolute top-6 -right-7 size-5 transition-all",
+				"cursor-pointer absolute top-1/2 -right-7 size-5 translate-y-[20%] transition-all",
 			)}
 			onClick={toggleFavorite}
 		/>

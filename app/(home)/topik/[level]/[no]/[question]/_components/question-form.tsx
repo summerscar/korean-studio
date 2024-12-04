@@ -1,4 +1,5 @@
 "use client";
+import OpenBlankIcon from "@/assets/svg/open-blank.svg";
 import { createSuccessToast } from "@/hooks/use-toast";
 import type { TopikQuestion } from "@/types";
 import { useTranslations } from "next-intl";
@@ -132,7 +133,7 @@ const QuestionForm = ({
 							onClick={() => router.back()}
 						>
 							<Link href={pathname} target="_blank">
-								↗️
+								<OpenBlankIcon className="size-4" />
 							</Link>
 						</button>
 					)}

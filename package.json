@@ -67,6 +67,7 @@
 		"remark-flexible-toc": "^1.1.1",
 		"remark-gfm": "^4.0.0",
 		"strip-markdown": "^6.0.0",
+		"swiper": "^11.1.15",
 		"swr": "^2.2.5",
 		"tsparticles": "^3.5.0",
 		"web-push": "^3.6.7",

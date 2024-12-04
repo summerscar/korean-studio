@@ -32,7 +32,7 @@ export default async function HomePage(props: {
 	const dictId = searchParamsDict === Dicts.local ? Dicts.local : targetDictId;
 
 	return (
-		<main className="w-full flex flex-col items-center justify-center">
+		<main className="w-full flex flex-col items-center justify-center relative">
 			<HomeStatus
 				isLocalDict={isLocalDict}
 				isUserDict={isUserDict}

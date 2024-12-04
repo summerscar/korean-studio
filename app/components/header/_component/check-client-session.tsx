@@ -1,6 +1,6 @@
 "use client";
-
 import { useUser } from "@/hooks/use-user";
+import { isDev } from "@/utils/is-dev";
 import { usePrevious } from "ahooks";
 import type { Session } from "next-auth";
 import { signIn } from "next-auth/react";
@@ -16,6 +16,8 @@ const CheckClientSession = ({
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
+		if (isDev) return;
+
 		if (!isLogin && prevIsLogin && serverSession) {
 			signIn();
 		}

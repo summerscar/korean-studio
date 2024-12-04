@@ -1,21 +1,15 @@
 "use client";
 import CompleteSVG from "@/assets/svg/complete.svg";
-import InfoIcon from "@/assets/svg/info.svg";
-import KoreanKeyBoardSVG from "@/assets/svg/korean-keyboard.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
-import SettingIcon from "@/assets/svg/setting.svg";
-import SpeakerIcon from "@/assets/svg/speaker.svg";
+
 import { useHomeProgress } from "@/components/header/_component/progress";
-import { HideText } from "@/components/hide-text";
 import { HomeDrawer } from "@/components/home-drawer";
-import { Pronunciation } from "@/components/pronunciation";
 import { checkIsTouchable, useDevice } from "@/hooks/use-device";
-import { useHoverToSearch } from "@/hooks/use-hover-to-search";
 import { usePronunciation } from "@/hooks/use-pronunciation";
 import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
 import type { UserDicts } from "@/types/dict";
-import { SITES_LANGUAGE } from "@/types/site";
+import type { SITES_LANGUAGE } from "@/types/site";
 import { useInputAudioEffect } from "@/utils/audio";
 import { playConfetti } from "@/utils/confetti";
 import { HOME_SETTING_KEY } from "@/utils/config";
@@ -23,24 +17,20 @@ import {
 	NextKeyShortcut,
 	PrevKeyShortcut,
 	convertInputsToQwerty,
-	isBackspace,
 	isEmptyInput,
-	isShift,
 	isShiftOnly,
-	isSpace,
-	keyCodeToQwerty,
 	parseSpaceStr,
 	spaceStr,
 } from "@/utils/convert-input";
-import { notoKR } from "@/utils/fonts";
 import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
 import { getLocalDict } from "@/utils/local-dict";
 import { shuffleArr } from "@/utils/shuffle-array";
 import { useEventListener, useLatest, useMemoizedFn, useMount } from "ahooks";
 import clsx from "clsx";
-import { disassemble, romanize, standardizePronunciation } from "es-hangul";
-import { useLocale, useTranslations } from "next-intl";
+import { disassemble } from "es-hangul";
+import { useLocale } from "next-intl";
+import dynamic from "next/dynamic";
 import {
 	type ReactNode,
 	useCallback,
@@ -49,11 +39,23 @@ import {
 	useRef,
 	useState,
 } from "react";
-import reactStringReplace from "react-string-replace";
 import { DictNav } from "./dict-nav";
+import { DisplayName } from "./display-name";
+import { Hangul } from "./hangul";
 import { HomeInput } from "./input";
-import { Star } from "./star";
+import { KeyBoard } from "./keyboard";
+import { StatusToggle } from "./status-toggle";
 import { useNewNotification } from "./use-new-notification";
+import { WordExample } from "./word-example";
+import { WordMeaning } from "./word-meaning";
+
+const WordCards = dynamic(
+	() =>
+		import("@/components/home-status/word-cards").then((mod) => mod.WordCards),
+	{
+		ssr: false,
+	},
+);
 
 const HomeStatus = ({
 	isLocalDict,
@@ -69,12 +71,14 @@ const HomeStatus = ({
 	dictId: string;
 }) => {
 	const [dict, setDict] = useState(originalDict);
+	const [isInputStatus, setIsInputStatus] = useState(true);
 	const [curWordIndex, setCurWordIndex] = useState(0);
 	const [curInputIndex, setCurInputIndex] = useState(0);
 	const [isComplete, setIsComplete] = useState(false);
 	const [isInputError, setIsInputError] = useState(false);
 	const [isInputFocused, setIsInputFocused] = useState(false);
 	const playExampleRef = useRef(() => {});
+	const slideToIndexRef = useRef<(index: number) => void>(() => {});
 	const { isTouchable } = useDevice();
 	useNewNotification(dictId);
 	const [setting, setSetting] = useState<HomeSetting>({
@@ -103,7 +107,6 @@ const HomeStatus = ({
 
 	const drawerRef = useRef({ open: () => {} });
 	const locale = useLocale() as SITES_LANGUAGE;
-	const tHome = useTranslations("Home");
 	const hangulRef = useRef<HTMLDivElement>(null);
 	const [inputKeys, setInputKeys] = useState<Record<string, boolean>>({});
 	const inputRef = useRef({
@@ -180,8 +183,10 @@ const HomeStatus = ({
 
 				if (e.code === NextKeyShortcut) {
 					toNextWordWithCheck();
+					slideToIndexRef.current(Math.min(curWordIndex + 1, dict.length - 1));
 				} else if (e.code === PrevKeyShortcut) {
 					toPrevWord();
+					slideToIndexRef.current(Math.max(curWordIndex - 1, 0));
 				}
 				inputAE.current!.swapAE.play();
 				return;
@@ -211,29 +216,17 @@ const HomeStatus = ({
 		return null;
 	}, [curWordIndex, dict]);
 
-	const displayNameRef = useHoverToSearch(currentWord?.name);
-	const exampleRef = useHoverToSearch(currentWord?.example);
-
 	const { isPlaying: isWordPlaying, play: playWord } = usePronunciation(
 		currentWord?.name,
 		{ autoPlay: setting.autoVoice },
 	);
-	/** 韩文单词 */
-	const displayName = currentWord?.name || "";
+
 	/** 韩文字母 */
-	const hangul = parseSpaceStr(disassemble(displayName));
+	const hangul = parseSpaceStr(disassemble(currentWord?.name || ""));
 	const lastedHangul = useLatest(hangul);
 
 	/** 韩文字母对应的键盘输入 */
 	const qwerty = parseSpaceStr(hangulToQwerty(hangul));
-
-	/** 韩文字母对应的罗马拼音 */
-	const romanized = romanize(displayName);
-
-	/** 韩文标准化发音 */
-	const standardized = standardizePronunciation(displayName, {
-		hardConversion: true,
-	});
 
 	const addShakeAnimation = useCallback((target: HTMLElement) => {
 		const className = "animate-[shake-text_0.25s_1]";
@@ -342,60 +335,12 @@ const HomeStatus = ({
 		}
 	}, [curInputIndex, lastedHangul, inputKeys, toNextWord]);
 
-	const wordTranslations = useMemo(() => {
-		if (!currentWord) return null;
-		return Object.entries(currentWord.trans).reduce(
-			(prev, [key, tran]) => {
-				return Object.assign(prev, { [key]: tran.join(", ") });
-			},
-			{} as Record<SITES_LANGUAGE, string>,
-		);
-	}, [currentWord]);
-
-	const exTranslations = useMemo(() => {
-		if (!currentWord) return null;
-		return Object.entries(currentWord.exTrans || {}).reduce(
-			(prev, [key, tran]) => {
-				return Object.assign(prev, { [key]: tran.join(", ") });
-			},
-			{} as Record<SITES_LANGUAGE, string>,
-		);
-	}, [currentWord]);
-
 	/** just for log */
 	useEffect(() => {
 		if (!isEmptyInput(inputKeys)) {
 			console.log("inputKeys:", inputKeys);
 		}
 	}, [inputKeys]);
-
-	/** 输入状态 style */
-	const heightLightClass = (strIndex: number) =>
-		clsx({
-			"font-bold text-[color:var(--font-color-error)]":
-				isInputError && curInputIndex === strIndex,
-			"text-[color:var(--font-color-active)] font-bold":
-				curInputIndex > strIndex,
-		});
-
-	const inlineStyle = useMemo(() => {
-		const activeColor = "var(--keyboard-active-color)";
-		return Object.keys(inputKeys).reduce((prev, keyCode) => {
-			return `${prev}.${keyCodeToQwerty(keyCode)} {fill: ${activeColor};}
-		.shift {${isShift(keyCode) ? `fill: ${activeColor};` : ""}}
-		.space {${isSpace(keyCode) ? `fill: ${activeColor};` : ""}}
-		.backspace {${isBackspace(keyCode) ? `fill: ${activeColor};` : ""}}`;
-		}, "");
-	}, [inputKeys]);
-
-	const highLightExample = (example?: string) => {
-		const displayName = currentWord?.name || "";
-		return reactStringReplace(example, displayName, (match, index) => (
-			<b className={notoKR.className} key={index}>
-				{match}
-			</b>
-		));
-	};
 
 	if (isComplete) {
 		return (
@@ -407,206 +352,78 @@ const HomeStatus = ({
 			</Wrapper>
 		);
 	}
+
 	return (
 		<Wrapper>
-			<DictNav
-				onNext={toNextWord}
-				onPrev={toPrevWord}
-				dict={dict}
-				curWordIndex={curWordIndex}
-				hideMeaning={!setting.showMeaning}
-			/>
-			{displayName && (
-				<div
-					className={clsx(
-						notoKR.className,
-						"text-4xl font-bold relative mobile:mt-8",
-					)}
-				>
-					<span ref={displayNameRef}>{displayName}</span>
-					<div
-						className={clsx(
-							"flex absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%] z-[1]",
-							!isTouchable && "tooltip tooltip-top",
-						)}
-						data-tip={`${romanized} [${standardized}]`}
-					>
-						<SpeakerIcon
-							width={20}
-							height={20}
-							onMouseEnter={playWord}
-							onTouchEnd={playWord}
-							className={clsx(
-								isWordPlaying ? "fill-current" : "text-base-content",
-								"cursor-pointer inline-block",
-							)}
+			{isInputStatus ? (
+				<>
+					<DictNav
+						onNext={toNextWord}
+						onPrev={toPrevWord}
+						dict={dict}
+						curWordIndex={curWordIndex}
+						hideMeaning={!setting.showMeaning}
+					/>
+					<DisplayName
+						currentWord={currentWord}
+						playWord={playWord}
+						isWordPlaying={isWordPlaying}
+						isLocalDict={isLocalDict}
+					/>
+					<WordMeaning
+						showMeaning={setting.showMeaning}
+						additionalMeaning={setting.additionalMeaning}
+						currentWord={currentWord}
+						locale={locale}
+					/>
+					{/* 韩语音节 */}
+					<Hangul
+						hangulRef={hangulRef}
+						focusInput={focusInput}
+						isInputError={isInputError}
+						curInputIndex={curInputIndex}
+						hangul={hangul}
+						qwerty={qwerty}
+					/>
+					{/* 键盘图案 */}
+					<KeyBoard
+						inputKeys={inputKeys}
+						isInputFocused={isInputFocused}
+						drawerRef={drawerRef}
+					/>
+					{/* 例句 */}
+					<WordExample
+						currentWord={currentWord}
+						playRef={playExampleRef}
+						showMeaning={setting.showMeaning}
+						additionalMeaning={setting.additionalMeaning}
+						locale={locale}
+					/>
+					{qwerty && (
+						<HomeInput
+							onFocusChange={setIsInputFocused}
+							onInput={setInputKeys}
+							position={inputPosition}
+							ref={inputRef}
 						/>
-					</div>
-					<Star dictItem={currentWord} isLocalDict={isLocalDict} />
-				</div>
-			)}
-			<div className="text-lg text-gray-500 mt-3 mb-2">
-				<HideText hide={!setting.showMeaning}>
-					{wordTranslations?.[locale] || wordTranslations?.en}
-				</HideText>
-			</div>
-			{/* 额外翻译 */}
-			{setting.additionalMeaning && (
-				<HideText
-					hide={!setting.showMeaning}
-					className="mb-3 -mt-1.5 block mobile:max-w-[90vw]"
-				>
-					<div className="flex flex-row gap-3">
-						{Object.values(SITES_LANGUAGE)
-							.filter((lang) => lang !== locale)
-							.map((lang) => (
-								<span
-									key={lang}
-									data-lang={lang}
-									className="text-xs text-gray-500/80 text-center"
-								>
-									{wordTranslations?.[lang] || wordTranslations?.en}
-								</span>
-							))}
-					</div>
-				</HideText>
-			)}
-			{/* 韩语音节 */}
-			<div
-				className={clsx(
-					notoKR.className,
-					"relative inline-block cursor-pointer text-xl text-[color:var(--font-color-inactive)]",
-				)}
-				ref={hangulRef}
-				onClick={focusInput}
-			>
-				{[...hangul].map((strItem, idx) => (
-					<span
-						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-						key={idx}
-						className={clsx(heightLightClass(idx))}
-					>
-						{strItem}
-					</span>
-				))}
-				{qwerty && (
-					<div
-						className={clsx(
-							"absolute -right-9 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[1]",
-							!isTouchable && "tooltip tooltip-top",
-						)}
-						data-tip={qwerty}
-					>
-						<InfoIcon
-							className="opacity-60"
-							width={20}
-							height={20}
-							viewBox="0 0 24 24"
-						/>
-					</div>
-				)}
-			</div>
-			{/* 键盘图案 */}
-			<div
-				className={clsx(
-					"drop-shadow-xl w-[90vw] sm:w-[80vw] md:w-[70vw] my-3 rounded-md sm:rounded-xl overflow-hidden relative",
-				)}
-			>
-				<style>{inlineStyle}</style>
-				<KoreanKeyBoardSVG
-					viewBox="0 0 910 310"
-					width={"100%"}
-					height={"100%"}
-					className="dark:invert-[0.8]"
-				/>
-				<div
-					className={clsx(
-						"transition-all select-none absolute top-0 left-0 w-full h-full bg-gray-400/75 dark:bg-gray-800/85 flex items-center justify-center flex-col",
-						isInputFocused ? "opacity-0 pointer-events-none" : "opacity-100",
 					)}
-				>
-					{!isTouchable ? (
-						<div className="text-3xl flex items-center">
-							{tHome.rich("tipsEnter", {
-								enter: () => <kbd className="kbd kbd-md mx-2">Enter</kbd>,
-							})}
-						</div>
-					) : (
-						<div className="text-xl flex items-center text-center">
-							{tHome("tipsForMobile")}
-						</div>
-					)}
-					<button
-						className="btn btn-outline btn-sm mt-5 mb-2"
-						type="button"
-						onClick={() => drawerRef.current.open()}
-					>
-						<SettingIcon className="size-5" />
-						{tHome("viewList")}
-					</button>
-					{!isTouchable && (
-						<div className="text-sm">
-							tips: Try <kbd className="kbd kbd-xs">[</kbd>
-							{" / "}
-							<kbd className="kbd kbd-xs">]</kbd>
-							{" / "}
-							<kbd className="kbd kbd-xs">\</kbd>
-							{" / "}
-							<kbd className="kbd kbd-xs">;</kbd>
-							{" / "}
-							<kbd className="kbd kbd-xs">'</kbd>.
-						</div>
-					)}
-				</div>
-			</div>
-			{/* 例句 */}
-			{currentWord?.example && (
-				<div className="flex justify-center flex-col items-center">
-					<p className={clsx("relative", notoKR.className)}>
-						<span ref={exampleRef}>
-							{highLightExample(currentWord.example)}
-						</span>
-						<Pronunciation
-							playRef={playExampleRef}
-							width={12}
-							height={12}
-							text={currentWord.example}
-							className="absolute top-1/2 -right-6 -translate-x-1/2 -translate-y-1/2"
-						/>
-					</p>
-					<p>
-						<HideText hide={!setting.showMeaning}>
-							{exTranslations?.[locale] || exTranslations?.en}
-						</HideText>
-					</p>
-					{/* 额外例句翻译 */}
-					{setting.additionalMeaning && (
-						<div className="flex text-center flex-col gap-0.5 py-0.5">
-							{Object.values(SITES_LANGUAGE)
-								.filter((lang) => lang !== locale)
-								.map((lang) => (
-									<div
-										key={lang}
-										data-lang={lang}
-										className="text-xs text-base-content/80"
-									>
-										<HideText hide={!setting.showMeaning}>
-											{exTranslations?.[lang] || exTranslations?.en}
-										</HideText>
-									</div>
-								))}
-						</div>
-					)}
-				</div>
-			)}
-			{qwerty && (
-				<HomeInput
-					onFocusChange={setIsInputFocused}
-					onInput={setInputKeys}
-					position={inputPosition}
-					ref={inputRef}
+				</>
+			) : (
+				<WordCards
+					dict={dict}
+					curWordIndex={curWordIndex}
+					onChange={skipToNextWord}
+					playWord={playWord}
+					isWordPlaying={isWordPlaying}
+					additionalMeaning={setting.additionalMeaning}
+					showMeaning={setting.showMeaning}
+					locale={locale}
+					isLocalDict={isLocalDict}
+					playExampleRef={playExampleRef}
+					slideToIndexRef={slideToIndexRef}
 				/>
 			)}
+			<StatusToggle isInputStatus={isInputStatus} onChange={setIsInputStatus} />
 			<HomeDrawer
 				isLocalDict={isLocalDict}
 				isUserDict={isUserDict}
@@ -627,7 +444,7 @@ const HomeStatus = ({
 
 const Wrapper = ({ children }: { children: ReactNode }) => {
 	return (
-		<div className={clsx("flex", "flex-col", "items-center", "justify-center")}>
+		<div className={clsx("flex flex-col items-center justify-center")}>
 			{children}
 		</div>
 	);

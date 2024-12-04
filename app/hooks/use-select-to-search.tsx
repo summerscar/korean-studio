@@ -1,4 +1,5 @@
 import { FloatButtonsPanel } from "@/components/float-buttons-panel";
+import type { SITES_LANGUAGE } from "@/types/site";
 import { useDebounceFn, useEventListener, useUnmount } from "ahooks";
 import { useLocale } from "next-intl";
 import { useEffect, useRef } from "react";
@@ -47,7 +48,7 @@ const useSelectToSearch = ({
 							showSearch={showSearch}
 							showCopy={showCopy}
 							showAI={showAI}
-							locale={locale}
+							locale={locale as SITES_LANGUAGE}
 							root={root}
 							onClose={() => {
 								root?.render(null);

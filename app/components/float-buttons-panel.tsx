@@ -1,10 +1,10 @@
 import { generateWordSuggestionAction } from "@/actions/generate-word-action";
 import { SearchButton } from "@/components/select-search-button";
 import { ErrorFallback } from "@/components/suspend-error-fallback";
+import type { SITES_LANGUAGE } from "@/types/site";
 import { timeOut } from "@/utils/time-out";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
 import type { Root } from "react-dom/client";
 
 const SuggestionPanel = dynamic(
@@ -14,6 +14,7 @@ const SuggestionPanel = dynamic(
 		),
 	{
 		ssr: false,
+		loading: () => <span className="loading loading-ring loading-lg" />,
 	},
 );
 
@@ -24,7 +25,7 @@ interface FloatButtonsPanelProps {
 	showCopy?: boolean;
 	showAI?: boolean;
 	root: Root | null;
-	locale: string;
+	locale: SITES_LANGUAGE;
 	position?: "top" | "bottom";
 	onClose?: () => void;
 }
@@ -88,11 +89,7 @@ export function FloatButtonsPanel({
 					className={`flex backdrop-blur-md rounded w-4/5 sm:w-[600px] min-h-40 max-h-96 sm:max-h-[65vh] p-2 sm:p-4 justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
 				>
 					<ErrorBoundary errorComponent={ErrorFallback}>
-						<Suspense
-							fallback={<span className="loading loading-ring loading-lg" />}
-						>
-							<SuggestionPanel promise={promise} />
-						</Suspense>
+						<SuggestionPanel promise={promise} />
 					</ErrorBoundary>
 				</div>
 			</div>,

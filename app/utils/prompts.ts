@@ -1,3 +1,5 @@
+import { type SITES_LANGUAGE, SITES_LANGUAGE_NAME } from "@/types/site";
+
 const WORD_EXAMPLE = {
 	name: "하늘",
 	trans: {
@@ -122,8 +124,8 @@ const generateDocPrompt = (title: string) => `
 
 请给出语法 [${title}] 的说明文档：`;
 
-const generateWordSuggestionPrompt = (word: string, locale: string) => {
-	return `现有韩语单词【${word}】，请告诉我该单词含义，以及如何拆解并背诵该单词。请使用 ${locale} 语言告诉我。`;
+const generateWordSuggestionPrompt = (word: string, locale: SITES_LANGUAGE) => {
+	return `现有韩语单词【${word}】，请告诉我该单词含义，以及如何拆解并背诵该单词。请使用【${SITES_LANGUAGE_NAME[locale]}】语言告诉我。`;
 };
 
 export {

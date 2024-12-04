@@ -36,7 +36,7 @@ const KeyBoard = ({
 	return (
 		<div
 			className={clsx(
-				"drop-shadow-xl w-[90vw] sm:w-[80vw] md:w-[70vw] my-3 rounded-md sm:rounded-xl overflow-hidden relative",
+				"drop-shadow-lg w-full sm:w-[80vw] md:w-[70vw] my-3 rounded-md sm:rounded-xl overflow-hidden relative",
 			)}
 		>
 			<style>{inlineStyle}</style>
@@ -48,7 +48,7 @@ const KeyBoard = ({
 			/>
 			<div
 				className={clsx(
-					"transition-all select-none absolute top-0 left-0 w-full h-full bg-gray-400/75 dark:bg-gray-800/85 flex items-center justify-center flex-col",
+					"transition-all select-none absolute top-0 left-0 w-full h-full bg-gray-400/75 dark:bg-gray-800/85 flex items-center justify-around sm:justify-center flex-col p-1 gap-0 sm:gap-8",
 					isInputFocused ? "opacity-0 pointer-events-none" : "opacity-100",
 				)}
 			>
@@ -63,27 +63,29 @@ const KeyBoard = ({
 						{tHome("tipsForMobile")}
 					</div>
 				)}
-				<button
-					className="btn btn-outline btn-sm mt-5 mb-2"
-					type="button"
-					onClick={() => drawerRef.current.open()}
-				>
-					<SettingIcon className="size-5" />
-					{tHome("viewList")}
-				</button>
-				{!isTouchable && (
-					<div className="text-sm">
-						tips: Try <kbd className="kbd kbd-xs">[</kbd>
-						{" / "}
-						<kbd className="kbd kbd-xs">]</kbd>
-						{" / "}
-						<kbd className="kbd kbd-xs">\</kbd>
-						{" / "}
-						<kbd className="kbd kbd-xs">;</kbd>
-						{" / "}
-						<kbd className="kbd kbd-xs">'</kbd>.
-					</div>
-				)}
+				<div className="flex flex-col items-center gap-2">
+					<button
+						className="btn btn-outline btn-sm"
+						type="button"
+						onClick={() => drawerRef.current.open()}
+					>
+						<SettingIcon className="size-5" />
+						{tHome("viewList")}
+					</button>
+					{!isTouchable && (
+						<div className="text-sm">
+							tips: Try <kbd className="kbd kbd-xs">[</kbd>
+							{" / "}
+							<kbd className="kbd kbd-xs">]</kbd>
+							{" / "}
+							<kbd className="kbd kbd-xs">\</kbd>
+							{" / "}
+							<kbd className="kbd kbd-xs">;</kbd>
+							{" / "}
+							<kbd className="kbd kbd-xs">'</kbd>.
+						</div>
+					)}
+				</div>
 			</div>
 		</div>
 	);

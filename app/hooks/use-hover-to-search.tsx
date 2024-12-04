@@ -1,4 +1,5 @@
 import { FloatButtonsPanel } from "@/components/float-buttons-panel";
+import type { SITES_LANGUAGE } from "@/types/site";
 import {
 	useClickAway,
 	useEventListener,
@@ -14,6 +15,7 @@ const useHoverToSearch = (text?: string) => {
 	const targetRef = useRef<HTMLElement>(null);
 	const rootRef = useRef<Root>(null);
 	const buttonContainer = useRef<HTMLDivElement>(null);
+	const isTouchRef = useRef(false);
 
 	const onMouseOver = useMemoizedFn(() => {
 		if (
@@ -35,7 +37,7 @@ const useHoverToSearch = (text?: string) => {
 		root.render(
 			<FloatButtonsPanel
 				position="top"
-				locale={locale}
+				locale={locale as SITES_LANGUAGE}
 				rect={targetRef.current.getBoundingClientRect()}
 				selectedText={text}
 				root={root}
@@ -95,7 +97,33 @@ const useHoverToSearch = (text?: string) => {
 		target: targetRef,
 	});
 
-	useClickAway(() => {
+	useEventListener(
+		"touchstart",
+		() => {
+			isTouchRef.current = true;
+			onMouseOver();
+		},
+		{
+			target: targetRef,
+		},
+	);
+
+	useEventListener(
+		"touchend",
+		() => {
+			setTimeout(() => {
+				isTouchRef.current = false;
+			}, 16);
+		},
+		{
+			target: targetRef,
+		},
+	);
+
+	useClickAway((e) => {
+		if (isTouchRef.current && targetRef.current?.contains(e.target as Node)) {
+			return;
+		}
 		cleanup();
 	}, buttonContainer);
 

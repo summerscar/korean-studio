@@ -6,13 +6,11 @@ import { useHomeProgress } from "@/components/header/_component/progress";
 import { HomeDrawer } from "@/components/home-drawer";
 import { checkIsTouchable, useDevice } from "@/hooks/use-device";
 import { usePronunciation } from "@/hooks/use-pronunciation";
-import type { HomeSetting } from "@/types";
 import { type Dict, Dicts } from "@/types/dict";
 import type { UserDicts } from "@/types/dict";
 import type { SITES_LANGUAGE } from "@/types/site";
 import { useInputAudioEffect } from "@/utils/audio";
 import { playConfetti } from "@/utils/confetti";
-import { HOME_SETTING_KEY } from "@/utils/config";
 import {
 	NextKeyShortcut,
 	PrevKeyShortcut,
@@ -26,7 +24,7 @@ import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
 import { getLocalDict } from "@/utils/local-dict";
 import { shuffleArr } from "@/utils/shuffle-array";
-import { useEventListener, useLatest, useMemoizedFn, useMount } from "ahooks";
+import { useEventListener, useLatest, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { disassemble } from "es-hangul";
 import { useLocale } from "next-intl";
@@ -45,6 +43,7 @@ import { Hangul } from "./hangul";
 import { HomeInput } from "./input";
 import { KeyBoard } from "./keyboard";
 import { ModeToggle } from "./mode-toggle";
+import { useHomeSetting } from "./use-home-setting";
 import { useNewNotification } from "./use-new-notification";
 import { WordExample } from "./word-example";
 import { WordMeaning } from "./word-meaning";
@@ -85,28 +84,14 @@ const HomeStatus = ({
 	const playExampleRef = useRef(() => {});
 	const slideToIndexRef = useRef<(index: number) => void>(() => {});
 	const { isTouchable } = useDevice();
-	useNewNotification(dictId);
-	const [setting, setSetting] = useState<HomeSetting>({
-		autoVoice: false,
-		showMeaning: true,
-		enableAudio: true,
-		additionalMeaning: false,
-	});
-	useMount(() => {
-		const settingStr = localStorage.getItem(HOME_SETTING_KEY);
-		if (settingStr) {
-			const newSetting = JSON.parse(settingStr);
-			setSetting(newSetting);
+	useEffect(() => {
+		if (isTouchable) {
+			setIsInputMode(false);
 		}
-	});
+	}, [isTouchable]);
+	useNewNotification(dictId);
 
-	const onSettingChange = (newVal: Partial<typeof setting>) => {
-		setSetting((val) => {
-			const newSetting = { ...val, ...newVal };
-			localStorage.setItem(HOME_SETTING_KEY, JSON.stringify(newSetting));
-			return newSetting;
-		});
-	};
+	const { setting, onSettingChange, setSetting } = useHomeSetting();
 
 	const inputAE = useInputAudioEffect(setting.enableAudio);
 

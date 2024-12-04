@@ -104,7 +104,7 @@ export function FloatButtonsPanel({
 					: { top: `${rect.bottom + window.scrollY}px` }),
 				left: `${rect.right - rect.width / 2 + window.scrollX}px`,
 			}}
-			className="z-[1] border border-base-content/10 bg-white/10 shadow backdrop-blur-md flex absolute rounded overflow-hidden"
+			className="z-[1] border border-base-content/10 bg-white/10 shadow backdrop-blur-md flex absolute rounded overflow-hidden -translate-x-1/4"
 		>
 			{showSearch && <SearchButton onClick={onPapagoSearch} icon="search" />}
 			{showCopy && <SearchButton onClick={onCopy} icon="copy" />}

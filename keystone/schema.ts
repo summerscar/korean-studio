@@ -1,6 +1,6 @@
 import type { createAuth } from "@keystone-6/auth";
 import { list } from "@keystone-6/core";
-import { allOperations, allowAll, denyAll } from "@keystone-6/core/access";
+import { allowAll } from "@keystone-6/core/access";
 import {
 	checkbox,
 	integer,

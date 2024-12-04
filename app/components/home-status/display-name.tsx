@@ -13,11 +13,13 @@ const DisplayName = ({
 	isWordPlaying,
 	isLocalDict,
 	className,
+	showStar = true,
 }: {
 	currentWord: DictItem | null;
 	playWord: () => void;
 	isWordPlaying: boolean;
 	isLocalDict: boolean;
+	showStar?: boolean;
 	className?: string;
 }) => {
 	const displayNameRef = useHoverToSearch(currentWord?.name);
@@ -43,25 +45,24 @@ const DisplayName = ({
 			)}
 		>
 			<span ref={displayNameRef}>{displayName}</span>
-			<div
-				className={clsx(
-					"flex absolute top-1/2 -right-10 -translate-x-1/2 -translate-y-[90%] z-[1]",
-					!isTouchable && "tooltip tooltip-top",
-				)}
-				data-tip={`${romanized} [${standardized}]`}
-			>
-				<SpeakerIcon
-					width={20}
-					height={20}
-					onMouseEnter={playWord}
-					onTouchEnd={playWord}
-					className={clsx(
-						isWordPlaying ? "fill-current" : "text-base-content",
-						"cursor-pointer inline-block",
-					)}
-				/>
+			<div className="absolute min-h-full top-0 right-0 translate-x-[130%] z-[2] flex flex-col justify-center gap-1">
+				<div
+					className={clsx("flex", !isTouchable && "tooltip tooltip-top")}
+					data-tip={`${romanized} [${standardized}]`}
+				>
+					<SpeakerIcon
+						width={20}
+						height={20}
+						onMouseEnter={playWord}
+						onTouchEnd={playWord}
+						className={clsx(
+							isWordPlaying ? "fill-current" : "text-base-content",
+							"cursor-pointer inline-block",
+						)}
+					/>
+				</div>
+				{showStar && <Star dictItem={currentWord} isLocalDict={isLocalDict} />}
 			</div>
-			<Star dictItem={currentWord} isLocalDict={isLocalDict} />
 		</div>
 	);
 };

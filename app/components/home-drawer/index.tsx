@@ -60,7 +60,7 @@ const HomeDrawer = ({
 					?.querySelector(`li[data-active="true"]`)
 					?.scrollIntoView({
 						block: "center",
-						inline: "center",
+						inline: "nearest",
 						behavior: "smooth",
 					});
 			}, 350);

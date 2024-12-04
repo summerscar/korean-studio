@@ -1,5 +1,4 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { _listAllDocs as _listAllDocsByLevel } from "@/utils/list-docs";
 import { generateDocDescriptionPrompt } from "@/utils/prompts";
 import { flattenAllDocs, insertOrUpdateFrontmatterKey } from "./list-all-docs";
 import { fetchChatCompletion, sequentialChatCompletion } from "./open-ai";

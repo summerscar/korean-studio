@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
+let lastIsTouchable: boolean | undefined;
+
 export const useDevice = () => {
-	const [isTouchable, setIsTouchable] = useState(false);
+	const [isTouchable, setIsTouchable] = useState(lastIsTouchable ?? false);
 
 	useEffect(() => {
 		const callback = () => {
@@ -20,5 +22,6 @@ export const checkIsTouchable = () => {
 	/* 		/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) &&
 		("ontouchstart" in window || navigator.maxTouchPoints > 0) &&
 		window.matchMedia("(pointer: coarse)").matches; */
-	return touchable;
+
+	return (lastIsTouchable = touchable);
 };

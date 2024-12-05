@@ -117,7 +117,7 @@ const style = {
 			} finally {
 				setTimeout(() => {
 					e.target.disabled = false;
-					e.target.textContent = "➕";
+					e.target.textContent = e.target.textContent === "❌" ? "🔄" : "➕";
 				}, 2000);
 			}
 		});

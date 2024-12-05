@@ -6,24 +6,22 @@ const ModeToggle = ({
 	isInputMode,
 	onChange,
 }: { isInputMode: boolean; onChange: (value: boolean) => void }) => {
+	const itemClassName = clsx(
+		"cursor-pointer size-4 sm:size-5 transition-all duration-300",
+	);
+
 	return (
 		<div className="flex absolute left-1/2 -translate-x-1/2 bottom-2 border border-slate-400/60 rounded-full px-1.5 py-0.5 gap-1.5 sm:px-2 sm:py-1 sm:gap-2">
 			<DesktopIcon
-				className={clsx(
-					"cursor-pointer size-4 sm:size-5 transition-all duration-300",
-					{
-						"text-slate-400/80": !isInputMode,
-					},
-				)}
+				className={clsx(itemClassName, {
+					"text-slate-400/80": !isInputMode,
+				})}
 				onClick={() => onChange(true)}
 			/>
 			<TabletIcon
-				className={clsx(
-					"cursor-pointer size-4 sm:size-5 transition-all duration-300",
-					{
-						"text-slate-400/80": isInputMode,
-					},
-				)}
+				className={clsx(itemClassName, {
+					"text-slate-400/80": isInputMode,
+				})}
 				onClick={() => onChange(false)}
 			/>
 			<div

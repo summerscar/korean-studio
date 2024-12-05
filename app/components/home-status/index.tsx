@@ -3,7 +3,6 @@ import CompleteSVG from "@/assets/svg/complete.svg";
 import RefreshSVG from "@/assets/svg/refresh.svg";
 
 import { useHomeProgress } from "@/components/header/_component/progress";
-import { HomeDrawer } from "@/components/home-drawer";
 import { checkIsTouchable, useDevice } from "@/hooks/use-device";
 import { usePronunciation } from "@/hooks/use-pronunciation";
 import { type Dict, Dicts } from "@/types/dict";
@@ -28,7 +27,6 @@ import { useEventListener, useLatest, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import { disassemble } from "es-hangul";
 import { useLocale } from "next-intl";
-import dynamic from "next/dynamic";
 import {
 	type ReactNode,
 	useCallback,
@@ -39,6 +37,10 @@ import {
 } from "react";
 import { DictNav } from "./dict-nav";
 import { DisplayName } from "./display-name";
+import {
+	DynamicDrawer as HomeDrawer,
+	DynamicWordCards as WordCards,
+} from "./dynamic-comp";
 import { Hangul } from "./hangul";
 import { HomeInput } from "./input";
 import { KeyBoard } from "./keyboard";
@@ -47,19 +49,6 @@ import { useHomeSetting } from "./use-home-setting";
 import { useNewNotification } from "./use-new-notification";
 import { WordExample } from "./word-example";
 import { WordMeaning } from "./word-meaning";
-
-const WordCards = dynamic(
-	() =>
-		import("@/components/home-status/word-cards").then((mod) => mod.WordCards),
-	{
-		ssr: false,
-		loading: () => (
-			<div className="animate-pulse w-60 h-80 bg-gray-200 rounded-2xl flex items-center justify-center">
-				<span className="loading loading-ring loading-lg" />
-			</div>
-		),
-	},
-);
 
 const HomeStatus = ({
 	isLocalDict,

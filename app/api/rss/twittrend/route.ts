@@ -42,7 +42,9 @@ export async function GET() {
 		const desc = `<div style="display: flex; flex-direction: row; justify-content: space-between;">
 		<div><a href="https://twittrend.jp/">Home page 🇯🇵</a>${trendsNowJP.html()}</div><div><a href="https://twittrend.net/">Home page 🇰🇷</a>${trendsNowKR.html()}</div>
 		</div>`;
-		const time = new Date().toLocaleString();
+		const time = new Date().toLocaleString("zh-CN", {
+			timeZone: "Asia/Shanghai",
+		});
 
 		// 添加趋势内容到 RSS feed
 		feed.addItem({

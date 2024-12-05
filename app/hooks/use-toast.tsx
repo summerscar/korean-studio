@@ -1,7 +1,6 @@
 "use client";
 import { useMemoizedFn } from "ahooks";
 import type { ReactNode } from "react";
-import { renderToString } from "react-dom/server";
 
 const createToast = ({
 	type,
@@ -16,8 +15,13 @@ const createToast = ({
 	const toastEl = document.createElement("div");
 	toastEl.className = `alert alert-${type} !text-white`;
 
-	toastEl.innerHTML = renderToString(message);
-	toastWrapper?.appendChild(toastEl);
+	import("react-dom/server")
+		.then((mod) => mod.renderToString)
+		.then((renderToString) => {
+			toastEl.innerHTML = renderToString(message);
+			toastWrapper?.appendChild(toastEl);
+		});
+
 	let unmount = () => {
 		toastWrapper?.removeChild(toastEl);
 		unmount = () => {};

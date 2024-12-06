@@ -17,12 +17,12 @@ import { WordExample } from "./word-example";
 import { WordMeaning } from "./word-meaning";
 
 const pastelColors = [
-	"bg-[#FFE5E5]", // 柔和的粉红色
-	"bg-[#E5F3FF]", // 淡蓝色
-	"bg-[#F0FFE5]", // 淡绿色
-	"bg-[#FFE5F3]", // 粉紫色
-	"bg-[#F5E5FF]", // 淡紫色
-	"bg-[#FFF5E5]", // 淡橙色
+	"bg-[#FFE5E5] dark:bg-[#3D2929]", // 柔和的粉红色
+	"bg-[#E5F3FF] dark:bg-[#293337]", // 淡蓝色
+	"bg-[#F0FFE5] dark:bg-[#2D3729]", // 淡绿色
+	"bg-[#FFE5F3] dark:bg-[#3D2935]", // 粉紫色
+	"bg-[#F5E5FF] dark:bg-[#352937]", // 淡紫色
+	"bg-[#FFF5E5] dark:bg-[#3D3529]", // 淡橙色
 ];
 
 const noop = () => {};
@@ -92,7 +92,12 @@ const WordCards = ({
 						key={word.id || word.name}
 						virtualIndex={i}
 						className={clsx(
-							"w-full h-full flex items-center justify-center rounded-2xl shadow dict-theme:[background-image:var(--dict-bg)] dict-theme:bg-cover dict-theme:bg-center dict-theme:bg-no-repeat dict-theme:bg-blend-soft-light dict-theme:contrast-[1]",
+							"w-full h-full flex items-center justify-center",
+							"rounded-2xl shadow",
+							"dict-theme:[background-image:var(--dict-bg)]",
+							"dict-theme:bg-cover dict-theme:bg-center dict-theme:bg-no-repeat",
+							"dict-theme:bg-blend-soft-light dark:dict-theme:bg-blend-multiply",
+							"dict-theme:contrast-[1]",
 							pastelColors[i % pastelColors.length],
 						)}
 					>

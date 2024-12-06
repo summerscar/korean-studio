@@ -7,7 +7,7 @@ import type { Dict, Dicts, UserDicts } from "@/types/dict";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import { WordsList } from "./words";
 
 const WordLists = ({ dicts }: { dicts: UserDicts }) => {
@@ -27,9 +27,24 @@ const WordLists = ({ dicts }: { dicts: UserDicts }) => {
 		fetchDicts(tabId);
 	}, [fetchDicts, tabId]);
 
+	const dictInfo = dicts.find((dict) => dict.id === tabId);
+
+	const style = dictInfo?.poster
+		? ({
+				"--dict-bg": `url('${dictInfo.poster}')`,
+			} as CSSProperties)
+		: undefined;
+
 	return (
-		<div className="[--tab-active-bg:#ffffff40]">
-			<div role="tablist" className="tabs tabs-lifted overflow-auto mt-4">
+		<div className="[--tab-active-bg:#ffffff40] relative" role="tabpanel">
+			<div
+				style={style}
+				className="absolute top-0 left-0 w-full h-full [background-image:var(--dict-bg)] bg-cover bg-center bg-no-repeat opacity-50 blur z-[-1]"
+			/>
+			<div
+				role="tablist"
+				className="tabs tabs-lifted overflow-auto mt-4 scrollbar-hide"
+			>
 				{dicts.map((dict) => (
 					<div
 						className={clsx(
@@ -51,7 +66,7 @@ const WordLists = ({ dicts }: { dicts: UserDicts }) => {
 				isFavDict={isFavList}
 				loading={pending}
 				dict={dict}
-				dictInfo={dicts.find((dict) => dict.id === tabId)}
+				dictInfo={dictInfo}
 				onUpdate={() => fetchDicts(tabId)}
 			/>
 		</div>

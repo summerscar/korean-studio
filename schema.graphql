@@ -392,6 +392,7 @@ type Dict {
   createdBy: User
   list(where: DictItemWhereInput! = {}, orderBy: [DictItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictItemWhereUniqueInput): [DictItem!]
   listCount(where: DictItemWhereInput! = {}): Int
+  poster: String
   favorites(where: DictItemFavoriteWhereInput! = {}, orderBy: [DictItemFavoriteOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictItemFavoriteWhereUniqueInput): [DictItemFavorite!]
   favoritesCount(where: DictItemFavoriteWhereInput! = {}): Int
 }
@@ -411,6 +412,7 @@ input DictWhereInput {
   createdAt: DateTimeNullableFilter
   createdBy: UserWhereInput
   list: DictItemManyRelationFilter
+  poster: StringFilter
   favorites: DictItemFavoriteManyRelationFilter
 }
 
@@ -432,6 +434,7 @@ input DictOrderByInput {
   public: OrderDirection
   intlKey: OrderDirection
   createdAt: OrderDirection
+  poster: OrderDirection
 }
 
 input DictUpdateInput {
@@ -441,6 +444,7 @@ input DictUpdateInput {
   createdAt: DateTime
   createdBy: UserRelateToOneForUpdateInput
   list: DictItemRelateToManyForUpdateInput
+  poster: String
   favorites: DictItemFavoriteRelateToManyForUpdateInput
 }
 
@@ -470,6 +474,7 @@ input DictCreateInput {
   createdAt: DateTime
   createdBy: UserRelateToOneForCreateInput
   list: DictItemRelateToManyForCreateInput
+  poster: String
   favorites: DictItemFavoriteRelateToManyForCreateInput
 }
 

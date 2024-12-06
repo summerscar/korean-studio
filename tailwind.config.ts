@@ -1,4 +1,5 @@
 import daisyui from "daisyui";
+import scrollbarHide from "tailwind-scrollbar-hide";
 import type { Config } from "tailwindcss";
 const config: Config = {
 	darkMode: ["selector", '[data-theme="dark"]'],
@@ -32,7 +33,14 @@ const config: Config = {
 			},
 		},
 	},
-	plugins: [daisyui],
+	plugins: [
+		daisyui,
+		scrollbarHide,
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		({ addVariant }: any) => {
+			addVariant("dict-theme", '[data-dict-theme="true"] &');
+		},
+	],
 	// daisyUI config (optional - here are the default values)
 	daisyui: {
 		themes: ["emerald", "dark"], // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]

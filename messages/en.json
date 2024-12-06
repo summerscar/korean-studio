@@ -21,7 +21,8 @@
 		"email": "Email",
 		"changePassword": "Change password",
 		"dictName": "Word List Name",
-		"public": "Public"
+		"public": "Public",
+		"poster": "Poster"
 	},
 	"Home": {
 		"viewList": "View list",

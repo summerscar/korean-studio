@@ -36,7 +36,7 @@ const KeyBoard = ({
 	return (
 		<div
 			className={clsx(
-				"drop-shadow-lg w-full sm:w-[80vw] md:w-[70vw] my-3 rounded-md sm:rounded-xl overflow-hidden relative",
+				"drop-shadow-lg w-full sm:w-[80vw] md:w-[70vw] my-3 rounded-md sm:rounded-xl overflow-hidden relative dict-theme:[background-image:var(--dict-bg)] dict-theme:bg-cover dict-theme:bg-center dict-theme:bg-no-repeat",
 			)}
 		>
 			<style>{inlineStyle}</style>
@@ -44,7 +44,7 @@ const KeyBoard = ({
 				viewBox="0 0 910 310"
 				width={"100%"}
 				height={"100%"}
-				className="dark:invert-[0.8]"
+				className="dark:invert-[0.8] dict-theme:opacity-75"
 			/>
 			<div
 				className={clsx(

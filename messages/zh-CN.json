@@ -21,7 +21,8 @@
 		"email": "邮箱",
 		"changePassword": "修改密码",
 		"dictName": "词单名",
-		"public": "公开"
+		"public": "公开",
+		"poster": "封面"
 	},
 	"Home": {
 		"viewList": "查看列表",

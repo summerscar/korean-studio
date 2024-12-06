@@ -45,6 +45,7 @@ import { Hangul } from "./hangul";
 import { HomeInput } from "./input";
 import { KeyBoard } from "./keyboard";
 import { ModeToggle } from "./mode-toggle";
+import { useDictTheme } from "./use-dict-theme";
 import { useHomeSetting } from "./use-home-setting";
 import { useNewNotification } from "./use-new-notification";
 import { WordExample } from "./word-example";
@@ -79,7 +80,7 @@ const HomeStatus = ({
 		}
 	}, [isTouchable]);
 	useNewNotification(dictId);
-
+	useDictTheme(dictList.find((dict) => dict.id === dictId));
 	const { setting, onSettingChange, setSetting } = useHomeSetting();
 
 	const inputAE = useInputAudioEffect(setting.enableAudio);

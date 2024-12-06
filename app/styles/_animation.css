@@ -16,8 +16,10 @@ body #bg{--y-0:80%;--x-0:85%;--c-0:hsla(150.8823529411765,52%,83%,1);--x-1:60%;-
 	body #bg {
 		background-image: none;
 		background-color: transparent;
+		animation: none;
 	}
 }
+
 
 /* loading */
 /* https://github.com/tobiasahlin/SpinKit/blob/master/spinkit.css */

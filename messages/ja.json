@@ -21,7 +21,8 @@
 		"email": "メール",
 		"changePassword": "パスワードの変更",
 		"dictName": "単語リスト名",
-		"public": "公開"
+		"public": "公開",
+		"poster": "ポスター"
 	},
 	"Home": {
 		"viewList": "リストを見る",

@@ -14,4 +14,6 @@ declare module "*.mp3" {
 	export default src;
 }
 
+declare module "tailwind-scrollbar-hide";
+
 declare module "@prisma/nextjs-monorepo-workaround-plugin";

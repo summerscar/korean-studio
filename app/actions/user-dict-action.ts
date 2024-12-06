@@ -19,7 +19,7 @@ const getAllDicts = unstable_cache(
 		const sudoContext = keystoneContext.sudo();
 		const res = (await sudoContext.query.Dict.findMany({
 			where: {},
-			query: "id name public intlKey createdBy { id name }",
+			query: "id name public intlKey poster createdBy { id name }",
 			orderBy: { createdAt: "asc" },
 		})) as UserDicts;
 		return toPlainObject(res);

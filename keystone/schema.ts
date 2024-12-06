@@ -205,6 +205,7 @@ export const lists = {
 			createdAt: timestamp({ defaultValue: { kind: "now" } }),
 			createdBy: relationship({ ref: "User", many: false }),
 			list: relationship({ ref: "DictItem.dict", many: true }),
+			poster: text({ validation: { isRequired: false } }),
 			favorites: relationship({ ref: "DictItemFavorite.dict", many: true }),
 		},
 	}),

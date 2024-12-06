@@ -183,7 +183,7 @@ const WordsList = ({
 					dictID: {dictInfo.id} <Link href={`/?dict=${dictInfo.id}`}>↗️</Link>
 				</div>
 				{!isFavDict && (
-					<div className="flex gap-2">
+					<div className="flex gap-y-2 gap-x-4 flex-wrap justify-center">
 						<label>
 							{tAccount("dictName")}：
 							<input
@@ -194,7 +194,19 @@ const WordsList = ({
 								}}
 								defaultValue={dictInfo.name}
 								type="text"
+								className="input input-bordered input-xs w-24"
+							/>
+						</label>
+						<label className="flex items-center">
+							{tAccount("poster")}：
+							<input
+								type="text"
 								className="input input-bordered input-xs"
+								defaultValue={dictInfo.poster || ""}
+								onBlur={(e) => {
+									if (e.target.value === dictInfo.poster) return;
+									updateDict({ poster: e.target.value });
+								}}
 							/>
 						</label>
 						<label className="flex items-center">

@@ -92,7 +92,7 @@ const WordCards = ({
 						key={word.id || word.name}
 						virtualIndex={i}
 						className={clsx(
-							"w-full h-full flex items-center justify-center rounded-2xl",
+							"w-full h-full flex items-center justify-center rounded-2xl shadow dict-theme:[background-image:var(--dict-bg)] dict-theme:bg-cover dict-theme:bg-center dict-theme:bg-no-repeat dict-theme:bg-blend-soft-light dict-theme:contrast-[1]",
 							pastelColors[i % pastelColors.length],
 						)}
 					>

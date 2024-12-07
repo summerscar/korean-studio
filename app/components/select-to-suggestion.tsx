@@ -23,8 +23,12 @@ const TypeEffectString = ({ promise }: { promise: Promise<string> }) => {
 
 	useEffect(() => {
 		(async () => {
-			const mdxSource = await serialize(displayText);
-			setMdContent(mdxSource);
+			try {
+				const mdxSource = await serialize(displayText);
+				setMdContent(mdxSource);
+			} catch (err) {
+				console.log(err);
+			}
 		})();
 	}, [displayText]);
 

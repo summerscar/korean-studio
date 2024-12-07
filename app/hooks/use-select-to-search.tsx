@@ -44,7 +44,7 @@ const useSelectToSearch = ({
 					}
 					root.render(
 						<FloatButtonsPanel
-							rect={rect}
+							getRect={() => range!.getBoundingClientRect()}
 							selectedText={selectedText}
 							showSearch={showSearch}
 							showCopy={showCopy}

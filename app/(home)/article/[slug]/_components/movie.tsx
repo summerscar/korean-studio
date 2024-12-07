@@ -11,6 +11,7 @@ import {
 } from "@/types/article";
 import type { SITES_LANGUAGE } from "@/types/site";
 import { notoKR } from "@/utils/fonts";
+import { isDev } from "@/utils/is-dev";
 import { generateSentenceSuggestionPrompt } from "@/utils/prompts";
 import { useMemoizedFn, useMount, useUpdateEffect } from "ahooks";
 import clsx from "clsx";
@@ -100,7 +101,7 @@ export function ArticleMovie({
 		try {
 			const subtitleData: SubtitleData = {};
 			try {
-				console.log("loading...", subtitleFiles[lang].filename);
+				isDev && console.log("loading...", subtitleFiles[lang].filename);
 				const response = await fetch(
 					`/subtitle-text/${subtitleFiles[lang].filename}`,
 				);

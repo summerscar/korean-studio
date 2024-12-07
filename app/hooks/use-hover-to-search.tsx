@@ -41,7 +41,7 @@ const useHoverToSearch = (
 			<FloatButtonsPanel
 				position="top"
 				locale={locale as SITES_LANGUAGE}
-				rect={targetRef.current.getBoundingClientRect()}
+				getRect={() => targetRef.current!.getBoundingClientRect()}
 				selectedText={text}
 				root={root}
 				prompt={prompt}

@@ -128,9 +128,17 @@ const generateWordSuggestionPrompt = (word: string, locale: SITES_LANGUAGE) => {
 	return `现有韩语单词【${word}】，请告诉我该单词含义，以及如何拆解并背诵该单词。请使用【${SITES_LANGUAGE_NAME[locale]}】语言告诉我。`;
 };
 
+const generateSentenceSuggestionPrompt = (
+	sentence: string,
+	locale: SITES_LANGUAGE,
+) => {
+	return `现有韩语句子【${sentence}】，请告诉我该句子含义，并分析该句子结构。请使用【${SITES_LANGUAGE_NAME[locale]}】语言告诉我。`;
+};
+
 export {
 	generateWordPrompt,
 	generateDocDescriptionPrompt,
 	generateDocPrompt,
 	generateWordSuggestionPrompt,
+	generateSentenceSuggestionPrompt,
 };

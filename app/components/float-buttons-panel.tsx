@@ -28,6 +28,7 @@ interface FloatButtonsPanelProps {
 	locale: SITES_LANGUAGE;
 	position?: "top" | "bottom";
 	onClose?: () => void;
+	prompt?: (word: string, locale: SITES_LANGUAGE) => string;
 }
 
 export function FloatButtonsPanel({
@@ -40,6 +41,7 @@ export function FloatButtonsPanel({
 	root,
 	locale,
 	position = "bottom",
+	prompt,
 }: FloatButtonsPanelProps) {
 	const onCopy = async () => {
 		try {
@@ -64,11 +66,11 @@ export function FloatButtonsPanel({
 	};
 
 	const openAISuggestion = async () => {
-		if (!root || !rect) return;
+		if (!root || !rect || !prompt) return;
 		// 防止同步render后影响外面的 clickOutside 检测
 		await timeOut(0);
 		onClose?.();
-		const promise = generateWordSuggestionAction(selectedText, locale);
+		const promise = generateWordSuggestionAction(prompt(selectedText, locale));
 		// const promise = Promise.resolve("123");
 		const windowHeight = window.innerHeight;
 		const spaceBelow = windowHeight - rect.bottom;
@@ -78,15 +80,14 @@ export function FloatButtonsPanel({
 		root.render(
 			<div
 				style={{
-					[showAbove ? "bottom" : "top"]:
-						`${showAbove ? windowHeight - rect.top + window.scrollY : rect.bottom + window.scrollY}px`,
+					top: `${showAbove ? windowHeight / 2 + window.scrollY : rect.bottom + window.scrollY}px`,
 					left: 0,
 					right: 0,
 				}}
 				className="z-[1] absolute flex justify-center pointer-events-none"
 			>
 				<div
-					className={`flex backdrop-blur-md rounded w-4/5 sm:w-[600px] min-h-40 max-h-96 sm:max-h-[65vh] p-2 sm:p-4 justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
+					className={`flex backdrop-blur-md rounded-lg w-4/5 sm:w-[600px] min-h-40 max-h-96 sm:max-h-[65vh] p-2 sm:p-4 justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
 				>
 					<ErrorBoundary errorComponent={ErrorFallback}>
 						<SuggestionPanel promise={promise} />
@@ -108,7 +109,9 @@ export function FloatButtonsPanel({
 		>
 			{showSearch && <SearchButton onClick={onPapagoSearch} icon="search" />}
 			{showCopy && <SearchButton onClick={onCopy} icon="copy" />}
-			{showAI && <SearchButton onClick={openAISuggestion} icon="sparkles" />}
+			{showAI && prompt && (
+				<SearchButton onClick={openAISuggestion} icon="sparkles" />
+			)}
 		</div>
 	);
 }

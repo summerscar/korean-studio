@@ -7,10 +7,13 @@ import {
 	useUnmount,
 } from "ahooks";
 import { useLocale } from "next-intl";
-import { useRef } from "react";
+import { type ComponentProps, useRef } from "react";
 import { type Root, createRoot } from "react-dom/client";
 
-const useHoverToSearch = (text?: string) => {
+const useHoverToSearch = (
+	text?: string,
+	prompt?: ComponentProps<typeof FloatButtonsPanel>["prompt"],
+) => {
 	const locale = useLocale();
 	const targetRef = useRef<HTMLElement>(null);
 	const rootRef = useRef<Root>(null);
@@ -41,6 +44,7 @@ const useHoverToSearch = (text?: string) => {
 				rect={targetRef.current.getBoundingClientRect()}
 				selectedText={text}
 				root={root}
+				prompt={prompt}
 				onClose={() => {
 					cancel?.();
 					cleanRoot();

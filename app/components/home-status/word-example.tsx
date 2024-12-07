@@ -4,6 +4,7 @@ import { useHoverToSearch } from "@/hooks/use-hover-to-search";
 import type { DictItem } from "@/types/dict";
 import { SITES_LANGUAGE } from "@/types/site";
 import { notoKR } from "@/utils/fonts";
+import { generateWordSuggestionPrompt } from "@/utils/prompts";
 import clsx from "clsx";
 import { useMemo } from "react";
 import reactStringReplace from "react-string-replace";
@@ -25,7 +26,10 @@ const WordExample = ({
 	className?: string;
 	pronunciationPreload?: boolean;
 }) => {
-	const exampleRef = useHoverToSearch(currentWord?.example);
+	const exampleRef = useHoverToSearch(
+		currentWord?.example,
+		generateWordSuggestionPrompt,
+	);
 
 	const exTranslations = useMemo(() => {
 		if (!currentWord) return null;

@@ -27,6 +27,7 @@ const header = (level: 1 | 2 | 3, props: PropsWithChildren<{ id: string }>) => {
 const Alink = ({ children, ...props }: PropsWithChildren<{ href: string }>) => (
 	<Link
 		className="!text-base-content !underline underline-offset-4"
+		target={props.href.startsWith("http") ? "_blank" : "_self"}
 		{...props}
 		prefetch
 	>

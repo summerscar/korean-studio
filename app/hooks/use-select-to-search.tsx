@@ -2,13 +2,14 @@ import { FloatButtonsPanel } from "@/components/float-buttons-panel";
 import type { SITES_LANGUAGE } from "@/types/site";
 import { useDebounceFn, useEventListener, useUnmount } from "ahooks";
 import { useLocale } from "next-intl";
-import { useEffect, useRef } from "react";
+import { type ComponentProps, useEffect, useRef } from "react";
 import { type Root, createRoot } from "react-dom/client";
 
 const useSelectToSearch = ({
 	showCopy = true,
 	showSearch = true,
 	showAI = true,
+	prompt,
 }: Config = {}) => {
 	const containerRef = useRef<HTMLElement>(null);
 	const locale = useLocale();
@@ -50,6 +51,7 @@ const useSelectToSearch = ({
 							showAI={showAI}
 							locale={locale as SITES_LANGUAGE}
 							root={root}
+							prompt={prompt}
 							onClose={() => {
 								root?.render(null);
 							}}
@@ -85,6 +87,7 @@ type Config = {
 	showCopy?: boolean;
 	showSearch?: boolean;
 	showAI?: boolean;
+	prompt?: ComponentProps<typeof FloatButtonsPanel>["prompt"];
 };
 
 export { useSelectToSearch };

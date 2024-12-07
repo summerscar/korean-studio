@@ -24,16 +24,24 @@ const header = (level: 1 | 2 | 3, props: PropsWithChildren<{ id: string }>) => {
 		</Header>
 	);
 };
-const Alink = ({ children, ...props }: PropsWithChildren<{ href: string }>) => (
-	<Link
-		className="!text-base-content !underline underline-offset-4"
-		target={props.href.startsWith("http") ? "_blank" : "_self"}
-		{...props}
-		prefetch
-	>
-		{children}
-	</Link>
-);
+const Alink = ({ children, ...props }: PropsWithChildren<{ href: string }>) => {
+	const blankSymbol = "_blank";
+
+	const isBlank =
+		props.href.startsWith("http") ||
+		(typeof children === "string" && children.endsWith(blankSymbol));
+
+	return (
+		<Link
+			className="!text-base-content !underline underline-offset-4"
+			target={isBlank ? blankSymbol : "_self"}
+			{...props}
+			prefetch={!isBlank}
+		>
+			{typeof children === "string" ? children.replace("_blank", "") : children}
+		</Link>
+	);
+};
 const components = {
 	// h1: (props: PropsWithChildren<{ id: string }>) => header(1, props),
 	// h2: (props: PropsWithChildren<{ id: string }>) => header(2, props),

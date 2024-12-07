@@ -6,8 +6,8 @@ export const getBaseURL = () => {
 	}
 
 	if (process.env.NEXT_PUBLIC_VERCEL_ENV === "production")
-		return `https://${process.env.NEXTAUTH_URL}`;
+		return `${process.env.NEXTAUTH_URL}`;
 	if (process.env.NEXT_PUBLIC_VERCEL_ENV === "preview")
-		return `https://${process.env.NEXTAUTH_URL}`;
+		return `${process.env.NEXTAUTH_URL}`;
 	return "http://localhost:3000";
 };

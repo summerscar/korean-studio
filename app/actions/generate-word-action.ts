@@ -1,11 +1,7 @@
 "use server";
 import type { DictItem } from "@/types/dict";
-import type { SITES_LANGUAGE } from "@/types/site";
 import { isDev } from "@/utils/is-dev";
-import {
-	generateWordPrompt,
-	generateWordSuggestionPrompt,
-} from "@/utils/prompts";
+import { generateWordPrompt } from "@/utils/prompts";
 import {
 	fetchChatCompletion,
 	sequentialChatCompletion,
@@ -44,12 +40,8 @@ export const generateWordsAction = async (words: string[]) => {
 	).filter((w) => w !== null);
 };
 
-export const generateWordSuggestionAction = async (
-	word: string,
-	locale: SITES_LANGUAGE,
-) => {
-	isDev && console.log(`[generateWordSuggestionAction][start]: ${word}`);
-	const prompt = generateWordSuggestionPrompt(word, locale);
+export const generateWordSuggestionAction = async (prompt: string) => {
+	isDev && console.log("[generateWordSuggestionAction][start]: ..........");
 	const result = await fetchChatCompletion([
 		{
 			role: "user",

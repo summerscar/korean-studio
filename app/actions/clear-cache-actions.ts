@@ -2,7 +2,9 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { getAllDicts } from "./user-dict-action";
 import {
+	allArticlesRevalidateKey,
 	allDictsRevalidateKey,
+	articleRevalidateKey,
 	getDictRevalidateKey,
 	getFavDictRevalidateKey,
 	isFavDict,
@@ -26,6 +28,10 @@ const clearCacheAction = async (path: string) => {
 			revalidateTag(getFavDictRevalidateKey(dict.id));
 		}
 	}
+
+	// article
+	revalidateTag(allArticlesRevalidateKey);
+	revalidateTag(articleRevalidateKey);
 };
 
 export { clearCacheAction };

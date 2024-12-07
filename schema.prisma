@@ -22,6 +22,7 @@ model User {
   from_PushSubscription_user PushSubscription[] @relation("PushSubscription_user")
   from_Dict_createdBy        Dict[]             @relation("Dict_createdBy")
   from_DictItem_createdBy    DictItem[]         @relation("DictItem_createdBy")
+  from_Article_createdBy     Article[]          @relation("Article_createdBy")
 }
 
 model PushSubscription {
@@ -104,6 +105,21 @@ model DictItemFavorite {
   @@index([itemId])
 }
 
+model Article {
+  id          String          @id @default(cuid())
+  title       String          @default("")
+  type        ArticleTypeType
+  poster      String          @default("")
+  description String          @default("")
+  subtitles   Json?           @default("[{\"title\":\"MOVIE S01E01\",\"subtitles\":{\"ko\":{\"label\":\"Korean\",\"filename\":\"\"},\"zh-Hans\":{\"label\":\"Chinese\",\"filename\":\"\"},\"en\":{\"label\":\"English\",\"filename\":\"\"},\"ja\":{\"label\":\"Japanese\",\"filename\":\"\"}}}]")
+  content     String          @default("")
+  createdAt   DateTime?       @default(now())
+  createdBy   User?           @relation("Article_createdBy", fields: [createdById], references: [id])
+  createdById String?         @map("createdBy")
+
+  @@index([createdById])
+}
+
 enum TopikLevelType {
   TOPIK_I
   TOPIK_II
@@ -113,4 +129,9 @@ enum TopikQuestionTypeType {
   LISTENING
   READING
   WRITING
+}
+
+enum ArticleTypeType {
+  MOVIE
+  TEXT
 }

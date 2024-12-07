@@ -636,6 +636,85 @@ input DictItemRelateToOneForCreateInput {
   connect: DictItemWhereUniqueInput
 }
 
+type Article {
+  id: ID!
+  title: String
+  type: ArticleTypeType
+  poster: String
+  description: String
+  subtitles: JSON
+  content: String
+  createdAt: DateTime
+  createdBy: User
+}
+
+enum ArticleTypeType {
+  MOVIE
+  TEXT
+}
+
+input ArticleWhereUniqueInput {
+  id: ID
+}
+
+input ArticleWhereInput {
+  AND: [ArticleWhereInput!]
+  OR: [ArticleWhereInput!]
+  NOT: [ArticleWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  type: ArticleTypeTypeNullableFilter
+  poster: StringFilter
+  description: StringFilter
+  content: StringFilter
+  createdAt: DateTimeNullableFilter
+  createdBy: UserWhereInput
+}
+
+input ArticleTypeTypeNullableFilter {
+  equals: ArticleTypeType
+  in: [ArticleTypeType!]
+  notIn: [ArticleTypeType!]
+  not: ArticleTypeTypeNullableFilter
+}
+
+input ArticleOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  type: OrderDirection
+  poster: OrderDirection
+  description: OrderDirection
+  content: OrderDirection
+  createdAt: OrderDirection
+}
+
+input ArticleUpdateInput {
+  title: String
+  type: ArticleTypeType
+  poster: String
+  description: String
+  subtitles: JSON
+  content: String
+  createdAt: DateTime
+  createdBy: UserRelateToOneForUpdateInput
+}
+
+input ArticleUpdateArgs {
+  where: ArticleWhereUniqueInput!
+  data: ArticleUpdateInput!
+}
+
+input ArticleCreateInput {
+  title: String
+  type: ArticleTypeType
+  poster: String
+  description: String
+  subtitles: JSON
+  content: String
+  createdAt: DateTime
+  createdBy: UserRelateToOneForCreateInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -678,6 +757,12 @@ type Mutation {
   updateDictItemFavorites(data: [DictItemFavoriteUpdateArgs!]!): [DictItemFavorite]
   deleteDictItemFavorite(where: DictItemFavoriteWhereUniqueInput!): DictItemFavorite
   deleteDictItemFavorites(where: [DictItemFavoriteWhereUniqueInput!]!): [DictItemFavorite]
+  createArticle(data: ArticleCreateInput!): Article
+  createArticles(data: [ArticleCreateInput!]!): [Article]
+  updateArticle(where: ArticleWhereUniqueInput!, data: ArticleUpdateInput!): Article
+  updateArticles(data: [ArticleUpdateArgs!]!): [Article]
+  deleteArticle(where: ArticleWhereUniqueInput!): Article
+  deleteArticles(where: [ArticleWhereUniqueInput!]!): [Article]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -719,6 +804,9 @@ type Query {
   dictItemFavorite(where: DictItemFavoriteWhereUniqueInput!): DictItemFavorite
   dictItemFavorites(where: DictItemFavoriteWhereInput! = {}, orderBy: [DictItemFavoriteOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DictItemFavoriteWhereUniqueInput): [DictItemFavorite!]
   dictItemFavoritesCount(where: DictItemFavoriteWhereInput! = {}): Int
+  article(where: ArticleWhereUniqueInput!): Article
+  articles(where: ArticleWhereInput! = {}, orderBy: [ArticleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ArticleWhereUniqueInput): [Article!]
+  articlesCount(where: ArticleWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

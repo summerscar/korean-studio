@@ -7,6 +7,7 @@
 	"Header": {
 		"beginner": "入门",
 		"intermediate": "进阶",
+		"article": "文章",
 		"tools": "工具",
 		"signIn": "登录",
 		"signOut": "退出",
@@ -101,6 +102,13 @@
 		"correct": "正确",
 		"incorrect": "错误",
 		"unSelectedTips": "请选择一个选项"
+	},
+	"Article": {
+		"scene": "场景",
+		"viewMode": "显示模式",
+		"translation": "字幕语言",
+		"sideBySide": "两侧对齐",
+		"vertical": "垂直显示"
 	},
 	"Notification": {
 		"addWordSuccess": "新单词已添加到词单",

@@ -14,7 +14,7 @@ const EPSelect = ({ article }: { article: Lists.Article.Item }) => {
 
 	return (
 		<select
-			className="select select-bordered w-full max-w-xs mt-6"
+			className="select select-bordered w-full max-w-xs mt-6 bg-white/20"
 			onChange={onChange}
 			value={searchParams.get("ep") || "0"}
 		>

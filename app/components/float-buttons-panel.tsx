@@ -5,6 +5,7 @@ import type { SITES_LANGUAGE } from "@/types/site";
 import { timeOut } from "@/utils/time-out";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import dynamic from "next/dynamic";
+import { useRef } from "react";
 import type { Root } from "react-dom/client";
 
 const SuggestionPanel = dynamic(
@@ -19,12 +20,12 @@ const SuggestionPanel = dynamic(
 );
 
 interface FloatButtonsPanelProps {
-	rect: DOMRect;
+	getRect: () => DOMRect;
 	selectedText: string;
 	showSearch?: boolean;
 	showCopy?: boolean;
 	showAI?: boolean;
-	root: Root | null;
+	root: Root;
 	locale: SITES_LANGUAGE;
 	position?: "top" | "bottom";
 	onClose?: () => void;
@@ -32,7 +33,7 @@ interface FloatButtonsPanelProps {
 }
 
 export function FloatButtonsPanel({
-	rect,
+	getRect,
 	selectedText,
 	showSearch = true,
 	showCopy = true,
@@ -43,6 +44,24 @@ export function FloatButtonsPanel({
 	position = "bottom",
 	prompt,
 }: FloatButtonsPanelProps) {
+	const observerRef = useRef<ResizeObserver>(null);
+
+	// 劫持 render， 清理 observer
+	const originalRender = root.render;
+	function newRender(this: Root, ...args: Parameters<typeof root.render>) {
+		if (observerRef.current && args[0] === null) {
+			observerRef.current.disconnect();
+			observerRef.current = null;
+			this.render = originalRender;
+		}
+		const res = originalRender.call(this, ...args);
+		return res;
+	}
+	newRender.__ = true;
+	if (!(originalRender as unknown as { __: boolean }).__) {
+		root.render = newRender;
+	}
+
 	const onCopy = async () => {
 		try {
 			await navigator.clipboard.writeText(selectedText);
@@ -66,21 +85,35 @@ export function FloatButtonsPanel({
 	};
 
 	const openAISuggestion = async () => {
-		if (!root || !rect || !prompt) return;
+		if (!root || !prompt) return;
 		// 防止同步render后影响外面的 clickOutside 检测
 		await timeOut(0);
 		onClose?.();
 		const promise = generateWordSuggestionAction(prompt(selectedText, locale));
 		// const promise = Promise.resolve("123");
 		const windowHeight = window.innerHeight;
+		const rect = getRect();
 		const spaceBelow = windowHeight - rect.bottom;
 		const spaceAbove = rect.top;
 		const showAbove = spaceBelow < 300 && spaceAbove > spaceBelow;
 
+		observerRef.current = new ResizeObserver((entries) => {
+			const el = entries[0].target as HTMLDivElement;
+			const { height } = el.getBoundingClientRect();
+			if (showAbove) {
+				el.style.top = `${rect.top - height + window.scrollY}px`;
+			}
+		});
+
 		root.render(
 			<div
+				ref={(el) => {
+					if (el) {
+						observerRef.current?.observe(el);
+					}
+				}}
 				style={{
-					top: `${showAbove ? windowHeight / 2 + window.scrollY : rect.bottom + window.scrollY}px`,
+					top: `${showAbove ? rect.top - 160 + window.scrollY : rect.bottom + window.scrollY}px`,
 					left: 0,
 					right: 0,
 				}}
@@ -97,6 +130,7 @@ export function FloatButtonsPanel({
 		);
 	};
 
+	const rect = getRect();
 	return (
 		<div
 			style={{

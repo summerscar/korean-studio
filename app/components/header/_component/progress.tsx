@@ -9,15 +9,18 @@ const Progress = () => {
 	const pathname = usePathname();
 
 	const isLearnPage = pathname.startsWith("/learn");
+	const isArticlePage = pathname.startsWith("/article/");
 	const isHome = pathname === "/";
-	const showProgress = isLearnPage || isHome;
+
+	const showProgress = isLearnPage || isArticlePage || isHome;
+	const enableAnimation = isLearnPage || isArticlePage;
 
 	return (
 		showProgress && (
 			<div
 				id="progress"
 				style={{
-					...(isLearnPage && { animationTimeline: "--page-scroll" }),
+					...(enableAnimation && { animationTimeline: "--page-scroll" }),
 					...(isHome && {
 						transform: `scaleX(var(${HomeProgressCSSVar}, 0))`,
 						transition: "transform 0.5s",
@@ -25,7 +28,7 @@ const Progress = () => {
 				}}
 				className={clsx(
 					"absolute left-0 bottom-0 w-full h-[2px] bg-base-content origin-[0%_50%]",
-					isLearnPage && "animate-[grow-progress_auto_linear]",
+					enableAnimation && "animate-[grow-progress_auto_linear]",
 				)}
 			/>
 		)

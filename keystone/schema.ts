@@ -247,4 +247,50 @@ export const lists = {
 		},
 		hooks: {},
 	}),
+	Article: list({
+		access: allowAll,
+		fields: {
+			title: text({ validation: { isRequired: true }, label: "标题" }),
+			type: select({
+				type: "enum",
+				options: [
+					{ label: "影视台词", value: "MOVIE" },
+					{ label: "文本", value: "TEXT" },
+				],
+				validation: { isRequired: true },
+				label: "类型",
+			}),
+			poster: text({ validation: { isRequired: false } }),
+			description: text({ validation: { isRequired: false } }),
+			subtitles: json({
+				label: "字幕",
+				defaultValue: [
+					{
+						title: "MOVIE S01E01",
+						subtitles: {
+							ko: {
+								label: "Korean",
+								filename: "",
+							},
+							"zh-Hans": {
+								label: "Chinese",
+								filename: "",
+							},
+							en: {
+								label: "English",
+								filename: "",
+							},
+							ja: {
+								label: "Japanese",
+								filename: "",
+							},
+						},
+					},
+				],
+			}),
+			content: text({ validation: { isRequired: false } }),
+			createdAt: timestamp({ defaultValue: { kind: "now" } }),
+			createdBy: relationship({ ref: "User", many: false }),
+		},
+	}),
 } satisfies Lists;

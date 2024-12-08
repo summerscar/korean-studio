@@ -11,6 +11,7 @@ import {
 import SearchIcon from "@/assets/svg/search.svg";
 import { JSONEditor } from "@/components/json-editor";
 import { callModal } from "@/components/modal";
+import { refreshDictList } from "@/hooks/use-dict-list";
 import {
 	createErrorToast,
 	createLoadingToast,
@@ -39,6 +40,7 @@ const WordsList = ({
 	const router = useRouter();
 	const tHome = useTranslations("Home");
 	const tAccount = useTranslations("Account");
+
 	const [editing, setEditing] = useState<DictItem>();
 	const locale = useLocale();
 	const [searchQuery, setSearchQuery] = useState("");
@@ -126,6 +128,7 @@ const WordsList = ({
 			router.push(`/account/?dict=${res.id}`);
 			removeInfoToast();
 			createSuccessToast(tHome("created"));
+			refreshDictList();
 		}
 	};
 

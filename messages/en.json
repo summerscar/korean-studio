@@ -7,6 +7,7 @@
 	"Header": {
 		"beginner": "Beginner",
 		"intermediate": "Intermediate",
+		"article": "Article",
 		"tools": "Tools",
 		"signIn": "Sign In",
 		"signOut": "Sign Out",
@@ -101,6 +102,13 @@
 		"correct": "Correct",
 		"incorrect": "Incorrect",
 		"unSelectedTips": "Please select an answer"
+	},
+	"Article": {
+		"scene": "Scene",
+		"viewMode": "View Mode",
+		"translation": "Translation Language",
+		"sideBySide": "Side by Side",
+		"vertical": "Vertical"
 	},
 	"Notification": {
 		"addWordSuccess": "New word added to list!",

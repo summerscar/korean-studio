@@ -23,6 +23,10 @@ export const headerConfig = (
 		label: `🔨${t("intermediate")}`,
 	},
 	{
+		href: "/article",
+		label: `${t("article")}`,
+	},
+	{
 		href: "/topik",
 		label: "🔨TOPIK",
 	},

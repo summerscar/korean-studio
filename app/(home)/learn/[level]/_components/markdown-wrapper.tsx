@@ -9,7 +9,7 @@ const MDContentWrapper = ({
 	lastModified,
 	bottomNav,
 }: { children: ReactNode; lastModified?: string; bottomNav?: ReactNode }) => {
-	const containerRef = useSelectToSearch({
+	const [containerRef, panel] = useSelectToSearch({
 		showAI: false,
 	});
 
@@ -25,6 +25,7 @@ const MDContentWrapper = ({
 				{children}
 			</div>
 			{bottomNav}
+			{panel}
 		</article>
 	);
 };

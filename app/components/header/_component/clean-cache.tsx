@@ -1,6 +1,7 @@
 "use client";
 import { clearCacheAction } from "@/actions/clear-cache-actions";
 import { callModal } from "@/components/modal";
+import { refreshDictList } from "@/hooks/use-dict-list";
 import { isAdminBySession } from "@/hooks/use-user";
 import { FAV_LIST_KEY } from "@/utils/config";
 import type { Session } from "next-auth";
@@ -21,6 +22,8 @@ const CleanCache = ({ session }: { session: Session | null }) => {
 		await clearCacheAction(path);
 		// client
 		await mutate(FAV_LIST_KEY);
+		refreshDictList();
+
 		router.refresh();
 	};
 	if (!isAdmin) return null;

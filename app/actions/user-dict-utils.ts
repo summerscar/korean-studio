@@ -6,6 +6,12 @@ import type { Session } from "next-auth";
 export const getDictRevalidateKey = (dictId: string) => `dict-${dictId}`;
 export const allDictsRevalidateKey = "all-dicts";
 export const getFavDictRevalidateKey = (dictId: string) => `fav-dict-${dictId}`;
+
+export const allArticlesRevalidateKey = "articles";
+export const getArticleRevalidateKey = (articleId: string) =>
+	`article-${articleId}`;
+export const articleRevalidateKey = "article";
+
 export const isFavDict = (dict?: UserDicts[0]) =>
 	dict?.intlKey === FAV_LIST_KEY;
 

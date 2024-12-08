@@ -16,9 +16,6 @@ export const generateMetadata = async () => {
 
 const AccountPage = async () => {
 	const session = await auth();
-	const dicts = filterAndSortDictList(await getAllDicts(), session, false);
-	const tAccount = await getTranslations("Account");
-
 	if (!session) {
 		return (
 			<div className="pt-32">
@@ -26,6 +23,9 @@ const AccountPage = async () => {
 			</div>
 		);
 	}
+
+	const dicts = filterAndSortDictList(await getAllDicts(), session, false);
+	const tAccount = await getTranslations("Account");
 
 	return (
 		<div className="w-full">

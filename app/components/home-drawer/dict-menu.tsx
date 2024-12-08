@@ -13,6 +13,7 @@ import ShuffleIcon from "@/assets/svg/shuffle.svg";
 import { signIn } from "next-auth/react";
 
 import { callModal } from "@/components/modal";
+import { refreshDictList } from "@/hooks/use-dict-list";
 import {
 	createErrorToast,
 	createLoadingToast,
@@ -131,6 +132,7 @@ const DictMenu = ({
 			await serverActionTimeOut();
 			removeInfoToast();
 			createSuccessToast(tHome("created"));
+			refreshDictList();
 		}
 	};
 

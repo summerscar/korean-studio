@@ -74,8 +74,8 @@ const WordCards = ({
 				virtual={{
 					slides: dict,
 					enabled: true,
-					addSlidesAfter: 3,
-					addSlidesBefore: 3,
+					addSlidesAfter: 5,
+					addSlidesBefore: 5,
 					cache: true,
 				}}
 				onInit={(swiper) => {

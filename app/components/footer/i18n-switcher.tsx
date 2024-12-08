@@ -5,7 +5,7 @@ import { useMount } from "ahooks";
 import clsx from "clsx";
 import { useState } from "react";
 
-const mapForLocale: Record<string, string> = {
+export const mapForLocale: Record<string, string> = {
 	[SITES_LANGUAGE.zhCN]: "🇨🇳",
 	[SITES_LANGUAGE.en]: "🇺🇸",
 	[SITES_LANGUAGE.ja]: "🇯🇵",

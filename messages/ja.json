@@ -7,6 +7,7 @@
 	"Header": {
 		"beginner": "初級",
 		"intermediate": "中級",
+		"article": "文章",
 		"tools": "ツール",
 		"signIn": "サインイン",
 		"signOut": "サインアウト",
@@ -101,6 +102,13 @@
 		"correct": "正解",
 		"incorrect": "不正解",
 		"unSelectedTips": "選択してください"
+	},
+	"Article": {
+		"scene": "シーン",
+		"viewMode": "表示モード",
+		"translation": "字幕言語",
+		"sideBySide": "横並び",
+		"vertical": "縦表示"
 	},
 	"Notification": {
 		"addWordSuccess": "新しい単語を追加しました!",

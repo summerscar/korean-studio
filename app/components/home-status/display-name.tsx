@@ -3,6 +3,7 @@ import { useDevice } from "@/hooks/use-device";
 import { useHoverToSearch } from "@/hooks/use-hover-to-search";
 import type { DictItem } from "@/types/dict";
 import { notoKR } from "@/utils/fonts";
+import { generateWordSuggestionPrompt } from "@/utils/prompts";
 import clsx from "clsx";
 import { romanize, standardizePronunciation } from "es-hangul";
 import { Star } from "./star";
@@ -22,7 +23,10 @@ const DisplayName = ({
 	showStar?: boolean;
 	className?: string;
 }) => {
-	const displayNameRef = useHoverToSearch(currentWord?.name);
+	const [displayNameRef, displayNameHoverPanel] = useHoverToSearch(
+		currentWord?.name,
+		generateWordSuggestionPrompt,
+	);
 	const displayName = currentWord?.name || "";
 	const { isTouchable } = useDevice();
 
@@ -63,6 +67,7 @@ const DisplayName = ({
 				</div>
 				{showStar && <Star dictItem={currentWord} isLocalDict={isLocalDict} />}
 			</div>
+			{displayNameHoverPanel}
 		</div>
 	);
 };

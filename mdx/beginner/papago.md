@@ -4,7 +4,7 @@ author: summerscar
 description: 本教程介绍了利用Papago插件和MacOS快捷指令高效添加生词到指定词单的方法。插件需安装Tampermonkey并运行自定义脚本，快捷指令则需在Safari中添加并配置服务器地址、词单ID和用户ID。两者均需预先设置用户ID和词单ID。
 date: 1
 tags: ['extension']
-last-modified: 1732727426700
+last-modified: 1733590234778
 ---
 
 # Papago 插件 / 快捷指令
@@ -19,7 +19,7 @@ last-modified: 1732727426700
 2. 创建新脚本，复制[脚本内容](https://raw.githubusercontent.com/summerscar/korean-studio/refs/heads/main/scripts/tampermonkey-create-word-from-papago.js)后粘贴到脚本编辑器并保存脚本
 3. 打开 [Papago](https://papago.naver.com/) 查词页面，输入单词
 4. 查词结果处会显示 创建➕ 复制📋 设置⚙️ 按钮
-5. 点击设置按钮，设置 <a target="_blank" className="!text-base-content !underline underline-offset-4" href="/account#:~:text=ID%3A">用户ID</a> 和 <a target="_blank" className="!text-base-content !underline underline-offset-4" href="/account#:~:text=dictID%3A">词单ID</a>
+5. 点击设置按钮，设置 [用户ID_blank](/account#:~:text=ID%3A) 和 [词单ID_blank](/account#:~:text=dictID%3A)
 6. 点击创建按钮，即可快速创建单词到指定词单
 
 ## MacOS 快捷指令

@@ -17,7 +17,14 @@ import { useMemoizedFn, useMount, useUpdateEffect } from "ahooks";
 import clsx from "clsx";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { type RefObject, memo, useEffect, useMemo, useState } from "react";
+import {
+	type RefObject,
+	memo,
+	useEffect,
+	useMemo,
+	useState,
+	useTransition,
+} from "react";
 
 // Group subtitles into scenes based on time gaps
 function groupSubtitlesIntoScenes(subtitles: SubtitleCue[]): SubtitleCue[][] {
@@ -89,6 +96,8 @@ export function ArticleMovie({
 		showAdd: true,
 	});
 
+	const [_, startTransition] = useTransition();
+
 	useMount(() => {
 		loadSubtitles(selectedLanguage);
 	});
@@ -124,9 +133,11 @@ export function ArticleMovie({
 	});
 
 	const handleLanguageChange = useMemoizedFn((lang: SubtitleLanguage) => {
-		setSelectedLanguage(lang);
+		startTransition(() => {
+			setSelectedLanguage(lang);
 
-		!subtitles[lang] && loadSubtitles(lang);
+			!subtitles[lang] && loadSubtitles(lang);
+		});
 	});
 
 	const scenes = useMemo(() => {
@@ -347,7 +358,7 @@ const ArticleRender = memo(
 				}
 			});
 
-			return minDiff <= 2 ? targetSubtitles[closestIndex] : null;
+			return minDiff <= 1 ? targetSubtitles[closestIndex] : null;
 		};
 
 		return (

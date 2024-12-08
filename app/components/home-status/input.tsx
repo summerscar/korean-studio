@@ -2,13 +2,7 @@
 import { KEYS_TO_BIND } from "@/utils/kr-const";
 import { useEventListener, useUpdateEffect } from "ahooks";
 import clsx from "clsx";
-import {
-	forwardRef,
-	useCallback,
-	useEffect,
-	useImperativeHandle,
-	useState,
-} from "react";
+import { useCallback, useEffect, useImperativeHandle, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 export type HomeInputRef = {
@@ -16,14 +10,17 @@ export type HomeInputRef = {
 	handleInputFocus: () => void;
 };
 
-const HomeInput = forwardRef<
-	HomeInputRef,
-	{
-		onInput?: (inputKeys: Record<string, boolean>) => void;
-		position?: DOMRect;
-		onFocusChange?: (isFocused: boolean) => void;
-	}
->(({ onInput, position, onFocusChange }, ref) => {
+const HomeInput = ({
+	onInput,
+	position,
+	onFocusChange,
+	ref,
+}: {
+	onInput?: (inputKeys: Record<string, boolean>) => void;
+	position?: DOMRect;
+	onFocusChange?: (isFocused: boolean) => void;
+	ref: React.RefObject<HomeInputRef>;
+}) => {
 	const [currentInputKeys, setCurrentInputKeys] = useState<
 		Record<string, boolean>
 	>({});
@@ -122,5 +119,5 @@ const HomeInput = forwardRef<
 			<input className="opacity-0 w-0 h-0" type="text" ref={inputRef} />
 		</div>
 	);
-});
+};
 export { HomeInput };

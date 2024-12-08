@@ -5,11 +5,12 @@ import { type ReactNode, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 type CallableModalProps = {
-	type: "dialog" | "confirm";
+	type: "dialog" | "confirm" | "select";
 	title?: string;
 	message?: ReactNode;
 	inputPlaceholder?: string;
 	inputDefaultValue?: string;
+	options?: { value: string; label: string }[];
 };
 
 type CallableModalReturn = string | undefined | boolean;
@@ -21,13 +22,16 @@ function CallableModal({
 	type,
 	inputPlaceholder,
 	inputDefaultValue,
+	options,
 }: CallableModalProps & {
 	call: { end: (payload?: CallableModalReturn) => void };
 }) {
 	const tModal = useTranslations("Modal");
 	const modalRef = useRef<HTMLDialogElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const [inputValue, setInputValue] = useState(inputDefaultValue || "");
+	const [inputValue, setInputValue] = useState(
+		inputDefaultValue || options?.[0]?.value || "",
+	);
 
 	useEffect(() => {
 		modalRef.current?.showModal();
@@ -45,7 +49,7 @@ function CallableModal({
 	}, [call.end]);
 
 	const handleOK = () => {
-		call.end(type === "dialog" ? inputValue : true);
+		call.end(["dialog", "select"].includes(type) ? inputValue : true);
 	};
 
 	const handleClose = () => {
@@ -79,9 +83,31 @@ function CallableModal({
 						}}
 					/>
 				)}
+				{type === "select" && (
+					<div className="flex flex-col gap-2 max-h-80 overflow-y-auto">
+						{options?.map((option) => (
+							<label
+								key={option.value}
+								className={`btn w-full ${
+									inputValue === option.value ? "btn btn-active" : "bg-base-100"
+								}`}
+							>
+								<input
+									type="radio"
+									name="options"
+									value={option.value}
+									checked={inputValue === option.value}
+									onChange={(e) => setInputValue(e.target.value)}
+									className="hidden"
+								/>
+								{option.label}
+							</label>
+						))}
+					</div>
+				)}
 				<div className="flex justify-end gap-2 sm:gap-4 pt-4">
 					<button
-						className="btn btn-md btn-primary"
+						className="btn btn-md btn-active"
 						type="button"
 						onClick={handleOK}
 					>

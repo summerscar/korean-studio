@@ -1,100 +1,68 @@
 import { FloatButtonsPanel } from "@/components/float-buttons-panel";
-import type { SITES_LANGUAGE } from "@/types/site";
+import { useClickAway, useEventListener, useMemoizedFn } from "ahooks";
 import {
-	useClickAway,
-	useEventListener,
-	useMemoizedFn,
-	useUnmount,
-} from "ahooks";
-import { useLocale } from "next-intl";
-import { type ComponentProps, useRef } from "react";
-import { type Root, createRoot } from "react-dom/client";
+	type ComponentProps,
+	type RefObject,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 
 const useHoverToSearch = (
 	text?: string,
 	prompt?: ComponentProps<typeof FloatButtonsPanel>["prompt"],
 ) => {
-	const locale = useLocale();
+	const [showPanel, setShowPanel] = useState(false);
 	const targetRef = useRef<HTMLElement>(null);
-	const rootRef = useRef<Root>(null);
-	const buttonContainer = useRef<HTMLDivElement>(null);
 	const isTouchRef = useRef(false);
+	const buttonContainer = useRef<HTMLDivElement>(null);
+	// biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
+	const cancelAutoCloseRef = useRef<() => void | undefined>(undefined);
+
+	const closePanel = () => {
+		setShowPanel(false);
+	};
 
 	const onMouseOver = useMemoizedFn(() => {
-		if (
-			!targetRef.current ||
-			!text ||
-			buttonContainer.current?.childNodes.length
-		) {
+		if (!targetRef.current || !text) {
 			return;
 		}
+		setShowPanel(true);
+	});
 
-		if (!buttonContainer.current) {
-			buttonContainer.current = document.createElement("div");
+	useEffect(() => {
+		if (showPanel) {
+			const cancelAutoClose = (cancelAutoCloseRef.current = autoClose());
+			return () => {
+				cancelAutoClose?.();
+			};
 		}
-		document.body.appendChild(buttonContainer.current);
-		const root =
-			rootRef.current ||
-			(rootRef.current = createRoot(buttonContainer.current));
-		const cancel = autoClose();
-		root.render(
-			<FloatButtonsPanel
-				position="top"
-				locale={locale as SITES_LANGUAGE}
-				getRect={() => targetRef.current!.getBoundingClientRect()}
-				selectedText={text}
-				root={root}
-				prompt={prompt}
-				onClose={() => {
-					cancel?.();
-					cleanRoot();
-				}}
-			/>,
-		);
-	});
-
-	const cleanRoot = useMemoizedFn(() => {
-		rootRef.current?.render(null);
-	});
-
-	const cleanup = useMemoizedFn(() => {
-		requestAnimationFrame(() => {
-			rootRef.current?.render(null);
-			rootRef.current?.unmount();
-			rootRef.current = null;
-			buttonContainer.current?.remove();
-		});
-	});
+	}, [showPanel]);
 
 	const autoClose = useMemoizedFn(() => {
 		if (buttonContainer.current) {
 			let timer: ReturnType<typeof setTimeout>;
-			const cleanup = () => {
+			const cleanTimer = () => {
 				clearTimeout(timer);
 			};
 
-			const cancel = () => {
-				cleanup();
-				buttonContainer.current?.removeEventListener("mouseenter", cleanup);
+			const cancelAutoClose = () => {
+				cleanTimer();
+				buttonContainer.current?.removeEventListener("mouseenter", cleanTimer);
 				buttonContainer.current?.removeEventListener("mouseleave", callback);
 			};
 			const callback = () => {
-				clearTimeout(timer);
+				cleanTimer();
 				timer = setTimeout(() => {
-					cleanRoot();
-					cancel();
+					closePanel();
 				}, 2000);
 			};
 
 			callback();
-			buttonContainer.current.addEventListener("mouseenter", cleanup);
+			buttonContainer.current.addEventListener("mouseenter", cleanTimer);
 			buttonContainer.current.addEventListener("mouseleave", callback);
-			return cancel;
+			return cancelAutoClose;
 		}
-	});
-
-	useUnmount(() => {
-		cleanup();
 	});
 
 	useEventListener("mouseover", onMouseOver, {
@@ -128,10 +96,34 @@ const useHoverToSearch = (
 		if (isTouchRef.current && targetRef.current?.contains(e.target as Node)) {
 			return;
 		}
-		cleanup();
+
+		let parent: Element | null = e.target as Element;
+		while ((parent = parent.parentElement)) {
+			if (parent.getAttribute("data-ignore-click-away") === "true") {
+				return;
+			}
+		}
+
+		closePanel();
 	}, buttonContainer);
 
-	return targetRef;
+	const panel = showPanel && (
+		<FloatButtonsPanel
+			ref={buttonContainer as RefObject<HTMLDivElement | null>}
+			position="top"
+			getRect={() => targetRef.current!.getBoundingClientRect()}
+			selectedText={text!}
+			prompt={prompt}
+			onClose={() => {
+				closePanel();
+			}}
+			onAIPanel={() => {
+				cancelAutoCloseRef.current?.();
+			}}
+		/>
+	);
+
+	return [targetRef, panel] as const;
 };
 
 export { useHoverToSearch };

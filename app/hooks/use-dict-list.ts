@@ -26,9 +26,10 @@ const useUserDictList = ({ filterFav = false }: { filterFav?: boolean }) => {
 	const { data: session } = useSession();
 	const dictList = useDictList();
 
-	return filterAndSortDictList(dictList, session, false).filter((dict) =>
+	const list = filterAndSortDictList(dictList, session, false).filter((dict) =>
 		filterFav ? !isFavDict(dict) : true,
 	);
+	return list;
 };
 
 export { useDictList, refreshDictList, useUserDictList };

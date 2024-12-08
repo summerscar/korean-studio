@@ -11,12 +11,13 @@ import {
 import { useUser } from "@/hooks/use-user";
 import type { SITES_LANGUAGE } from "@/types/site";
 import { timeOut } from "@/utils/time-out";
+import { useMemoizedFn } from "ahooks";
 import { signIn } from "next-auth/react";
-import type { AbstractIntlMessages } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import dynamic from "next/dynamic";
-import { useRef } from "react";
-import type { Root } from "react-dom/client";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { callModal } from "./modal";
 
 const SuggestionPanel = dynamic(
@@ -37,15 +38,11 @@ interface FloatButtonsPanelProps {
 	showCopy?: boolean;
 	showAI?: boolean;
 	showAdd?: boolean;
-	root: Root;
-	locale: SITES_LANGUAGE;
 	position?: "top" | "bottom";
 	onClose?: () => void;
 	prompt?: (word: string, locale: SITES_LANGUAGE) => string;
-	translate: (
-		key: keyof AbstractIntlMessages,
-		values?: Record<string, unknown>,
-	) => string;
+	ref?: React.RefObject<HTMLDivElement | null>;
+	onAIPanel?: () => void;
 }
 
 export function FloatButtonsPanel({
@@ -56,33 +53,25 @@ export function FloatButtonsPanel({
 	showAI = true,
 	showAdd = false,
 	onClose,
-	root,
-	locale,
+	onAIPanel,
 	position = "bottom",
 	prompt,
-	translate,
+	ref,
 }: FloatButtonsPanelProps) {
+	const locale = useLocale() as SITES_LANGUAGE;
+	const translate = useTranslations();
 	const observerRef = useRef<ResizeObserver>(null);
 	const { isLogin } = useUser();
 	const dictList = useUserDictList({ filterFav: true });
+	const [showAIPanel, setShowAI] = useState(false);
+	const memoedGetRect = useMemoizedFn(getRect);
 
-	// 劫持 render， 清理 observer
-	const originalRender = root.render;
-	function newRender(this: Root, ...args: Parameters<typeof root.render>) {
-		if (observerRef.current && args[0] === null) {
-			observerRef.current.disconnect();
-			observerRef.current = null;
-			this.render = originalRender;
-		}
-		const res = originalRender.call(this, ...args);
-		return res;
-	}
-	newRender.__ = true;
-	if (!(originalRender as unknown as { __: boolean }).__) {
-		root.render = newRender;
-	}
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	const rect = useMemo(() => {
+		return memoedGetRect();
+	}, [memoedGetRect, showAIPanel]);
 
-	const onAdd = async () => {
+	const onAdd = useMemoizedFn(async () => {
 		onClose?.();
 		if (!isLogin) {
 			signIn();
@@ -112,7 +101,7 @@ export function FloatButtonsPanel({
 				removeInfoToast();
 			}
 		}
-	};
+	});
 
 	const onCopy = async () => {
 		try {
@@ -137,68 +126,111 @@ export function FloatButtonsPanel({
 	};
 
 	const openAISuggestion = async () => {
-		if (!root || !prompt) return;
-		// 防止同步render后影响外面的 clickOutside 检测
-		await timeOut(0);
-		onClose?.();
-		const promise = generateWordSuggestionAction(prompt(selectedText, locale));
-		// const promise = Promise.resolve("123");
+		if (!prompt) return;
+		await timeOut(16);
+		setShowAI(true);
+		onAIPanel?.();
+	};
+
+	const showAbove = useMemo(() => {
+		if (!showAI) return false;
+
 		const windowHeight = window.innerHeight;
-		const rect = getRect();
 		const spaceBelow = windowHeight - rect.bottom;
 		const spaceAbove = rect.top;
 		const showAbove = spaceBelow < 300 && spaceAbove > spaceBelow;
+		return showAbove;
+	}, [showAI, rect]);
 
-		observerRef.current = new ResizeObserver((entries) => {
-			const el = entries[0].target as HTMLDivElement;
-			const { height } = el.getBoundingClientRect();
-			if (showAbove) {
-				el.style.top = `${rect.top - height + window.scrollY}px`;
-			}
-		});
+	useEffect(() => {
+		if (showAIPanel) {
+			observerRef.current = new ResizeObserver((entries) => {
+				const el = entries[0].target as HTMLDivElement;
+				const { height } = el.getBoundingClientRect();
+				if (showAbove) {
+					el.style.top = `${rect.top - height + window.scrollY}px`;
+				}
+			});
+			return () => {
+				observerRef.current?.disconnect();
+			};
+		}
+	}, [showAIPanel, showAbove, rect]);
 
-		root.render(
-			<div
-				ref={(el) => {
-					if (el) {
-						observerRef.current?.observe(el);
-					}
-				}}
-				style={{
-					top: `${showAbove ? rect.top - 160 + window.scrollY : rect.bottom + window.scrollY}px`,
-					left: 0,
-					right: 0,
-				}}
-				className="z-[1] absolute flex justify-center pointer-events-none"
-			>
-				<div
-					className={`flex backdrop-blur-md rounded-lg w-4/5 sm:w-[600px] min-h-40 max-h-96 sm:max-h-[65vh] p-2 sm:p-4 justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
-				>
-					<ErrorBoundary errorComponent={ErrorFallback}>
-						<SuggestionPanel promise={promise} />
-					</ErrorBoundary>
-				</div>
-			</div>,
-		);
-	};
+	// 只需要在 showAIPanel 时，渲染一次
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	const panel = useMemo(
+		() => (
+			<div ref={ref} data-ignore-click-away="true">
+				{showAIPanel ? (
+					<AIPanel
+						observerRef={observerRef}
+						// promise={Promise.resolve("12345")}
+						promise={generateWordSuggestionAction(
+							prompt!(selectedText, locale),
+						)}
+						rect={rect}
+						showAbove={showAbove}
+					/>
+				) : (
+					<div
+						style={{
+							...(position === "top"
+								? { top: `${rect.top - 35 + window.scrollY}px` }
+								: { top: `${rect.bottom + window.scrollY}px` }),
+							left: `${rect.right - rect.width / 2 + window.scrollX}px`,
+						}}
+						className="z-[1] border border-base-content/10 bg-white/10 shadow backdrop-blur-md flex absolute rounded overflow-hidden -translate-x-1/4"
+					>
+						{showAdd && <SearchButton onClick={onAdd} icon="add" />}
+						{showSearch && (
+							<SearchButton onClick={onPapagoSearch} icon="search" />
+						)}
+						{showCopy && <SearchButton onClick={onCopy} icon="copy" />}
+						{showAI && prompt && (
+							<SearchButton onClick={openAISuggestion} icon="sparkles" />
+						)}
+					</div>
+				)}
+			</div>
+		),
+		[showAIPanel],
+	);
 
-	const rect = getRect();
+	return createPortal(panel, document.body);
+}
+
+const AIPanel = ({
+	observerRef,
+	showAbove,
+	rect,
+	promise,
+}: {
+	observerRef: React.RefObject<ResizeObserver | null>;
+	ref?: React.RefObject<HTMLDivElement>;
+	showAbove: boolean;
+	rect: DOMRect;
+	promise: Promise<string>;
+}) => {
 	return (
 		<div
-			style={{
-				...(position === "top"
-					? { top: `${rect.top - 35 + window.scrollY}px` }
-					: { top: `${rect.bottom + window.scrollY}px` }),
-				left: `${rect.right - rect.width / 2 + window.scrollX}px`,
+			ref={(el) => {
+				if (el) {
+					observerRef?.current?.observe(el);
+				}
 			}}
-			className="z-[1] border border-base-content/10 bg-white/10 shadow backdrop-blur-md flex absolute rounded overflow-hidden -translate-x-1/4"
+			style={{
+				top: `${showAbove ? rect.top - 160 + window.scrollY : rect.bottom + window.scrollY}px`,
+			}}
+			className="z-[1] left-0 right-0 absolute flex justify-center pointer-events-none"
 		>
-			{showAdd && <SearchButton onClick={onAdd} icon="add" />}
-			{showSearch && <SearchButton onClick={onPapagoSearch} icon="search" />}
-			{showCopy && <SearchButton onClick={onCopy} icon="copy" />}
-			{showAI && prompt && (
-				<SearchButton onClick={openAISuggestion} icon="sparkles" />
-			)}
+			<div
+				className={`flex backdrop-blur-md rounded-lg w-4/5 sm:w-[600px] min-h-40 max-h-96 sm:max-h-[65vh] p-2 sm:p-4 justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
+			>
+				<ErrorBoundary errorComponent={ErrorFallback}>
+					<SuggestionPanel promise={promise} />
+				</ErrorBoundary>
+			</div>
 		</div>
 	);
-}
+};

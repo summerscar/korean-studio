@@ -17,7 +17,7 @@ import { useMemoizedFn, useMount, useUpdateEffect } from "ahooks";
 import clsx from "clsx";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { memo, useEffect, useMemo, useState } from "react";
+import { type RefObject, memo, useEffect, useMemo, useState } from "react";
 
 // Group subtitles into scenes based on time gaps
 function groupSubtitlesIntoScenes(subtitles: SubtitleCue[]): SubtitleCue[][] {
@@ -83,6 +83,11 @@ export function ArticleMovie({
 	const [viewMode, setViewMode] = useState<"side-by-side" | "vertical">(
 		"side-by-side",
 	);
+
+	const [containerRef, panel] = useSelectToSearch({
+		prompt: generateSentenceSuggestionPrompt,
+		showAdd: true,
+	});
 
 	useMount(() => {
 		loadSubtitles(selectedLanguage);
@@ -289,12 +294,14 @@ export function ArticleMovie({
 				loading
 			) : (
 				<ArticleRender
+					ref={containerRef as RefObject<HTMLDivElement | null>}
 					scenes={scenes}
 					subtitles={subtitles}
 					selectedLanguage={selectedLanguage}
 					viewMode={viewMode}
 				/>
 			)}
+			{panel}
 		</div>
 	);
 }
@@ -310,16 +317,14 @@ const ArticleRender = memo(
 		subtitles,
 		selectedLanguage,
 		viewMode,
+		ref,
 	}: {
 		scenes: SubtitleCue[][];
 		subtitles: SubtitleData;
 		selectedLanguage: SubtitleLanguage;
 		viewMode: "side-by-side" | "vertical";
+		ref: React.RefObject<HTMLDivElement | null>;
 	}) => {
-		const containerRef = useSelectToSearch({
-			prompt: generateSentenceSuggestionPrompt,
-			showAdd: true,
-		});
 		const tArticle = useTranslations("Article");
 		const findClosestSubtitle = (
 			koIndex: number,
@@ -346,7 +351,7 @@ const ArticleRender = memo(
 		};
 
 		return (
-			<article className="prose prose-lg max-w-none" ref={containerRef}>
+			<article className="prose prose-lg max-w-none" ref={ref}>
 				{scenes.map((scene, sceneIndex) => (
 					<section
 						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>

@@ -26,7 +26,7 @@ const WordExample = ({
 	className?: string;
 	pronunciationPreload?: boolean;
 }) => {
-	const exampleRef = useHoverToSearch(
+	const [exampleRef, exampleHoverPanel] = useHoverToSearch(
 		currentWord?.example,
 		generateWordSuggestionPrompt,
 	);
@@ -93,6 +93,7 @@ const WordExample = ({
 						))}
 				</div>
 			)}
+			{exampleHoverPanel}
 		</div>
 	);
 };

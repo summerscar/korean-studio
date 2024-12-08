@@ -57,7 +57,11 @@ function CallableModal({
 	};
 
 	return createPortal(
-		<dialog ref={modalRef} className="modal !z-40">
+		<dialog
+			ref={modalRef}
+			className="modal !z-40"
+			data-ignore-click-away="true"
+		>
 			<div className="modal-box">
 				<button
 					type="button"
@@ -88,8 +92,10 @@ function CallableModal({
 						{options?.map((option) => (
 							<label
 								key={option.value}
-								className={`btn w-full ${
-									inputValue === option.value ? "btn btn-active" : "bg-base-100"
+								className={`btn w-full hover:bg-slate-400/30 ${
+									inputValue === option.value
+										? "btn !btn-active"
+										: "bg-base-100"
 								}`}
 							>
 								<input

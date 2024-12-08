@@ -23,7 +23,7 @@ const DisplayName = ({
 	showStar?: boolean;
 	className?: string;
 }) => {
-	const displayNameRef = useHoverToSearch(
+	const [displayNameRef, displayNameHoverPanel] = useHoverToSearch(
 		currentWord?.name,
 		generateWordSuggestionPrompt,
 	);
@@ -67,6 +67,7 @@ const DisplayName = ({
 				</div>
 				{showStar && <Star dictItem={currentWord} isLocalDict={isLocalDict} />}
 			</div>
+			{displayNameHoverPanel}
 		</div>
 	);
 };

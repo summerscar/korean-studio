@@ -318,6 +318,7 @@ const ArticleRender = memo(
 	}) => {
 		const containerRef = useSelectToSearch({
 			prompt: generateSentenceSuggestionPrompt,
+			showAdd: true,
 		});
 		const tArticle = useTranslations("Article");
 		const findClosestSubtitle = (

@@ -1,12 +1,23 @@
 import { generateWordSuggestionAction } from "@/actions/generate-word-action";
+import { addWordsToUserDictAction } from "@/actions/user-dict-action";
 import { SearchButton } from "@/components/select-search-button";
 import { ErrorFallback } from "@/components/suspend-error-fallback";
+import { useUserDictList } from "@/hooks/use-dict-list";
+import {
+	createErrorToast,
+	createLoadingToast,
+	createSuccessToast,
+} from "@/hooks/use-toast";
+import { useUser } from "@/hooks/use-user";
 import type { SITES_LANGUAGE } from "@/types/site";
 import { timeOut } from "@/utils/time-out";
+import { signIn } from "next-auth/react";
+import type { AbstractIntlMessages } from "next-intl";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
 import type { Root } from "react-dom/client";
+import { callModal } from "./modal";
 
 const SuggestionPanel = dynamic(
 	() =>
@@ -25,11 +36,16 @@ interface FloatButtonsPanelProps {
 	showSearch?: boolean;
 	showCopy?: boolean;
 	showAI?: boolean;
+	showAdd?: boolean;
 	root: Root;
 	locale: SITES_LANGUAGE;
 	position?: "top" | "bottom";
 	onClose?: () => void;
 	prompt?: (word: string, locale: SITES_LANGUAGE) => string;
+	translate: (
+		key: keyof AbstractIntlMessages,
+		values?: Record<string, unknown>,
+	) => string;
 }
 
 export function FloatButtonsPanel({
@@ -38,13 +54,17 @@ export function FloatButtonsPanel({
 	showSearch = true,
 	showCopy = true,
 	showAI = true,
+	showAdd = false,
 	onClose,
 	root,
 	locale,
 	position = "bottom",
 	prompt,
+	translate,
 }: FloatButtonsPanelProps) {
 	const observerRef = useRef<ResizeObserver>(null);
+	const { isLogin } = useUser();
+	const dictList = useUserDictList({ filterFav: true });
 
 	// 劫持 render， 清理 observer
 	const originalRender = root.render;
@@ -61,6 +81,38 @@ export function FloatButtonsPanel({
 	if (!(originalRender as unknown as { __: boolean }).__) {
 		root.render = newRender;
 	}
+
+	const onAdd = async () => {
+		onClose?.();
+		if (!isLogin) {
+			signIn();
+			return;
+		}
+		if (selectedText) {
+			const dictId = (await callModal({
+				type: "select",
+				title: "Select Dict to add",
+				options: dictList.map((dict) => ({
+					value: dict.id,
+					label: dict.name,
+				})),
+			})) as string;
+			if (!dictId) return;
+			const word = selectedText.trim();
+			const removeInfoToast = createLoadingToast(translate("Home.generating"));
+
+			try {
+				await addWordsToUserDictAction(dictId, [word]);
+				createSuccessToast(translate("Home.generated"));
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			} catch (error: any) {
+				console.error(`[createWord][${word}]:\n`, error);
+				createErrorToast(translate("Home.generateError"));
+			} finally {
+				removeInfoToast();
+			}
+		}
+	};
 
 	const onCopy = async () => {
 		try {
@@ -141,6 +193,7 @@ export function FloatButtonsPanel({
 			}}
 			className="z-[1] border border-base-content/10 bg-white/10 shadow backdrop-blur-md flex absolute rounded overflow-hidden -translate-x-1/4"
 		>
+			{showAdd && <SearchButton onClick={onAdd} icon="add" />}
 			{showSearch && <SearchButton onClick={onPapagoSearch} icon="search" />}
 			{showCopy && <SearchButton onClick={onCopy} icon="copy" />}
 			{showAI && prompt && (

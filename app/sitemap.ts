@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { flattenAllDocs } from "scripts/list-all-docs";
+import { getArticles } from "./actions/article-actions";
 import { Levels } from "./types";
 import { toolsNames } from "./types/tools";
 
@@ -34,6 +35,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			changeFrequency: "daily" as const,
 			priority: 0.9,
 		},
+		// Article 相关路由
+		{
+			url: `${baseUrl}/article`,
+			lastModified: new Date(),
+			changeFrequency: "daily" as const,
+			priority: 0.7,
+		},
+		...(await getArticles()).map((article) => ({
+			url: `${baseUrl}/article/${article.id}`,
+			lastModified: new Date(),
+			changeFrequency: "daily" as const,
+			priority: 0.7,
+		})),
 		// TOPIK 相关路由
 		{
 			url: `${baseUrl}/topik`,

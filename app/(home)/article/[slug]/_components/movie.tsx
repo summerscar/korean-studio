@@ -13,6 +13,7 @@ import type { SITES_LANGUAGE } from "@/types/site";
 import { notoKR } from "@/utils/fonts";
 import { isDev } from "@/utils/is-dev";
 import { generateSentenceSuggestionPrompt } from "@/utils/prompts";
+import { timeOut } from "@/utils/time-out";
 import { useMemoizedFn, useMount, useUpdateEffect } from "ahooks";
 import clsx from "clsx";
 import { useLocale, useTranslations } from "next-intl";
@@ -98,7 +99,8 @@ export function ArticleMovie({
 
 	const [_, startTransition] = useTransition();
 
-	useMount(() => {
+	useMount(async () => {
+		await timeOut(500);
 		loadSubtitles(selectedLanguage);
 	});
 

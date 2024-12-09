@@ -2,7 +2,7 @@ import { getArticles } from "@/actions/article-actions";
 import { notoKR } from "@/utils/fonts";
 import { renderMDTextServer } from "@/utils/render-md-server";
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 
 export const generateMetadata = async () => {
 	const tHeader = await getTranslations("Header");
@@ -32,7 +32,8 @@ const ArticlePage = async () => {
 								<img
 									src={article.poster || "/icon"}
 									alt="poster"
-									className="w-full aspect-video object-cover"
+									className="w-full aspect-video object-cover rounded-lg"
+									style={{ viewTransitionName: `article-image-${article.id}` }}
 								/>
 							</Link>
 						</figure>
@@ -40,8 +41,19 @@ const ArticlePage = async () => {
 							className="card-body p-6"
 							style={{ fontFamily: notoKR.style.fontFamily }}
 						>
-							<h2 className="card-title">{article.title}</h2>
-							{await renderMDTextServer(article.description)}
+							<h2
+								className="card-title"
+								style={{ viewTransitionName: `article-title-${article.id}` }}
+							>
+								{article.title}
+							</h2>
+							<div
+								style={{
+									viewTransitionName: `article-description-${article.id}`,
+								}}
+							>
+								{await renderMDTextServer(article.description)}
+							</div>
 						</div>
 					</div>
 				))}

@@ -95,19 +95,26 @@ const SlugPage = async ({
 							src={article.poster}
 							alt={article.title}
 							className="w-full h-auto rounded-lg shadow-lg object-cover"
+							style={{ viewTransitionName: `article-image-${article.id}` }}
 						/>
 					</div>
 				)}
 				<div className="flex-1 flex flex-col">
 					<div
 						className="text-4xl font-bold mb-4 leading-tight"
-						style={{ fontFamily: notoKR.style.fontFamily }}
+						style={{
+							fontFamily: notoKR.style.fontFamily,
+							viewTransitionName: `article-title-${article.id}`,
+						}}
 					>
 						{article.title}
 					</div>
 					<div
 						className="text-base text-base-content/70 leading-relaxed flex-grow"
-						style={{ fontFamily: notoKR.style.fontFamily }}
+						style={{
+							fontFamily: notoKR.style.fontFamily,
+							viewTransitionName: `article-description-${article.id}`,
+						}}
 					>
 						{renderMDTextServer(article.description)}
 					</div>

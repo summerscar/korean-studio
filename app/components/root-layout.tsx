@@ -13,6 +13,7 @@ import clsx from "clsx";
 import { SessionProvider } from "next-auth/react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { ViewTransitions } from "next-view-transitions";
 
 export async function DefaultLayout({
 	isAdmin = false,
@@ -36,23 +37,25 @@ export async function DefaultLayout({
 		);
 	}
 	return (
-		<html lang={locale} data-theme={themeFromCookie || Themes.Light}>
-			<body className={clsx(bodyClassName, "text-base-content")}>
-				<div id="bg" />
-				<style>{"::target-text { background-color: gold; }"}</style>
-				<SessionProvider>
-					<NextIntlClientProvider messages={messages}>
-						<NotificationProvider>
-							<main className="flex min-h-dvh flex-col">{children}</main>
-							<ModalRoot />
-						</NotificationProvider>
-					</NextIntlClientProvider>
-				</SessionProvider>
-				{isDev && <VConsole />}
-				{isProd && <SpeedInsights />}
-				{isProd && <Analytics />}
-				{isProd && <GoogleAnalytics gaId={GAId} />}
-			</body>
-		</html>
+		<ViewTransitions>
+			<html lang={locale} data-theme={themeFromCookie || Themes.Light}>
+				<body className={clsx(bodyClassName, "text-base-content")}>
+					<div id="bg" />
+					<style>{"::target-text { background-color: gold; }"}</style>
+					<SessionProvider>
+						<NextIntlClientProvider messages={messages}>
+							<NotificationProvider>
+								<main className="flex min-h-dvh flex-col">{children}</main>
+								<ModalRoot />
+							</NotificationProvider>
+						</NextIntlClientProvider>
+					</SessionProvider>
+					{isDev && <VConsole />}
+					{isProd && <SpeedInsights />}
+					{isProd && <Analytics />}
+					{isProd && <GoogleAnalytics gaId={GAId} />}
+				</body>
+			</html>
+		</ViewTransitions>
 	);
 }

@@ -51,6 +51,7 @@ async function fetchPostDetail(postId: number): Promise<PostDetail | null> {
 		const response = await fetch(
 			`https://tech.kakao.com/api/v1/posts/${postId}`,
 			{
+				cache: "force-cache",
 				headers: {
 					accept: "*/*",
 					"accept-language":

@@ -29,7 +29,7 @@ const TypeEffectString = ({ promise }: { promise: Promise<string> }) => {
 			} else {
 				clearInterval(timer);
 			}
-		}, 50);
+		}, 30);
 		return () => clearInterval(timer);
 	}, [res]);
 

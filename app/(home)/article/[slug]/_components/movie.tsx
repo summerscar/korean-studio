@@ -14,18 +14,11 @@ import { notoKR } from "@/utils/fonts";
 import { isDev } from "@/utils/is-dev";
 import { generateSentenceSuggestionPrompt } from "@/utils/prompts";
 import { timeOut } from "@/utils/time-out";
-import { useMemoizedFn, useMount, useUpdateEffect } from "ahooks";
+import { useDebounce, useMemoizedFn, useMount, useUpdateEffect } from "ahooks";
 import clsx from "clsx";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import {
-	type RefObject,
-	memo,
-	useEffect,
-	useMemo,
-	useState,
-	useTransition,
-} from "react";
+import { type RefObject, memo, useEffect, useMemo, useState } from "react";
 
 // Group subtitles into scenes based on time gaps
 function groupSubtitlesIntoScenes(subtitles: SubtitleCue[]): SubtitleCue[][] {
@@ -87,7 +80,7 @@ export function ArticleMovie({
 			([_, lang]) => lang === locale,
 		)?.[0] as SubtitleLanguage,
 	);
-
+	const deferredSelectedLanguage = useDebounce(selectedLanguage, { wait: 50 });
 	const [viewMode, setViewMode] = useState<"side-by-side" | "vertical">(
 		"side-by-side",
 	);
@@ -96,8 +89,6 @@ export function ArticleMovie({
 		prompt: generateSentenceSuggestionPrompt,
 		showAdd: true,
 	});
-
-	const [_, startTransition] = useTransition();
 
 	useMount(async () => {
 		await timeOut(500);
@@ -135,11 +126,8 @@ export function ArticleMovie({
 	});
 
 	const handleLanguageChange = useMemoizedFn((lang: SubtitleLanguage) => {
-		startTransition(() => {
-			setSelectedLanguage(lang);
-
-			!subtitles[lang] && loadSubtitles(lang);
-		});
+		setSelectedLanguage(lang);
+		!subtitles[lang] && loadSubtitles(lang);
 	});
 
 	const scenes = useMemo(() => {
@@ -310,7 +298,7 @@ export function ArticleMovie({
 					ref={containerRef as RefObject<HTMLDivElement | null>}
 					scenes={scenes}
 					subtitles={subtitles}
-					selectedLanguage={selectedLanguage}
+					selectedLanguage={deferredSelectedLanguage}
 					viewMode={viewMode}
 				/>
 			)}

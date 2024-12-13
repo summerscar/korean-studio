@@ -1,7 +1,9 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { Feed } from "feed";
+import { marked } from "marked";
 import { NextResponse } from "next/server";
+import { fetchChatCompletion } from "scripts/open-ai";
 
 export async function GET() {
 	try {
@@ -23,21 +25,42 @@ export async function GET() {
 		const resKR = await axios.get("https://twittrend.net/");
 		const $KR = cheerio.load(resKR.data);
 
-		const process = (el: ReturnType<typeof $JP>, $: cheerio.CheerioAPI) => {
+		const process = async (
+			el: ReturnType<typeof $JP>,
+			$: cheerio.CheerioAPI,
+		) => {
 			el.find("script").remove();
 			el.find(".box-header span").remove();
 			el.find('[id^="more"]').remove();
 			el.find("a").each((_, element) => {
-				$(element).before($(element).text());
+				$(element).before(`<span class="title">${$(element).text()}</span>`);
 				$(element).text(" ↗️ ");
 			});
+			const trends = el
+				.find("li .trend span.title")
+				.slice(0, 5)
+				.toArray()
+				.map((cur) => {
+					return $(cur).text();
+				});
+
+			const res = await fetchChatCompletion([
+				{
+					role: "user",
+					content: `为下面的推特热搜词条生成总结,,这些词条间没有关系: ${trends.join(
+						", ",
+					)}.请使用 ${"zh-CN"} 语言。`,
+				},
+			]);
+
+			el.find(".box-body").prepend(`<div class="summary">${marked(res)}</div>`);
 		};
 
 		const trendsNowJP = $JP("#now");
-		process(trendsNowJP, $JP);
+		await process(trendsNowJP, $JP);
 
 		const trendsNowKR = $KR("#now");
-		process(trendsNowKR, $KR);
+		await process(trendsNowKR, $KR);
 
 		const desc = `<div style="display: flex; flex-direction: row; justify-content: space-between;">
 		<div><a href="https://twittrend.jp/">Home page 🇯🇵</a>${trendsNowJP.html()}</div><div><a href="https://twittrend.net/">Home page 🇰🇷</a>${trendsNowKR.html()}</div>

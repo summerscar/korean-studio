@@ -428,7 +428,10 @@ const Wrapper = ({
 }: { children: ReactNode; className?: string }) => {
 	return (
 		<div
-			className={clsx("flex flex-col items-center justify-center", className)}
+			className={clsx(
+				"flex flex-col items-center justify-center w-full",
+				className,
+			)}
 		>
 			{children}
 		</div>

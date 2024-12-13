@@ -66,6 +66,8 @@ async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
 				const geminiAI = getGeminiInstance();
 				const geminiModel = geminiAI.getGenerativeModel({
 					model,
+					// @ts-ignore
+					// tools: [{ googleSearch: {} }],
 				});
 				const result = await geminiModel.generateContent(
 					messages.map((message) => message.content as string),

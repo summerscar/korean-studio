@@ -4,7 +4,6 @@ import RefreshSVG from "@/assets/svg/refresh.svg";
 
 import { useHomeProgress } from "@/components/header/_component/progress";
 import { checkIsTouchable, useDevice } from "@/hooks/use-device";
-import { usePronunciation } from "@/hooks/use-pronunciation";
 import { type Dict, Dicts } from "@/types/dict";
 import type { UserDicts } from "@/types/dict";
 import type { SITES_LANGUAGE } from "@/types/site";
@@ -23,7 +22,12 @@ import { isServer } from "@/utils/is-server";
 import { hangulToQwerty } from "@/utils/kr-const";
 import { getLocalDict } from "@/utils/local-dict";
 import { shuffleArr } from "@/utils/shuffle-array";
-import { useEventListener, useLatest, useMemoizedFn } from "ahooks";
+import {
+	useDebounceFn,
+	useEventListener,
+	useLatest,
+	useMemoizedFn,
+} from "ahooks";
 import clsx from "clsx";
 import { disassemble } from "es-hangul";
 import { useLocale } from "next-intl";
@@ -72,6 +76,7 @@ const HomeStatus = ({
 	const [isInputError, setIsInputError] = useState(false);
 	const [isInputFocused, setIsInputFocused] = useState(false);
 	const playExampleRef = useRef(() => {});
+	const playWordRef = useRef(() => {});
 	const slideToIndexRef = useRef<(index: number) => void>(() => {});
 	const { isTouchable } = useDevice();
 	useEffect(() => {
@@ -149,7 +154,7 @@ const HomeStatus = ({
 				return;
 			}
 			if (e.code === "Semicolon") {
-				playWord();
+				playWordRef.current();
 				return;
 			}
 			if (e.code === "Quote") {
@@ -195,11 +200,6 @@ const HomeStatus = ({
 		}
 		return null;
 	}, [curWordIndex, dict]);
-
-	const { isPlaying: isWordPlaying, play: playWord } = usePronunciation(
-		currentWord?.name,
-		{ autoPlay: setting.autoVoice },
-	);
 
 	/** 韩文字母 */
 	const hangul = parseSpaceStr(disassemble(currentWord?.name || ""));
@@ -283,6 +283,17 @@ const HomeStatus = ({
 		);
 	});
 
+	const { run: playSlideWord } = useDebounceFn(
+		() => {
+			playWordRef.current();
+		},
+		{ wait: 800 },
+	);
+	const onSlideChange = useMemoizedFn((index: number) => {
+		playSlideWord();
+		skipToNextWord(index);
+	});
+
 	const toPrevWord = useMemoizedFn(() => {
 		skipToNextWord(curWordIndex - 1);
 	});
@@ -346,9 +357,9 @@ const HomeStatus = ({
 					/>
 					<DisplayName
 						currentWord={currentWord}
-						playWord={playWord}
-						isWordPlaying={isWordPlaying}
+						playWordRef={playWordRef}
 						isLocalDict={isLocalDict}
+						autoPlay={setting.autoVoice}
 					/>
 					<WordMeaning
 						showMeaning={setting.showMeaning}
@@ -406,13 +417,12 @@ const HomeStatus = ({
 				<WordCards
 					dict={dict}
 					curWordIndex={curWordIndex}
-					onChange={skipToNextWord}
-					playWord={playWord}
-					isWordPlaying={isWordPlaying}
+					onChange={onSlideChange}
 					additionalMeaning={setting.additionalMeaning}
 					showMeaning={setting.showMeaning}
 					locale={locale}
 					isLocalDict={isLocalDict}
+					playWordRef={playWordRef}
 					playExampleRef={playExampleRef}
 					slideToIndexRef={slideToIndexRef}
 				/>

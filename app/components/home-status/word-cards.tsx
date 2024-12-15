@@ -30,25 +30,23 @@ const noop = () => {};
 const WordCards = ({
 	dict,
 	onChange,
-	playWord,
-	isWordPlaying,
 	isLocalDict,
 	additionalMeaning,
 	locale,
 	showMeaning,
 	curWordIndex,
+	playWordRef,
 	playExampleRef,
 	slideToIndexRef,
 }: {
 	dict: Dict;
 	onChange: (index: number) => void;
-	playWord: () => void;
-	isWordPlaying: boolean;
 	isLocalDict: boolean;
 	locale: SITES_LANGUAGE;
 	additionalMeaning: boolean;
 	showMeaning: boolean;
 	curWordIndex: number;
+	playWordRef: React.RefObject<() => void>;
 	playExampleRef: React.RefObject<() => void>;
 	slideToIndexRef: React.RefObject<(index: number) => void>;
 }) => {
@@ -67,6 +65,7 @@ const WordCards = ({
 				modules={[EffectCards, Virtual]}
 				className="w-60 h-80"
 				initialSlide={curWordIndex}
+				runCallbacksOnInit={false}
 				cardsEffect={{
 					perSlideRotate: 3,
 					perSlideOffset: 9,
@@ -74,9 +73,9 @@ const WordCards = ({
 				virtual={{
 					slides: dict,
 					enabled: true,
-					addSlidesAfter: 5,
-					addSlidesBefore: 5,
-					cache: true,
+					addSlidesAfter: 4,
+					addSlidesBefore: 4,
+					cache: false,
 				}}
 				onInit={(swiper) => {
 					slideToIndexRef.current = (val: number) => {
@@ -109,11 +108,11 @@ const WordCards = ({
 									className="absolute top-4 right-4 size-6"
 								/>
 								<DisplayName
+									autoPlay={false}
 									showStar={false}
 									className="scale-75"
 									currentWord={word}
-									playWord={playWord}
-									isWordPlaying={isWordPlaying}
+									playWordRef={getIsActive(i) ? playWordRef : noopRef}
 									isLocalDict={isLocalDict}
 								/>
 								<WordMeaning

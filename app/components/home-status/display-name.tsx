@@ -1,4 +1,3 @@
-import SpeakerIcon from "@/assets/svg/speaker.svg";
 import { useDevice } from "@/hooks/use-device";
 import { useHoverToSearch } from "@/hooks/use-hover-to-search";
 import type { DictItem } from "@/types/dict";
@@ -6,22 +5,23 @@ import { notoKR } from "@/utils/fonts";
 import { generateWordSuggestionPrompt } from "@/utils/prompts";
 import clsx from "clsx";
 import { romanize, standardizePronunciation } from "es-hangul";
+import { Pronunciation } from "../pronunciation";
 import { Star } from "./star";
 
 const DisplayName = ({
 	currentWord,
-	playWord,
-	isWordPlaying,
+	playWordRef,
 	isLocalDict,
 	className,
 	showStar = true,
+	autoPlay,
 }: {
 	currentWord: DictItem | null;
-	playWord: () => void;
-	isWordPlaying: boolean;
 	isLocalDict: boolean;
 	showStar?: boolean;
 	className?: string;
+	playWordRef?: React.RefObject<() => void>;
+	autoPlay: boolean;
 }) => {
 	const [displayNameRef, displayNameHoverPanel] = useHoverToSearch(
 		currentWord?.name,
@@ -50,21 +50,16 @@ const DisplayName = ({
 		>
 			<span ref={displayNameRef}>{displayName}</span>
 			<div className="absolute min-h-full top-0 right-0 translate-x-[130%] z-[2] flex flex-col justify-center gap-1">
-				<div
-					className={clsx("flex", !isTouchable && "tooltip tooltip-top")}
-					data-tip={`${romanized} [${standardized}]`}
-				>
-					<SpeakerIcon
-						width={20}
-						height={20}
-						onMouseEnter={playWord}
-						onTouchEnd={playWord}
-						className={clsx(
-							isWordPlaying ? "fill-current" : "text-base-content",
-							"cursor-pointer inline-block",
-						)}
-					/>
-				</div>
+				<Pronunciation
+					preload={false}
+					playRef={playWordRef}
+					tooltipText={`${romanized} [${standardized}]`}
+					width={20}
+					height={20}
+					text={displayName}
+					tooltip={!isTouchable}
+					autoPlay={autoPlay}
+				/>
 				{showStar && <Star dictItem={currentWord} isLocalDict={isLocalDict} />}
 			</div>
 			{displayNameHoverPanel}

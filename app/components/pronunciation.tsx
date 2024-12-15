@@ -11,11 +11,15 @@ const Pronunciation = ({
 	text,
 	children,
 	tooltip = false,
+	tooltipText,
+	autoPlay = false,
 	...svgProps
 }: {
 	text?: string;
 	preload?: boolean;
 	tooltip?: boolean;
+	tooltipText?: string;
+	autoPlay?: boolean;
 	playRef?: RefObject<() => void>;
 } & ComponentProps<typeof SpeakerSVG>) => {
 	const DEFAULT_SIZE = 16;
@@ -26,7 +30,10 @@ const Pronunciation = ({
 		...rest
 	} = svgProps;
 	const targetText = typeof children === "string" ? children : text || "";
-	const { isPlaying, play } = usePronunciation(targetText, { preload });
+	const { isPlaying, play } = usePronunciation(targetText, {
+		preload,
+		autoPlay,
+	});
 
 	playRef && (playRef.current = play);
 
@@ -49,7 +56,10 @@ const Pronunciation = ({
 		<>
 			{children}{" "}
 			{tooltip && targetText.length < 10 ? (
-				<span className="tooltip" data-tip={romanize(targetText)}>
+				<span
+					className="tooltip inline-flex"
+					data-tip={tooltipText || romanize(targetText)}
+				>
 					{speakerEl}
 				</span>
 			) : (

@@ -1,5 +1,11 @@
 // import { createToast } from "@/hooks/use-toast";
-import { useDebounceFn, useLatest, useMemoizedFn, useThrottleFn } from "ahooks";
+import {
+	useDebounceFn,
+	useLatest,
+	useMemoizedFn,
+	useThrottleFn,
+	useUpdateEffect,
+} from "ahooks";
 import { useEffect, useRef, useState } from "react";
 
 const pronunciationApi = "https://dict.youdao.com/dictvoice?audio=";
@@ -38,12 +44,14 @@ const usePronunciation = (
 
 			audioRef.current.src = generateWordSoundSrc(word);
 			audioRef.current.preload = preload ? "auto" : "none";
-
-			if (lastedAutoPlay.current) {
-				debouncedPlay();
-			}
 		}
-	}, [lastedAutoPlay, preload, word]);
+	}, [preload, word]);
+
+	useUpdateEffect(() => {
+		if (lastedAutoPlay.current) {
+			debouncedPlay();
+		}
+	}, [word]);
 
 	const play = useMemoizedFn(async () => {
 		if (audioRef.current) {

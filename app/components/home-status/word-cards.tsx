@@ -5,10 +5,10 @@ import "swiper/css";
 import "swiper/css/effect-cards";
 import "swiper/css/virtual";
 
-import type { Dict } from "@/types/dict";
+import type { Dict, DictItem } from "@/types/dict";
 import type { SITES_LANGUAGE } from "@/types/site";
 import clsx from "clsx";
-import { useRef } from "react";
+import { memo, useRef } from "react";
 
 import { EffectCards, Virtual } from "swiper/modules";
 import { DisplayName } from "./display-name";
@@ -50,11 +50,6 @@ const WordCards = ({
 	playExampleRef: React.RefObject<() => void>;
 	slideToIndexRef: React.RefObject<(index: number) => void>;
 }) => {
-	const noopRef = useRef<() => void>(noop);
-	const getIsActive = (index: number) => {
-		return index === curWordIndex;
-	};
-
 	if (!dict.length) return null;
 
 	return (
@@ -100,43 +95,82 @@ const WordCards = ({
 							pastelColors[i % pastelColors.length],
 						)}
 					>
-						<div className="flex flex-col items-center justify-around p-2 px-5 h-full">
-							<div className="flex flex-col items-center justify-between">
-								<Star
-									dictItem={word}
-									isLocalDict={isLocalDict}
-									className="absolute top-4 right-4 size-6"
-								/>
-								<DisplayName
-									autoPlay={false}
-									showStar={false}
-									className="scale-75"
-									currentWord={word}
-									playWordRef={getIsActive(i) ? playWordRef : noopRef}
-									isLocalDict={isLocalDict}
-								/>
-								<WordMeaning
-									className="text-sm"
-									showMeaning={showMeaning}
-									currentWord={word}
-									locale={locale}
-									additionalMeaning={additionalMeaning}
-								/>
-							</div>
-							<WordExample
-								className="text-sm gap-y-1"
-								currentWord={word}
-								locale={locale}
+						{({ isActive }) => (
+							<CardItem
+								word={word}
+								isLocalDict={isLocalDict}
 								additionalMeaning={additionalMeaning}
+								locale={locale}
 								showMeaning={showMeaning}
-								playRef={getIsActive(i) ? playExampleRef : noopRef}
+								isActive={isActive}
+								playWordRef={playWordRef}
+								playExampleRef={playExampleRef}
 							/>
-						</div>
+						)}
 					</SwiperSlide>
 				))}
 			</Swiper>
 		</div>
 	);
 };
+
+const CardItem = memo(
+	({
+		word,
+		isLocalDict,
+		additionalMeaning,
+		locale,
+		showMeaning,
+		isActive,
+		playWordRef,
+		playExampleRef,
+	}: {
+		word: DictItem;
+		isLocalDict: boolean;
+		additionalMeaning: boolean;
+		locale: SITES_LANGUAGE;
+		showMeaning: boolean;
+		isActive: boolean;
+		playWordRef: React.RefObject<() => void>;
+		playExampleRef: React.RefObject<() => void>;
+	}) => {
+		const noopRef = useRef<() => void>(noop);
+
+		return (
+			<div className="flex flex-col items-center justify-around p-2 px-5 h-full">
+				<div className="flex flex-col items-center justify-between">
+					<Star
+						dictItem={word}
+						isLocalDict={isLocalDict}
+						className="absolute top-4 right-4 size-6"
+					/>
+					<DisplayName
+						autoPlay={false}
+						showStar={false}
+						className="scale-75"
+						currentWord={word}
+						playWordRef={isActive ? playWordRef : noopRef}
+						isLocalDict={isLocalDict}
+					/>
+					<WordMeaning
+						className="text-sm"
+						showMeaning={showMeaning}
+						currentWord={word}
+						locale={locale}
+						additionalMeaning={additionalMeaning}
+					/>
+				</div>
+				<WordExample
+					className="text-sm gap-y-1"
+					currentWord={word}
+					locale={locale}
+					additionalMeaning={additionalMeaning}
+					showMeaning={showMeaning}
+					playRef={isActive ? playExampleRef : noopRef}
+				/>
+			</div>
+		);
+	},
+);
 
 export { WordCards };

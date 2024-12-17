@@ -1,6 +1,6 @@
 import { getArticles } from "@/actions/article-actions";
+import { RenderMDTextServer } from "@/components/render-md-server";
 import { notoKR } from "@/utils/fonts";
-import { renderMDTextServer } from "@/utils/render-md-server";
 import { getTranslations } from "next-intl/server";
 import { Link } from "next-view-transitions";
 
@@ -14,11 +14,14 @@ export const generateMetadata = async () => {
 
 const ArticlePage = async () => {
 	const articles = await getArticles();
+	const sortedArticles = articles.toSorted((a, b) =>
+		a.type === "MOVIE" ? -1 : b.type === "MOVIE" ? 1 : 0,
+	);
 
 	return (
 		<div className="container px-4 py-8 mx-auto">
 			<div className="mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1024px]">
-				{articles.map(async (article) => (
+				{sortedArticles.map(async (article) => (
 					<div
 						key={article.id}
 						className="card shadow-lg !rounded-xl backdrop-blur-lg bg-white/10"
@@ -38,7 +41,7 @@ const ArticlePage = async () => {
 							</Link>
 						</figure>
 						<div
-							className="card-body p-6"
+							className="card-body p-6 justify-between"
 							style={{ fontFamily: notoKR.style.fontFamily }}
 						>
 							<h2
@@ -52,7 +55,7 @@ const ArticlePage = async () => {
 									viewTransitionName: `article-description-${article.id}`,
 								}}
 							>
-								{await renderMDTextServer(article.description)}
+								<RenderMDTextServer text={article.description} />
 							</div>
 						</div>
 					</div>

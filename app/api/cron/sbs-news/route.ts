@@ -10,6 +10,17 @@ const channelId = "UCkinYTS9IHqOEwR1Sze2JTw";
 // Ensure you set this as an environment variable
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
+function decodeHtmlEntities(text: string | null | undefined): string {
+	if (!text) return "";
+	return text
+		.replace(/&#39;/g, "'")
+		.replace(/&quot;/g, '"')
+		.replace(/&amp;/g, "&")
+		.replace(/&lt;/g, "<")
+		.replace(/&gt;/g, ">");
+}
+
+// When setting the title or description
 export async function GET() {
 	try {
 		if (!YOUTUBE_API_KEY) {
@@ -49,11 +60,13 @@ export async function GET() {
 
 				const videoStats = statsResponse.data.items?.[0]?.statistics;
 				const fullSnippet = statsResponse.data.items?.[0]?.snippet;
-				console.log("item.snippet?.thumbnails", item.snippet?.thumbnails);
+
 				return {
 					videoId,
-					title: item.snippet?.title,
-					description: fullSnippet?.description || item.snippet?.description,
+					title: decodeHtmlEntities(item.snippet?.title),
+					description: decodeHtmlEntities(
+						fullSnippet?.description || item.snippet?.description,
+					),
 					publishedAt: item.snippet?.publishedAt,
 					viewCount: Number(videoStats?.viewCount || 0),
 					thumbnailUrl: item.snippet?.thumbnails?.high?.url,

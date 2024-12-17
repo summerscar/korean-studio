@@ -1,11 +1,16 @@
+import { RenderMDTextServer } from "@/components/render-md-server";
 import { SelectToSearch } from "@/hooks/use-select-to-search";
-import { renderMDTextServer } from "@/utils/render-md-server";
+import { notoKR } from "@/utils/fonts";
+import clsx from "clsx";
 
 const Text = ({ content }: { content: string }) => {
 	const resolvedContent = content.replace("frameborder", "frameBorder");
 	return (
 		<SelectToSearch showAdd prompt="sentence">
-			{renderMDTextServer(resolvedContent)}
+			<RenderMDTextServer
+				text={resolvedContent}
+				className={clsx(notoKR.className, "pt-2")}
+			/>
 		</SelectToSearch>
 	);
 };

@@ -52,4 +52,12 @@
 	li > pre {
 		@apply mobile:max-w-[calc(100vw-7rem)];
 	}
+
+	hr {
+		@apply !h-0.5
+	}
+
+	iframe {
+		@apply !w-[-webkit-fill-available] !h-auto !aspect-video;
+	}
 }

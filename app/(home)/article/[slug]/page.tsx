@@ -4,10 +4,10 @@ import {
 	articleRevalidateKey,
 	getArticleRevalidateKey,
 } from "@/actions/user-dict-utils";
+import { RenderMDTextServer } from "@/components/render-md-server";
 import type { SubtitleCues, SubtitleSeries } from "@/types/article";
 import { notoKR } from "@/utils/fonts";
 import { getBaseURL } from "@/utils/get-base-url";
-import { renderMDTextServer } from "@/utils/render-md-server";
 import clsx from "clsx";
 import { getTranslations } from "next-intl/server";
 import { unstable_cache } from "next/cache";
@@ -119,7 +119,7 @@ const SlugPage = async ({
 							viewTransitionName: `article-description-${article.id}`,
 						}}
 					>
-						{renderMDTextServer(article.description)}
+						<RenderMDTextServer text={article.description} />
 					</div>
 					{article.type === "MOVIE" && <EPSelect article={article} />}
 				</div>

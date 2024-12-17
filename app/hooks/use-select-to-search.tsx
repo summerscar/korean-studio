@@ -1,6 +1,17 @@
+"use client";
 import { FloatButtonsPanel } from "@/components/float-buttons-panel";
+import {
+	generateSentenceSuggestionPrompt,
+	generateWordSuggestionPrompt,
+} from "@/utils/prompts";
 import { useDebounceFn, useEventListener } from "ahooks";
-import { type ComponentProps, useRef, useState } from "react";
+import {
+	type ComponentProps,
+	type PropsWithChildren,
+	type RefObject,
+	useRef,
+	useState,
+} from "react";
 
 const useSelectToSearch = ({
 	showCopy = true,
@@ -39,6 +50,12 @@ const useSelectToSearch = ({
 	useEventListener("mouseup", showSearchButton, {
 		target: containerRef,
 	});
+	const promptFn =
+		prompt === "sentence"
+			? generateSentenceSuggestionPrompt
+			: prompt === "word"
+				? generateWordSuggestionPrompt
+				: prompt;
 
 	const panel = showPanel ? (
 		<FloatButtonsPanel
@@ -48,7 +65,7 @@ const useSelectToSearch = ({
 			showCopy={showCopy}
 			showAI={showAI}
 			showAdd={showAdd}
-			prompt={prompt}
+			prompt={promptFn}
 			onClose={() => {
 				setShowPanel(false);
 			}}
@@ -63,7 +80,23 @@ type Config = {
 	showSearch?: boolean;
 	showAI?: boolean;
 	showAdd?: boolean;
-	prompt?: ComponentProps<typeof FloatButtonsPanel>["prompt"];
+	prompt?:
+		| ComponentProps<typeof FloatButtonsPanel>["prompt"]
+		| "sentence"
+		| "word";
 };
 
-export { useSelectToSearch };
+const SelectToSearch = ({
+	children,
+	...config
+}: PropsWithChildren<Parameters<typeof useSelectToSearch>[0]>) => {
+	const [containerRef, panel] = useSelectToSearch({ ...config });
+	return (
+		<div ref={containerRef as RefObject<HTMLDivElement>}>
+			{children}
+			{panel}
+		</div>
+	);
+};
+
+export { useSelectToSearch, SelectToSearch };

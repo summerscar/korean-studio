@@ -44,9 +44,9 @@ const ArticlePage = async () => {
 							<h2
 								className="card-title"
 								style={{ viewTransitionName: `article-title-${article.id}` }}
-							>
-								{article.title}
-							</h2>
+								// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+								dangerouslySetInnerHTML={{ __html: article.title }}
+							/>
 							<div
 								style={{
 									viewTransitionName: `article-description-${article.id}`,

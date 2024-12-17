@@ -15,6 +15,7 @@ import { redirect } from "next/navigation";
 import { cache } from "react";
 import { EPSelect } from "./_components/ep-select";
 import { ArticleMovie } from "./_components/movie";
+import { Text } from "./_components/text";
 
 const getArticle = cache(
 	async (slug: string) =>
@@ -84,6 +85,8 @@ const SlugPage = async ({
 				subtitleSeries={article.subtitles as SubtitleSeries}
 			/>
 		);
+	} else if (article.type === "TEXT") {
+		children = <Text content={article.content} />;
 	}
 
 	return (
@@ -94,7 +97,7 @@ const SlugPage = async ({
 						<img
 							src={article.poster}
 							alt={article.title}
-							className="w-full h-auto rounded-lg shadow-lg object-cover"
+							className="w-full h-auto rounded-lg shadow-lg object-cover aspect-video"
 							style={{ viewTransitionName: `article-image-${article.id}` }}
 						/>
 					</div>
@@ -106,9 +109,9 @@ const SlugPage = async ({
 							fontFamily: notoKR.style.fontFamily,
 							viewTransitionName: `article-title-${article.id}`,
 						}}
-					>
-						{article.title}
-					</div>
+						// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+						dangerouslySetInnerHTML={{ __html: article.title }}
+					/>
 					<div
 						className="text-base text-base-content/70 leading-relaxed flex-grow"
 						style={{

@@ -1,3 +1,4 @@
+"use client";
 import { generateWordSuggestionAction } from "@/actions/generate-word-action";
 import { addWordsToUserDictAction } from "@/actions/user-dict-action";
 import { SearchButton } from "@/components/select-search-button";

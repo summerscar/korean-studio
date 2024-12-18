@@ -21,8 +21,8 @@ const useSelectToSearch = ({
 	prompt,
 }: Config = {}) => {
 	const containerRef = useRef<HTMLElement>(null);
-	const [showPanel, setShowPanel] = useState(false);
-	const [selection, setSelection] = useState<Selection | null>(null);
+	const [selectedText, setSelectedText] = useState<string>("");
+	const showPanel = !!selectedText;
 
 	const isKorean = (text: string) =>
 		/[\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F\u3000-\u303F\uFF00-\uFFEF\s]/.test(
@@ -37,11 +37,10 @@ const useSelectToSearch = ({
 			if (selectedText && isKorean(selectedText)) {
 				const range = selection?.getRangeAt(0);
 				if (range) {
-					setSelection(selection);
-					setShowPanel(true);
+					setSelectedText(selectedText);
 				}
 			} else {
-				setShowPanel(false);
+				setSelectedText("");
 			}
 		},
 		{ wait: 150 },
@@ -59,15 +58,17 @@ const useSelectToSearch = ({
 
 	const panel = showPanel ? (
 		<FloatButtonsPanel
-			getRect={() => selection!.getRangeAt(0).getBoundingClientRect()}
-			selectedText={selection!.toString().trim()}
+			getRect={() =>
+				window.getSelection()!.getRangeAt(0).getBoundingClientRect()
+			}
+			selectedText={selectedText}
 			showSearch={showSearch}
 			showCopy={showCopy}
 			showAI={showAI}
 			showAdd={showAdd}
 			prompt={promptFn}
 			onClose={() => {
-				setShowPanel(false);
+				setSelectedText("");
 			}}
 		/>
 	) : null;

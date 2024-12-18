@@ -7,10 +7,11 @@ const getArticles = unstable_cache(
 		return await keystoneContext.db.Article.findMany({
 			where: {},
 			orderBy: { createdAt: "desc" },
+			take: 36,
 		});
 	},
 	[allArticlesRevalidateKey],
-	{ revalidate: false, tags: [allArticlesRevalidateKey] },
+	{ revalidate: 60 * 60 * 24, tags: [allArticlesRevalidateKey] },
 );
 
 export { getArticles };

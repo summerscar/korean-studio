@@ -10,12 +10,12 @@ type Video = {
 const buildContent = (video: Video) => {
 	return `
 <iframe
-    width="560"
-    height="315"
-    src="https://www.youtube.com/embed/${video.videoId}"
-    title="${video.title?.replace(/"/g, '\\"')}"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+	width="560"
+	height="315"
+	src="https://www.youtube.com/embed/${video.videoId}"
+	title="${video.title?.replace(/"/g, "&quot;")}"
+	frameborder="0"
+	allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 />
 
 ---

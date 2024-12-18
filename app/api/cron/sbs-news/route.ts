@@ -90,6 +90,35 @@ export async function GET() {
 			},
 		});
 
+		const count = await keystoneContext.db.Article.count({
+			where: {},
+		});
+
+		console.log(`[SBS News][count]: ${count}`);
+
+		if (count > 100) {
+			const oldestTextArticle = (
+				await keystoneContext.db.Article.findMany({
+					where: {
+						type: { equals: "TEXT" },
+					},
+					orderBy: {
+						createdAt: "asc",
+					},
+					take: 1,
+				})
+			)[0];
+
+			if (oldestTextArticle) {
+				await keystoneContext.db.Article.deleteOne({
+					where: {
+						id: oldestTextArticle.id,
+					},
+				});
+				console.log(`[SBS News][Deleted]: ${oldestTextArticle.title}`);
+			}
+		}
+
 		revalidateTag(allArticlesRevalidateKey);
 
 		return NextResponse.json({ status: 200 });

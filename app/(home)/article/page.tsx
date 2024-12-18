@@ -24,7 +24,7 @@ const ArticlePage = async () => {
 				{sortedArticles.map(async (article) => (
 					<div
 						key={article.id}
-						className="card shadow-lg !rounded-xl backdrop-blur-lg bg-white/10"
+						className="card shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 !rounded-xl backdrop-blur-lg bg-white/10"
 					>
 						<figure>
 							<Link

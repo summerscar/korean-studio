@@ -70,7 +70,7 @@ export function FloatButtonsPanel({
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	const rect = useMemo(() => {
 		return memoedGetRect();
-	}, [memoedGetRect, showAIPanel]);
+	}, [memoedGetRect, showAIPanel, selectedText]);
 
 	const onAdd = useMemoizedFn(async () => {
 		onClose?.();
@@ -195,7 +195,7 @@ export function FloatButtonsPanel({
 				)}
 			</div>
 		),
-		[showAIPanel],
+		[showAIPanel, selectedText],
 	);
 
 	return createPortal(panel, document.body);

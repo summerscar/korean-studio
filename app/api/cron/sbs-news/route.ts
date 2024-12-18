@@ -43,6 +43,7 @@ export async function GET() {
 			order: "viewCount",
 			publishedAfter: twentyFourHoursAgo,
 			maxResults: 1,
+			videoDuration: "short",
 		});
 
 		const videos = await Promise.all(

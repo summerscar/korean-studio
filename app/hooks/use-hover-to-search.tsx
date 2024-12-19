@@ -117,7 +117,7 @@ const useHoverToSearch = (
 			onClose={() => {
 				closePanel();
 			}}
-			onAIPanel={() => {
+			onNewPanel={() => {
 				cancelAutoCloseRef.current?.();
 			}}
 		/>

@@ -1,7 +1,7 @@
 "use client";
-import { useSelectToSearch } from "@/hooks/use-select-to-search";
+import { SelectToSearch } from "@/hooks/use-select-to-search";
 import { usePathname } from "next/navigation";
-import { type ReactNode, type RefObject, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import type { TocItem } from "remark-flexible-toc";
 
 const MDContentWrapper = ({
@@ -9,23 +9,15 @@ const MDContentWrapper = ({
 	lastModified,
 	bottomNav,
 }: { children: ReactNode; lastModified?: string; bottomNav?: ReactNode }) => {
-	const [containerRef, panel] = useSelectToSearch({
-		showAI: false,
-	});
-
 	return (
 		<article
 			data-last-modified={lastModified}
 			className="p-8 border-r-2 border-slate-900/10 flex-auto"
 		>
-			<div
-				className="markdown-body"
-				ref={containerRef as RefObject<HTMLDivElement>}
-			>
+			<SelectToSearch showAI={false} className="markdown-body">
 				{children}
-			</div>
+			</SelectToSearch>
 			{bottomNav}
-			{panel}
 		</article>
 	);
 };

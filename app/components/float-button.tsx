@@ -3,22 +3,24 @@ import CopyIcon from "@/assets/svg/copy.svg";
 import AddIcon from "@/assets/svg/folder-plus.svg";
 import SearchIcon from "@/assets/svg/search.svg";
 import SparklesIcon from "@/assets/svg/sparkles.svg";
+import TranslateIcon from "@/assets/svg/translate.svg";
 import type { CSSProperties } from "react";
 
 interface SearchButtonProps {
 	style?: CSSProperties;
 	onClick: () => void;
-	icon: "search" | "copy" | "sparkles" | "add";
+	icon: "search" | "copy" | "sparkles" | "add" | "translate";
 }
 
 const IconMap = {
 	search: SearchIcon,
+	translate: TranslateIcon,
 	copy: CopyIcon,
 	sparkles: SparklesIcon,
 	add: AddIcon,
 };
 
-export const SearchButton = ({
+export const FloatButton = ({
 	style,
 	onClick,
 	icon = "search",

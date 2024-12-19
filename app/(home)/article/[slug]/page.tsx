@@ -5,6 +5,7 @@ import {
 	getArticleRevalidateKey,
 } from "@/actions/user-dict-utils";
 import { RenderMDTextServer } from "@/components/render-md-server";
+import { SelectToSearch } from "@/hooks/use-select-to-search";
 import type { SubtitleCues, SubtitleSeries } from "@/types/article";
 import { notoKR } from "@/utils/fonts";
 import { getBaseURL } from "@/utils/get-base-url";
@@ -103,15 +104,18 @@ const SlugPage = async ({
 					</div>
 				)}
 				<div className="flex-1 flex flex-col">
-					<div
-						className="text-4xl font-bold mb-4 leading-tight"
-						style={{
-							fontFamily: notoKR.style.fontFamily,
-							viewTransitionName: `article-title-${article.id}`,
-						}}
-						// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-						dangerouslySetInnerHTML={{ __html: article.title }}
-					/>
+					<SelectToSearch showAdd prompt="sentence">
+						<div
+							className="text-4xl font-bold mb-4 leading-tight"
+							style={{
+								fontFamily: notoKR.style.fontFamily,
+								viewTransitionName: `article-title-${article.id}`,
+							}}
+							// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+							dangerouslySetInnerHTML={{ __html: article.title }}
+							lang="ko"
+						/>
+					</SelectToSearch>
 					<div
 						className="text-base text-base-content/70 leading-relaxed flex-grow"
 						style={{

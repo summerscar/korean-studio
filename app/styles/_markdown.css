@@ -58,6 +58,6 @@
 	}
 
 	iframe {
-		@apply !w-[-webkit-fill-available] !h-auto !aspect-video;
+		@apply !w-[-webkit-fill-available] !h-auto !aspect-video rounded-lg overflow-hidden;
 	}
 }

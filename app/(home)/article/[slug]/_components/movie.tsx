@@ -379,6 +379,7 @@ const ArticleRender = memo(
 									<p
 										className="text-lg leading-relaxed m-0"
 										style={{ fontFamily: notoKR.style.fontFamily }}
+										lang="ko"
 									>
 										{cue.text}
 									</p>

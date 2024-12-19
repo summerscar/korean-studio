@@ -25,7 +25,6 @@ type SearchResult = {
 
 const Search = () => {
 	const tHeader = useTranslations("Header");
-	const [isInputFocused, setIsInputFocused] = useState(false);
 	const [query, setQuery] = useState("");
 	const [results, setResults] = useState<SearchResult[]>([]);
 	const [searchIndex, setSearchIndex] =
@@ -107,7 +106,7 @@ const Search = () => {
 	};
 
 	return (
-		<div className="relative w-5/6 sm:w-28 sm:focus-within:w-64 transition-[width] [transition-duration:300ms]">
+		<div className="group relative w-5/6 sm:w-28 sm:has-[:focus]:w-64 transition-[width] [transition-duration:300ms]">
 			<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
 				<svg
 					aria-hidden="true"
@@ -132,22 +131,20 @@ const Search = () => {
 				type="search"
 				className="input input-sm w-full pl-10 bg-white/30 peer"
 				placeholder={tHeader("search")}
-				onFocus={() => setIsInputFocused(true)}
 				// TODO: animation lib
-				onBlur={() => setTimeout(() => setIsInputFocused(false), 150)}
 			/>
 			<ul
 				className={clsx(
-					isInputFocused ? "block" : "hidden",
-					"peer-focus:opacity-100 transition-opacity opacity-0 absolute z-10 w-full bg-base-100 bg-transparent backdrop-blur-lg shadow-2xl rounded-lg max-h-[70dvh] sm:max-h-[50dvh] overflow-auto",
+					"group-has-[:focus]:opacity-100 group-has-[:focus]:pointer-events-auto pointer-events-none opacity-0 transition-opacity",
+					"absolute z-10 w-full bg-base-100 bg-transparent backdrop-blur-lg shadow-2xl rounded-lg max-h-[70dvh] sm:max-h-[50dvh] overflow-auto",
 				)}
 			>
 				{results.map((res) => (
 					<li
 						key={`${res.type}-${res.id}`}
-						className="hover:bg-slate-400/40 rounded-md p-2"
+						className="hover:bg-slate-400/40 rounded-md p-2 focus-within:bg-slate-400/40"
 					>
-						<Link href={res.url}>
+						<Link href={res.url} className="focus:outline-none">
 							<div className="text-sm font-bold truncate">
 								{[tHeader(res.level), ...res.relativeReadablePath].join(" > ")}
 							</div>

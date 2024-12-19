@@ -21,7 +21,7 @@ const ArticlePage = async () => {
 	return (
 		<div className="container px-4 py-8 mx-auto">
 			<div className="mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1024px]">
-				{sortedArticles.map(async (article) => (
+				{sortedArticles.map((article, index) => (
 					<div
 						key={article.id}
 						className="card shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 !rounded-xl backdrop-blur-lg bg-white/10"
@@ -31,6 +31,7 @@ const ArticlePage = async () => {
 								key={article.id}
 								href={`/article/${article.id}`}
 								className="block w-full"
+								prefetch={article.type === "TEXT" && index < 6}
 							>
 								<img
 									src={article.poster || "/icon"}
@@ -49,6 +50,7 @@ const ArticlePage = async () => {
 								style={{ viewTransitionName: `article-title-${article.id}` }}
 								// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 								dangerouslySetInnerHTML={{ __html: article.title }}
+								lang="ko"
 							/>
 							<div
 								style={{

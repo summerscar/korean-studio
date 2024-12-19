@@ -8,6 +8,7 @@ const Text = ({ content }: { content: string }) => {
 	return (
 		<SelectToSearch showAdd prompt="sentence">
 			<RenderMDTextServer
+				lang="ko"
 				text={resolvedContent}
 				className={clsx(notoKR.className, "pt-2")}
 			/>

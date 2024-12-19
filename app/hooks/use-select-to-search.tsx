@@ -15,7 +15,7 @@ import {
 
 const useSelectToSearch = ({
 	showCopy = true,
-	showSearch = true,
+	showTranslate = true,
 	showAI = true,
 	showAdd = false,
 	prompt,
@@ -29,7 +29,7 @@ const useSelectToSearch = ({
 			text,
 		);
 
-	const { run: showSearchButton } = useDebounceFn(
+	const { run: showFloatButton } = useDebounceFn(
 		() => {
 			const selection = window.getSelection();
 			const selectedText = selection?.toString().trim();
@@ -46,7 +46,7 @@ const useSelectToSearch = ({
 		{ wait: 150 },
 	);
 
-	useEventListener("mouseup", showSearchButton, {
+	useEventListener("mouseup", showFloatButton, {
 		target: containerRef,
 	});
 	const promptFn =
@@ -62,7 +62,7 @@ const useSelectToSearch = ({
 				window.getSelection()!.getRangeAt(0).getBoundingClientRect()
 			}
 			selectedText={selectedText}
-			showSearch={showSearch}
+			showTranslate={showTranslate}
 			showCopy={showCopy}
 			showAI={showAI}
 			showAdd={showAdd}
@@ -78,7 +78,7 @@ const useSelectToSearch = ({
 
 type Config = {
 	showCopy?: boolean;
-	showSearch?: boolean;
+	showTranslate?: boolean;
 	showAI?: boolean;
 	showAdd?: boolean;
 	prompt?:
@@ -89,11 +89,14 @@ type Config = {
 
 const SelectToSearch = ({
 	children,
+	className,
 	...config
-}: PropsWithChildren<Parameters<typeof useSelectToSearch>[0]>) => {
+}: PropsWithChildren<Parameters<typeof useSelectToSearch>[0]> & {
+	className?: string;
+}) => {
 	const [containerRef, panel] = useSelectToSearch({ ...config });
 	return (
-		<div ref={containerRef as RefObject<HTMLDivElement>}>
+		<div ref={containerRef as RefObject<HTMLDivElement>} className={className}>
 			{children}
 			{panel}
 		</div>

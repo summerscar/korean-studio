@@ -96,13 +96,7 @@ const useHoverToSearch = (
 		if (isTouchRef.current && targetRef.current?.contains(e.target as Node)) {
 			return;
 		}
-
-		let parent: Element | null = e.target as Element;
-		while ((parent = parent.parentElement)) {
-			if (parent.getAttribute("data-ignore-click-away") === "true") {
-				return;
-			}
-		}
+		if ((e.target as HTMLElement).closest("[data-ignore-click-away]")) return;
 
 		closePanel();
 	}, buttonContainer);

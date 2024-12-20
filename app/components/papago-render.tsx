@@ -50,8 +50,10 @@ const PapagoResultRender = ({
 				{data.translatedText}
 				<img
 					onClick={onSearch}
+					/** 防止 useSelectToSearch 触发 */
+					onMouseUpCapture={(e) => e.stopPropagation()}
 					src="/img/papago.png"
-					className="w-6 h-6 inline-block cursor-pointer"
+					className="w-6 h-6 inline-block cursor-pointer select-none"
 					alt="Papago"
 				/>
 			</div>

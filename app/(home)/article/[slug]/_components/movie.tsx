@@ -395,6 +395,7 @@ const ArticleRender = memo(
 												dangerouslySetInnerHTML={{
 													__html: matchingSubtitle.text,
 												}}
+												lang={selectedLanguage}
 											/>
 										</p>
 									)}

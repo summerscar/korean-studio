@@ -2,6 +2,7 @@
 import { papagoTranslateAction } from "@/actions/papago-translate-action";
 import TranslateIcon from "@/assets/svg/translate.svg";
 import { useServerActionState } from "@/hooks/use-server-action-state";
+import { notoKR } from "@/utils/fonts";
 import { isKorean } from "@/utils/is-korean";
 import clsx from "clsx";
 import { useLocale } from "next-intl";
@@ -38,11 +39,22 @@ const TranslateParagraph = ({
 				</div>
 			) : null}
 
-			<p className={clsx("!mb-0 w-full", isKoreanText && "pl-5")} {...props}>
+			<p
+				className={clsx(
+					"!mb-0 w-full",
+					isKoreanText && "pl-5",
+					notoKR.className,
+				)}
+				lang="ko"
+				{...props}
+			>
 				{children}
 			</p>
 			{data && (
-				<p className="!mb-0 pl-5 !mt-1 w-full shrink-0 text-base-content/60">
+				<p
+					className="!mb-0 pl-5 !mt-1 w-full shrink-0 text-base-content/60"
+					lang={locale}
+				>
 					{data.translatedText}
 				</p>
 			)}

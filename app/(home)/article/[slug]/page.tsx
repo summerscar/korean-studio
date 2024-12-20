@@ -91,7 +91,7 @@ const SlugPage = async ({
 	}
 
 	return (
-		<div className={clsx("container px-4 py-8 max-w-[1024px] mx-auto")}>
+		<div className={clsx("container px-4 sm:px-8 py-8 max-w-[1024px] mx-auto")}>
 			<div className="flex flex-col md:flex-row gap-8 mb-8">
 				{article.poster && (
 					<div className="w-full md:w-1/3">

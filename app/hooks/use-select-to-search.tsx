@@ -1,10 +1,11 @@
 "use client";
 import { FloatButtonsPanel } from "@/components/float-buttons-panel";
+import { isKorean } from "@/utils/is-korean";
 import {
 	generateSentenceSuggestionPrompt,
 	generateWordSuggestionPrompt,
 } from "@/utils/prompts";
-import { useDebounceFn, useEventListener } from "ahooks";
+import { useClickAway, useDebounceFn, useEventListener } from "ahooks";
 import {
 	type ComponentProps,
 	type PropsWithChildren,
@@ -18,19 +19,16 @@ const useSelectToSearch = ({
 	showTranslate = true,
 	showAI = true,
 	showAdd = false,
+	clickAway = true,
 	prompt,
 }: Config = {}) => {
 	const containerRef = useRef<HTMLElement>(null);
 	const [selectedText, setSelectedText] = useState<string>("");
 	const showPanel = !!selectedText;
 
-	const isKorean = (text: string) =>
-		/[\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F\u3000-\u303F\uFF00-\uFFEF\s]/.test(
-			text,
-		);
-
 	const { run: showFloatButton } = useDebounceFn(
-		() => {
+		(e: MouseEvent) => {
+			if (!containerRef.current?.contains(e.target as Node)) return;
 			const selection = window.getSelection();
 			const selectedText = selection?.toString().trim();
 
@@ -49,6 +47,15 @@ const useSelectToSearch = ({
 	useEventListener("mouseup", showFloatButton, {
 		target: containerRef,
 	});
+
+	useClickAway((e) => {
+		if (!clickAway) return;
+
+		if ((e.target as HTMLElement).closest("[data-ignore-click-away]")) return;
+
+		setSelectedText("");
+	}, containerRef);
+
 	const promptFn =
 		prompt === "sentence"
 			? generateSentenceSuggestionPrompt
@@ -81,6 +88,7 @@ type Config = {
 	showTranslate?: boolean;
 	showAI?: boolean;
 	showAdd?: boolean;
+	clickAway?: boolean;
 	prompt?:
 		| ComponentProps<typeof FloatButtonsPanel>["prompt"]
 		| "sentence"

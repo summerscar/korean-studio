@@ -156,13 +156,17 @@ export function FloatButtonsPanel({
 
 	const onResize = useMemoizedFn((entries: ResizeObserverEntry[]) => {
 		const el = entries[0].target as HTMLDivElement;
-		const { height, bottom } = el.getBoundingClientRect();
+		const { height, bottom, right, width } = el.getBoundingClientRect();
 		if (showAbove) {
 			el.style.top = `${rect.top - height + window.scrollY}px`;
 		} else {
 			if (bottom + window.scrollY > document.body.clientHeight) {
 				el.style.top = `${rect.top - height + window.scrollY}px`;
 			}
+		}
+
+		if (right + window.scrollX > document.body.clientWidth) {
+			el.style.left = `${document.body.clientWidth - width - 50 + window.scrollX}px`;
 		}
 	});
 
@@ -204,7 +208,7 @@ export function FloatButtonsPanel({
 								: { top: `${rect.bottom + window.scrollY}px` }),
 							left: `${rect.right - rect.width / 2 + window.scrollX}px`,
 						}}
-						className="z-[1] border border-base-content/10 bg-white/10 shadow backdrop-blur-md flex absolute rounded overflow-hidden -translate-x-1/4"
+						className="z-[5] border border-base-content/10 bg-white/10 shadow backdrop-blur-md flex absolute rounded overflow-hidden -translate-x-1/4"
 					>
 						{showTranslate && (
 							<FloatButton onClick={onPapagoTranslate} icon="translate" />
@@ -250,7 +254,7 @@ const AIPanel = ({
 			className="z-[5] left-0 right-0 absolute flex justify-center pointer-events-none"
 		>
 			<div
-				className={`flex backdrop-blur-md rounded-lg w-4/5 sm:w-[600px] min-h-40 max-h-96 sm:max-h-[65vh] justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
+				className={`flex backdrop-blur-xl rounded-lg w-4/5 sm:w-[600px] min-h-40 max-h-96 sm:max-h-[65vh] justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
 			>
 				<ErrorBoundary errorComponent={ErrorFallback}>
 					<SuggestionPanel promise={promise} />
@@ -288,7 +292,7 @@ const PapagoPanel = ({
 			}}
 		>
 			<div
-				className={`flex backdrop-blur-md rounded-lg w-4/5 sm:w-[400px] min-h-40 max-h-96 sm:max-h-[65vh] justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
+				className={`flex backdrop-blur-xl rounded-lg w-4/5 sm:w-[400px] min-h-40 max-h-96 sm:max-h-[65vh] justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
 			>
 				<ErrorBoundary errorComponent={ErrorFallback}>
 					<PapagoResult promise={promise} onSearch={onSearch} />

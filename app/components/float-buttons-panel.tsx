@@ -292,7 +292,7 @@ const PapagoPanel = ({
 			}}
 		>
 			<div
-				className={`flex backdrop-blur-xl rounded-lg w-4/5 sm:w-[400px] min-h-40 max-h-96 sm:max-h-[65vh] justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
+				className={`flex backdrop-blur-xl rounded-lg w-[60vw] sm:w-[400px] min-h-40 max-h-96 sm:max-h-[65vh] justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
 			>
 				<ErrorBoundary errorComponent={ErrorFallback}>
 					<PapagoResult promise={promise} onSearch={onSearch} />

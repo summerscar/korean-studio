@@ -42,7 +42,7 @@ export async function GET() {
 			type: ["video"],
 			order: "viewCount",
 			publishedAfter: twentyFourHoursAgo,
-			maxResults: 1,
+			maxResults: 5,
 			videoDuration: "short",
 		});
 
@@ -71,11 +71,16 @@ export async function GET() {
 					publishedAt: item.snippet?.publishedAt,
 					viewCount: Number(videoStats?.viewCount || 0),
 					thumbnailUrl: item.snippet?.thumbnails?.high?.url,
+					liveBroadcastContent: fullSnippet?.liveBroadcastContent,
 				};
 			}),
 		);
+
 		// Filter out null results and sort by view count
-		const mostViewedVideo = videos[0];
+		const mostViewedVideo = videos.filter(
+			(video) => video?.liveBroadcastContent !== "live",
+		)[0];
+
 		if (!mostViewedVideo) {
 			throw new Error("No mostViewedVideo video found");
 		}

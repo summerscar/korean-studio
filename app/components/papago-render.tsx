@@ -15,7 +15,7 @@ const PapagoResult = ({
 			fallback={
 				<img
 					src="/img/papago.png"
-					className="size-24 animate-pulse self-center opacity-80"
+					className="size-24 animate-pulse self-center opacity-80 object-contain"
 					alt="Papago"
 				/>
 			}

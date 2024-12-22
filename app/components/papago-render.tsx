@@ -77,7 +77,9 @@ const PapagoResultRender = ({
 							{item.pos.map((posItem, posIndex) => (
 								// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 								<li key={posIndex} className="mb-1 last:mb-0 text-sm">
-									{posItem.type}
+									<span className="rounded-box bg-slate-200/40 px-2">
+										{posItem.type}
+									</span>
 									<ul>
 										{posItem.meanings.map((meaning, meaningIndex) => (
 											// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
@@ -89,6 +91,15 @@ const PapagoResultRender = ({
 														__html: meaning.meaning,
 													}}
 												/>
+												{meaning.examples?.map((example) => (
+													<div key={example.text} className="pl-4 text-sm">
+														<p
+															// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+															dangerouslySetInnerHTML={{ __html: example.text }}
+														/>
+														<p>{example.translatedText}</p>
+													</div>
+												))}
 											</li>
 										))}
 									</ul>

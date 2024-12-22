@@ -41,7 +41,10 @@ export const currentModel = () =>
 	process.env.GPT_MODEL ||
 	(isOpenAi() ? "gpt-3.5-turbo" : isGemini() ? "gemini-1.5-flash" : "");
 
-async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
+async function fetchChatCompletion(
+	messages: ChatCompletionMessageParam[],
+	search = false,
+) {
 	if (isOpenAi()) {
 		const model = currentModel();
 		// TODO:  response_format
@@ -67,7 +70,7 @@ async function fetchChatCompletion(messages: ChatCompletionMessageParam[]) {
 				const geminiModel = geminiAI.getGenerativeModel({
 					model,
 					// @ts-ignore
-					// tools: [{ googleSearch: {} }],
+					tools: [search ? { googleSearch: {} } : undefined],
 				});
 				const result = await geminiModel.generateContent(
 					messages.map((message) => message.content as string),

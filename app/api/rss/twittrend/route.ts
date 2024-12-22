@@ -44,23 +44,24 @@ export async function GET() {
 					return $(cur).text();
 				});
 
-			const res = await fetchChatCompletion([
-				{
-					role: "user",
-					content: `为下面的推特热搜词条生成总结,,这些词条间没有关系: ${trends.join(
-						", ",
-					)}.请使用 ${"zh-CN"} 语言。`,
-				},
-			]);
+			const res = await fetchChatCompletion(
+				[
+					{
+						role: "user",
+						content: `下面的词条是今天的推特热搜词条，为这些词条生成总结（围绕该词条正在讨论什么），这些词条间没有关系: ${trends.join(
+							", ",
+						)}.请使用 ${"zh-CN"} 语言。`,
+					},
+				],
+				true,
+			);
 
 			el.find(".box-body").prepend(`<div class="summary">${marked(res)}</div>`);
 		};
 
 		const trendsNowJP = $JP("#now");
-		await process(trendsNowJP, $JP);
-
 		const trendsNowKR = $KR("#now");
-		await process(trendsNowKR, $KR);
+		await Promise.all([process(trendsNowJP, $JP), process(trendsNowKR, $KR)]);
 
 		const desc = `<div style="display: flex; flex-direction: row; justify-content: space-between;">
 		<div><a href="https://twittrend.jp/">Home page 🇯🇵</a>${trendsNowJP.html()}</div><div><a href="https://twittrend.net/">Home page 🇰🇷</a>${trendsNowKR.html()}</div>

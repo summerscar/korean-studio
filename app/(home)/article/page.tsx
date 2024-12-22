@@ -3,6 +3,7 @@ import { RenderMDTextServer } from "@/components/render-md-server";
 import { notoKR } from "@/utils/fonts";
 import { getTranslations } from "next-intl/server";
 import { Link } from "next-view-transitions";
+import { ArticleRemove } from "./[slug]/_components/article-remove";
 
 export const generateMetadata = async () => {
 	const tHeader = await getTranslations("Header");
@@ -26,7 +27,9 @@ const ArticlePage = async () => {
 						key={article.id}
 						className="card shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 !rounded-xl backdrop-blur-lg bg-white/10"
 					>
-						<figure>
+						<figure
+							style={{ viewTransitionName: `article-image-${article.id}` }}
+						>
 							<Link
 								key={article.id}
 								href={`/article/${article.id}`}
@@ -37,7 +40,6 @@ const ArticlePage = async () => {
 									src={article.poster || "/icon"}
 									alt="poster"
 									className="w-full aspect-video object-cover rounded-lg"
-									style={{ viewTransitionName: `article-image-${article.id}` }}
 								/>
 							</Link>
 						</figure>
@@ -60,6 +62,7 @@ const ArticlePage = async () => {
 								<RenderMDTextServer text={article.description} />
 							</div>
 						</div>
+						<ArticleRemove id={article.id} />
 					</div>
 				))}
 			</div>

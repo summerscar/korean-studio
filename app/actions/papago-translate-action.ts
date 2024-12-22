@@ -71,7 +71,7 @@ function authorization(url: string, uuid: string) {
 
 interface Meaning {
 	meaning: string;
-	examples: string[];
+	examples: Example[];
 	originalMeaning: string;
 }
 
@@ -80,42 +80,20 @@ interface Po {
 	meanings: Meaning[];
 }
 
-interface Item {
-	entry: string;
-	subEntry?: string | null;
-	matchType: string;
-	hanjaEntry: string | null;
-	phoneticSigns: PhoneticSign[];
-	pos: Po[];
-	source: string;
-	url: string;
-	mUrl: string;
-	expDicTypeForm: string;
-	locale: string;
-	gdid: string;
-	expEntrySuperscript: string;
+interface Example {
+	text: string;
+	translatedText: string;
 }
 
 interface Dict {
 	items?: Item[];
-	examples: string[];
+	examples: Example[];
 	isWordType: boolean;
 }
 
 interface PhoneticSign {
 	type: null;
 	sign: string;
-}
-
-interface Meaning {
-	meaning: string;
-	examples: string[];
-	originalMeaning: string;
-}
-
-interface Po {
-	type: string;
-	meanings: Meaning[];
 }
 
 interface Item {
@@ -136,13 +114,8 @@ interface Item {
 
 interface TarDict {
 	items: Item[];
-	examples: string[];
+	examples: Example[];
 	isWordType: boolean;
-}
-
-interface TlitResult {
-	token: string;
-	phoneme: string;
 }
 
 interface Message {
@@ -156,10 +129,6 @@ interface TlitSrc {
 interface TlitResult {
 	token: string;
 	phoneme: string;
-}
-
-interface Message {
-	tlitResult: TlitResult[];
 }
 
 interface Tlit {

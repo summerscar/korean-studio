@@ -1,5 +1,5 @@
 import { timeOut } from "@/utils/time-out";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, type Tool } from "@google/generative-ai";
 import { config as envConfig } from "dotenv";
 import OpenAI from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
@@ -67,16 +67,21 @@ async function fetchChatCompletion(
 		while (retryCount < maxRetries) {
 			try {
 				const geminiAI = getGeminiInstance();
+				const tools: Tool[] = [];
+				// @ts-ignore
+				search && tools.push({ googleSearch: {} });
 				const geminiModel = geminiAI.getGenerativeModel({
 					model,
 					// @ts-ignore
-					tools: [search ? { googleSearch: {} } : undefined],
+					tools,
 				});
 				const result = await geminiModel.generateContent(
 					messages.map((message) => message.content as string),
 				);
 				console.log(
-					`[AI][Gemini][${model}]: use ${result.response.usageMetadata?.totalTokenCount} tokens.`,
+					`[AI][Gemini][${model}]: use ${result.response.usageMetadata?.totalTokenCount} tokens. Tools: ${JSON.stringify(
+						tools,
+					)}`,
 				);
 				return result.response.text();
 				// biome-ignore lint/suspicious/noExplicitAny: <explanation>

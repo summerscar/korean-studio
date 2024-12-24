@@ -93,10 +93,17 @@ const PapagoResultRender = ({
 												/>
 												{meaning.examples?.map((example) => (
 													<div key={example.text} className="pl-4 text-sm">
-														<p
-															// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-															dangerouslySetInnerHTML={{ __html: example.text }}
-														/>
+														<p>
+															<span
+																// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+																dangerouslySetInnerHTML={{
+																	__html: example.text,
+																}}
+															/>
+															<Pronunciation
+																text={example.text.replace(/<[^>]*>/g, "")}
+															/>
+														</p>
 														<p>{example.translatedText}</p>
 													</div>
 												))}

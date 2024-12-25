@@ -13,6 +13,7 @@ const createToast = ({
 }) => {
 	const toastWrapper = getToastWrapper();
 	const toastEl = document.createElement("div");
+	const { promise, resolve } = Promise.withResolvers();
 	toastEl.className = `alert alert-${type} !text-white`;
 
 	import("react-dom/server")
@@ -20,10 +21,11 @@ const createToast = ({
 		.then((renderToString) => {
 			toastEl.innerHTML = renderToString(message);
 			toastWrapper?.appendChild(toastEl);
+			resolve("");
 		});
 
 	let unmount = () => {
-		toastWrapper?.removeChild(toastEl);
+		promise.then(() => toastWrapper?.removeChild(toastEl));
 		unmount = () => {};
 	};
 	const timeout = setTimeout(() => unmount(), delay);

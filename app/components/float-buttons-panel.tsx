@@ -35,6 +35,7 @@ const SuggestionPanel = dynamic(
 		loading: () => <span className="loading loading-ring loading-lg" />,
 	},
 );
+let _lastSelectCache: string | undefined;
 
 interface FloatButtonsPanelProps {
 	getRect: () => DOMRect;
@@ -87,13 +88,16 @@ export function FloatButtonsPanel({
 		if (selectedText) {
 			const dictId = (await callModal({
 				type: "select",
-				title: "Select Dict to add",
+				title: `Select Dict to add 【${selectedText}】`,
 				options: dictList.map((dict) => ({
 					value: dict.id,
 					label: dict.name,
 				})),
+				inputDefaultValue: dictList.find((dict) => dict.id === _lastSelectCache)
+					?.id,
 			})) as string;
 			if (!dictId) return;
+			_lastSelectCache = dictId;
 			const word = selectedText.trim();
 			const removeInfoToast = createLoadingToast(translate("Home.generating"));
 

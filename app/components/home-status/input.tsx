@@ -73,14 +73,6 @@ const HomeInput = ({
 		}
 	}, [currentInputKeys, onInput]);
 
-	useHotkeys(
-		["enter"],
-		() => {
-			handleInputFocus();
-		},
-		[],
-	);
-
 	useEventListener(
 		"blur",
 		() => {

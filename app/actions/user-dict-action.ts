@@ -271,6 +271,20 @@ const refreshDictAction = async (dictId: string) => {
 	revalidateTag(getDictRevalidateKey(dictId));
 };
 
+const getDictItemsByUserAction = async (userId: string) => {
+	const session = await auth();
+	const ctx = KSwithSession(session);
+	const res = await ctx.query.DictItem.findMany({
+		where: {
+			createdBy: { id: { equals: userId } },
+			dict: { some: { id: { not: null } } },
+		},
+		query: "id name",
+	});
+
+	return toPlainObject(res) as DictItem[];
+};
+
 export {
 	createDictAction,
 	createFavListAction,
@@ -287,4 +301,5 @@ export {
 	removeDictAction,
 	importDictItemToUserDict,
 	refreshDictAction,
+	getDictItemsByUserAction,
 };

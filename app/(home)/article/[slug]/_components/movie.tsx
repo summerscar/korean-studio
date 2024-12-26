@@ -1,5 +1,6 @@
 "use client";
 import { mapForLocale } from "@/components/footer/i18n-switcher";
+import { HighLightedDictItems } from "@/components/high-lighted-dict-items";
 import { useSelectToSearch } from "@/hooks/use-select-to-search";
 import {
 	type SubtitleCue,
@@ -381,7 +382,7 @@ const ArticleRender = memo(
 										style={{ fontFamily: notoKR.style.fontFamily }}
 										lang="ko"
 									>
-										{cue.text}
+										<HighLightedDictItems>{cue.text}</HighLightedDictItems>
 									</p>
 									{sceneIndex === 0 && !subtitles[selectedLanguage] && loading}
 									{matchingSubtitle && (

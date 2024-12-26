@@ -1,6 +1,7 @@
 "use client";
 import { papagoTranslateAction } from "@/actions/papago-translate-action";
 import TranslateIcon from "@/assets/svg/translate.svg";
+import { HighLightedDictItems } from "@/components/high-lighted-dict-items";
 import { useServerActionState } from "@/hooks/use-server-action-state";
 import { notoKR } from "@/utils/fonts";
 import { isKorean } from "@/utils/is-korean";
@@ -12,6 +13,7 @@ const TranslateParagraph = ({
 	...props
 }: { children: React.ReactNode }) => {
 	const locale = useLocale();
+
 	const text = typeof children === "string" ? children : "";
 	const isKoreanText = isKorean(text);
 
@@ -48,7 +50,7 @@ const TranslateParagraph = ({
 				lang="ko"
 				{...props}
 			>
-				{children}
+				<HighLightedDictItems>{children}</HighLightedDictItems>
 			</p>
 			{data && (
 				<p

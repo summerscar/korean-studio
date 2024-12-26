@@ -1,4 +1,5 @@
 import { refreshDictAction } from "@/actions/user-dict-action";
+import { refreshSWRUserDictItems } from "@/components/high-lighted-dict-items";
 import { usePushNotificationEvents } from "@/hooks/use-push-notification-events";
 import { createToast } from "@/hooks/use-toast";
 import { useMemoizedFn } from "ahooks";
@@ -12,6 +13,7 @@ const useNewNotification = (dictId: string) => {
 		if (payload?.data?.dictId === dictId) {
 			createToast({ type: "info", message: tHome("newWordDetected") });
 			await refreshDictAction(dictId);
+			refreshSWRUserDictItems();
 		}
 	});
 

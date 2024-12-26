@@ -3,18 +3,14 @@ import {
 	type TranslateResult,
 	papagoTranslateAction,
 } from "@/actions/papago-translate-action";
-import { addWordsToUserDictAction } from "@/actions/user-dict-action";
 import { FloatButton } from "@/components/float-button";
 import { callModal } from "@/components/modal";
 import { PapagoResult } from "@/components/papago-render";
 import { ErrorFallback } from "@/components/suspend-error-fallback";
 import { useUserDictList } from "@/hooks/use-dict-list";
-import {
-	createErrorToast,
-	createLoadingToast,
-	createSuccessToast,
-} from "@/hooks/use-toast";
+import {} from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
+import { addWordsToUserDict } from "@/service/add-words-to-user-dict";
 import type { SITES_LANGUAGE } from "@/types/site";
 import { timeOut } from "@/utils/time-out";
 import { useMemoizedFn } from "ahooks";
@@ -99,18 +95,7 @@ export function FloatButtonsPanel({
 			if (!dictId) return;
 			_lastSelectCache = dictId;
 			const word = selectedText.trim();
-			const removeInfoToast = createLoadingToast(translate("Home.generating"));
-
-			try {
-				await addWordsToUserDictAction(dictId, [word]);
-				createSuccessToast(translate("Home.generated"));
-				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-			} catch (error: any) {
-				console.error(`[createWord][${word}]:\n`, error);
-				createErrorToast(translate("Home.generateError"));
-			} finally {
-				removeInfoToast();
-			}
+			addWordsToUserDict(dictId, [word], translate);
 		}
 	});
 

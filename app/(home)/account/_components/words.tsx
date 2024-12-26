@@ -1,6 +1,5 @@
 "use client";
 import {
-	addWordsToUserDictAction,
 	createDictAction,
 	removeDictAction,
 	removeDictItemAction,
@@ -17,6 +16,7 @@ import {
 	createLoadingToast,
 	createSuccessToast,
 } from "@/hooks/use-toast";
+import { addWordsToUserDict } from "@/service/add-words-to-user-dict";
 import type { Dict, DictItem, UserDicts } from "@/types/dict";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
@@ -39,6 +39,7 @@ const WordsList = ({
 }) => {
 	const router = useRouter();
 	const tHome = useTranslations("Home");
+	const translate = useTranslations();
 	const tAccount = useTranslations("Account");
 
 	const [editing, setEditing] = useState<DictItem>();
@@ -85,20 +86,9 @@ const WordsList = ({
 			message: `${tHome("createWord")}`,
 		})) as string | undefined;
 		if (word) {
-			const removeInfoToast = createLoadingToast(tHome("generating"));
+			const words = word.split(/[,，、]+/).map((_) => _.trim());
 
-			try {
-				const words = word.split(/[,，、]+/).map((_) => _.trim());
-				await addWordsToUserDictAction(dictInfo!.id, words);
-				await onUpdate?.();
-				createSuccessToast(tHome("generated"));
-				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-			} catch (error: any) {
-				console.error(`[createWord][${word}]:\n`, error);
-				createErrorToast(tHome("generateError"));
-			} finally {
-				removeInfoToast();
-			}
+			await addWordsToUserDict(dictInfo!.id, words, translate, onUpdate);
 		}
 	};
 

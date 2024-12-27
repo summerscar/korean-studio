@@ -92,10 +92,8 @@ function CallableModal({
 						{options?.map((option) => (
 							<label
 								key={option.value}
-								className={`btn w-full hover:bg-slate-400/30 ${
-									inputValue === option.value
-										? "btn !btn-active"
-										: "bg-base-100"
+								className={`btn w-full bg-base-100 dark:border-slate-400/30 dark:hover:border-slate-400/30 hover:bg-slate-300/30 ${
+									inputValue === option.value ? "bg-slate-400/30" : ""
 								}`}
 							>
 								<input
@@ -113,7 +111,7 @@ function CallableModal({
 				)}
 				<div className="flex justify-end gap-2 sm:gap-4 pt-4">
 					<button
-						className="btn btn-md btn-active"
+						className="btn btn-md bg-slate-400/30"
 						type="button"
 						onClick={handleOK}
 					>

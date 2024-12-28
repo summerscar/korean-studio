@@ -1,13 +1,11 @@
 import { generateWordSuggestionAction } from "@/actions/generate-word-action";
-import {
-	type TranslateResult,
-	papagoTranslateAction,
-} from "@/actions/papago-translate-action";
+import { papagoTranslateAction } from "@/actions/papago-translate-action";
 import { FloatButton } from "@/components/float-button";
 import { callModal } from "@/components/modal";
-import { PapagoResult } from "@/components/papago-render";
+import { PapagoPanel } from "@/components/papago-render";
 import { ErrorFallback } from "@/components/suspend-error-fallback";
 import { useUserDictList } from "@/hooks/use-dict-list";
+import { usePanelReposition } from "@/hooks/use-panel-reposition";
 import {} from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
 import { addWordsToUserDict } from "@/service/add-words-to-user-dict";
@@ -18,7 +16,7 @@ import { signIn } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
 const SuggestionPanel = dynamic(
@@ -62,7 +60,6 @@ export function FloatButtonsPanel({
 }: FloatButtonsPanelProps) {
 	const locale = useLocale() as SITES_LANGUAGE;
 	const translate = useTranslations();
-	const observerRef = useRef<ResizeObserver>(null);
 	const { isLogin } = useUser();
 	const dictList = useUserDictList({ filterFav: true });
 	const [showAIPanel, setShowAIPanel] = useState(false);
@@ -99,17 +96,6 @@ export function FloatButtonsPanel({
 		}
 	});
 
-	const onPapagoSearch = () => {
-		if (selectedText) {
-			const papagoUrl = `https://papago.naver.com/?sk=ko&tk=${locale}&st=${encodeURIComponent(selectedText)}`;
-			window.open(
-				papagoUrl,
-				"PapagoSearch",
-				"width=400,height=600,left=150,top=150",
-			);
-		}
-	};
-
 	const onCopy = async () => {
 		try {
 			await navigator.clipboard.writeText(selectedText);
@@ -143,29 +129,6 @@ export function FloatButtonsPanel({
 		return spaceBelow < 300 && spaceAbove > spaceBelow;
 	}, [showNewPanel, rect]);
 
-	const onResize = useMemoizedFn((entries: ResizeObserverEntry[]) => {
-		const el = entries[0].target as HTMLDivElement;
-		const { height, bottom, right, width } = el.getBoundingClientRect();
-		if (showAbove) {
-			el.style.top = `${rect.top - height + window.scrollY}px`;
-		} else {
-			if (bottom + window.scrollY > document.body.clientHeight) {
-				el.style.top = `${rect.top - height + window.scrollY}px`;
-			}
-		}
-
-		if (right + window.scrollX > document.body.clientWidth) {
-			el.style.left = `${document.body.clientWidth - width - 50 + window.scrollX}px`;
-		}
-	});
-
-	useEffect(() => {
-		observerRef.current = new ResizeObserver(onResize);
-		return () => {
-			observerRef.current?.disconnect();
-		};
-	}, [onResize]);
-
 	// 只需要在 showNewPanel 时，渲染一次
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	const panel = useMemo(
@@ -173,7 +136,6 @@ export function FloatButtonsPanel({
 			<div ref={ref} data-ignore-click-away="true">
 				{showAIPanel ? (
 					<AIPanel
-						observerRef={observerRef}
 						// promise={Promise.resolve("12345")}
 						promise={generateWordSuggestionAction(
 							prompt!(selectedText, locale),
@@ -184,10 +146,8 @@ export function FloatButtonsPanel({
 				) : showPapagoPanel ? (
 					<PapagoPanel
 						promise={papagoTranslateAction(selectedText, locale)}
-						onSearch={onPapagoSearch}
 						rect={rect}
 						showAbove={showAbove}
-						observerRef={observerRef}
 					/>
 				) : (
 					<div
@@ -218,25 +178,18 @@ export function FloatButtonsPanel({
 }
 
 const AIPanel = ({
-	observerRef,
 	showAbove,
 	rect,
 	promise,
 }: {
-	observerRef: React.RefObject<ResizeObserver | null>;
-	ref?: React.RefObject<HTMLDivElement>;
 	showAbove: boolean;
 	rect: DOMRect;
 	promise: Promise<string>;
 }) => {
+	const observerRef = usePanelReposition({ showAbove, rect });
 	return (
 		<div
-			ref={(el) => {
-				if (el) {
-					observerRef?.current?.observe(el);
-					return () => observerRef.current?.unobserve(el);
-				}
-			}}
+			ref={observerRef}
 			style={{
 				top: `${showAbove ? rect.top - 160 + window.scrollY : rect.bottom + window.scrollY}px`,
 			}}
@@ -247,44 +200,6 @@ const AIPanel = ({
 			>
 				<ErrorBoundary errorComponent={ErrorFallback}>
 					<SuggestionPanel promise={promise} />
-				</ErrorBoundary>
-			</div>
-		</div>
-	);
-};
-
-const PapagoPanel = ({
-	showAbove,
-	rect,
-	promise,
-	onSearch,
-	observerRef,
-}: {
-	observerRef: React.RefObject<ResizeObserver | null>;
-	showAbove: boolean;
-	rect: DOMRect;
-	promise: Promise<TranslateResult>;
-	onSearch: () => void;
-}) => {
-	return (
-		<div
-			style={{
-				top: `${showAbove ? rect.top - 160 + window.scrollY : rect.bottom + window.scrollY}px`,
-				left: `${rect.right - rect.width / 2 + window.scrollX}px`,
-			}}
-			className="z-[5] absolute flex justify-center pointer-events-none"
-			ref={(el) => {
-				if (el) {
-					observerRef?.current?.observe(el);
-					return () => observerRef.current?.unobserve(el);
-				}
-			}}
-		>
-			<div
-				className={`flex backdrop-blur-xl rounded-lg w-[60vw] sm:w-[400px] min-h-40 max-h-96 sm:max-h-[65vh] justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
-			>
-				<ErrorBoundary errorComponent={ErrorFallback}>
-					<PapagoResult promise={promise} onSearch={onSearch} />
 				</ErrorBoundary>
 			</div>
 		</div>

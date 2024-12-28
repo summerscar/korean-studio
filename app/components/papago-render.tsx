@@ -2,44 +2,48 @@ import type {
 	TranslateResult,
 	papagoTranslateAction,
 } from "@/actions/papago-translate-action";
+import { Pronunciation } from "@/components/pronunciation";
+import { ErrorFallback } from "@/components/suspend-error-fallback";
+import { usePanelReposition } from "@/hooks/use-panel-reposition";
 import { SelectToSearch } from "@/hooks/use-select-to-search";
+import { papagoWebSearch } from "@/service/papago-web-search";
+import type { SITES_LANGUAGE } from "@/types/site";
+import { useLocale } from "next-intl";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Suspense, use } from "react";
-import { Pronunciation } from "./pronunciation";
 
-const PapagoResult = ({
-	promise,
-	onSearch,
-}: { promise: Promise<TranslateResult>; onSearch?: () => void }) => {
+const PapagoResult = ({ promise }: { promise: Promise<TranslateResult> }) => {
 	return (
-		<Suspense
-			fallback={
-				<img
-					src="/img/papago.png"
-					className="size-24 animate-pulse self-center opacity-80 object-contain"
-					alt="Papago"
-				/>
-			}
-		>
-			<PapagoPromise promise={promise} onSearch={onSearch} />
-		</Suspense>
+		<ErrorBoundary errorComponent={ErrorFallback}>
+			<Suspense
+				fallback={
+					<img
+						src="/img/papago.png"
+						className="size-24 animate-pulse self-center opacity-80 object-contain"
+						alt="Papago"
+					/>
+				}
+			>
+				<PapagoPromise promise={promise} />
+			</Suspense>
+		</ErrorBoundary>
 	);
 };
 
-const PapagoPromise = ({
-	promise,
-	onSearch,
-}: { promise: Promise<TranslateResult>; onSearch?: () => void }) => {
+const PapagoPromise = ({ promise }: { promise: Promise<TranslateResult> }) => {
 	const res = use(promise);
-	return <PapagoResultRender data={res} onSearch={onSearch} />;
+	return <PapagoResultRender data={res} />;
 };
 
 const PapagoResultRender = ({
 	data,
-	onSearch,
 }: {
 	data: Awaited<ReturnType<typeof papagoTranslateAction>>;
-	onSearch?: () => void;
 }) => {
+	const locale = useLocale();
+	const onSearch = () => {
+		papagoWebSearch(data.text, locale as SITES_LANGUAGE);
+	};
 	return (
 		<SelectToSearch
 			showAdd
@@ -69,7 +73,10 @@ const PapagoResultRender = ({
 								// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 								dangerouslySetInnerHTML={{ __html: item.entry }}
 							/>
-							<Pronunciation text={item.entry.replace(/<b>(.+)<\/b>/, "$1")} />
+							<Pronunciation
+								text={item.entry.replace(/<b>(.+)<\/b>/, "$1")}
+								tooltip
+							/>
 							{item.hanjaEntry && (
 								<span className="text-sm text-base-content/60 pl-2">
 									[{item.hanjaEntry}]
@@ -123,4 +130,43 @@ const PapagoResultRender = ({
 	);
 };
 
-export { PapagoResult };
+const PapagoPanel = ({
+	showAbove,
+	rect,
+	promise,
+	ref,
+}: {
+	showAbove: boolean;
+	rect: DOMRect;
+	promise: Promise<TranslateResult>;
+	ref?: React.RefObject<HTMLDivElement | null>;
+}) => {
+	const observerRef = usePanelReposition({ showAbove, rect });
+	return (
+		<div
+			style={{
+				top: `${showAbove ? rect.top - 160 + window.scrollY : rect.bottom + window.scrollY}px`,
+				left: `${rect.right - rect.width / 2 + window.scrollX}px`,
+			}}
+			className="z-[5] absolute flex justify-center pointer-events-none"
+			ref={(el) => {
+				if (el) {
+					ref && (ref.current = el);
+					observerRef.current = el;
+					return () => {
+						observerRef.current = null;
+						ref && (ref.current = null);
+					};
+				}
+			}}
+		>
+			<div
+				className={`flex backdrop-blur-xl rounded-lg w-[60vw] sm:w-[400px] min-h-40 max-h-96 sm:max-h-[65vh] justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
+			>
+				<PapagoResult promise={promise} />
+			</div>
+		</div>
+	);
+};
+
+export { PapagoResult, PapagoPanel };

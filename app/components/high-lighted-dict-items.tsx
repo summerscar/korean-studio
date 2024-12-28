@@ -1,4 +1,5 @@
 import { getDictItemsByUserAction } from "@/actions/user-dict-action";
+import { NotableText } from "@/components/notable-text";
 import { useUser } from "@/hooks/use-user";
 import { timeOut } from "@/utils/time-out";
 import { memo, useEffect, useState } from "react";
@@ -33,12 +34,7 @@ const useHighlightedDictItems = (text: string | React.ReactNode, wait = 0) => {
 				const replacedText = dictItems.reduce(
 					(acc, cur) => {
 						return reactStringReplace(acc, cur.name, (match, index) => (
-							<span
-								key={`${cur.id}-${index}`}
-								className="bg-yellow-200/80 dark:bg-slate-600 inline-block rounded-sm"
-							>
-								{match}
-							</span>
+							<NotableText key={`${cur.id}-${index}`}>{match}</NotableText>
 						));
 					},
 					[text] as React.ReactNode[],

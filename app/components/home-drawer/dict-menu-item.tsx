@@ -1,4 +1,3 @@
-import SearchIcon from "@/assets/svg/search.svg";
 import StarIcon from "@/assets/svg/star.svg";
 import TrashIcon from "@/assets/svg/trash.svg";
 import { useStarred } from "@/components/home-status/star";
@@ -62,19 +61,6 @@ const DictMenuItem = ({
 						<TrashIcon className="w-4 h-4" />
 					</div>
 				)}
-				<div
-					className="absolute -bottom-2 -right-1 btn-circle btn btn-xs items-center justify-center opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity shadow-md"
-					onClick={(e) => {
-						e.stopPropagation();
-						window.open(
-							`https://papago.naver.com/?sk=ko&tk=${locale}&st=${item.name}`,
-							"mini",
-							"left=150, top=150, width=400, height=600, toolbar=no, scrollbars=yes, status=no, resizable=yes",
-						);
-					}}
-				>
-					<SearchIcon className="w-4 h-4" />
-				</div>
 			</div>
 		</li>
 	);

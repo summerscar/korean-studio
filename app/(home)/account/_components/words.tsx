@@ -17,7 +17,9 @@ import {
 	createSuccessToast,
 } from "@/hooks/use-toast";
 import { addWordsToUserDict } from "@/service/add-words-to-user-dict";
+import { papagoWebSearch } from "@/service/papago-web-search";
 import type { Dict, DictItem, UserDicts } from "@/types/dict";
+import type { SITES_LANGUAGE } from "@/types/site";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -143,11 +145,7 @@ const WordsList = ({
 	};
 
 	const handleSearch = async (dictItem: DictItem) => {
-		window.open(
-			`https://papago.naver.com/?sk=ko&tk=${locale}&st=${dictItem.name}`,
-			"mini",
-			"left=150, top=150, width=400, height=600, toolbar=no, scrollbars=yes, status=no, resizable=yes",
-		);
+		papagoWebSearch(dictItem.name, locale as SITES_LANGUAGE);
 	};
 
 	if (!dictInfo)

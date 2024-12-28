@@ -9,11 +9,12 @@ const usePanelReposition = ({
 	rect: DOMRect;
 }) => {
 	const observerRef = useRef<HTMLDivElement>(null);
+	const showAboveRef = useRef(showAbove);
 
 	const onResize = useMemoizedFn((entries: ResizeObserverEntry[]) => {
 		const el = entries[0].target as HTMLDivElement;
 		const { height, bottom, right, width } = el.getBoundingClientRect();
-		if (showAbove) {
+		if (showAboveRef.current) {
 			el.style.top = `${rect.top - height + window.scrollY}px`;
 		} else {
 			// 从下面(超出文档高度)修正到上面
@@ -23,6 +24,7 @@ const usePanelReposition = ({
 			} */
 			if (bottom > window.innerHeight) {
 				el.style.top = `${rect.top - height + window.scrollY}px`;
+				showAboveRef.current = true;
 			}
 		}
 

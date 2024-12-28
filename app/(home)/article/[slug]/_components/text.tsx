@@ -5,6 +5,7 @@ import { TranslateParagraph } from "./translate-paragraph";
 
 const Text = ({ content }: { content: string }) => {
 	const resolvedContent = content.replace("frameborder", "frameBorder");
+	let paragraphIndex = 0;
 
 	return (
 		<SelectToSearch showAdd prompt="sentence">
@@ -13,7 +14,10 @@ const Text = ({ content }: { content: string }) => {
 				className={clsx("pt-2")}
 				mdComponents={{
 					p: (props: { children: React.ReactNode }) => (
-						<TranslateParagraph {...props} />
+						<TranslateParagraph
+							{...props}
+							data-paragraph-index={paragraphIndex++}
+						/>
 					),
 				}}
 			/>

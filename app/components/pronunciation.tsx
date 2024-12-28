@@ -2,12 +2,12 @@
 import SpeakerSVG from "@/assets/svg/speaker.svg";
 import { usePronunciation } from "@/hooks/use-pronunciation";
 import clsx from "clsx";
-import { romanize } from "es-hangul";
+import { romanize, standardizePronunciation } from "es-hangul";
 import type { ComponentProps, RefObject } from "react";
 
 const Pronunciation = ({
 	playRef,
-	preload = true,
+	preload = false,
 	text,
 	children,
 	tooltip = false,
@@ -51,14 +51,16 @@ const Pronunciation = ({
 			{...rest}
 		/>
 	);
-
+	const standardized = standardizePronunciation(targetText, {
+		hardConversion: true,
+	});
 	return (
 		<>
 			{children}{" "}
 			{tooltip && targetText.length < 10 ? (
 				<span
 					className="tooltip inline-flex"
-					data-tip={tooltipText || romanize(targetText)}
+					data-tip={tooltipText || `[${standardized}] ${romanize(targetText)}`}
 				>
 					{speakerEl}
 				</span>

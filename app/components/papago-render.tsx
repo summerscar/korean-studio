@@ -47,6 +47,9 @@ const PapagoResultRender = ({
 			className="w-full h-fit p-2 sm:p-4"
 		>
 			<div className="text-xl">
+				<p className="text-xs text-base-content/50 mb-1 pl-1 border-l-4 border-base-content/50">
+					{data.text}
+				</p>
 				{data.translatedText}
 				<img
 					onClick={onSearch}

@@ -45,7 +45,9 @@ export const papagoTranslateAction = async (
 	if (response.status !== 200) {
 		throw new Error((await response.text()) || response.statusText);
 	}
-	return await response.json();
+	const result = await response.json();
+	result.text = text;
+	return result;
 };
 
 function uuid() {
@@ -145,6 +147,7 @@ interface LangDetection {
 }
 
 export interface TranslateResult {
+	text: string;
 	dict: Dict;
 	tarDict: TarDict;
 	delay: number;

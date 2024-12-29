@@ -64,9 +64,11 @@ const loading = (
 export function ArticleMovie({
 	defaultSubtitleCues,
 	subtitleSeries,
+	articleId,
 }: {
 	defaultSubtitleCues: SubtitleCues;
 	subtitleSeries: SubtitleSeries;
+	articleId: string;
 }) {
 	const locale = useLocale() as SITES_LANGUAGE;
 	const tArticle = useTranslations("Article");
@@ -89,6 +91,7 @@ export function ArticleMovie({
 	const [containerRef, panel] = useSelectToSearch({
 		prompt: generateSentenceSuggestionPrompt,
 		showAdd: true,
+		showAnnotate: true,
 	});
 
 	useMount(async () => {
@@ -296,6 +299,8 @@ export function ArticleMovie({
 				loading
 			) : (
 				<ArticleRender
+					articleId={articleId}
+					chapterId={epIndex.toString()}
 					ref={containerRef as RefObject<HTMLDivElement | null>}
 					scenes={scenes}
 					subtitles={subtitles}
@@ -320,12 +325,16 @@ const ArticleRender = memo(
 		selectedLanguage,
 		viewMode,
 		ref,
+		articleId,
+		chapterId,
 	}: {
 		scenes: SubtitleCue[][];
 		subtitles: SubtitleData;
 		selectedLanguage: SubtitleLanguage;
 		viewMode: "side-by-side" | "vertical";
 		ref: React.RefObject<HTMLDivElement | null>;
+		articleId: string;
+		chapterId: string;
 	}) => {
 		const tArticle = useTranslations("Article");
 		const findClosestSubtitle = (
@@ -351,7 +360,7 @@ const ArticleRender = memo(
 
 			return minDiff <= 1 ? targetSubtitles[closestIndex] : null;
 		};
-
+		let paragraphIndex = 0;
 		return (
 			<article className="prose prose-lg max-w-none" ref={ref}>
 				{scenes.map((scene, sceneIndex) => (
@@ -366,7 +375,7 @@ const ArticleRender = memo(
 								subtitles.ko!.indexOf(cue),
 								selectedLanguage,
 							);
-
+							const currentParagraphIndex = paragraphIndex++;
 							return (
 								<div
 									// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
@@ -381,8 +390,15 @@ const ArticleRender = memo(
 										className="text-lg leading-relaxed m-0"
 										style={{ fontFamily: notoKR.style.fontFamily }}
 										lang="ko"
+										data-paragraph-index={currentParagraphIndex}
 									>
-										<HighLightedDictItems>{cue.text}</HighLightedDictItems>
+										<HighLightedDictItems
+											articleId={articleId}
+											chapterId={chapterId}
+											paragraphIndex={currentParagraphIndex}
+										>
+											{cue.text}
+										</HighLightedDictItems>
 									</p>
 									{sceneIndex === 0 && !subtitles[selectedLanguage] && loading}
 									{matchingSubtitle && (

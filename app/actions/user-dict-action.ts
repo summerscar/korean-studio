@@ -271,8 +271,12 @@ const refreshDictAction = async (dictId: string) => {
 	revalidateTag(getDictRevalidateKey(dictId));
 };
 
-const getDictItemsByUserAction = async (userId: string) => {
+const getDictItemsByUserAction = async () => {
 	const session = await auth();
+	const userId = session?.user?.id;
+	if (!userId) {
+		return [];
+	}
 	const ctx = KSwithSession(session);
 	const res = await ctx.query.DictItem.findMany({
 		where: {

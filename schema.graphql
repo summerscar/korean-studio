@@ -715,6 +715,105 @@ input ArticleCreateInput {
   createdBy: UserRelateToOneForCreateInput
 }
 
+type Annotation {
+  id: ID!
+  type: AnnotationTypeType
+  bookId: Article
+  chapterId: String
+  text: String
+  content: String
+  color: String
+  createdAt: DateTime
+  createdBy: User
+  updatedAt: DateTime
+  range: JSON
+}
+
+enum AnnotationTypeType {
+  NOTE
+  HIGHLIGHT
+}
+
+input AnnotationWhereUniqueInput {
+  id: ID
+}
+
+input AnnotationWhereInput {
+  AND: [AnnotationWhereInput!]
+  OR: [AnnotationWhereInput!]
+  NOT: [AnnotationWhereInput!]
+  id: IDFilter
+  type: AnnotationTypeTypeNullableFilter
+  bookId: ArticleWhereInput
+  chapterId: StringFilter
+  text: StringFilter
+  content: StringFilter
+  color: StringFilter
+  createdAt: DateTimeNullableFilter
+  createdBy: UserWhereInput
+  updatedAt: DateTimeNullableFilter
+}
+
+input AnnotationTypeTypeNullableFilter {
+  equals: AnnotationTypeType
+  in: [AnnotationTypeType!]
+  notIn: [AnnotationTypeType!]
+  not: AnnotationTypeTypeNullableFilter
+}
+
+input AnnotationOrderByInput {
+  id: OrderDirection
+  type: OrderDirection
+  chapterId: OrderDirection
+  text: OrderDirection
+  content: OrderDirection
+  color: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input AnnotationUpdateInput {
+  type: AnnotationTypeType
+  bookId: ArticleRelateToOneForUpdateInput
+  chapterId: String
+  text: String
+  content: String
+  color: String
+  createdAt: DateTime
+  createdBy: UserRelateToOneForUpdateInput
+  updatedAt: DateTime
+  range: JSON
+}
+
+input ArticleRelateToOneForUpdateInput {
+  create: ArticleCreateInput
+  connect: ArticleWhereUniqueInput
+  disconnect: Boolean
+}
+
+input AnnotationUpdateArgs {
+  where: AnnotationWhereUniqueInput!
+  data: AnnotationUpdateInput!
+}
+
+input AnnotationCreateInput {
+  type: AnnotationTypeType
+  bookId: ArticleRelateToOneForCreateInput
+  chapterId: String
+  text: String
+  content: String
+  color: String
+  createdAt: DateTime
+  createdBy: UserRelateToOneForCreateInput
+  updatedAt: DateTime
+  range: JSON
+}
+
+input ArticleRelateToOneForCreateInput {
+  create: ArticleCreateInput
+  connect: ArticleWhereUniqueInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -763,6 +862,12 @@ type Mutation {
   updateArticles(data: [ArticleUpdateArgs!]!): [Article]
   deleteArticle(where: ArticleWhereUniqueInput!): Article
   deleteArticles(where: [ArticleWhereUniqueInput!]!): [Article]
+  createAnnotation(data: AnnotationCreateInput!): Annotation
+  createAnnotations(data: [AnnotationCreateInput!]!): [Annotation]
+  updateAnnotation(where: AnnotationWhereUniqueInput!, data: AnnotationUpdateInput!): Annotation
+  updateAnnotations(data: [AnnotationUpdateArgs!]!): [Annotation]
+  deleteAnnotation(where: AnnotationWhereUniqueInput!): Annotation
+  deleteAnnotations(where: [AnnotationWhereUniqueInput!]!): [Annotation]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -807,6 +912,9 @@ type Query {
   article(where: ArticleWhereUniqueInput!): Article
   articles(where: ArticleWhereInput! = {}, orderBy: [ArticleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ArticleWhereUniqueInput): [Article!]
   articlesCount(where: ArticleWhereInput! = {}): Int
+  annotation(where: AnnotationWhereUniqueInput!): Annotation
+  annotations(where: AnnotationWhereInput! = {}, orderBy: [AnnotationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AnnotationWhereUniqueInput): [Annotation!]
+  annotationsCount(where: AnnotationWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

@@ -19,6 +19,7 @@ const useSelectToSearch = ({
 	showTranslate = true,
 	showAI = true,
 	showAdd = false,
+	showAnnotate = false,
 	clickAway = true,
 	prompt,
 }: Config = {}) => {
@@ -63,6 +64,12 @@ const useSelectToSearch = ({
 				? generateWordSuggestionPrompt
 				: prompt;
 
+	const shouldShowAnnotate = () =>
+		showAnnotate &&
+		!window.getSelection()?.isCollapsed &&
+		window.getSelection()?.getRangeAt(0).startContainer ===
+			window.getSelection()?.getRangeAt(0).endContainer;
+
 	const panel = showPanel ? (
 		<FloatButtonsPanel
 			getRect={() =>
@@ -73,6 +80,7 @@ const useSelectToSearch = ({
 			showCopy={showCopy}
 			showAI={showAI}
 			showAdd={showAdd}
+			showAnnotate={shouldShowAnnotate()}
 			prompt={promptFn}
 			onClose={() => {
 				setSelectedText("");
@@ -89,6 +97,7 @@ type Config = {
 	showAI?: boolean;
 	showAdd?: boolean;
 	clickAway?: boolean;
+	showAnnotate?: boolean;
 	prompt?:
 		| ComponentProps<typeof FloatButtonsPanel>["prompt"]
 		| "sentence"

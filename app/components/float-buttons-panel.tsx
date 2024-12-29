@@ -18,6 +18,7 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
+import { AnnotationPanel } from "./annotation-panel";
 
 const SuggestionPanel = dynamic(
 	() =>
@@ -38,6 +39,7 @@ interface FloatButtonsPanelProps {
 	showCopy?: boolean;
 	showAI?: boolean;
 	showAdd?: boolean;
+	showAnnotate?: boolean;
 	position?: "top" | "bottom";
 	onClose?: () => void;
 	prompt?: (word: string, locale: SITES_LANGUAGE) => string;
@@ -52,6 +54,7 @@ export function FloatButtonsPanel({
 	showCopy = true,
 	showAI = true,
 	showAdd = false,
+	showAnnotate = false,
 	onClose,
 	onNewPanel,
 	position = "bottom",
@@ -64,7 +67,8 @@ export function FloatButtonsPanel({
 	const dictList = useUserDictList({ filterFav: true });
 	const [showAIPanel, setShowAIPanel] = useState(false);
 	const [showPapagoPanel, setShowPapagoPanel] = useState(false);
-	const showNewPanel = showAIPanel || showPapagoPanel;
+	const [showAnnotatePanel, setShowAnnotatePanel] = useState(false);
+	const showNewPanel = showAIPanel || showPapagoPanel || showAnnotatePanel;
 	const memoedGetRect = useMemoizedFn(getRect);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -106,18 +110,31 @@ export function FloatButtonsPanel({
 		}
 	};
 
+	const onOpenNewPanel = async () => {
+		await timeOut(16);
+		onNewPanel?.();
+	};
+
 	const onPapagoTranslate = async () => {
 		if (!selectedText) return;
-		await timeOut(16);
+		await onOpenNewPanel();
 		setShowPapagoPanel(true);
-		onNewPanel?.();
 	};
 
 	const openAISuggestion = async () => {
 		if (!prompt) return;
-		await timeOut(16);
+		await onOpenNewPanel();
 		setShowAIPanel(true);
-		onNewPanel?.();
+	};
+
+	const onAnnotate = async () => {
+		if (!isLogin) {
+			signIn();
+			return;
+		}
+
+		await onOpenNewPanel();
+		setShowAnnotatePanel(true);
 	};
 
 	const showAbove = useMemo(() => {
@@ -149,6 +166,8 @@ export function FloatButtonsPanel({
 						rect={rect}
 						showAbove={showAbove}
 					/>
+				) : showAnnotatePanel ? (
+					<AnnotationPanel rect={rect} showAbove={showAbove} />
 				) : (
 					<div
 						style={{
@@ -165,6 +184,9 @@ export function FloatButtonsPanel({
 						{showCopy && <FloatButton onClick={onCopy} icon="copy" />}
 						{showAI && prompt && (
 							<FloatButton onClick={openAISuggestion} icon="sparkles" />
+						)}
+						{showAnnotate && (
+							<FloatButton onClick={onAnnotate} icon="annotate" />
 						)}
 						{showAdd && <FloatButton onClick={onAdd} icon="add" />}
 					</div>

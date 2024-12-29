@@ -293,4 +293,42 @@ export const lists = {
 			createdBy: relationship({ ref: "User", many: false }),
 		},
 	}),
+	Annotation: list({
+		access: allowAll,
+		fields: {
+			type: select({
+				type: "enum",
+				options: [
+					{ label: "笔记", value: "NOTE" },
+					{ label: "高亮", value: "HIGHLIGHT" },
+				],
+				validation: { isRequired: true },
+				label: "类型",
+			}),
+			bookId: relationship({ ref: "Article", many: false }),
+			chapterId: text({ validation: { isRequired: true } }),
+			text: text({ validation: { isRequired: true } }),
+			content: text({ validation: { isRequired: false } }),
+			color: text({ validation: { isRequired: false } }),
+			createdAt: timestamp({ defaultValue: { kind: "now" } }),
+			createdBy: relationship({ ref: "User", many: false }),
+			updatedAt: timestamp({
+				defaultValue: { kind: "now" },
+				db: { updatedAt: true },
+			}),
+			range: json({
+				label: "笔记范围",
+				defaultValue: {
+					start: {
+						paragraphIndex: 0,
+						offset: 0,
+					},
+					end: {
+						paragraphIndex: 0,
+						offset: 0,
+					},
+				},
+			}),
+		},
+	}),
 } satisfies Lists;

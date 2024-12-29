@@ -10,8 +10,16 @@ import { useLocale } from "next-intl";
 
 const TranslateParagraph = ({
 	children,
+	articleId,
+	chapterId,
+	paragraphIndex,
 	...props
-}: { children: React.ReactNode }) => {
+}: {
+	children: React.ReactNode;
+	paragraphIndex: number;
+	articleId: string;
+	chapterId?: string;
+}) => {
 	const locale = useLocale();
 
 	const text = typeof children === "string" ? children : "";
@@ -50,7 +58,13 @@ const TranslateParagraph = ({
 				lang="ko"
 				{...props}
 			>
-				<HighLightedDictItems>{children}</HighLightedDictItems>
+				<HighLightedDictItems
+					paragraphIndex={paragraphIndex}
+					articleId={articleId}
+					chapterId={chapterId || undefined}
+				>
+					{children}
+				</HighLightedDictItems>
 			</p>
 			{data && (
 				<p

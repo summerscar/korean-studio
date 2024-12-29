@@ -84,10 +84,11 @@ const SlugPage = async ({
 			<ArticleMovie
 				defaultSubtitleCues={subtitleCues}
 				subtitleSeries={article.subtitles as SubtitleSeries}
+				articleId={slug}
 			/>
 		);
 	} else if (article.type === "TEXT") {
-		children = <Text content={article.content} />;
+		children = <Text content={article.content} articleId={slug} />;
 	}
 
 	return (

@@ -23,6 +23,7 @@ model User {
   from_Dict_createdBy        Dict[]             @relation("Dict_createdBy")
   from_DictItem_createdBy    DictItem[]         @relation("DictItem_createdBy")
   from_Article_createdBy     Article[]          @relation("Article_createdBy")
+  from_Annotation_createdBy  Annotation[]       @relation("Annotation_createdBy")
 }
 
 model PushSubscription {
@@ -106,17 +107,37 @@ model DictItemFavorite {
 }
 
 model Article {
-  id          String          @id @default(cuid())
-  title       String          @default("")
-  type        ArticleTypeType
-  poster      String          @default("")
-  description String          @default("")
-  subtitles   Json?           @default("[{\"title\":\"MOVIE S01E01\",\"subtitles\":{\"ko\":{\"label\":\"Korean\",\"filename\":\"\"},\"zh-Hans\":{\"label\":\"Chinese\",\"filename\":\"\"},\"en\":{\"label\":\"English\",\"filename\":\"\"},\"ja\":{\"label\":\"Japanese\",\"filename\":\"\"}}}]")
-  content     String          @default("")
-  createdAt   DateTime?       @default(now())
-  createdBy   User?           @relation("Article_createdBy", fields: [createdById], references: [id])
-  createdById String?         @map("createdBy")
+  id                     String          @id @default(cuid())
+  title                  String          @default("")
+  type                   ArticleTypeType
+  poster                 String          @default("")
+  description            String          @default("")
+  subtitles              Json?           @default("[{\"title\":\"MOVIE S01E01\",\"subtitles\":{\"ko\":{\"label\":\"Korean\",\"filename\":\"\"},\"zh-Hans\":{\"label\":\"Chinese\",\"filename\":\"\"},\"en\":{\"label\":\"English\",\"filename\":\"\"},\"ja\":{\"label\":\"Japanese\",\"filename\":\"\"}}}]")
+  content                String          @default("")
+  createdAt              DateTime?       @default(now())
+  createdBy              User?           @relation("Article_createdBy", fields: [createdById], references: [id])
+  createdById            String?         @map("createdBy")
+  from_Annotation_bookId Annotation[]    @relation("Annotation_bookId")
 
+  @@index([createdById])
+}
+
+model Annotation {
+  id          String             @id @default(cuid())
+  type        AnnotationTypeType
+  bookId      Article?           @relation("Annotation_bookId", fields: [bookIdId], references: [id])
+  bookIdId    String?            @map("bookId")
+  chapterId   String             @default("")
+  text        String             @default("")
+  content     String             @default("")
+  color       String             @default("")
+  createdAt   DateTime?          @default(now())
+  createdBy   User?              @relation("Annotation_createdBy", fields: [createdById], references: [id])
+  createdById String?            @map("createdBy")
+  updatedAt   DateTime?          @default(now()) @updatedAt
+  range       Json?              @default("{\"start\":{\"paragraphIndex\":0,\"offset\":0},\"end\":{\"paragraphIndex\":0,\"offset\":0}}")
+
+  @@index([bookIdId])
   @@index([createdById])
 }
 
@@ -134,4 +155,9 @@ enum TopikQuestionTypeType {
 enum ArticleTypeType {
   MOVIE
   TEXT
+}
+
+enum AnnotationTypeType {
+  NOTE
+  HIGHLIGHT
 }

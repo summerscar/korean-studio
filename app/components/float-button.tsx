@@ -1,6 +1,6 @@
-"use client";
 import CopyIcon from "@/assets/svg/copy.svg";
 import AddIcon from "@/assets/svg/folder-plus.svg";
+import PenIcon from "@/assets/svg/pen.svg";
 import SearchIcon from "@/assets/svg/search.svg";
 import SparklesIcon from "@/assets/svg/sparkles.svg";
 import TranslateIcon from "@/assets/svg/translate.svg";
@@ -9,7 +9,7 @@ import type { CSSProperties } from "react";
 interface SearchButtonProps {
 	style?: CSSProperties;
 	onClick: () => void;
-	icon: "search" | "copy" | "sparkles" | "add" | "translate";
+	icon: "search" | "copy" | "sparkles" | "add" | "translate" | "annotate";
 }
 
 const IconMap = {
@@ -18,6 +18,7 @@ const IconMap = {
 	copy: CopyIcon,
 	sparkles: SparklesIcon,
 	add: AddIcon,
+	annotate: PenIcon,
 };
 
 export const FloatButton = ({

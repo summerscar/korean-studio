@@ -256,6 +256,7 @@ export const lists = {
 				options: [
 					{ label: "影视台词", value: "MOVIE" },
 					{ label: "文本", value: "TEXT" },
+					{ label: "电子书", value: "EPUB" },
 				],
 				validation: { isRequired: true },
 				label: "类型",

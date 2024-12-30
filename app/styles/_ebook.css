@@ -1,0 +1,55 @@
+.ebook {
+	font-family: auto;
+	h2 {
+		margin: revert;
+	}
+	p {
+		margin: 0;
+		font-size: 1em;
+		text-align: justify;
+		text-indent: 1em;
+		line-height: 1.5;
+	}
+
+	.title1 {
+		font-size: 1.4em;
+		line-height: 1.6;
+		text-align: left;
+		text-indent: 0;
+		font-weight: bold;
+	}
+
+	.center {
+		text-align: center;
+	}
+
+	.right {
+		text-align: right;
+	}
+
+	.copyright {
+		text-indent: 0;
+		text-align: left;
+		font-size: 0.9em;
+	}
+
+	sup {
+		vertical-align: super;
+		font-size: 0.8em;
+		color: #6f6f6f;
+	}
+
+	sub {
+		vertical-align: baseline;
+		font-size: 0.8em;
+		color: #6f6f6f;
+	}
+
+	p.sgc-3 {
+		font-weight: bold;
+	}
+
+	h2.sgc-4 {
+		text-align: center;
+	}
+}

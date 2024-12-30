@@ -14,6 +14,7 @@ import { getTranslations } from "next-intl/server";
 import { unstable_cache } from "next/cache";
 import { redirect } from "next/navigation";
 import { cache } from "react";
+import { EBook } from "./_components/ebook";
 import { EPSelect } from "./_components/ep-select";
 import { ArticleMovie } from "./_components/movie";
 import { Text } from "./_components/text";
@@ -89,6 +90,14 @@ const SlugPage = async ({
 		);
 	} else if (article.type === "TEXT") {
 		children = <Text content={article.content} articleId={slug} />;
+	} else if (article.type === "EPUB") {
+		children = (
+			<EBook
+				bookTitle={article.title}
+				bookId={slug}
+				bookURL={`${process.env.NEXT_PUBLIC_BLOB_BASE_URL}${article.content}`}
+			/>
+		);
 	}
 
 	return (

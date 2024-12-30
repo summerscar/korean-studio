@@ -155,6 +155,7 @@ enum TopikQuestionTypeType {
 enum ArticleTypeType {
   MOVIE
   TEXT
+  EPUB
 }
 
 enum AnnotationTypeType {

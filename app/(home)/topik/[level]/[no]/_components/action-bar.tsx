@@ -2,7 +2,7 @@
 import { startTestAction } from "@/actions/topik-actions";
 import { cancelTestAction } from "@/actions/topik-actions";
 import { useServerActionState } from "@/hooks/use-server-action-state";
-import { serverActionTimeOut, timeOut } from "@/utils/time-out";
+import { serverActionTimeOut } from "@/utils/time-out";
 import { useTranslations } from "next-intl";
 import { TestCutDown } from "./count-down";
 import type { TopikLevelType } from ".keystone/types";

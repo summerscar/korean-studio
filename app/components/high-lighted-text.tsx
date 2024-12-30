@@ -48,7 +48,7 @@ export const refreshSWRUserAnnotationItems = async (
 	await mutate(getAnnotationRevalidateKey(articleId, chapterId));
 };
 
-const useHighlightedDictItems = (
+const useHighlightedText = (
 	paragraphIndex: number,
 	articleId: string,
 	chapterId: string | undefined,
@@ -74,7 +74,7 @@ const useHighlightedDictItems = (
 					},
 					[text] as React.ReactNode[],
 				);
-				// TODO: 重合问题
+
 				// 笔记过的单词
 				annotationItems.forEach((annotation) => {
 					if (
@@ -132,7 +132,7 @@ const useHighlightedDictItems = (
 	return textWithDictItem;
 };
 
-const HighLightedDictItems = memo(
+const HighLightedText = memo(
 	({
 		children,
 		articleId,
@@ -144,7 +144,7 @@ const HighLightedDictItems = memo(
 		articleId: string;
 		chapterId?: string;
 	}) => {
-		const highLightedChildren = useHighlightedDictItems(
+		const highLightedChildren = useHighlightedText(
 			paragraphIndex,
 			articleId,
 			chapterId,
@@ -155,4 +155,4 @@ const HighLightedDictItems = memo(
 	},
 );
 
-export { useUserDictItems, HighLightedDictItems };
+export { useUserDictItems, HighLightedText };

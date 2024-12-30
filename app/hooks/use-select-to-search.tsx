@@ -64,11 +64,19 @@ const useSelectToSearch = ({
 				? generateWordSuggestionPrompt
 				: prompt;
 
-	const shouldShowAnnotate = () =>
-		showAnnotate &&
-		!window.getSelection()?.isCollapsed &&
-		window.getSelection()?.getRangeAt(0).startContainer ===
-			window.getSelection()?.getRangeAt(0).endContainer;
+	const shouldShowAnnotate = () => {
+		const range = window.getSelection()?.getRangeAt(0);
+		// 防止注释、单词高亮重合
+		return (
+			showAnnotate &&
+			!!range &&
+			!!range.toString().trim() &&
+			// 同一个文本节点
+			range.startContainer === range.endContainer &&
+			// 不是 span 内的文本
+			range.commonAncestorContainer.parentElement?.tagName !== "SPAN"
+		);
+	};
 
 	const panel = showPanel ? (
 		<FloatButtonsPanel

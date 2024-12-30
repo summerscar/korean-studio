@@ -1,5 +1,5 @@
 import { addWordsToUserDictAction } from "@/actions/user-dict-action";
-import { refreshSWRUserDictItems } from "@/components/high-lighted-dict-items";
+import { refreshSWRUserDictItems } from "@/components/high-lighted-text";
 import {
 	createErrorToast,
 	createLoadingToast,

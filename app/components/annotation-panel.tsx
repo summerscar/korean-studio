@@ -3,7 +3,7 @@ import {
 	removeAnnotationAction,
 	updateAnnotationAction,
 } from "@/actions/annotate-actions";
-import { refreshSWRUserAnnotationItems } from "@/components/high-lighted-dict-items";
+import { refreshSWRUserAnnotationItems } from "@/components/high-lighted-text";
 import { usePanelReposition } from "@/hooks/use-panel-reposition";
 import { createLoadingToast } from "@/hooks/use-toast";
 import type { AnnotationItem, AnnotationUpdateItem } from "@/types/annotation";
@@ -62,7 +62,6 @@ const Annotation = ({ annotation }: { annotation?: AnnotationItem }) => {
 
 	const create = async () => {
 		if (!range) return;
-		// TODO: 处理重合的问题
 		const rangeText = range.toString();
 		const getParentParagraph = (node: Node) => {
 			return (node.parentElement as HTMLElement).closest(

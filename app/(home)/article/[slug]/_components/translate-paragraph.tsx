@@ -1,7 +1,7 @@
 "use client";
 import { papagoTranslateAction } from "@/actions/papago-translate-action";
 import TranslateIcon from "@/assets/svg/translate.svg";
-import { HighLightedDictItems } from "@/components/high-lighted-dict-items";
+import { HighLightedText } from "@/components/high-lighted-text";
 import { useServerActionState } from "@/hooks/use-server-action-state";
 import { notoKR } from "@/utils/fonts";
 import { isKorean } from "@/utils/is-korean";
@@ -58,13 +58,13 @@ const TranslateParagraph = ({
 				lang="ko"
 				{...props}
 			>
-				<HighLightedDictItems
+				<HighLightedText
 					paragraphIndex={paragraphIndex}
 					articleId={articleId}
 					chapterId={chapterId || undefined}
 				>
 					{children}
-				</HighLightedDictItems>
+				</HighLightedText>
 			</p>
 			{data && (
 				<p

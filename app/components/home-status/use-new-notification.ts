@@ -1,5 +1,5 @@
 import { refreshDictAction } from "@/actions/user-dict-action";
-import { refreshSWRUserDictItems } from "@/components/high-lighted-dict-items";
+import { refreshSWRUserDictItems } from "@/components/high-lighted-text";
 import { usePushNotificationEvents } from "@/hooks/use-push-notification-events";
 import { createToast } from "@/hooks/use-toast";
 import { useMemoizedFn } from "ahooks";

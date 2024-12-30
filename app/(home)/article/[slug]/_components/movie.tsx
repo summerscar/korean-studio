@@ -1,6 +1,6 @@
 "use client";
 import { mapForLocale } from "@/components/footer/i18n-switcher";
-import { HighLightedDictItems } from "@/components/high-lighted-dict-items";
+import { HighLightedText } from "@/components/high-lighted-text";
 import { useSelectToSearch } from "@/hooks/use-select-to-search";
 import {
 	type SubtitleCue,
@@ -392,13 +392,13 @@ const ArticleRender = memo(
 										lang="ko"
 										data-paragraph-index={currentParagraphIndex}
 									>
-										<HighLightedDictItems
+										<HighLightedText
 											articleId={articleId}
 											chapterId={chapterId}
 											paragraphIndex={currentParagraphIndex}
 										>
 											{cue.text}
-										</HighLightedDictItems>
+										</HighLightedText>
 									</p>
 									{sceneIndex === 0 && !subtitles[selectedLanguage] && loading}
 									{matchingSubtitle && (

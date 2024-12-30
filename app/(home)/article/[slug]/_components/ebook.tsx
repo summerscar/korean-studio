@@ -1,6 +1,13 @@
 "use client";
+import CloseIcon from "@/assets/svg/close.svg";
+import ExitFullscreenIcon from "@/assets/svg/exit-full-screen.svg";
+import FullscreenIcon from "@/assets/svg/full-screen.svg";
+import NextIcon from "@/assets/svg/next.svg";
+import PrevIcon from "@/assets/svg/prev.svg";
 import { SelectToSearch } from "@/hooks/use-select-to-search";
-import { useMemoizedFn } from "ahooks";
+import { isServer } from "@/utils/is-server";
+import { useEventListener, useMemoizedFn } from "ahooks";
+import clsx from "clsx";
 import type { Book, Contents, Location, NavItem, Rendition } from "epubjs";
 import { useEffect, useRef, useState } from "react";
 
@@ -20,9 +27,14 @@ const EBook = ({
 	const [clonedDoms, setClonedDoms] = useState<HTMLElement | null>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [scrollLeft, setScrollLeft] = useState(0);
+	const wrapperRef = useRef<HTMLDivElement>(null);
+	const [isFullScreen, setIsFullScreen] = useState(false);
+	const initPromiseRef = useRef<Promise<void> | null>(null);
 
 	useEffect(() => {
-		(async () => {
+		if (initPromiseRef.current) return;
+
+		initPromiseRef.current = (async () => {
 			if (bookURL && containerRef.current) {
 				await import("jszip").then((m) => m.default);
 				const ePub = await import("epubjs").then((m) => m.default);
@@ -68,6 +80,9 @@ const EBook = ({
 				setTableOfContents(toc.toc);
 			}
 		})();
+		initPromiseRef.current.then(() => {
+			initPromiseRef.current = null;
+		});
 	}, [bookURL]);
 
 	useEffect(() => {
@@ -106,6 +121,40 @@ const EBook = ({
 		}
 	};
 
+	const onFullscreenChange = useMemoizedFn(() => {
+		if (isFullScreen) {
+			rendition?.resize(window.innerWidth, window.innerHeight);
+		} else {
+			rendition?.resize(
+				wrapperRef.current!.clientWidth,
+				wrapperRef.current!.clientHeight,
+			);
+		}
+	});
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		onFullscreenChange();
+	}, [isFullScreen, onFullscreenChange]);
+
+	const handleFullscreen = () => {
+		if (isFullScreen) {
+			document.exitFullscreen();
+			return;
+		}
+		if (wrapperRef.current) {
+			wrapperRef.current.requestFullscreen();
+		}
+	};
+
+	useEventListener(
+		"fullscreenchange",
+		() => {
+			setIsFullScreen(document.fullscreenElement !== null);
+		},
+		{ target: isServer ? undefined : document },
+	);
+
 	const clean = useMemoizedFn(() => {
 		rendition?.destroy();
 		book?.destroy();
@@ -114,22 +163,29 @@ const EBook = ({
 	useEffect(() => clean, [clean]);
 
 	return (
-		<div>
-			<div className="epub-reader relative rounded-lg bg-[#F5F5DC]/80 dark:bg-[#F5F5DC]/10 drop-shadow-lg">
+		<div ref={wrapperRef}>
+			<div
+				className={clsx(
+					"epub-reader relative h-[600px] rounded-lg overflow-hidden bg-[#F5F5DC]/80 dark:bg-[#F5F5DC]/10 drop-shadow-lg",
+					isFullScreen && "h-screen",
+				)}
+			>
 				{isLoading && (
-					<div className="loading loading-spinner loading-lg absolute left-1/2 top-64 -translate-x-1/2 -translate-y-1/2" />
+					<div className="loading loading-spinner loading-lg absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
 				)}
 
 				<div
 					ref={containerRef}
-					className="w-full pointer-events-none invisible h-[600px] opacity-0"
+					className={clsx(
+						"w-full pointer-events-none invisible h-full opacity-0 absolute left-0 top-0 z-[-1]",
+					)}
 				/>
 				{clonedDoms && (
 					<SelectToSearch
 						showAdd
 						showAnnotate
 						prompt="sentence"
-						className="absolute w-full h-full left-0 top-0"
+						className="w-full h-full"
 					>
 						<div
 							ref={(el) => {
@@ -148,22 +204,22 @@ const EBook = ({
 						<button
 							type="button"
 							onClick={() => setShowTOC(!showTOC)}
-							className="btn btn-ghost"
+							className="btn btn-ghost btn-md text-lg text-base-content"
 						>
 							{"☰"}
 						</button>
 					</div>
 				)}
 				{showTOC && tableOfContents.length > 0 && (
-					<div className="w-72 h-full overflow-y-auto border-r p-4 bg-white/30 backdrop-blur-lg absolute left-0 top-0 z-[1]">
+					<div className="w-72 h-full overflow-y-auto p-4 bg-white/30 dark:bg-black/50 backdrop-blur-lg absolute left-0 top-0 z-[1]">
 						<h2 className="text-xl font-bold mb-4">
 							{bookTitle}
 							<button
 								type="button"
 								onClick={() => setShowTOC(!showTOC)}
-								className="btn btn-ghost btn-sm float-right"
+								className="btn btn-ghost btn-xs float-right"
 							>
-								{"×"}
+								<CloseIcon className="size-4" />
 							</button>
 						</h2>
 
@@ -173,17 +229,25 @@ const EBook = ({
 						/>
 					</div>
 				)}
-			</div>
-			<div className="epub-controls flex justify-between p-2">
-				<button onClick={handlePrevPage} type="button">
-					Previous Page
-				</button>
-				<div className="text-center">
-					{/* Page {currentPage} of {totalPages} */}
-				</div>
-				<button onClick={handleNextPage} type="button">
-					Next Page
-				</button>
+				<PrevIcon
+					className="absolute left-1 top-1/2 -translate-y-1/2 w-8 h-8 cursor-pointer"
+					onClick={handlePrevPage}
+				/>
+				<NextIcon
+					className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 cursor-pointer"
+					onClick={handleNextPage}
+				/>
+				{isFullScreen ? (
+					<ExitFullscreenIcon
+						className="absolute right-2 top-2 size-6 cursor-pointer"
+						onClick={handleFullscreen}
+					/>
+				) : (
+					<FullscreenIcon
+						className="absolute right-2 top-2 size-6 cursor-pointer"
+						onClick={handleFullscreen}
+					/>
+				)}
 			</div>
 		</div>
 	);

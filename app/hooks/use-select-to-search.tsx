@@ -67,6 +67,7 @@ const useSelectToSearch = ({
 	const shouldShowAnnotate = () => {
 		const range = window.getSelection()?.getRangeAt(0);
 		// 防止注释、单词高亮重合
+		// TODO: 支持重合
 		return (
 			showAnnotate &&
 			!!range &&

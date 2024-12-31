@@ -1,5 +1,6 @@
 "use client";
 import { createCallable } from "@/utils/callable";
+import { getPortalParent } from "@/utils/get-portal-parent";
 import { useTranslations } from "next-intl";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -128,7 +129,7 @@ function CallableModal({
 				</button>
 			</div>
 		</dialog>,
-		document.body,
+		getPortalParent(),
 	);
 }
 

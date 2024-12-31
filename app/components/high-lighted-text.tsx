@@ -2,6 +2,7 @@ import { listAnnotationAction } from "@/actions/annotate-actions";
 import { getDictItemsByUserAction } from "@/actions/user-dict-action";
 import { NotableText } from "@/components/notable-text";
 import { useUser } from "@/hooks/use-user";
+import { emptyArray } from "@/utils/const";
 import { timeOutOnce } from "@/utils/time-out";
 import { memo, useEffect, useState } from "react";
 import reactStringReplace from "react-string-replace";
@@ -13,12 +14,15 @@ const SWR_ANNOTATION_KEY = "user-annotation-items";
 const getAnnotationRevalidateKey = (articleId: string, chapterId?: string) =>
 	[SWR_ANNOTATION_KEY, articleId, chapterId].filter(Boolean).join("|");
 
+let increment = 0;
+
 const useUserDictItems = () => {
 	const { isLogin } = useUser();
-	const { data = [] } = useSWRImmutable(
+	const { data = emptyArray } = useSWRImmutable(
 		isLogin ? SWR_DICT_KEY : null,
 		async () => {
-			return await getDictItemsByUserAction();
+			const res = await getDictItemsByUserAction();
+			return res;
 		},
 	);
 
@@ -27,7 +31,7 @@ const useUserDictItems = () => {
 
 const useUserAnnotationItems = (articleId: string, chapterId = "0") => {
 	const { isLogin } = useUser();
-	const { data = [] } = useSWRImmutable(
+	const { data = emptyArray } = useSWRImmutable(
 		isLogin ? getAnnotationRevalidateKey(articleId, chapterId) : null,
 		async () => {
 			return await listAnnotationAction(articleId, chapterId);
@@ -68,8 +72,8 @@ const useHighlightedText = (
 				// 保存过的单词
 				const replacedText = dictItems.reduce(
 					(acc, cur) => {
-						return reactStringReplace(acc, cur.name, (match, index) => (
-							<NotableText key={`${cur.id}-${index}`}>{match}</NotableText>
+						return reactStringReplace(acc, cur.name, (match) => (
+							<NotableText key={`${increment++}`}>{match}</NotableText>
 						));
 					},
 					[text] as React.ReactNode[],
@@ -83,33 +87,33 @@ const useHighlightedText = (
 					) {
 						let prevIndex = 0;
 						for (const [index, textItem] of Object.entries([...replacedText])) {
-							let text = "";
+							let _text = "";
 							if (typeof textItem === "string") {
-								text = textItem;
+								_text = textItem;
 							} else if (
 								textItem &&
 								typeof textItem === "object" &&
 								"props" in textItem
 							) {
-								text = (textItem.props as { children: string }).children;
-								prevIndex += text.length;
+								_text = (textItem.props as { children: string }).children;
+								prevIndex += _text.length;
 								continue;
 							}
 							const offsetStart = annotation.range.start.offset - prevIndex;
 							const offsetEnd = annotation.range.end.offset - prevIndex;
 
-							if (offsetStart >= 0 && offsetEnd <= text.length) {
+							if (offsetStart >= 0 && offsetEnd <= _text.length) {
 								replacedText.splice(
 									+index,
 									1,
 									...reactStringReplace(
-										text,
-										text.slice(offsetStart, offsetEnd),
-										(match, index, offset) =>
+										_text,
+										_text.slice(offsetStart, offsetEnd),
+										(match, _index, offset) =>
 											offset === offsetStart ? (
 												<NotableText
 													annotation={annotation}
-													key={`${annotation.id}-${index}`}
+													key={`${increment++}`}
 												>
 													{match}
 												</NotableText>
@@ -119,7 +123,7 @@ const useHighlightedText = (
 									),
 								);
 							}
-							prevIndex += text.length;
+							prevIndex += _text.length;
 						}
 					}
 				});

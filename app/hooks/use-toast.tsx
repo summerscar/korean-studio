@@ -20,12 +20,12 @@ const createToast = ({
 		.then((mod) => mod.renderToString)
 		.then((renderToString) => {
 			toastEl.innerHTML = renderToString(message);
-			toastWrapper?.appendChild(toastEl);
+			toastWrapper.appendChild(toastEl);
 			resolve("");
 		});
 
 	let unmount = () => {
-		promise.then(() => toastWrapper?.removeChild(toastEl));
+		promise.then(() => toastWrapper.removeChild(toastEl));
 		unmount = () => {};
 	};
 	const timeout = setTimeout(() => unmount(), delay);
@@ -47,6 +47,11 @@ const getToastWrapper = () => {
 			"z-50",
 			"pointer-events-none",
 		);
+		document.body.appendChild(toastWrapper);
+	}
+	if (document.fullscreenElement) {
+		document.fullscreenElement.appendChild(toastWrapper);
+	} else {
 		document.body.appendChild(toastWrapper);
 	}
 	return toastWrapper;

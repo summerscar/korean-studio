@@ -4,16 +4,26 @@ import ExitFullscreenIcon from "@/assets/svg/exit-full-screen.svg";
 import FullscreenIcon from "@/assets/svg/full-screen.svg";
 import NextIcon from "@/assets/svg/next.svg";
 import PrevIcon from "@/assets/svg/prev.svg";
-import { SelectToSearch } from "@/hooks/use-select-to-search";
-import { isServer } from "@/utils/is-server";
-import { useEventListener, useMemoizedFn } from "ahooks";
+import { timeOut } from "@/utils/time-out";
+import { useFullscreen, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import type { Book, Contents, Location, NavItem, Rendition } from "epubjs";
+import type Section from "epubjs/types/section";
+import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+
+const EBookRender = dynamic(
+	() => import("./ebook-render").then((mod) => mod.EBookRender),
+	{
+		ssr: false,
+	},
+);
 
 const EBook = ({
 	bookTitle,
 	bookURL,
+	bookId,
 }: {
 	bookTitle: string;
 	bookId: string;
@@ -21,6 +31,10 @@ const EBook = ({
 }) => {
 	const [book, setBook] = useState<Book | null>(null);
 	const [rendition, setRendition] = useState<Rendition | null>(null);
+	const [spines, setSpines] = useState<Section[]>([]);
+	const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
+	const sectionId = useSearchParams().get("section") || "0";
+
 	const [isLoading, setIsLoading] = useState(true);
 	const [tableOfContents, setTableOfContents] = useState<NavItem[]>([]);
 	const [showTOC, setShowTOC] = useState(false);
@@ -28,8 +42,53 @@ const EBook = ({
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [scrollLeft, setScrollLeft] = useState(0);
 	const wrapperRef = useRef<HTMLDivElement>(null);
-	const [isFullScreen, setIsFullScreen] = useState(false);
 	const initPromiseRef = useRef<Promise<void> | null>(null);
+	const ebookRenderContainerRef = useRef<HTMLDivElement>(null);
+	const [isFullScreen, { enterFullscreen, exitFullscreen }] = useFullscreen(
+		wrapperRef,
+		{
+			onEnter: () => {
+				setTimeout(() => {
+					rendition?.resize(window.innerWidth, window.innerHeight);
+				}, 100);
+			},
+			onExit: () => {
+				setTimeout(() => {
+					rendition?.resize(
+						wrapperRef.current!.clientWidth,
+						wrapperRef.current!.clientHeight,
+					);
+				}, 100);
+			},
+		},
+	);
+
+	const onRender = useMemoizedFn((contents: Contents) => {
+		contents.document.querySelectorAll("p").forEach((p, index) => {
+			p.setAttribute("data-paragraph-index", `${index}`);
+		});
+		(async () => {
+			await Promise.all(
+				[...contents.document.querySelectorAll("img")].map(async (img) => {
+					await timeOut(16);
+					const rect = img.getBoundingClientRect();
+					img.style.width = `${rect.width}px`;
+					img.style.height = `${rect.height}px`;
+				}),
+			);
+			const clonedBody = contents.document.body.cloneNode(true);
+			const wrapper = document.createElement("div");
+			wrapper.setAttribute(
+				"style",
+				contents.document.body.getAttribute("style") || "",
+			);
+			wrapper.classList.add("overflow-hidden");
+			[...clonedBody.childNodes].forEach((node) => {
+				wrapper.appendChild(node);
+			});
+			setClonedDoms(wrapper);
+		})();
+	});
 
 	useEffect(() => {
 		if (initPromiseRef.current) return;
@@ -53,26 +112,23 @@ const EBook = ({
 				// Optional: Add navigation methods
 
 				newBook.ready.then(async () => {
+					const spines: Section[] = [];
+					newBook.spine.each((item: Section) => spines.push(item));
+
+					const urlSection = new URLSearchParams(window.location.search).get(
+						"section",
+					);
+					const sectionURL = spines.find(
+						(item) => item.idref === urlSection,
+					)?.href;
+					sectionURL && newRendition.display(sectionURL);
+
+					setSpines(spines);
 					setIsLoading(false);
 					console.log("Book is ready", newRendition);
 				});
 
-				newRendition.hooks.content.register((contents: Contents) => {
-					contents.document.querySelectorAll("p").forEach((p, index) => {
-						p.setAttribute("data-paragraph-index", `${index}`);
-					});
-					const clonedBody = contents.document.body.cloneNode(true);
-					const wrapper = document.createElement("div");
-					wrapper.setAttribute(
-						"style",
-						contents.document.body.getAttribute("style") || "",
-					);
-					wrapper.classList.add("overflow-hidden");
-					[...clonedBody.childNodes].forEach((node) => {
-						wrapper.appendChild(node);
-					});
-					setClonedDoms(wrapper);
-				});
+				newRendition.hooks.render.register(onRender);
 
 				newRendition.display();
 				// Fetch and set table of contents
@@ -83,25 +139,48 @@ const EBook = ({
 		initPromiseRef.current.then(() => {
 			initPromiseRef.current = null;
 		});
-	}, [bookURL]);
+	}, [bookURL, onRender]);
+
+	const onRelocated = useMemoizedFn((location: Location) => {
+		setCurrentLocation(location);
+		setTimeout(() => {
+			const scrollLeft =
+				containerRef.current?.querySelector(".epub-container")?.scrollLeft;
+			setScrollLeft(scrollLeft || 0);
+		});
+	});
+
+	const handleSectionChange = useMemoizedFn((location: Location) => {
+		const idref = spines.find(
+			(item) => item.href === location.start.href,
+		)?.idref;
+
+		if (idref) {
+			history.pushState({}, "", `/article/${bookId}?section=${idref}`);
+		}
+	});
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		currentLocation && handleSectionChange(currentLocation);
+	}, [currentLocation?.start.href, handleSectionChange]);
 
 	useEffect(() => {
 		if (rendition) {
-			rendition.on("relocated", (location: Location) => {
-				console.log("relocated", location);
-				setTimeout(() => {
-					const scrollLeft =
-						containerRef.current?.querySelector(".epub-container")?.scrollLeft;
-
-					setScrollLeft(scrollLeft || 0);
-				});
-			});
+			rendition.on("relocated", onRelocated);
+			return () => {
+				rendition.off("relocated", onRelocated);
+			};
 		}
-	}, [rendition]);
+	}, [rendition, onRelocated]);
 
 	useEffect(() => {
-		clonedDoms?.scrollTo(scrollLeft, 0);
-	}, [scrollLeft, clonedDoms]);
+		if (!ebookRenderContainerRef.current?.firstChild) return;
+		(ebookRenderContainerRef.current.firstChild as HTMLDivElement).scrollTo(
+			scrollLeft,
+			0,
+		);
+	}, [scrollLeft]);
 
 	const handleNextPage = () => {
 		if (rendition) {
@@ -120,40 +199,6 @@ const EBook = ({
 			await rendition.display(href);
 		}
 	};
-
-	const onFullscreenChange = useMemoizedFn(() => {
-		if (isFullScreen) {
-			rendition?.resize(window.innerWidth, window.innerHeight);
-		} else {
-			rendition?.resize(
-				wrapperRef.current!.clientWidth,
-				wrapperRef.current!.clientHeight,
-			);
-		}
-	});
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
-		onFullscreenChange();
-	}, [isFullScreen, onFullscreenChange]);
-
-	const handleFullscreen = () => {
-		if (isFullScreen) {
-			document.exitFullscreen();
-			return;
-		}
-		if (wrapperRef.current) {
-			wrapperRef.current.requestFullscreen();
-		}
-	};
-
-	useEventListener(
-		"fullscreenchange",
-		() => {
-			setIsFullScreen(document.fullscreenElement !== null);
-		},
-		{ target: isServer ? undefined : document },
-	);
 
 	const clean = useMemoizedFn(() => {
 		rendition?.destroy();
@@ -181,23 +226,13 @@ const EBook = ({
 					)}
 				/>
 				{clonedDoms && (
-					<SelectToSearch
-						showAdd
-						showAnnotate
-						prompt="sentence"
-						className="w-full h-full"
-					>
-						<div
-							ref={(el) => {
-								if (!el || clonedDoms === el.firstChild) return;
-								el.innerHTML = "";
-								el.appendChild(clonedDoms);
-							}}
-							className="w-full h-full ebook"
-						/>
-					</SelectToSearch>
+					<EBookRender
+						dom={clonedDoms}
+						bookId={bookId}
+						sectionId={sectionId}
+						containerRef={ebookRenderContainerRef}
+					/>
 				)}
-
 				{/* Table of Contents Sidebar */}
 				{tableOfContents.length > 0 && !showTOC && (
 					<div className="absolute left-0 top-0 z-10">
@@ -240,14 +275,29 @@ const EBook = ({
 				{isFullScreen ? (
 					<ExitFullscreenIcon
 						className="absolute right-2 top-2 size-6 cursor-pointer"
-						onClick={handleFullscreen}
+						onClick={exitFullscreen}
 					/>
 				) : (
 					<FullscreenIcon
 						className="absolute right-2 top-2 size-6 cursor-pointer"
-						onClick={handleFullscreen}
+						onClick={enterFullscreen}
 					/>
 				)}
+				<div className="absolute bottom-2 left-1/2 -translate-x-1/2 select-none">
+					<span>
+						{currentLocation
+							? `${currentLocation.start.displayed.page} /
+						${currentLocation.start.displayed.total}`
+							: ""}
+					</span>
+				</div>
+				<div className="absolute bottom-2 right-2 -translate-x-1/2 select-none">
+					<span>
+						{spines.findIndex((s) => s.href === currentLocation?.start.href) +
+							1}{" "}
+						/ {spines.length}
+					</span>
+				</div>
 			</div>
 		</div>
 	);

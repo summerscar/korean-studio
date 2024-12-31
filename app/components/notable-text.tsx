@@ -5,6 +5,7 @@ import {
 import { AnnotationPanel } from "@/components/annotation-panel";
 import { PapagoPanel } from "@/components/papago-render";
 import type { AnnotationItem } from "@/types/annotation";
+import { getPortalParent } from "@/utils/get-portal-parent";
 import { useClickAway } from "ahooks";
 import clsx from "clsx";
 import { useRef, useState } from "react";
@@ -27,6 +28,8 @@ const NotableText = ({
 	}, panelRef);
 
 	const showPapagoPanel = () => {
+		console.log("click annotation");
+
 		if (isShowPanel) return;
 		if (!papagoPromise.current) {
 			papagoPromise.current = papagoTranslateAction(children);
@@ -37,7 +40,7 @@ const NotableText = ({
 	return (
 		<span
 			className={clsx(
-				"dark:bg-slate-600 inline-block rounded-sm relative cursor-pointer",
+				"dark:bg-slate-600 inline-block rounded-sm relative cursor-pointer indent-0",
 				annotation ? "bg-orange-400/80" : "bg-yellow-200/80",
 			)}
 			onClick={showPapagoPanel}
@@ -48,6 +51,7 @@ const NotableText = ({
 				<span
 					className="absolute -top-0.5 -right-2 cursor-pointer size-2 rounded-sm bg-orange-500"
 					onClick={(e) => {
+						console.log("click annotation");
 						e.stopPropagation();
 						setShowAnnotation(true);
 					}}
@@ -62,7 +66,7 @@ const NotableText = ({
 						showAbove={true}
 						ref={panelRef}
 					/>,
-					document.body,
+					getPortalParent(),
 				)}
 			{showPapago &&
 				createPortal(
@@ -72,7 +76,7 @@ const NotableText = ({
 						rect={spanRef.current!.getBoundingClientRect()}
 						promise={papagoPromise.current!}
 					/>,
-					document.body,
+					getPortalParent(),
 				)}
 		</span>
 	);

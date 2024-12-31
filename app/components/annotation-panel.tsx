@@ -17,13 +17,16 @@ const AnnotationPanel = ({
 	rect,
 	ref,
 	annotation,
+	range,
 }: {
 	showAbove: boolean;
 	rect: DOMRect;
 	ref?: React.RefObject<HTMLDivElement | null>;
 	annotation?: AnnotationItem;
+	range?: Range;
 }) => {
 	const observerRef = usePanelReposition({ showAbove, rect });
+
 	return (
 		<div
 			style={{
@@ -45,18 +48,22 @@ const AnnotationPanel = ({
 			<div
 				className={`flex backdrop-blur-xl rounded-lg w-[60vw] sm:w-80 h-40 justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
 			>
-				<Annotation annotation={annotation} />
+				<Annotation annotation={annotation} range={range} />
 			</div>
 		</div>
 	);
 };
 
-const Annotation = ({ annotation }: { annotation?: AnnotationItem }) => {
+const Annotation = ({
+	annotation,
+	range,
+}: { annotation?: AnnotationItem; range?: Range }) => {
 	const [value, setValue] = useState(annotation?.content || "");
-	const [range] = useState(() => window.getSelection()?.getRangeAt(0));
 	// TODO: 作为组件参数
 	const [bookId] = useState(() => location.pathname.split("/").pop());
-	const chapterId = useSearchParams().get("ep") || "0";
+	const searchParams = useSearchParams();
+	const chapterId =
+		searchParams.get("ep") || searchParams.get("section") || "0";
 
 	const unmountPromise = useRef<Promise<void> | null>(null);
 

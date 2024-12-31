@@ -7,6 +7,7 @@ import { useServerActionState } from "@/hooks/use-server-action-state";
 import { useUser } from "@/hooks/use-user";
 import type { Dict, DictItem } from "@/types/dict";
 import { FAV_LIST_KEY } from "@/utils/config";
+import { emptyArray } from "@/utils/const";
 import { isDev } from "@/utils/is-dev";
 import clsx from "clsx";
 import { signIn } from "next-auth/react";
@@ -73,9 +74,7 @@ const fetcher = () => {
 };
 
 const useFavList = () => {
-	const { data } = useSWRImmutable(FAV_LIST_KEY, fetcher);
-
-	if (!data) return [];
+	const { data = emptyArray } = useSWRImmutable(FAV_LIST_KEY, fetcher);
 	return data;
 };
 

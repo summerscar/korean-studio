@@ -10,13 +10,14 @@ import {} from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
 import { addWordsToUserDict } from "@/service/add-words-to-user-dict";
 import type { SITES_LANGUAGE } from "@/types/site";
+import { getPortalParent } from "@/utils/get-portal-parent";
 import { timeOut } from "@/utils/time-out";
 import { useMemoizedFn } from "ahooks";
 import { signIn } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnnotationPanel } from "./annotation-panel";
 
@@ -70,11 +71,18 @@ export function FloatButtonsPanel({
 	const [showAnnotatePanel, setShowAnnotatePanel] = useState(false);
 	const showNewPanel = showAIPanel || showPapagoPanel || showAnnotatePanel;
 	const memoedGetRect = useMemoizedFn(getRect);
+	const [range, setRange] = useState<Range | undefined>(undefined);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	const rect = useMemo(() => {
 		return memoedGetRect();
-	}, [memoedGetRect, showNewPanel, selectedText]);
+	}, [memoedGetRect, selectedText]);
+
+	useEffect(() => {
+		if (selectedText && showAnnotate) {
+			setRange(window.getSelection()?.getRangeAt(0));
+		}
+	}, [selectedText, showAnnotate]);
 
 	const onAdd = useMemoizedFn(async () => {
 		onClose?.();
@@ -167,7 +175,7 @@ export function FloatButtonsPanel({
 						showAbove={showAbove}
 					/>
 				) : showAnnotatePanel ? (
-					<AnnotationPanel rect={rect} showAbove={showAbove} />
+					<AnnotationPanel rect={rect} showAbove={showAbove} range={range} />
 				) : (
 					<div
 						style={{
@@ -196,7 +204,7 @@ export function FloatButtonsPanel({
 		[showNewPanel, selectedText],
 	);
 
-	return createPortal(panel, document.body);
+	return createPortal(panel, getPortalParent());
 }
 
 const AIPanel = ({

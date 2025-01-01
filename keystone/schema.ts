@@ -306,7 +306,7 @@ export const lists = {
 				validation: { isRequired: true },
 				label: "类型",
 			}),
-			bookId: relationship({ ref: "Article", many: false }),
+			articleId: relationship({ ref: "Article", many: false }),
 			chapterId: text({ validation: { isRequired: true } }),
 			text: text({ validation: { isRequired: true } }),
 			content: text({ validation: { isRequired: false } }),

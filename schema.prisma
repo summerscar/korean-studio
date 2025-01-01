@@ -107,17 +107,17 @@ model DictItemFavorite {
 }
 
 model Article {
-  id                     String          @id @default(cuid())
-  title                  String          @default("")
-  type                   ArticleTypeType
-  poster                 String          @default("")
-  description            String          @default("")
-  subtitles              Json?           @default("[{\"title\":\"MOVIE S01E01\",\"subtitles\":{\"ko\":{\"label\":\"Korean\",\"filename\":\"\"},\"zh-Hans\":{\"label\":\"Chinese\",\"filename\":\"\"},\"en\":{\"label\":\"English\",\"filename\":\"\"},\"ja\":{\"label\":\"Japanese\",\"filename\":\"\"}}}]")
-  content                String          @default("")
-  createdAt              DateTime?       @default(now())
-  createdBy              User?           @relation("Article_createdBy", fields: [createdById], references: [id])
-  createdById            String?         @map("createdBy")
-  from_Annotation_bookId Annotation[]    @relation("Annotation_bookId")
+  id                        String          @id @default(cuid())
+  title                     String          @default("")
+  type                      ArticleTypeType
+  poster                    String          @default("")
+  description               String          @default("")
+  subtitles                 Json?           @default("[{\"title\":\"MOVIE S01E01\",\"subtitles\":{\"ko\":{\"label\":\"Korean\",\"filename\":\"\"},\"zh-Hans\":{\"label\":\"Chinese\",\"filename\":\"\"},\"en\":{\"label\":\"English\",\"filename\":\"\"},\"ja\":{\"label\":\"Japanese\",\"filename\":\"\"}}}]")
+  content                   String          @default("")
+  createdAt                 DateTime?       @default(now())
+  createdBy                 User?           @relation("Article_createdBy", fields: [createdById], references: [id])
+  createdById               String?         @map("createdBy")
+  from_Annotation_articleId Annotation[]    @relation("Annotation_articleId")
 
   @@index([createdById])
 }
@@ -125,8 +125,8 @@ model Article {
 model Annotation {
   id          String             @id @default(cuid())
   type        AnnotationTypeType
-  bookId      Article?           @relation("Annotation_bookId", fields: [bookIdId], references: [id])
-  bookIdId    String?            @map("bookId")
+  articleId   Article?           @relation("Annotation_articleId", fields: [articleIdId], references: [id])
+  articleIdId String?            @map("articleId")
   chapterId   String             @default("")
   text        String             @default("")
   content     String             @default("")
@@ -137,7 +137,7 @@ model Annotation {
   updatedAt   DateTime?          @default(now()) @updatedAt
   range       Json?              @default("{\"start\":{\"paragraphIndex\":0,\"offset\":0},\"end\":{\"paragraphIndex\":0,\"offset\":0}}")
 
-  @@index([bookIdId])
+  @@index([articleIdId])
   @@index([createdById])
 }
 

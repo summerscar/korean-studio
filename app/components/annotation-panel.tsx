@@ -60,7 +60,7 @@ const Annotation = ({
 }: { annotation?: AnnotationItem; range?: Range }) => {
 	const [value, setValue] = useState(annotation?.content || "");
 	// TODO: 作为组件参数
-	const [bookId] = useState(() => location.pathname.split("/").pop());
+	const [articleId] = useState(() => location.pathname.split("/").pop());
 	const searchParams = useSearchParams();
 	const chapterId =
 		searchParams.get("ep") || searchParams.get("section") || "0";
@@ -116,7 +116,7 @@ const Annotation = ({
 
 		const newAnnotation = {
 			type: "NOTE",
-			bookId: { connect: { id: bookId } },
+			articleId: { connect: { id: articleId } },
 			chapterId,
 			content: value,
 			text: rangeText,
@@ -138,7 +138,7 @@ const Annotation = ({
 				.then(() => {})
 				.finally(async () => {
 					unmountPromise.current = null;
-					await refreshSWRUserAnnotationItems(bookId!, chapterId);
+					await refreshSWRUserAnnotationItems({ chapterId, articleId });
 					isDev && console.log("[create annotation][success]", newAnnotation);
 					cancel();
 				});
@@ -148,7 +148,7 @@ const Annotation = ({
 	const remove = async (annotation: AnnotationItem) => {
 		const cancel = createLoadingToast("Removing…");
 		await removeAnnotationAction(annotation.id);
-		await refreshSWRUserAnnotationItems(bookId!, chapterId);
+		await refreshSWRUserAnnotationItems({ chapterId, articleId });
 		cancel();
 		isDev && console.log("[remove annotation][success]", annotation);
 	};
@@ -157,7 +157,7 @@ const Annotation = ({
 		if (value === annotation.content) return;
 		const cancel = createLoadingToast("Updating…");
 		await updateAnnotationAction(annotation.id, { content: value });
-		await refreshSWRUserAnnotationItems(bookId!, chapterId);
+		await refreshSWRUserAnnotationItems({ chapterId, articleId });
 		cancel();
 		isDev && console.log("[update annotation][success]");
 	};

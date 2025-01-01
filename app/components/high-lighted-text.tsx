@@ -11,7 +11,10 @@ import useSWRImmutable from "swr/immutable";
 
 const SWR_DICT_KEY = "user-dict-items";
 const SWR_ANNOTATION_KEY = "user-annotation-items";
-const getAnnotationRevalidateKey = (articleId: string, chapterId?: string) =>
+const getAnnotationRevalidateKey = ({
+	articleId,
+	chapterId,
+}: { articleId?: string; chapterId?: string }) =>
 	[SWR_ANNOTATION_KEY, articleId, chapterId].filter(Boolean).join("|");
 
 let increment = 0;
@@ -32,9 +35,9 @@ const useUserDictItems = () => {
 const useUserAnnotationItems = (articleId: string, chapterId = "0") => {
 	const { isLogin } = useUser();
 	const { data = emptyArray } = useSWRImmutable(
-		isLogin ? getAnnotationRevalidateKey(articleId, chapterId) : null,
+		isLogin ? getAnnotationRevalidateKey({ articleId, chapterId }) : null,
 		async () => {
-			return await listAnnotationAction(articleId, chapterId);
+			return await listAnnotationAction({ articleId, chapterId });
 		},
 	);
 
@@ -45,11 +48,11 @@ export const refreshSWRUserDictItems = async () => {
 	await mutate(SWR_DICT_KEY);
 };
 
-export const refreshSWRUserAnnotationItems = async (
-	articleId: string,
-	chapterId?: string,
-) => {
-	await mutate(getAnnotationRevalidateKey(articleId, chapterId));
+export const refreshSWRUserAnnotationItems = async ({
+	articleId,
+	chapterId,
+}: { articleId?: string; chapterId?: string }) => {
+	await mutate(getAnnotationRevalidateKey({ articleId, chapterId }));
 };
 
 const useHighlightedText = (

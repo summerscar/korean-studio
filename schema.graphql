@@ -719,7 +719,7 @@ input ArticleCreateInput {
 type Annotation {
   id: ID!
   type: AnnotationTypeType
-  bookId: Article
+  articleId: Article
   chapterId: String
   text: String
   content: String
@@ -745,7 +745,7 @@ input AnnotationWhereInput {
   NOT: [AnnotationWhereInput!]
   id: IDFilter
   type: AnnotationTypeTypeNullableFilter
-  bookId: ArticleWhereInput
+  articleId: ArticleWhereInput
   chapterId: StringFilter
   text: StringFilter
   content: StringFilter
@@ -775,7 +775,7 @@ input AnnotationOrderByInput {
 
 input AnnotationUpdateInput {
   type: AnnotationTypeType
-  bookId: ArticleRelateToOneForUpdateInput
+  articleId: ArticleRelateToOneForUpdateInput
   chapterId: String
   text: String
   content: String
@@ -799,7 +799,7 @@ input AnnotationUpdateArgs {
 
 input AnnotationCreateInput {
   type: AnnotationTypeType
-  bookId: ArticleRelateToOneForCreateInput
+  articleId: ArticleRelateToOneForCreateInput
   chapterId: String
   text: String
   content: String

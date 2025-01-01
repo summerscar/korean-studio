@@ -7,7 +7,10 @@ import type {
 	AnnotationUpdateInput,
 } from ".keystone/types";
 
-const listAnnotationAction = async (bookId: string, chapterId: string) => {
+const listAnnotationAction = async ({
+	articleId,
+	chapterId,
+}: { articleId?: string; chapterId?: string }) => {
 	const session = await auth();
 	const userId = session?.user?.id;
 	if (!userId) {
@@ -15,9 +18,9 @@ const listAnnotationAction = async (bookId: string, chapterId: string) => {
 	}
 	const res = (await KSwithSession(session).db.Annotation.findMany({
 		where: {
-			bookId: { id: { equals: bookId } },
 			createdBy: { id: { equals: userId } },
-			chapterId: { equals: chapterId },
+			...(articleId ? { articleId: { id: { equals: articleId } } } : null),
+			...(chapterId ? { chapterId: { equals: chapterId } } : null),
 		},
 	})) as AnnotationItem[];
 

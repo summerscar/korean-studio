@@ -44,11 +44,18 @@
 		font-size: 0.8em;
 		color: #6f6f6f;
 	}
-
+	img {
+		display: inline;
+	}
+	div.sgc-2 {
+		text-align: center;
+	}
 	p.sgc-3 {
 		font-weight: bold;
 	}
-
+	p.sgc-5 {
+		text-align: center;
+	}
 	h2.sgc-4 {
 		text-align: center;
 	}

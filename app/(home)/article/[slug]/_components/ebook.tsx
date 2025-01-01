@@ -5,13 +5,15 @@ import FullscreenIcon from "@/assets/svg/full-screen.svg";
 import NextIcon from "@/assets/svg/next.svg";
 import PrevIcon from "@/assets/svg/prev.svg";
 import { timeOut } from "@/utils/time-out";
-import { useFullscreen, useMemoizedFn } from "ahooks";
+import { useClickAway, useFullscreen, useMemoizedFn } from "ahooks";
 import clsx from "clsx";
 import type { Book, Contents, Location, NavItem, Rendition } from "epubjs";
 import type Section from "epubjs/types/section";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+
+const debug = false;
 
 const EBookRender = dynamic(
 	() => import("./ebook-render").then((mod) => mod.EBookRender),
@@ -42,6 +44,7 @@ const EBook = ({
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [scrollLeft, setScrollLeft] = useState(0);
 	const wrapperRef = useRef<HTMLDivElement>(null);
+	const tocWrapperRef = useRef<HTMLDivElement>(null);
 	const initPromiseRef = useRef<Promise<void> | null>(null);
 	const ebookRenderContainerRef = useRef<HTMLDivElement>(null);
 	const [isFullScreen, { enterFullscreen, exitFullscreen }] = useFullscreen(
@@ -64,10 +67,13 @@ const EBook = ({
 	);
 
 	const onRender = useMemoizedFn((contents: Contents) => {
-		contents.document.querySelectorAll("p").forEach((p, index) => {
-			p.setAttribute("data-paragraph-index", `${index}`);
-		});
+		contents.document
+			.querySelectorAll("p:not([data-paragraph-index])")
+			.forEach((p, index) => {
+				p.setAttribute("data-paragraph-index", `${index}`);
+			});
 		(async () => {
+			await timeOut(16);
 			await Promise.all(
 				[...contents.document.querySelectorAll("img")].map(async (img) => {
 					await timeOut(16);
@@ -82,7 +88,13 @@ const EBook = ({
 				"style",
 				contents.document.body.getAttribute("style") || "",
 			);
-			wrapper.classList.add("overflow-hidden");
+			const scrollLeft =
+				containerRef.current?.querySelector(".epub-container")?.scrollLeft || 0;
+
+			Object.assign(wrapper.style, {
+				overflowY: "visible",
+				transform: `translateX(-${scrollLeft}px)`,
+			});
 			[...clonedBody.childNodes].forEach((node) => {
 				wrapper.appendChild(node);
 			});
@@ -106,6 +118,7 @@ const EBook = ({
 					spread: "always",
 					allowScriptedContent: true,
 				});
+
 				setBook(newBook);
 				setRendition(newRendition);
 				window.book = newBook;
@@ -141,14 +154,25 @@ const EBook = ({
 		});
 	}, [bookURL, onRender]);
 
+	const updateScrollLeft = () => {
+		const scrollLeft =
+			containerRef.current?.querySelector(".epub-container")?.scrollLeft;
+		setScrollLeft(scrollLeft || 0);
+	};
+
 	const onRelocated = useMemoizedFn((location: Location) => {
 		setCurrentLocation(location);
 		setTimeout(() => {
-			const scrollLeft =
-				containerRef.current?.querySelector(".epub-container")?.scrollLeft;
-			setScrollLeft(scrollLeft || 0);
-		});
+			updateScrollLeft();
+		}, 16);
 	});
+
+	useEffect(() => {
+		if (!ebookRenderContainerRef.current?.firstChild) return;
+		(
+			ebookRenderContainerRef.current.firstChild as HTMLDivElement
+		).style.transform = `translateX(-${scrollLeft}px)`;
+	}, [scrollLeft]);
 
 	const handleSectionChange = useMemoizedFn((location: Location) => {
 		const idref = spines.find(
@@ -174,14 +198,6 @@ const EBook = ({
 		}
 	}, [rendition, onRelocated]);
 
-	useEffect(() => {
-		if (!ebookRenderContainerRef.current?.firstChild) return;
-		(ebookRenderContainerRef.current.firstChild as HTMLDivElement).scrollTo(
-			scrollLeft,
-			0,
-		);
-	}, [scrollLeft]);
-
 	const handleNextPage = () => {
 		if (rendition) {
 			rendition.next();
@@ -200,10 +216,22 @@ const EBook = ({
 		}
 	};
 
+	const changeFontSize = (fontSize: string) => () => {
+		rendition?.themes.fontSize(fontSize);
+		onThemeChange();
+	};
+	const onThemeChange = () => {
+		if (!rendition) return;
+		const contents = rendition.getContents() as unknown as Contents[];
+		onRender(contents[0]);
+	};
+
 	const clean = useMemoizedFn(() => {
 		rendition?.destroy();
 		book?.destroy();
 	});
+
+	useClickAway(() => setShowTOC(false), tocWrapperRef);
 
 	useEffect(() => clean, [clean]);
 
@@ -222,7 +250,9 @@ const EBook = ({
 				<div
 					ref={containerRef}
 					className={clsx(
-						"w-full pointer-events-none invisible h-full opacity-0 absolute left-0 top-0 z-[-1]",
+						"w-full h-full absolute left-0 top-0 z-[-1]",
+						"pointer-events-none invisible opacity-0",
+						debug && "pointer-events-auto opacity-50 -translate-x-0.5 z-[1]",
 					)}
 				/>
 				{clonedDoms && (
@@ -246,22 +276,51 @@ const EBook = ({
 					</div>
 				)}
 				{showTOC && tableOfContents.length > 0 && (
-					<div className="w-72 h-full overflow-y-auto p-4 bg-white/30 dark:bg-black/50 backdrop-blur-lg absolute left-0 top-0 z-[1]">
-						<h2 className="text-xl font-bold mb-4">
-							{bookTitle}
-							<button
-								type="button"
-								onClick={() => setShowTOC(!showTOC)}
-								className="btn btn-ghost btn-xs float-right"
-							>
-								<CloseIcon className="size-4" />
-							</button>
-						</h2>
-
-						<TOCItems
-							items={tableOfContents}
-							onTOCItemClick={handleTOCItemClick}
-						/>
+					<div
+						ref={tocWrapperRef}
+						className="w-72 h-full overflow-y-auto bg-[#F5F5DC] dark:bg-gray-800 shadow-lg absolute left-0 top-0 z-[1]"
+					>
+						<div className="sticky top-0 bg-[#F5F5DC] dark:dark:bg-gray-800 p-4 shadow-md">
+							<h2 className="text-xl font-bold mb-4">
+								{bookTitle}
+								<button
+									type="button"
+									onClick={() => setShowTOC(!showTOC)}
+									className="btn btn-ghost btn-xs float-right"
+								>
+									<CloseIcon className="size-4" />
+								</button>
+							</h2>
+							<div className="flex gap-2">
+								<button
+									type="button"
+									onClick={changeFontSize("14px")}
+									className="btn btn-ghost btn-xs"
+								>
+									<span className="text-sm">한</span>
+								</button>
+								<button
+									type="button"
+									onClick={changeFontSize("16px")}
+									className="btn btn-ghost btn-xs"
+								>
+									<span className="text-base">한</span>
+								</button>
+								<button
+									type="button"
+									onClick={changeFontSize("18px")}
+									className="btn btn-ghost btn-xs"
+								>
+									<span className="text-lg">한</span>
+								</button>
+							</div>
+						</div>
+						<div className="px-4">
+							<TOCItems
+								items={tableOfContents}
+								onTOCItemClick={handleTOCItemClick}
+							/>
+						</div>
 					</div>
 				)}
 				<PrevIcon
@@ -284,7 +343,7 @@ const EBook = ({
 					/>
 				)}
 				<div className="absolute bottom-2 left-1/2 -translate-x-1/2 select-none">
-					<span>
+					<span className="text-sm text-base-content/70">
 						{currentLocation
 							? `${currentLocation.start.displayed.page} /
 						${currentLocation.start.displayed.total}`
@@ -292,7 +351,7 @@ const EBook = ({
 					</span>
 				</div>
 				<div className="absolute bottom-2 right-2 -translate-x-1/2 select-none">
-					<span>
+					<span className="text-sm text-base-content/50">
 						{spines.findIndex((s) => s.href === currentLocation?.start.href) +
 							1}{" "}
 						/ {spines.length}

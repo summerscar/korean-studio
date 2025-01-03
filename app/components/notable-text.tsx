@@ -27,9 +27,11 @@ const NotableText = ({
 		setShowAnnotation(false);
 	}, panelRef);
 
-	const showPapagoPanel = () => {
-		console.log("click annotation");
-
+	const showPapagoPanel = (e: React.MouseEvent) => {
+		// 防止触发挂在上层元素的 ClickAway 检测
+		// next.js 的 root 是 document，正好避免了 ClickAway 触发，但是 createPortal 的时候不行
+		// https://codepen.io/summerscar/pen/ogvoBjW?editors=1111
+		e.stopPropagation();
 		if (isShowPanel) return;
 		if (!papagoPromise.current) {
 			papagoPromise.current = papagoTranslateAction(children);
@@ -51,7 +53,6 @@ const NotableText = ({
 				<span
 					className="absolute -top-0.5 -right-2 cursor-pointer size-2 rounded-sm bg-orange-500"
 					onClick={(e) => {
-						console.log("click annotation");
 						e.stopPropagation();
 						setShowAnnotation(true);
 					}}

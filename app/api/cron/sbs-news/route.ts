@@ -5,6 +5,8 @@ import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { buildContent } from "./template";
 
+export const dynamic = "force-dynamic";
+
 const youtube = google.youtube("v3");
 const channelId = "UCkinYTS9IHqOEwR1Sze2JTw";
 // Ensure you set this as an environment variable

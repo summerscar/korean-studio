@@ -7,7 +7,7 @@ export const getDictRevalidateKey = (dictId: string) => `dict-${dictId}`;
 export const allDictsRevalidateKey = "all-dicts";
 export const getFavDictRevalidateKey = (dictId: string) => `fav-dict-${dictId}`;
 
-export const allArticlesRevalidateKey = "articles";
+export const allArticlesRevalidateKey = "all-articles";
 export const getArticleRevalidateKey = (articleId: string) =>
 	`article-${articleId}`;
 export const articleRevalidateKey = "article";

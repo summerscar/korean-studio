@@ -180,7 +180,7 @@ const EBook = ({
 		)?.idref;
 
 		if (idref) {
-			history.pushState({}, "", `/article/${bookId}?section=${idref}`);
+			history.replaceState({}, "", `/article/${bookId}?section=${idref}`);
 		}
 	});
 

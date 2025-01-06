@@ -42,7 +42,7 @@ const NotableText = ({
 	return (
 		<span
 			className={clsx(
-				"dark:bg-slate-600 inline-block rounded-sm relative cursor-pointer indent-0",
+				"dark:bg-slate-600 inline rounded-sm relative cursor-pointer indent-0",
 				annotation ? "bg-orange-400/80" : "bg-yellow-200/80",
 			)}
 			onClick={showPapagoPanel}

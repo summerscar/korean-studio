@@ -78,7 +78,7 @@ interface Meaning {
 }
 
 interface Po {
-	type: string;
+	type: string | null;
 	meanings: Meaning[];
 }
 

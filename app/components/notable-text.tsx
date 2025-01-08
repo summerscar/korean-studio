@@ -51,7 +51,7 @@ const NotableText = ({
 			{children}
 			{annotation && (
 				<span
-					className="absolute -top-0.5 -right-2 cursor-pointer size-2 rounded-sm bg-orange-500"
+					className="absolute -top-0.5 -right-2 cursor-pointer size-2 rounded-sm bg-orange-500 z-[1]"
 					onClick={(e) => {
 						e.stopPropagation();
 						setShowAnnotation(true);

@@ -3,6 +3,7 @@
 @import "./_animation.css";
 @import "./_markdown.css";
 @import "./_ebook.css";
+@import "./_nprogress.css";
 
 /* https://ylface.com/course/2821.html */
 /* 当父级元素使用了backdrop--filter后，子级再使用该属性会不生效。 */

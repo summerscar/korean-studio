@@ -14,6 +14,7 @@ import { SessionProvider } from "next-auth/react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { ViewTransitions } from "next-view-transitions";
+import { NprogressBar } from "./nprogress-bar";
 
 export async function DefaultLayout({
 	isAdmin = false,
@@ -47,6 +48,7 @@ export async function DefaultLayout({
 							<NotificationProvider>
 								<main className="flex min-h-dvh flex-col">{children}</main>
 								<ModalRoot />
+								<NprogressBar />
 							</NotificationProvider>
 						</NextIntlClientProvider>
 					</SessionProvider>

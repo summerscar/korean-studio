@@ -1,0 +1,8 @@
+#nprogress .bar {
+	@apply !bottom-0 !top-[unset];
+	@apply !bg-base-content
+}
+
+#nprogress .peg {
+	@apply !hidden;
+}

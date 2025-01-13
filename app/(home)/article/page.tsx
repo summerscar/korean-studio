@@ -1,6 +1,7 @@
-import { getArticles } from "@/actions/article-actions";
+import { getArticlesWithPagination } from "@/actions/article-actions";
 import { RenderMDTextServer } from "@/components/render-md-server";
 import { notoKR } from "@/utils/fonts";
+import clsx from "clsx";
 import { getTranslations } from "next-intl/server";
 import { Link } from "next-view-transitions";
 import { ArticleRemove } from "./[slug]/_components/article-remove";
@@ -13,8 +14,11 @@ export const generateMetadata = async () => {
 	};
 };
 
-const ArticlePage = async () => {
-	const articles = await getArticles();
+const ArticlePage = async ({
+	searchParams,
+}: { searchParams: Promise<{ page: string }> }) => {
+	const page = Number((await searchParams).page || "1");
+	const { articles, totalPages } = await getArticlesWithPagination(page);
 	const sortedArticles = articles.toSorted((a, b) =>
 		a.type === "MOVIE" ? -1 : b.type === "MOVIE" ? 1 : 0,
 	);
@@ -65,6 +69,22 @@ const ArticlePage = async () => {
 						<ArticleRemove id={article.id} />
 					</div>
 				))}
+			</div>
+			<div className="flex justify-center mt-8">
+				<div className="btn-group flex w-full justify-center gap-2 overflow-x-auto">
+					{Array.from({ length: totalPages }, (_, i) => (
+						<Link
+							// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+							key={i}
+							href={`/article?page=${i + 1}`}
+							className={clsx("btn btn-sm", {
+								"btn-active": i + 1 === page,
+							})}
+						>
+							{i + 1}
+						</Link>
+					))}
+				</div>
 			</div>
 		</div>
 	);

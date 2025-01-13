@@ -103,7 +103,9 @@ export async function GET() {
 
 		console.log(`[SBS News][count]: ${count}`);
 
-		if (count > 100) {
+		// 暂时跳过
+		// biome-ignore lint/correctness/noConstantCondition: <explanation>
+		if (count > 100 && false) {
 			const oldestTextArticle = (
 				await keystoneContext.db.Article.findMany({
 					where: {

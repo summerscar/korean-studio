@@ -7,7 +7,10 @@ export const getDictRevalidateKey = (dictId: string) => `dict-${dictId}`;
 export const allDictsRevalidateKey = "all-dicts";
 export const getFavDictRevalidateKey = (dictId: string) => `fav-dict-${dictId}`;
 
+export const articlePageSize = 9;
 export const allArticlesRevalidateKey = "all-articles";
+export const getPageArticlesRevalidateKey = (page = 1) =>
+	`all-articles-${page}`;
 export const getArticleRevalidateKey = (articleId: string) =>
 	`article-${articleId}`;
 export const articleRevalidateKey = "article";

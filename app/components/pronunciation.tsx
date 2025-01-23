@@ -51,16 +51,19 @@ const Pronunciation = ({
 			{...rest}
 		/>
 	);
-	const standardized = standardizePronunciation(targetText, {
-		hardConversion: true,
-	});
+
 	return (
 		<>
 			{children}{" "}
 			{tooltip && targetText.length < 10 ? (
 				<span
 					className="tooltip inline-flex"
-					data-tip={tooltipText || `[${standardized}] ${romanize(targetText)}`}
+					data-tip={
+						tooltipText ||
+						`[${standardizePronunciation(targetText, {
+							hardConversion: true,
+						})}] ${romanize(targetText)}`
+					}
 				>
 					{speakerEl}
 				</span>

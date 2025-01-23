@@ -45,7 +45,7 @@
 		"crypto-js": "^4.2.0",
 		"dotenv": "^16.4.5",
 		"epubjs": "^0.3.93",
-		"es-hangul": "^2.2.4",
+		"es-hangul": "^2.3.0",
 		"feed": "^4.2.2",
 		"flexsearch": "^0.7.43",
 		"github-markdown-css": "^5.6.1",

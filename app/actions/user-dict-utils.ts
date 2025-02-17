@@ -8,7 +8,7 @@ export const allDictsRevalidateKey = "all-dicts";
 export const getFavDictRevalidateKey = (dictId: string) => `fav-dict-${dictId}`;
 
 export const articlePageSize = 9;
-export const allArticlesRevalidateKey = "all-articles";
+export const allArticlesRevalidateKey = `all-articles-${process.env.NEXT_PUBLIC_VERCEL_ENV || "dev"}`;
 export const getPageArticlesRevalidateKey = (page = 1) =>
 	`all-articles-${page}`;
 export const getArticleRevalidateKey = (articleId: string) =>

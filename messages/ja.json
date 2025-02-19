@@ -16,6 +16,7 @@
 	"Account": {
 		"profile": "プロファイル",
 		"myWordList": "マイ単語リスト",
+		"myAnnotation": "マイアノテーション",
 		"username": "ユーザー名",
 		"password": "パスワード",
 		"confirmPassword": "パスワードの確認",

@@ -16,6 +16,7 @@
 	"Account": {
 		"profile": "个人资料",
 		"myWordList": "我的词单",
+		"myAnnotation": "我的标注",
 		"username": "用户名",
 		"password": "密码",
 		"confirmPassword": "确认密码",

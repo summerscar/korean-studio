@@ -16,6 +16,7 @@
 	"Account": {
 		"profile": "Profile",
 		"myWordList": "My word list",
+		"myAnnotation": "My annotation",
 		"username": "Username",
 		"password": "Password",
 		"confirmPassword": "Confirm password",

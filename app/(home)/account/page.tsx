@@ -1,9 +1,11 @@
+import { listAnnotationActionWithArticle } from "@/actions/annotate-actions";
 import { getAllDicts } from "@/actions/user-dict-action";
 import { filterAndSortDictList } from "@/actions/user-dict-utils";
 import InfoIcon from "@/assets/svg/info.svg";
 import { auth } from "auth";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import Annotations from "./_components/annotations";
 import { WordLists } from "./_components/lists";
 
 export const generateMetadata = async () => {
@@ -26,6 +28,10 @@ const AccountPage = async () => {
 
 	const dicts = filterAndSortDictList(await getAllDicts(), session, false);
 	const tAccount = await getTranslations("Account");
+	const annotations = await listAnnotationActionWithArticle({
+		take: 3,
+		orderBy: { createdAt: "desc" },
+	});
 
 	return (
 		<div className="w-full">
@@ -48,6 +54,17 @@ const AccountPage = async () => {
 				<div>
 					{tAccount("email")}: {session.user?.email}
 				</div>
+			</div>
+			<div>
+				<h2 className="text-2xl">{tAccount("myAnnotation")}</h2>
+				<Annotations annotations={annotations} className="py-4" />
+				{annotations.length && (
+					<div className="pb-4">
+						<Link href={"/account/annotations"} className="underline">
+							More
+						</Link>
+					</div>
+				)}
 			</div>
 			<div>
 				<h2 className="text-2xl">{tAccount("myWordList")}</h2>

@@ -4,13 +4,21 @@ import type { AnnotationItem } from "@/types/annotation";
 import { auth } from "auth";
 import type {
 	AnnotationCreateInput,
+	AnnotationOrderByInput,
 	AnnotationUpdateInput,
 } from ".keystone/types";
 
 const listAnnotationAction = async ({
 	articleId,
 	chapterId,
-}: { articleId?: string; chapterId?: string }) => {
+	take = undefined,
+	orderBy = undefined,
+}: {
+	articleId?: string;
+	chapterId?: string;
+	take?: number;
+	orderBy?: AnnotationOrderByInput;
+}) => {
 	const session = await auth();
 	const userId = session?.user?.id;
 	if (!userId) {
@@ -22,8 +30,41 @@ const listAnnotationAction = async ({
 			...(articleId ? { articleId: { id: { equals: articleId } } } : null),
 			...(chapterId ? { chapterId: { equals: chapterId } } : null),
 		},
+		take,
+		orderBy,
 	})) as AnnotationItem[];
 
+	return res;
+};
+
+const listAnnotationActionWithArticle = async ({
+	articleId,
+	chapterId,
+	take = undefined,
+	orderBy = undefined,
+}: {
+	articleId?: string;
+	chapterId?: string;
+	take?: number;
+	orderBy?: AnnotationOrderByInput;
+}) => {
+	const session = await auth();
+	const userId = session?.user?.id;
+	if (!userId) {
+		return [];
+	}
+	const res = (await KSwithSession(session).query.Annotation.findMany({
+		where: {
+			createdBy: { id: { equals: userId } },
+			...(articleId ? { articleId: { id: { equals: articleId } } } : null),
+			...(chapterId ? { chapterId: { equals: chapterId } } : null),
+		},
+		take,
+		orderBy,
+		query: "id text content createdAt chapterId articleId { id title type }",
+	})) as (AnnotationItem & {
+		articleId: { id: string; title: string; createAt: string };
+	})[];
 	return res;
 };
 
@@ -57,6 +98,7 @@ const removeAnnotationAction = async (id: string) => {
 
 export {
 	listAnnotationAction,
+	listAnnotationActionWithArticle,
 	createAnnotationAction,
 	updateAnnotationAction,
 	removeAnnotationAction,

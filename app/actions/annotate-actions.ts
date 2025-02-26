@@ -63,7 +63,7 @@ const listAnnotationActionWithArticle = async ({
 		orderBy,
 		query: "id text content createdAt chapterId articleId { id title type }",
 	})) as (AnnotationItem & {
-		articleId: { id: string; title: string; createAt: string };
+		articleId: { id: string; title: string; createdAt: string };
 	})[];
 	return res;
 };

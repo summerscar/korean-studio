@@ -7,7 +7,7 @@ const Annotations = ({
 	className,
 }: {
 	annotations: (AnnotationItem & {
-		articleId: { id: string; title: string; createAt: string };
+		articleId: { id: string; title: string; createdAt: string };
 	})[];
 	className?: string;
 }) => {
@@ -25,6 +25,7 @@ const Annotations = ({
 					<div className="flex gap-2 pt-4 justify-between text-xs text-gray-500">
 						<p className="flex-auto mobile:w-44 truncate sm:mr-8">
 							{/* TODO: dialog or tooltip */}
+							{/* Consider using a modal or tooltip to display article preview   */}
 							<Link
 								target="_blank"
 								href={`/article/${annotation.articleId.id}`}

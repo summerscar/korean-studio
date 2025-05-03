@@ -10,7 +10,7 @@
 		"keystone:dev": "keystone dev",
 		"keystone:build": "keystone build --no-ui",
 		"keystone:start": "keystone start",
-		"next:dev": "next dev --turbo",
+		"next:dev": "next dev",
 		"next:build": "next build",
 		"next:start": "next start",
 		"lint": "biome lint -- apply <files>",

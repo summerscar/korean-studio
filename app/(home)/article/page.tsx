@@ -72,18 +72,41 @@ const ArticlePage = async ({
 			</div>
 			<div className="flex justify-center mt-8">
 				<div className="btn-group flex w-full justify-center gap-2 overflow-x-auto">
-					{Array.from({ length: totalPages }, (_, i) => (
-						<Link
-							// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-							key={i}
-							href={`/article?page=${i + 1}`}
-							className={clsx("btn btn-sm", {
-								"btn-active": i + 1 === page,
-							})}
-						>
-							{i + 1}
-						</Link>
-					))}
+					{Array.from({ length: totalPages }, (_, i) => {
+						const pageNumber = i + 1;
+						const isNearCurrentPage = Math.abs(pageNumber - page) <= 2;
+						const isFirstOrLastPage =
+							pageNumber === 1 || pageNumber === totalPages;
+
+						if (!isNearCurrentPage && !isFirstOrLastPage) {
+							if (
+								(pageNumber === page - 3 || pageNumber === page + 3) &&
+								totalPages > 7
+							) {
+								return (
+									<span
+										key={`ellipsis-${pageNumber}`}
+										className="btn btn-sm pointer-events-none"
+									>
+										...
+									</span>
+								);
+							}
+							return null;
+						}
+
+						return (
+							<Link
+								key={`page-${pageNumber}`}
+								href={`/article?page=${pageNumber}`}
+								className={clsx("btn btn-sm", {
+									"btn-active": pageNumber === page,
+								})}
+							>
+								{pageNumber}
+							</Link>
+						);
+					})}
 				</div>
 			</div>
 		</div>

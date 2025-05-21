@@ -171,4 +171,4 @@ const PapagoPanel = ({
 	);
 };
 
-export { PapagoResult, PapagoPanel };
+export { PapagoPanel, PapagoResult };

@@ -65,7 +65,7 @@ function authorization(url: string, uuid: string) {
 	return {
 		Authorization: `PPG ${t}:${HmacMD5(
 			`${t}\n${url.split("?")[0]}\n${n}`,
-			"v1.8.10_9e022f68fb",
+			"v1.8.11_52b4eb3fe0",
 		).toString(Base64)}`,
 		Timestamp: n.toString(),
 	};

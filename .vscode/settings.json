@@ -6,5 +6,6 @@
 		"source.organizeImports.biome": "explicit",
 		"quickfix.biome": "explicit"
 	},
-	"biome.enabled": true
+	"biome.enabled": true,
+	"prettier.enable": false
 }

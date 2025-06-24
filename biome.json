@@ -1,14 +1,17 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-	"organizeImports": {
-		"enabled": true
+	"$schema": "https://biomejs.dev/schemas/2.0.0-beta.6/schema.json",
+	"assist": {
+		"actions": {
+			"source": { "organizeImports": "on" }
+		}
 	},
 	"files": {
-		"ignore": [
-			"**/*.css",
-			"schema.prisma",
-			"schema.graphql",
-			"public/search-index.json"
+		"includes": [
+			"**",
+			"!**/*.css",
+			"!**/schema.prisma",
+			"!**/schema.graphql",
+			"!**/public/search-index.json"
 		]
 	},
 	"linter": {
@@ -24,7 +27,17 @@
 				"noAssignInExpressions": "off"
 			},
 			"style": {
-				"noNonNullAssertion": "off"
+				"noNonNullAssertion": "off",
+				"noParameterAssign": "error",
+				"useAsConstAssertion": "error",
+				"useDefaultParameterLast": "error",
+				"useEnumInitializers": "error",
+				"useSelfClosingElements": "error",
+				"useSingleVarDeclarator": "error",
+				"noUnusedTemplateLiteral": "error",
+				"useNumberNamespace": "error",
+				"noInferrableTypes": "error",
+				"noUselessElse": "error"
 			},
 			"a11y": {
 				"useKeyWithClickEvents": "off"

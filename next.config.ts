@@ -62,18 +62,18 @@ export default (
 						dynamic: isDEV ? 0 : 60 * 0.5,
 						// default: 5min
 						static: 60 * 5,
-					},
-					turbo: {
-						rules: {
-							"*.svg": {
-								loaders: [
-									{
-										loader: "@svgr/webpack",
-										options: SVGRConfig,
-									},
-								],
-								as: "*.js",
-							},
+					}
+				},
+				turbopack: {
+					rules: {
+						"*.svg": {
+							loaders: [
+								{
+									loader: "@svgr/webpack",
+									options: SVGRConfig,
+								},
+							],
+							as: "*.js",
 						},
 					},
 				},

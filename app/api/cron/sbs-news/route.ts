@@ -1,5 +1,6 @@
 import { keystoneContext } from "@/../keystone/context";
 import { allArticlesRevalidateKey } from "@/actions/user-dict-utils";
+import { healthCheck } from "@/service/papago-health-check";
 import { google } from "googleapis";
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
@@ -24,6 +25,14 @@ function decodeHtmlEntities(text: string | null | undefined): string {
 
 // When setting the title or description
 export async function GET() {
+	// papago health check
+	try {
+		await healthCheck();
+		console.log("Papago health check success");
+	} catch (error) {
+		console.error("Papago health check failed:", error);
+	}
+
 	try {
 		if (!YOUTUBE_API_KEY) {
 			return NextResponse.json(

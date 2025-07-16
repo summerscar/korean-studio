@@ -31,9 +31,9 @@
 		"@keystone-6/fields-document": "^9.1.1",
 		"@mdx-js/loader": "^3.1.0",
 		"@mdx-js/react": "^3.1.0",
-		"@next/bundle-analyzer": "15.3.1",
-		"@next/mdx": "15.3.1",
-		"@next/third-parties": "15.3.1",
+		"@next/bundle-analyzer": "15.4.1",
+		"@next/mdx": "15.4.1",
+		"@next/third-parties": "15.4.1",
 		"@prisma/client": "^5.22.0",
 		"@svgr/webpack": "^8.1.0",
 		"@types/mdx": "^2.0.13",
@@ -57,13 +57,14 @@
 		"js-cookie": "^3.0.5",
 		"jszip": "^3.10.1",
 		"marked": "^15.0.3",
-		"next": "15.3.1",
+		"next": "15.4.1",
 		"next-auth": "^5.0.0-beta.25",
 		"next-cache-toolbar": "^0.2.1",
 		"next-intl": "^3.26.0",
 		"next-mdx-remote": "^5.0.0",
 		"next-nprogress-bar": "^2.4.3",
 		"next-view-transitions": "^0.3.4",
+		"nodemailer": "^6.10.1",
 		"openai": "^4.68.4",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
@@ -88,6 +89,7 @@
 		"@types/crypto-js": "^4.2.2",
 		"@types/js-cookie": "^3.0.6",
 		"@types/node": "^20",
+		"@types/nodemailer": "^6.4.17",
 		"@types/react": "19.1.0",
 		"@types/react-dom": "19.1.1",
 		"@types/web-push": "^3.6.4",
@@ -145,6 +147,6 @@
 	"overrides": {
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
-		"next": "15.3.1"
+		"next": "15.4.1"
 	}
 }

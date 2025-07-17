@@ -18,7 +18,7 @@ interface Content {
 	releaseDate: string;
 	releaseDateTime: string;
 	categories: Category[];
-	author: Author;
+	authors: Author[];
 	thumbnailUri: string;
 }
 
@@ -118,7 +118,7 @@ export async function GET() {
 					id: content.id.toString(),
 					link: `https://tech.kakao.com/blog/${content.id}`,
 					description: description,
-					author: [{ name: sanitizeContent(content.author.name) }],
+					author: [{ name: sanitizeContent(content.authors[0].name) }],
 					date: new Date(content.releaseDateTime),
 					category: content.categories.map((cat) => ({
 						name: sanitizeContent(cat.name),

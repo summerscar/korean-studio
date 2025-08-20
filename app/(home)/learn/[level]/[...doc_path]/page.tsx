@@ -38,7 +38,7 @@ export async function generateMetadata(props: {
 }
 
 export async function generateStaticParams(props: {
-	params: Promise<DocPathParams>;
+	params: Awaited<PageProps<'/learn/[level]/[...doc_path]'>>['params'];
 }) {
 	const { level } = await props.params;
 	const docs = await listAllDocs(level);

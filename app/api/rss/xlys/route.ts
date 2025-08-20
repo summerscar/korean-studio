@@ -23,8 +23,9 @@ const GET = async () => {
 		copyright: "All rights reserved",
 	});
 
-	const res = await axios.get(FEED_WEB_URL);
-	const $ = cheerio.load(res.data);
+	const res = await axios.get(FEED_WEB_URL).catch(() => null);
+
+	const $ = cheerio.load(res?.data || '');
 
 	const elements = $(".row-cards>div").toArray().slice(0, SIZE);
 

@@ -73,7 +73,7 @@ export async function generateStaticParams() {
 export default async function Layout({
 	children,
 	params,
-}: { children: React.ReactNode; params: Promise<{ tool: string[] }> }) {
+}: LayoutProps<'/tools/[[...tool]]'>) {
 	const tTools = await getTranslations("Tools");
 	const tool = ((await params).tool || [])[0] as ToolName;
 

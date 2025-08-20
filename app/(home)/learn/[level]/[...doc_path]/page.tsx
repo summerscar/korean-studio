@@ -38,9 +38,9 @@ export async function generateMetadata(props: {
 }
 
 export async function generateStaticParams(props: {
-	params: Awaited<PageProps<'/learn/[level]/[...doc_path]'>>['params'];
+	params: Awaited<PageProps<'/learn/[level]/[...doc_path]'>['params']>;
 }) {
-	const { level } = await props.params;
+	const { level } = props.params;
 	const docs = await listAllDocs(level);
 	const flatten = docs
 		.flatMap((doc) => {

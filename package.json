@@ -18,6 +18,7 @@
 		"check": "biome check --apply <files>",
 		"prepare": "husky",
 		"lint-staged": "lint-staged",
+		"type-check": "next typegen && tsc --noEmit",
 		"script:docs-desc": "tsx scripts/generate-doc-desc.ts",
 		"script:docs-file": "tsx scripts/generate-doc-file.ts",
 		"script:docs-modified": "tsx scripts/generate-doc-last-modified.ts",
@@ -31,9 +32,9 @@
 		"@keystone-6/fields-document": "^9.1.1",
 		"@mdx-js/loader": "^3.1.0",
 		"@mdx-js/react": "^3.1.0",
-		"@next/bundle-analyzer": "15.4.4",
-		"@next/mdx": "15.4.4",
-		"@next/third-parties": "15.4.4",
+		"@next/bundle-analyzer": "15.5.0",
+		"@next/mdx": "15.5.0",
+		"@next/third-parties": "15.5.0",
 		"@prisma/client": "^5.22.0",
 		"@svgr/webpack": "^8.1.0",
 		"@types/mdx": "^2.0.13",
@@ -57,7 +58,7 @@
 		"js-cookie": "^3.0.5",
 		"jszip": "^3.10.1",
 		"marked": "^15.0.3",
-		"next": "15.4.4",
+		"next": "15.5.0",
 		"next-auth": "^5.0.0-beta.25",
 		"next-cache-toolbar": "^0.2.1",
 		"next-intl": "^3.26.0",
@@ -147,6 +148,6 @@
 	"overrides": {
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
-		"next": "15.4.4"
+		"next": "15.5.0"
 	}
 }

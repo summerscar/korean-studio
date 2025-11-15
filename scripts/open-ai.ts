@@ -45,8 +45,9 @@ async function fetchChatCompletion(
 	messages: ChatCompletionMessageParam[],
 	search = false,
 ) {
+	const model = currentModel();
+	console.log(`[AI][${process.env.AI}]: ${model}`)
 	if (isOpenAi()) {
-		const model = currentModel();
 		// TODO:  response_format
 		// https://cookbook.openai.com/examples/structured_outputs_intro
 		const result = await openai.chat.completions.create({
@@ -60,7 +61,6 @@ async function fetchChatCompletion(
 	}
 
 	if (isGemini()) {
-		const model = currentModel();
 		let retryCount = 0;
 		const maxRetries = GEMINI_KEYS.length;
 

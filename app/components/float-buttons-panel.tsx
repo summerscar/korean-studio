@@ -6,7 +6,6 @@ import { PapagoPanel } from "@/components/papago-render";
 import { ErrorFallback } from "@/components/suspend-error-fallback";
 import { useUserDictList } from "@/hooks/use-dict-list";
 import { usePanelReposition } from "@/hooks/use-panel-reposition";
-import {} from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
 import { addWordsToUserDict } from "@/service/add-words-to-user-dict";
 import type { SITES_LANGUAGE } from "@/types/site";
@@ -160,14 +159,14 @@ export function FloatButtonsPanel({
 		() => (
 			<div ref={ref} data-ignore-click-away="true">
 				{showAIPanel ? (
-					<AIPanel
-						// promise={Promise.resolve("12345")}
-						promise={generateWordSuggestionAction(
-							prompt!(selectedText, locale),
-						)}
-						rect={rect}
-						showAbove={showAbove}
-					/>
+						<AIPanel
+							// promise={Promise.resolve("12345")}
+							promise={generateWordSuggestionAction(
+								prompt!(selectedText, locale),
+							)}
+							rect={rect}
+							showAbove={showAbove}
+						/>
 				) : showPapagoPanel ? (
 					<PapagoPanel
 						promise={papagoTranslateAction(selectedText, locale)}

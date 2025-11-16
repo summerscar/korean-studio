@@ -1,3 +1,10 @@
+import { useMemoizedFn } from "ahooks";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import dynamic from "next/dynamic";
+import { signIn } from "next-auth/react";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { generateWordSuggestionAction } from "@/actions/generate-word-action";
 import { papagoTranslateAction } from "@/actions/papago-translate-action";
 import { FloatButton } from "@/components/float-button";
@@ -11,13 +18,6 @@ import { addWordsToUserDict } from "@/service/add-words-to-user-dict";
 import type { SITES_LANGUAGE } from "@/types/site";
 import { getPortalParent } from "@/utils/get-portal-parent";
 import { timeOut } from "@/utils/time-out";
-import { useMemoizedFn } from "ahooks";
-import { signIn } from "next-auth/react";
-import { useLocale, useTranslations } from "next-intl";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState } from "react";
-import { createPortal } from "react-dom";
 import { AnnotationPanel } from "./annotation-panel";
 
 const SuggestionPanel = dynamic(
@@ -159,14 +159,14 @@ export function FloatButtonsPanel({
 		() => (
 			<div ref={ref} data-ignore-click-away="true">
 				{showAIPanel ? (
-						<AIPanel
-							// promise={Promise.resolve("12345")}
-							promise={generateWordSuggestionAction(
-								prompt!(selectedText, locale),
-							)}
-							rect={rect}
-							showAbove={showAbove}
-						/>
+					<AIPanel
+						// promise={Promise.resolve("12345")}
+						promise={generateWordSuggestionAction(
+							prompt!(selectedText, locale),
+						)}
+						rect={rect}
+						showAbove={showAbove}
+					/>
 				) : showPapagoPanel ? (
 					<PapagoPanel
 						promise={papagoTranslateAction(selectedText, locale)}

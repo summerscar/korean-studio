@@ -1,9 +1,10 @@
-import { getArticlesWithPagination } from "@/actions/article-actions";
-import { RenderMDTextServer } from "@/components/render-md-server";
-import { notoKR } from "@/utils/fonts";
 import clsx from "clsx";
 import { getTranslations } from "next-intl/server";
 import { Link } from "next-view-transitions";
+import { getArticlesWithPagination } from "@/actions/article-actions";
+import { FormattedDate } from "@/components/formatted-date";
+import { RenderMDTextServer } from "@/components/render-md-server";
+import { notoKR } from "@/utils/fonts";
 import { ArticleRemove } from "./[slug]/_components/article-remove";
 
 export const generateMetadata = async () => {
@@ -16,7 +17,9 @@ export const generateMetadata = async () => {
 
 const ArticlePage = async ({
 	searchParams,
-}: { searchParams: Promise<{ page: string }> }) => {
+}: {
+	searchParams: Promise<{ page: string }>;
+}) => {
 	const page = Number((await searchParams).page || "1");
 	const { articles, totalPages } = await getArticlesWithPagination(page);
 	const sortedArticles = articles.toSorted((a, b) =>
@@ -51,19 +54,29 @@ const ArticlePage = async ({
 							className="card-body p-6 justify-between"
 							style={{ fontFamily: notoKR.style.fontFamily }}
 						>
-							<h2
-								className="card-title"
-								style={{ viewTransitionName: `article-title-${article.id}` }}
-								// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-								dangerouslySetInnerHTML={{ __html: article.title }}
-								lang="ko"
-							/>
+							<Link
+								key={article.id}
+								href={`/article/${article.id}`}
+								className="block w-full"
+								prefetch={article.type === "TEXT" && index < 6}
+							>
+								<h2
+									className="card-title"
+									style={{ viewTransitionName: `article-title-${article.id}` }}
+									// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+									dangerouslySetInnerHTML={{ __html: article.title }}
+									lang="ko"
+								/>
+							</Link>
 							<div
 								style={{
 									viewTransitionName: `article-description-${article.id}`,
 								}}
 							>
 								<RenderMDTextServer text={article.description} />
+								{article.type === "TEXT" && article.createdAt && (
+									<FormattedDate date={article.createdAt} />
+								)}
 							</div>
 						</div>
 						<ArticleRemove id={article.id} />

@@ -22,7 +22,8 @@
 		"script:docs-desc": "tsx scripts/generate-doc-desc.ts",
 		"script:docs-file": "tsx scripts/generate-doc-file.ts",
 		"script:docs-modified": "tsx scripts/generate-doc-last-modified.ts",
-		"script:generate-search-index": "tsx scripts/generate-search-index.ts"
+		"script:generate-search-index": "tsx scripts/generate-search-index.ts",
+		"script:get-hostname": "tsx scripts/get-specific-hostname.ts"
 	},
 	"dependencies": {
 		"@google/generative-ai": "^0.21.0",

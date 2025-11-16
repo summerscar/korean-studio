@@ -84,7 +84,7 @@
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.0.0-beta.6",
+		"@biomejs/biome": "2.0.6",
 		"@prisma/nextjs-monorepo-workaround-plugin": "^5.22.0",
 		"@types/canvas-confetti": "^1.6.4",
 		"@types/crypto-js": "^4.2.2",

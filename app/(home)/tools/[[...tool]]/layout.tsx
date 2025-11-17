@@ -1,7 +1,7 @@
-import { type ToolName, toolsNames } from "@/types/tools";
 import clsx from "clsx";
-import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { type ToolName, toolsNames } from "@/types/tools";
 
 const list: {
 	href: string;
@@ -73,7 +73,10 @@ export async function generateStaticParams() {
 export default async function Layout({
 	children,
 	params,
-}: LayoutProps<'/tools/[[...tool]]'>) {
+}: {
+	children: React.ReactNode;
+	params: Promise<{ tool: string[] }>;
+}) {
 	const tTools = await getTranslations("Tools");
 	const tool = ((await params).tool || [])[0] as ToolName;
 

@@ -1,3 +1,8 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import type { ReactNode } from "react";
 import NextIcon from "@/assets/svg/next.svg";
 import PrevIcon from "@/assets/svg/prev.svg";
 import { type DocPathParams, Levels } from "@/types";
@@ -5,11 +10,6 @@ import { isDev } from "@/utils/is-dev";
 import { type FileItem, listAllDocs } from "@/utils/list-docs";
 import { loadMDX } from "@/utils/load-mdx";
 import { timeOut } from "@/utils/time-out";
-import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import type { ReactNode } from "react";
 import { MDContentWrapper } from "../_components/markdown-wrapper";
 import { Toc } from "../_components/toc";
 
@@ -38,7 +38,7 @@ export async function generateMetadata(props: {
 }
 
 export async function generateStaticParams(props: {
-	params: Awaited<PageProps<'/learn/[level]/[...doc_path]'>['params']>;
+	params: Promise<DocPathParams>;
 }) {
 	const { level } = await props.params;
 	const docs = await listAllDocs(level);
@@ -92,7 +92,10 @@ export default async function Page(props: { params: Promise<DocPathParams> }) {
 	const NavButton = ({
 		children,
 		href,
-	}: { children: ReactNode; href: string }) => (
+	}: {
+		children: ReactNode;
+		href: string;
+	}) => (
 		<Link
 			prefetch
 			href={href}

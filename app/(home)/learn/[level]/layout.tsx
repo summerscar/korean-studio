@@ -1,4 +1,4 @@
-import { Levels } from "@/types";
+import { type DocPathParams, Levels } from "@/types";
 import { DocsCategory } from "./_components/category";
 import { DocsLayout } from "./_components/docs-layout";
 
@@ -13,7 +13,7 @@ export default async function Layout({
 	params,
 }: {
 	children: React.ReactNode;
-	params: LayoutProps<'/learn/[level]'>['params'];
+	params: Promise<DocPathParams>;
 }) {
 	const { level } = await params;
 

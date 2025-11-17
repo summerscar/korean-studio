@@ -1,12 +1,12 @@
 "use server";
-import { KSwithSession } from "@/../keystone/context";
-import type { AnnotationItem } from "@/types/annotation";
-import { auth } from "auth";
 import type {
 	AnnotationCreateInput,
 	AnnotationOrderByInput,
 	AnnotationUpdateInput,
 } from ".keystone/types";
+import { auth } from "auth";
+import { KSwithSession } from "@/../keystone/context";
+import type { AnnotationItem } from "@/types/annotation";
 
 const listAnnotationAction = async ({
 	articleId,
@@ -31,7 +31,7 @@ const listAnnotationAction = async ({
 			...(chapterId ? { chapterId: { equals: chapterId } } : null),
 		},
 		take,
-		orderBy,
+		...(orderBy ? { orderBy } : {}),
 	})) as AnnotationItem[];
 
 	return res;

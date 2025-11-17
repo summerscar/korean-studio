@@ -1,8 +1,8 @@
-import { timeOut } from "@/utils/time-out";
 import { GoogleGenerativeAI, type Tool } from "@google/generative-ai";
 import { config as envConfig } from "dotenv";
 import OpenAI from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
+import { timeOut } from "@/utils/time-out";
 
 envConfig({ path: ["./.env", "./.env.local"] });
 
@@ -46,7 +46,7 @@ async function fetchChatCompletion(
 	search = false,
 ) {
 	const model = currentModel();
-	console.log(`[AI][${process.env.AI}]: ${model}`)
+	console.log(`[AI][${process.env.AI}]: ${model}`);
 	if (isOpenAi()) {
 		// TODO:  response_format
 		// https://cookbook.openai.com/examples/structured_outputs_intro
@@ -57,7 +57,10 @@ async function fetchChatCompletion(
 		console.log(
 			`[AI][OpenAI][${model}]: use ${result.usage?.total_tokens} tokens.`,
 		);
-		return result.choices[0].message.content || "";
+		const content = result.choices?.[0]?.message?.content || "";
+		// 过滤掉类似 <think>...</think> 的内容块
+		const filtered = content.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+		return filtered;
 	}
 
 	if (isGemini()) {

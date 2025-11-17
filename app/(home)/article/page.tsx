@@ -75,7 +75,7 @@ const ArticlePage = async ({
 							>
 								<RenderMDTextServer text={article.description} />
 								{article.type === "TEXT" && article.createdAt && (
-									<FormattedDate date={article.createdAt} />
+									<FormattedDate date={article.createdAt} className="text-xs" />
 								)}
 							</div>
 						</div>

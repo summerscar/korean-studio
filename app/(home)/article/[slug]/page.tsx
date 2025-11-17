@@ -1,19 +1,20 @@
+import clsx from "clsx";
+import { unstable_cache } from "next/cache";
+import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { cache } from "react";
 import { keystoneContext } from "@/../keystone/context";
 import { getArticles } from "@/actions/article-actions";
 import {
 	articleRevalidateKey,
 	getArticleRevalidateKey,
 } from "@/actions/user-dict-utils";
+import { FormattedDate } from "@/components/formatted-date";
 import { RenderMDTextServer } from "@/components/render-md-server";
 import { SelectToSearch } from "@/hooks/use-select-to-search";
 import type { SubtitleCues, SubtitleSeries } from "@/types/article";
 import { notoKR } from "@/utils/fonts";
 import { getBaseURL } from "@/utils/get-base-url";
-import clsx from "clsx";
-import { getTranslations } from "next-intl/server";
-import { unstable_cache } from "next/cache";
-import { redirect } from "next/navigation";
-import { cache } from "react";
 import { EBook } from "./_components/ebook";
 import { EPSelect } from "./_components/ep-select";
 import { ArticleMovie } from "./_components/movie";
@@ -37,7 +38,9 @@ const getArticle = cache(
 
 export const generateMetadata = async ({
 	params,
-}: { params: Promise<{ slug: string }> }) => {
+}: {
+	params: Promise<{ slug: string }>;
+}) => {
 	const slug = (await params).slug;
 	const tHeader = await getTranslations("Header");
 	const article = await getArticle(slug);
@@ -129,13 +132,16 @@ const SlugPage = async ({
 						/>
 					</SelectToSearch>
 					<div
-						className="text-base text-base-content/70 leading-relaxed flex-grow"
+						className="text-base text-base-content/70 leading-relaxed flex-grow flex justify-between"
 						style={{
 							fontFamily: notoKR.style.fontFamily,
 							viewTransitionName: `article-description-${article.id}`,
 						}}
 					>
 						<RenderMDTextServer text={article.description} />
+						{article.type === "TEXT" && article.createdAt && (
+							<FormattedDate date={article.createdAt} />
+						)}
 					</div>
 					{article.type === "MOVIE" && <EPSelect article={article} />}
 				</div>

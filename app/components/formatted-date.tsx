@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 
 interface FormattedDateProps {
 	date: string | Date;
+	className?: string;
 }
 
-export function FormattedDate({ date }: FormattedDateProps) {
+export function FormattedDate({ date, className }: FormattedDateProps) {
 	const [formattedDate, setFormattedDate] = useState<string>("");
 
 	useEffect(() => {
@@ -17,5 +18,5 @@ export function FormattedDate({ date }: FormattedDateProps) {
 		return null;
 	}
 
-	return <span className="text-xs">{formattedDate}</span>;
+	return <span className={className}>{formattedDate}</span>;
 }

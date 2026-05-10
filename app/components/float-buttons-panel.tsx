@@ -1,3 +1,4 @@
+import { MastraClient } from "@mastra/client-js";
 import { useMemoizedFn } from "ahooks";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import dynamic from "next/dynamic";
@@ -5,7 +6,7 @@ import { signIn } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { generateWordSuggestionAction } from "@/actions/generate-word-action";
+import { getMastraTokenAction } from "@/actions/mastra-token-action";
 import { papagoTranslateAction } from "@/actions/papago-translate-action";
 import { FloatButton } from "@/components/float-button";
 import { callModal } from "@/components/modal";
@@ -20,10 +21,13 @@ import { getPortalParent } from "@/utils/get-portal-parent";
 import { timeOut } from "@/utils/time-out";
 import { AnnotationPanel } from "./annotation-panel";
 
-const SuggestionPanel = dynamic(
+const MASTRA_BASE_URL =
+	process.env.NEXT_PUBLIC_MASTRA_API_URL || "https://mastra.chinatrending.net/";
+
+const SuggestionPanelStream = dynamic(
 	() =>
 		import("@/components/select-to-suggestion").then(
-			(mod) => mod.SuggestionPanel,
+			(mod) => mod.SuggestionPanelStream,
 		),
 	{
 		ssr: false,
@@ -160,10 +164,7 @@ export function FloatButtonsPanel({
 			<div ref={ref} data-ignore-click-away="true">
 				{showAIPanel ? (
 					<AIPanel
-						// promise={Promise.resolve("12345")}
-						promise={generateWordSuggestionAction(
-							prompt!(selectedText, locale),
-						)}
+						prompt={prompt!(selectedText, locale)}
 						rect={rect}
 						showAbove={showAbove}
 					/>
@@ -209,26 +210,101 @@ export function FloatButtonsPanel({
 const AIPanel = ({
 	showAbove,
 	rect,
-	promise,
+	prompt,
 }: {
 	showAbove: boolean;
 	rect: DOMRect;
-	promise: Promise<string>;
+	prompt: string;
 }) => {
 	const observerRef = usePanelReposition({ showAbove, rect });
+	const [streamText, setStreamText] = useState("");
+	const [reasoningText, setReasoningText] = useState("");
+	const [streamError, setStreamError] = useState<string | null>(null);
+	const [streamComplete, setStreamComplete] = useState(false);
+
+	useEffect(() => {
+		const abortController = new AbortController();
+		let cancelled = false;
+
+		setStreamText("");
+		setReasoningText("");
+		setStreamError(null);
+		setStreamComplete(false);
+
+		const timer = setTimeout(async () => {
+			try {
+				const token = await getMastraTokenAction();
+				const client = new MastraClient({
+					baseUrl: MASTRA_BASE_URL,
+					abortSignal: abortController.signal,
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				const agent = client.getAgent("call-ai-agent");
+				const response = await agent.stream(
+					[{ role: "user", content: prompt }],
+					{
+						providerOptions: {
+							openai: { reasoningEffort: "none" },
+						},
+					},
+				);
+
+				await response.processDataStream({
+					onChunk: async (chunk) => {
+						if (cancelled) return;
+
+						if (chunk.type === "text-delta") {
+							setStreamText((prev) => prev + chunk.payload.text);
+						} else if (chunk.type === "reasoning-delta") {
+							setReasoningText((prev) => prev + chunk.payload.text);
+						}
+					},
+				});
+			} catch (err) {
+				if (cancelled) return;
+				console.error("[AIPanel] stream error:", err);
+				setStreamError(err instanceof Error ? err.message : "Request failed");
+			} finally {
+				if (!cancelled) {
+					setStreamComplete(true);
+				}
+			}
+		}, 0);
+
+		return () => {
+			cancelled = true;
+			clearTimeout(timer);
+			abortController.abort();
+		};
+	}, [prompt]);
+
+	const isStreaming = !streamComplete && !streamError;
+
+	const topStyle = useMemo(() => {
+		const scrollY = window.scrollY;
+		return {
+			top: `${showAbove ? rect.top - 160 + scrollY : rect.bottom + scrollY}px`,
+		};
+	}, [showAbove, rect]);
+
 	return (
 		<div
 			ref={observerRef}
-			style={{
-				top: `${showAbove ? rect.top - 160 + window.scrollY : rect.bottom + window.scrollY}px`,
-			}}
+			style={topStyle}
 			className="z-[5] left-0 right-0 absolute flex justify-center pointer-events-none"
 		>
 			<div
 				className={`flex backdrop-blur-xl rounded-lg w-4/5 sm:w-[600px] min-h-40 max-h-96 sm:max-h-[65vh] justify-center items-stretch text-wrap text-base-content/80 border border-base-content/10 bg-white/10 shadow pointer-events-auto overflow-auto ${showAbove ? "mb-2" : "mt-2"}`}
 			>
 				<ErrorBoundary errorComponent={ErrorFallback}>
-					<SuggestionPanel promise={promise} />
+					<SuggestionPanelStream
+						text={streamText}
+						reasoningText={reasoningText}
+						isStreaming={isStreaming}
+						error={streamError}
+					/>
 				</ErrorBoundary>
 			</div>
 		</div>

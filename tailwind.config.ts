@@ -1,6 +1,7 @@
 import daisyui from "daisyui";
 import scrollbarHide from "tailwind-scrollbar-hide";
 import type { Config } from "tailwindcss";
+
 const config: Config = {
 	darkMode: ["selector", '[data-theme="dark"]'],
 	content: [
@@ -30,6 +31,15 @@ const config: Config = {
 				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
 				"gradient-conic":
 					"conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+			},
+			keyframes: {
+				marquee: {
+					from: { transform: "translateX(0)" },
+					to: { transform: "translateX(-50%)" },
+				},
+			},
+			animation: {
+				marquee: "marquee 8s linear infinite",
 			},
 		},
 	},

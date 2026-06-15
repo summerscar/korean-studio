@@ -1,11 +1,11 @@
+import NextAuth, { CredentialsSignin } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import { keystoneContext } from "@/../keystone/context";
 import { createFavListAction } from "@/actions/user-dict-action";
 import { authenticateUserWithPassword } from "@/utils/db";
 import { signInSchema } from "@/utils/zod";
-import NextAuth, { CredentialsSignin } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import GitHub from "next-auth/providers/github";
-import Google from "next-auth/providers/google";
+
 class InvalidLoginError extends CredentialsSignin {
 	code = "Invalid identifier or password";
 }
@@ -17,7 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		maxAge: 60 * 60 * 24 * 30,
 	},
 	providers: [
-		GitHub,
+		// GitHub,
 		Google,
 		Credentials({
 			// You can specify which fields should be submitted, by adding keys to the `credentials` object.
@@ -107,7 +107,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		session({ session, token }) {
 			// console.log("[session][session]", JSON.stringify(session));
 			// console.log("[session][token]", JSON.stringify(token));
-			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			// biome-ignore lint/suspicious/noExplicitAny: aaa
 			(session.user as any).isAdmin = token.isAdmin as boolean;
 			session.user.id = token.id as string;
 			session.user.name = token.name;

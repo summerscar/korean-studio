@@ -1,9 +1,9 @@
-import { keystoneContext } from "@/../keystone/context";
-import { allArticlesRevalidateKey } from "@/actions/user-dict-utils";
-import { healthCheck } from "@/service/papago-health-check";
+// import { healthCheck } from "@/service/papago-health-check";
 import { google } from "googleapis";
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
+import { keystoneContext } from "@/../keystone/context";
+import { allArticlesRevalidateKey } from "@/actions/user-dict-utils";
 import { buildContent } from "./template";
 
 export const dynamic = "force-dynamic";
@@ -26,12 +26,12 @@ function decodeHtmlEntities(text: string | null | undefined): string {
 // When setting the title or description
 export async function GET() {
 	// papago health check
-	try {
+	/* try {
 		await healthCheck();
 		console.log("Papago health check success");
 	} catch (error) {
 		console.error("Papago health check failed:", error);
-	}
+	} */
 
 	try {
 		if (!YOUTUBE_API_KEY) {
@@ -113,7 +113,7 @@ export async function GET() {
 		console.log(`[SBS News][count]: ${count}`);
 
 		// 暂时跳过
-		// biome-ignore lint/correctness/noConstantCondition: <explanation>
+		// biome-ignore lint/correctness/noConstantCondition: aaa
 		if (count > 100 && false) {
 			const oldestTextArticle = (
 				await keystoneContext.db.Article.findMany({

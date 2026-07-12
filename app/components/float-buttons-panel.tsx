@@ -21,8 +21,7 @@ import { getPortalParent } from "@/utils/get-portal-parent";
 import { timeOut } from "@/utils/time-out";
 import { AnnotationPanel } from "./annotation-panel";
 
-const MASTRA_BASE_URL =
-	process.env.NEXT_PUBLIC_MASTRA_API_URL || "https://mastra.chinatrending.net/";
+const MASTRA_BASE_URL = process.env.NEXT_PUBLIC_MASTRA_API_URL;
 
 const SuggestionPanelStream = dynamic(
 	() =>
